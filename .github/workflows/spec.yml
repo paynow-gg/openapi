@@ -1,0 +1,83 @@
+name: Update OpenAPI Specifications
+
+on:
+  schedule:
+    # Runs every day at 2:00 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+jobs:
+  update-openapi-specs:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Set up directories
+        run: |
+          mkdir -p openapi/yaml
+          mkdir -p openapi/json
+      
+      - name: Fetch OpenAPI specs (YAML and JSON)
+        run: |
+          # Define the API endpoints with both formats
+          declare -a apis=(
+            "storefront-api"
+            "management-api"
+            "gameserver-api"
+          )
+          
+          base_url="https://api.paynow.gg/swagger"
+          
+          # Fetch each OpenAPI spec in both formats
+          for api_name in "${apis[@]}"; do
+            echo "Fetching OpenAPI specs for: $api_name"
+            
+            # Download YAML version
+            yaml_url="${base_url}/${api_name}/openapi.yaml"
+            echo "Fetching YAML from: $yaml_url"
+            curl -sSL "$yaml_url" -o "openapi/yaml/${api_name}.yaml" || {
+              echo "Failed to fetch ${api_name}.yaml"
+              continue
+            }
+            echo "Successfully fetched ${api_name}.yaml"
+            
+            # Download JSON version
+            json_url="${base_url}/${api_name}/openapi.json"
+            echo "Fetching JSON from: $json_url"
+            curl -sSL "$json_url" -o "openapi/json/${api_name}.json" || {
+              echo "Failed to fetch ${api_name}.json"
+              continue
+            }
+            echo "Successfully fetched ${api_name}.json"
+          done
+      
+      - name: Check for changes
+        id: check_changes
+        run: |
+          git add openapi/
+          if git diff --cached --quiet; then
+            echo "No changes detected"
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "Changes detected"
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            
+            # Show what changed
+            echo "Files changed:"
+            git diff --cached --name-only
+          fi
+      
+      - name: Commit and push changes
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -m "chore: update OpenAPI specifications [skip ci]"
+          git push

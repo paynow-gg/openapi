@@ -1,0 +1,716 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "PayNow Game Server API",
+    "description": "The GameServer API facilitates integration with game servers, enabling command executions and server linking.It provides the necessary functionality to connect your store with game servers, manage in-game actions, and synchronize data between your store and game environments.This API must be called using a token created by creating a Game Server.",
+    "termsOfService": "https://paynow.gg/terms-of-use",
+    "contact": {
+      "name": "PayNow Services, Inc.",
+      "url": "https://paynow.gg",
+      "email": "support@paynow.gg"
+    },
+    "version": "v1"
+  },
+  "paths": {
+    "/v1/delivery/gameserver/link": {
+      "post": {
+        "tags": [
+          "delivery"
+        ],
+        "summary": "Update the link information for a Gameserver",
+        "operationId": "GameServerDelivery_LinkGameServer",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LinkGameServerRequestDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LinkGameServerRequestDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LinkGameServerRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LinkGameServerResponseDto"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/delivery/command-queue": {
+      "get": {
+        "tags": [
+          "delivery"
+        ],
+        "summary": "Retrieve the queued to execute for a Gameserver",
+        "operationId": "GameServerCommandQueue_GetQueuedCommands",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/QueuedCommandDto"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "delivery"
+        ],
+        "summary": "Retrieve the queued commands, while supplying the online players for a gameserver",
+        "operationId": "GameServerCommandQueue_GetQueuedCommandsWithOnlinePlayers",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetQueuedCommandsWithOnlinePlayersRequestDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetQueuedCommandsWithOnlinePlayersRequestDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetQueuedCommandsWithOnlinePlayersRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/QueuedCommandDto"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "delivery"
+        ],
+        "summary": "Mark commands as executed in bulk",
+        "operationId": "GameServerCommandQueue_MarkQueuedCommandExecutedBulk",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/MarkQueuedCommandAsExecutedDto"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/MarkQueuedCommandAsExecutedDto"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/MarkQueuedCommandAsExecutedDto"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/delivery/command-queue/{attemptId}": {
+      "delete": {
+        "tags": [
+          "delivery"
+        ],
+        "summary": "Mark a queued command as executed",
+        "operationId": "GameServerCommandQueue_MarkQueuedCommandExecuted",
+        "parameters": [
+          {
+            "name": "attemptId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/delivery/command-queue/acknowledge": {
+      "post": {
+        "tags": [
+          "delivery"
+        ],
+        "summary": "Mark commands as executed in bulk via a POST request",
+        "description": "Mark commands as executed in bulk via a POST request.\nSome HTTP clients don't support bodies in DELETE requests, so for compatibility we have a POST route.\nPlease use the DELETE route if your HTTP client supports it.",
+        "operationId": "GameServerCommandQueue_MarkQueuedCommandExecutedBulkViaPost",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/MarkQueuedCommandAsExecutedDto"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/MarkQueuedCommandAsExecutedDto"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/MarkQueuedCommandAsExecutedDto"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/delivery/events": {
+      "post": {
+        "tags": [
+          "delivery"
+        ],
+        "operationId": "GameServerDeliveryEvents_ReportGameServerEvents",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ReportGameServerEventsEntryDto"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ReportGameServerEventsEntryDto"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ReportGameServerEventsEntryDto"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AddressFamily": {
+        "enum": [
+          "unspecified",
+          "unix",
+          "inter_network",
+          "imp_link",
+          "pup",
+          "chaos",
+          "ns",
+          "iso",
+          "ecma",
+          "data_kit",
+          "ccitt",
+          "sna",
+          "dec_net",
+          "data_link",
+          "lat",
+          "hyper_channel",
+          "apple_talk",
+          "net_bios",
+          "voice_view",
+          "fire_fox",
+          "banyan",
+          "atm",
+          "inter_network_v6",
+          "cluster",
+          "ieee12844",
+          "irda",
+          "network_designers",
+          "max",
+          "packet",
+          "controller_area_network",
+          "unknown"
+        ],
+        "type": "string"
+      },
+      "FlakeId": {
+        "type": "string",
+        "additionalProperties": false,
+        "format": "flake-id",
+        "example": "411486491630370816"
+      },
+      "GameServerEventDto": {
+        "enum": [
+          "invalid",
+          "player_join"
+        ],
+        "type": "string",
+        "description": "Represents the types of events that can occur on a game server.",
+        "x-enumDescriptions": {
+          "invalid": "Invalid or unspecified event type. Used as the default value.",
+          "player_join": "Indicates a player has joined the game server."
+        }
+      },
+      "GetQueuedCommandsWithOnlinePlayersRequestDto": {
+        "type": "object",
+        "properties": {
+          "steam_ids": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SteamId"
+            },
+            "nullable": true
+          },
+          "minecraft_uuids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "customer_names": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "IPAddress": {
+        "type": "string",
+        "additionalProperties": false,
+        "format": "ip-address",
+        "example": "127.0.0.1"
+      },
+      "LinkGameServerRequestDto": {
+        "required": [
+          "ip",
+          "platform",
+          "version"
+        ],
+        "type": "object",
+        "properties": {
+          "ip": {
+            "type": "string"
+          },
+          "platform": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LinkGameServerResponseDto": {
+        "required": [
+          "gameserver",
+          "update_avaliable"
+        ],
+        "type": "object",
+        "properties": {
+          "update_avaliable": {
+            "type": "boolean"
+          },
+          "latest_version": {
+            "type": "string",
+            "nullable": true
+          },
+          "previously_linked": {
+            "$ref": "#/components/schemas/PreviousGameServerLinkDto"
+          },
+          "gameserver": {
+            "$ref": "#/components/schemas/MinimalGameServerDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "MarkQueuedCommandAsExecutedDto": {
+        "required": [
+          "attempt_id"
+        ],
+        "type": "object",
+        "properties": {
+          "attempt_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          }
+        },
+        "additionalProperties": false
+      },
+      "MinimalGameServerDto": {
+        "required": [
+          "enabled",
+          "id",
+          "name",
+          "store_id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "store_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "name": {
+            "type": "string",
+            "description": "The display name of the game server."
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Indicates whether the game server is currently enabled."
+          }
+        },
+        "additionalProperties": false,
+        "description": "A minimal representation of a Game Server"
+      },
+      "PayNowError": {
+        "required": [
+          "code",
+          "message",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "description": "The HTTP status code.",
+            "format": "int32",
+            "example": 400
+          },
+          "code": {
+            "type": "string",
+            "description": "The PayNow parseable error code.",
+            "example": "bad-request"
+          },
+          "message": {
+            "type": "string",
+            "description": "The human-readable error message.",
+            "example": "Bad Request Example"
+          },
+          "trace_id": {
+            "type": "string",
+            "description": "A distributed trace ID used for debugging.",
+            "nullable": true,
+            "example": "234a5bcd543ef3fa53ce929d0e0e4736"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "description": "An array of multiple errors. Only used by some API services.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents a PayNow error"
+      },
+      "PreviousGameServerLinkDto": {
+        "required": [
+          "host_name",
+          "ip",
+          "last_linked_at"
+        ],
+        "type": "object",
+        "properties": {
+          "ip": {
+            "type": "string"
+          },
+          "host_name": {
+            "type": "string"
+          },
+          "last_linked_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "QueuedCommandDto": {
+        "required": [
+          "attempt_id",
+          "command",
+          "online_only",
+          "queued_at"
+        ],
+        "type": "object",
+        "properties": {
+          "attempt_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "steam_id": {
+            "$ref": "#/components/schemas/SteamId"
+          },
+          "minecraft_uuid": {
+            "type": "string",
+            "description": "The Minecraft UUID of the customer, if applicable.",
+            "nullable": true
+          },
+          "customer_name": {
+            "type": "string",
+            "description": "The name of the customer, if applicable.",
+            "nullable": true
+          },
+          "command": {
+            "type": "string",
+            "description": "The command to be executed."
+          },
+          "online_only": {
+            "type": "boolean",
+            "description": "Indicates if the command should be executed only if the customer is online (Connected to the gameserver)"
+          },
+          "queued_at": {
+            "type": "string",
+            "description": "Represents when the command was queued.",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents a command to be executed on a Gameserver"
+      },
+      "ReportGameServerEventsEntryDto": {
+        "required": [
+          "event",
+          "timestamp"
+        ],
+        "type": "object",
+        "properties": {
+          "event": {
+            "$ref": "#/components/schemas/GameServerEventDto"
+          },
+          "player_join": {
+            "$ref": "#/components/schemas/ReportGameServerEventsEntryPlayerJoinDto"
+          },
+          "timestamp": {
+            "type": "string",
+            "description": "When did this event occur.",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents a single game server event entry in a report."
+      },
+      "ReportGameServerEventsEntryPlayerJoinDto": {
+        "required": [
+          "ip_address"
+        ],
+        "type": "object",
+        "properties": {
+          "ip_address": {
+            "$ref": "#/components/schemas/IPAddress"
+          },
+          "steam_id": {
+            "$ref": "#/components/schemas/SteamId"
+          },
+          "minecraft_uuid": {
+            "type": "string",
+            "description": "The Minecraft UUID of the player.",
+            "nullable": true
+          },
+          "minecraft_name": {
+            "maxLength": 128,
+            "type": "string",
+            "description": "The Minecraft username of the player.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Contains detailed information about a player joining a game server."
+      },
+      "SteamId": {
+        "type": "string",
+        "additionalProperties": false,
+        "description": "A 64-bit Steam account identifier. Accepts string or numeric format.",
+        "format": "steam-id",
+        "example": "76561197960287930"
+      },
+      "ValidationError": {
+        "required": [
+          "code",
+          "message",
+          "path",
+          "validation"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "The parseable error code."
+          },
+          "message": {
+            "type": "string",
+            "description": "The human-readable error message."
+          },
+          "path": {
+            "type": "string",
+            "description": "The path leading to the validation error."
+          },
+          "validation": {
+            "type": "string",
+            "description": "Type of the validation that failed."
+          }
+        },
+        "additionalProperties": false,
+        "description": "A validation error."
+      }
+    },
+    "securitySchemes": {
+      "APIKey": {
+        "type": "apiKey",
+        "description": "An API Key token generated in the Dashboard in the format 'APIKey TOKEN_HERE'.",
+        "name": "Authorization",
+        "in": "header"
+      },
+      "Customer": {
+        "type": "apiKey",
+        "description": "A Customer token generated using an API Key in the format 'Customer TOKEN_HERE'.",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  }
+}

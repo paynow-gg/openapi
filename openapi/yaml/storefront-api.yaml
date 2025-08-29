@@ -1,0 +1,1801 @@
+openapi: 3.0.4
+info:
+  title: PayNow Storefront (Headless) API
+  description: 'The Storefront API lets you integrate your store into custom front-ends or games. It manages product catalogue displaying, VAT rate calculation, carts, checkout sessions, and more. This API can be safely called directly from customer browsers or client-side applications without requiring an API key.'
+  termsOfService: https://paynow.gg/terms-of-use
+  contact:
+    name: 'PayNow Services, Inc.'
+    url: https://paynow.gg
+    email: support@paynow.gg
+  version: v1
+paths:
+  /v1/store/cart:
+    get:
+      tags:
+        - cart
+      summary: Get cart
+      description: Retrieves the current customer's shopping cart.
+      operationId: StorefrontCart_GetCart
+      parameters:
+        - name: currency
+          in: query
+          description: 'The ISO three-letter lowercase currency code (e.g., usd, eur, gbp) to display prices in. If not provided, the store''s default currency will be used.'
+          schema:
+            type: string
+        - name: x-paynow-customer-ip
+          in: header
+          description: The IP address (IPv4 or IPv6) of the customer. Required if the request is not being made from the customer's browser.
+          schema:
+            type: string
+            format: ipv4
+        - name: x-paynow-customer-countrycode
+          in: header
+          description: 'The customer''s country code in ISO 3166-1 alpha-2 format. Optional, but recommended if you have this available.'
+          schema:
+            pattern: '^[A-Z]{2}$'
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - Customer: [ ]
+    delete:
+      tags:
+        - cart
+      summary: Clear cart
+      description: Clears all items from the customer's shopping cart.
+      operationId: StorefrontCart_ClearCart
+      parameters:
+        - name: x-paynow-customer-ip
+          in: header
+          description: The IP address (IPv4 or IPv6) of the customer. Required if the request is not being made from the customer's browser.
+          schema:
+            type: string
+            format: ipv4
+        - name: x-paynow-customer-countrycode
+          in: header
+          description: 'The customer''s country code in ISO 3166-1 alpha-2 format. Optional, but recommended if you have this available.'
+          schema:
+            pattern: '^[A-Z]{2}$'
+            type: string
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - Customer: [ ]
+  /v1/store/cart/lines:
+    put:
+      tags:
+        - cart
+      summary: Add product to cart
+      description: "Adds a product to the cart or updates the quantity of an existing product.\nWhen increment parameter is \"true\" or \"1\", the specified quantity will be added to any existing quantity.\nOtherwise, the quantity will be set to the specified value, replacing any existing quantity."
+      operationId: StorefrontCart_AddLine
+      parameters:
+        - name: product_id
+          in: query
+          description: The ID of the product that should be added to the cart.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: quantity
+          in: query
+          description: The quantity to set or increment.
+          schema:
+            type: integer
+            format: int32
+        - name: subscription
+          in: query
+          description: Set to either '1' or 'true' to store as a subscription line item.
+          schema:
+            type: string
+        - name: gameserver_id
+          in: query
+          description: 'A game server ID, required if single_game_server_only is enabled for the product.'
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: increment
+          in: query
+          description: Set to either '1' or 'true' to increment (add quantity instead of setting).
+          schema:
+            type: string
+        - name: custom_variables
+          in: query
+          description: "Dictionary of product custom variables where each entry consists of a string key (identifier) \nand its corresponding selected value. Use the following URL parameter format: \n?custom_variables[IDENTIFIER]=VALUE"
+          style: deepObject
+          schema:
+            type: object
+            additionalProperties:
+              type: string
+        - name: x-paynow-customer-ip
+          in: header
+          description: The IP address (IPv4 or IPv6) of the customer. Required if the request is not being made from the customer's browser.
+          schema:
+            type: string
+            format: ipv4
+        - name: x-paynow-customer-countrycode
+          in: header
+          description: 'The customer''s country code in ISO 3166-1 alpha-2 format. Optional, but recommended if you have this available.'
+          schema:
+            pattern: '^[A-Z]{2}$'
+            type: string
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - Customer: [ ]
+  /v1/store/cart/checkout:
+    post:
+      tags:
+        - cart
+      summary: Create a cart checkout session
+      description: "Creates a checkout session from the contents of the cart.\nAfter creating the checkout session, redirect the customer to the `url` returned."
+      operationId: StorefrontCart_CreateCartCheckout
+      parameters:
+        - name: x-paynow-customer-ip
+          in: header
+          description: The IP address (IPv4 or IPv6) of the customer. Required if the request is not being made from the customer's browser.
+          schema:
+            type: string
+            format: ipv4
+        - name: x-paynow-customer-countrycode
+          in: header
+          description: 'The customer''s country code in ISO 3166-1 alpha-2 format. Optional, but recommended if you have this available.'
+          schema:
+            pattern: '^[A-Z]{2}$'
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCartCheckoutSessionDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CreateCartCheckoutSessionDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/CreateCartCheckoutSessionDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCheckoutSessionResponseDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - Customer: [ ]
+  /v1/checkouts:
+    post:
+      tags:
+        - checkout
+      summary: Create a checkout session
+      description: "Creates a checkout session using a Customer token.\nAfter creating the checkout session, redirect the customer to the `url` returned."
+      operationId: StorefrontCheckout_CreateCheckoutSession
+      parameters:
+        - name: x-paynow-customer-ip
+          in: header
+          description: The IP address (IPv4 or IPv6) of the customer. Required if the request is not being made from the customer's browser.
+          schema:
+            type: string
+            format: ipv4
+        - name: x-paynow-customer-countrycode
+          in: header
+          description: 'The customer''s country code in ISO 3166-1 alpha-2 format. Optional, but recommended if you have this available.'
+          schema:
+            pattern: '^[A-Z]{2}$'
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCheckoutSessionRequestDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CreateCheckoutSessionRequestDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/CreateCheckoutSessionRequestDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCheckoutSessionResponseDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - Customer: [ ]
+  /v1/store/customer:
+    get:
+      tags:
+        - customer
+      summary: Get current customer
+      description: Retrieves the current customer from the passed Customer token.
+      operationId: StorefrontCustomer_GetStorefrontCustomer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - Customer: [ ]
+  '/v1/store/customer/giftcards/lookup/{code}':
+    get:
+      tags:
+        - customer
+      summary: Lookup a gift card by the code
+      operationId: StorefrontCustomer_GetStorefrontGiftCard
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StorefrontGiftCardDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - Customer: [ ]
+  /v1/store/customer/command-delivery:
+    get:
+      tags:
+        - customer
+      summary: Get storefront customer delivery items
+      operationId: StorefrontCustomer_RootGetStorefrontCustomerDeliveryItems
+      parameters:
+        - name: limit
+          in: query
+          description: The maximum number of items to return in a single request.
+          schema:
+            maximum: 100
+            minimum: 1
+            type: integer
+            format: int32
+        - name: after
+          in: query
+          description: "Returns items after the specified ID.\nUsed for forward pagination through results."
+          schema:
+            type: integer
+            format: int64
+            example: 
+          example: 
+        - name: before
+          in: query
+          description: "Returns items before the specified ID.\nUsed for backward pagination through results."
+          schema:
+            type: integer
+            format: int64
+            example: 
+          example: 
+        - name: asc
+          in: query
+          description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StorefrontDeliveryItemDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - Customer: [ ]
+  '/v1/stores/{storeId}/product_versions/discord_actions':
+    get:
+      tags:
+        - discord
+      operationId: ProductsDiscord_DoProductsHaveDiscordActions
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: product_version_id
+          in: query
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: boolean
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - { }
+        - Customer: [ ]
+          APIKey: [ ]
+  /v1/store/navlinks:
+    get:
+      tags:
+        - navlinks
+      summary: Get navlinks
+      description: Retrieves the store's navlink structure used for navigation.
+      operationId: StorefrontNavLinks_GetStorefrontNavLinks
+      parameters:
+        - name: x-paynow-store-id
+          in: header
+          description: PayNow Store Identifier (Store ID) available in Store Settings
+          required: true
+          schema:
+            type: string
+            format: flake-id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StorefrontNavLinkDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - { }
+        - Customer: [ ]
+          APIKey: [ ]
+  /v1/store/products:
+    get:
+      tags:
+        - products
+      summary: Get products
+      description: 'Retrieves the available products. To make sure all VAT rates are properly displayed, pass in the IP headers as instructed.'
+      operationId: StorefrontProducts_GetStorefrontProducts
+      parameters:
+        - name: tag
+          in: query
+          description: Tag slugs to filter by. Each tag slug is a separate query parameter.
+          schema:
+            type: array
+            items:
+              type: string
+        - name: currency
+          in: query
+          description: 'The ISO three-letter lowercase currency code (e.g., usd, eur, gbp) to display prices in. If not provided, the store''s default currency will be used.'
+          schema:
+            type: string
+        - name: x-paynow-store-id
+          in: header
+          description: PayNow Store Identifier (Store ID) available in Store Settings
+          required: true
+          schema:
+            type: string
+            format: flake-id
+        - name: x-paynow-customer-ip
+          in: header
+          description: The IP address (IPv4 or IPv6) of the customer. Required if the request is not being made from the customer's browser.
+          schema:
+            type: string
+            format: ipv4
+        - name: x-paynow-customer-countrycode
+          in: header
+          description: 'The customer''s country code in ISO 3166-1 alpha-2 format. Optional, but recommended if you have this available.'
+          schema:
+            pattern: '^[A-Z]{2}$'
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StorefrontProductDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - { }
+        - Customer: [ ]
+          APIKey: [ ]
+  '/v1/store/products/{idOrSlug}':
+    get:
+      tags:
+        - products
+      summary: Get product by ID or slug
+      description: 'Retrieves a product by an ID or a slug. To make sure all VAT rates are properly displayed, pass in the IP headers as instructed.'
+      operationId: StorefrontProducts_GetStorefrontProductByIdOrSlug
+      parameters:
+        - name: idOrSlug
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: currency
+          in: query
+          description: 'The ISO three-letter lowercase currency code (e.g., usd, eur, gbp) to display prices in. If not provided, the store''s default currency will be used.'
+          schema:
+            type: string
+        - name: x-paynow-store-id
+          in: header
+          description: PayNow Store Identifier (Store ID) available in Store Settings
+          required: true
+          schema:
+            type: string
+            format: flake-id
+        - name: x-paynow-customer-ip
+          in: header
+          description: The IP address (IPv4 or IPv6) of the customer. Required if the request is not being made from the customer's browser.
+          schema:
+            type: string
+            format: ipv4
+        - name: x-paynow-customer-countrycode
+          in: header
+          description: 'The customer''s country code in ISO 3166-1 alpha-2 format. Optional, but recommended if you have this available.'
+          schema:
+            pattern: '^[A-Z]{2}$'
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StorefrontProductDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - { }
+        - Customer: [ ]
+          APIKey: [ ]
+  /v1/store:
+    get:
+      tags:
+        - store
+      summary: Get current store
+      description: Retrieves a store by the passed in x-paynow-store-id or Customer token.
+      operationId: StorefrontStore_GetStorefrontStore
+      parameters:
+        - name: x-paynow-store-id
+          in: header
+          description: PayNow Store Identifier (Store ID) available in Store Settings
+          required: true
+          schema:
+            type: string
+            format: flake-id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StorefrontStoreDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - { }
+        - Customer: [ ]
+          APIKey: [ ]
+  /v1/store/tags:
+    get:
+      tags:
+        - tags
+      summary: Get tags
+      description: Retrieves the store's tags.
+      operationId: StorefrontTags_GetStorefrontTags
+      parameters:
+        - name: x-paynow-store-id
+          in: header
+          description: PayNow Store Identifier (Store ID) available in Store Settings
+          required: true
+          schema:
+            type: string
+            format: flake-id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StorefrontTagDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - { }
+        - Customer: [ ]
+          APIKey: [ ]
+components:
+  schemas:
+    CartDto:
+      required:
+        - currency
+        - customer_id
+        - lines
+        - store_id
+        - total
+      type: object
+      properties:
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        customer_id:
+          $ref: '#/components/schemas/FlakeId'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartLineDto'
+          description: The line items in the cart
+        total:
+          type: integer
+          description: 'The total price of all items in the cart in the smallest currency unit (e.g., cents)'
+          format: int64
+        currency:
+          type: string
+          description: 'The currency code (e.g., usd, eur, gbp)'
+      additionalProperties: false
+      description: Represents a customer's shopping cart
+    CartLineCustomVariableDto:
+      required:
+        - description
+        - id
+        - identifier
+        - name
+        - options
+        - type
+        - value
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        name:
+          type: string
+          description: The display name of the custom variable
+        identifier:
+          type: string
+          description: The unique identifier string for the custom variable
+        description:
+          type: string
+          description: The description of the custom variable
+        type:
+          $ref: '#/components/schemas/CustomVariableType'
+        value:
+          type: string
+          description: The selected value of the custom variable
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/StorefrontCustomVariableOptionDto'
+          description: The collection of available options for this custom variable. Only present for dropdown type
+        selected_option:
+          $ref: '#/components/schemas/StorefrontCustomVariableOptionDto'
+      additionalProperties: false
+    CartLineDto:
+      required:
+        - custom_variables
+        - line_key
+        - name
+        - price
+        - pricing
+        - product_id
+        - quantity
+        - slug
+        - subscription
+      type: object
+      properties:
+        line_key:
+          type: string
+          description: The unique key for this line item
+        product_id:
+          $ref: '#/components/schemas/FlakeId'
+        name:
+          type: string
+          description: The name of the product
+        slug:
+          type: string
+          description: The slug of the product
+        price:
+          type: integer
+          description: 'The price of the product in the smallest currency unit (e.g., cents)'
+          format: int64
+        quantity:
+          type: integer
+          description: The quantity of this product in the cart
+          format: int32
+        subscription:
+          type: boolean
+          description: Indicates whether this line item should be a subscription
+        image_url:
+          type: string
+          description: The URL to the product image
+          nullable: true
+        selected_gameserver_id:
+          $ref: '#/components/schemas/FlakeId'
+        selected_gameserver:
+          $ref: '#/components/schemas/StorefrontGameServerDto'
+        pricing:
+          $ref: '#/components/schemas/StorefrontProductPricingDetailsDto'
+        custom_variables:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartLineCustomVariableDto'
+          description: Selected custom variables for this cart line.
+      additionalProperties: false
+      description: Represents a line item in a cart
+    CreateCartCheckoutSessionDto:
+      required:
+        - auto_redirect
+      type: object
+      properties:
+        coupon_id:
+          $ref: '#/components/schemas/FlakeId'
+        affiliate_code:
+          type: string
+          description: Optional affiliate code to track referrals
+          nullable: true
+        return_url:
+          type: string
+          description: Optional URL to redirect to after successful checkout
+          nullable: true
+        cancel_url:
+          type: string
+          description: Optional URL to redirect to if checkout is canceled
+          nullable: true
+        auto_redirect:
+          type: boolean
+          description: Whether to automatically redirect the customer (return_url must be set)
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: "Optional metadata to associate with the checkout session.\nDo not store any sensitive information here."
+          nullable: true
+      additionalProperties: false
+      description: Request to create a new checkout session from a cart
+    CreateCheckoutSessionLineDto:
+      required:
+        - product_id
+        - quantity
+        - subscription
+      type: object
+      properties:
+        product_id:
+          $ref: '#/components/schemas/FlakeId'
+        subscription:
+          type: boolean
+          description: Determines whether this line should create a subscription
+        gift_to:
+          $ref: '#/components/schemas/CustomerPlatformAccountDto'
+        gift_to_customer_id:
+          $ref: '#/components/schemas/FlakeId'
+        quantity:
+          type: integer
+          description: The quantity of this product to purchase
+          format: int32
+        selected_gameserver_id:
+          $ref: '#/components/schemas/FlakeId'
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: "Optional metadata to associate with the checkout session line.\nDo not store any sensitive information here."
+          nullable: true
+        custom_variables:
+          type: object
+          additionalProperties:
+            type: string
+          description: "Key-value pair mapping custom variable identifiers to their selected values.\nRequired only when the product includes custom variables."
+          nullable: true
+      additionalProperties: false
+      description: Represents a line item in a checkout session request
+    CreateCheckoutSessionRequestDto:
+      required:
+        - auto_redirect
+        - lines
+        - subscription
+      type: object
+      properties:
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateCheckoutSessionLineDto'
+          description: The line items to include in the checkout.
+        subscription:
+          type: boolean
+          description: "Whether this checkout creates a subscription.\nDEPRECATED: Use 'subscription' field in 'lines' array objects instead."
+          deprecated: true
+        coupon_id:
+          $ref: '#/components/schemas/FlakeId'
+        affiliate_code:
+          type: string
+          description: Optional affiliate code to track referrals
+          nullable: true
+        return_url:
+          type: string
+          description: Optional URL to redirect to after successful checkout
+          nullable: true
+        cancel_url:
+          type: string
+          description: Optional URL to redirect to if checkout is canceled
+          nullable: true
+        auto_redirect:
+          type: boolean
+          description: Whether to automatically redirect the customer (return_url must be set)
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: "Optional metadata to associate with the checkout session.\nDo not store any sensitive information here."
+          nullable: true
+      additionalProperties: false
+      description: Request to create a new checkout session
+    CreateCheckoutSessionResponseDto:
+      required:
+        - id
+        - token
+        - url
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        token:
+          type: string
+          description: The token for the checkout session
+        url:
+          type: string
+          description: The URL to redirect the customer to complete checkout
+      additionalProperties: false
+      description: Response after creating a checkout session
+    CustomVariableType:
+      enum:
+        - dropdown
+        - text
+        - number
+      type: string
+      description: Defines the type of input method for a custom variable.
+      x-enumDescriptions:
+        dropdown: "Dropdown selection with predefined options.\n            Customers choose from a list of available options.\n            Allows for additional pricing based on the selected entry."
+        text: "Free-form text input.\n            Customers can enter any text value (subject to validation)."
+        number: "Numeric input.\n            Customers can enter numeric values (subject to validation)."
+    CustomerDto:
+      required:
+        - created_at
+        - id
+        - metadata
+        - store_id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        profile:
+          $ref: '#/components/schemas/GenericProfileDto'
+        steam_id:
+          $ref: '#/components/schemas/SteamId'
+        steam:
+          $ref: '#/components/schemas/SteamProfileDto'
+        minecraft_uuid:
+          type: string
+          description: "The customer's Minecraft UUID, if they have linked their Minecraft account.\nNot set for offline Minecraft stores. If the platform type is Minecraft - Geyser,\nand the profile is a bedrock account, this will be a UUID generated from the Xbox XUID."
+          nullable: true
+          example: f84c6a79-0a4e-45e0-879b-cd49ebd4c4e2
+        minecraft:
+          $ref: '#/components/schemas/MinecraftProfileDto'
+        xbox_xuid:
+          type: string
+          description: 'The customer''s Xbox XUID, if available.'
+          nullable: true
+        minecraft_platform:
+          $ref: '#/components/schemas/CustomerMinecraftPlatform'
+        name:
+          type: string
+          description: The display name for the customer.
+          nullable: true
+          example: m0uka
+        created_at:
+          type: string
+          description: The date and time when the customer was created in the system.
+          format: date-time
+        updated_at:
+          type: string
+          description: 'The date and time when the customer was last updated, if applicable.'
+          format: date-time
+          nullable: true
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Additional custom data associated with the customer.
+      additionalProperties: false
+      description: Represents a customer in the PayNow system with their associated profiles and metadata.
+    CustomerMinecraftPlatform:
+      enum:
+        - unknown
+        - java
+        - bedrock
+      type: string
+    CustomerPlatformAccountDto:
+      required:
+        - id
+        - platform
+      type: object
+      properties:
+        platform:
+          $ref: '#/components/schemas/CustomerProfilePlatform'
+        id:
+          type: string
+          description: The account ID on the platform
+          example: '76561198152492642'
+      additionalProperties: false
+      description: 'Represents a customer platform association, used for gifting'
+    CustomerProfilePlatform:
+      enum:
+        - invalid
+        - steam
+        - minecraft
+        - paynow_name
+      type: string
+      description: A customer platform type used while gifting
+      x-enumDescriptions:
+        steam: Steam profile platform - the ID param must be a Steam ID 64.
+        minecraft: Minecraft profile platform - the ID param must be a Minecraft nick.
+        paynow_name: PayNow name profile platform - the ID param must be a PayNow username.
+    DeliveryItemProductDto:
+      required:
+        - id
+        - name
+        - slug
+        - version_id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        name:
+          type: string
+          description: The name of the product
+          example: Premium Membership
+        slug:
+          type: string
+          description: The URL-friendly slug of the product
+          example: premium-membership
+        version_id:
+          type: string
+          description: The version identifier of the product
+          example: v2.1.0
+      additionalProperties: false
+      description: Represents the product information for a delivery item
+    DeliveryItemStateDto:
+      enum:
+        - usable
+        - active
+        - used
+        - revoked
+        - renewed
+      type: string
+    FlakeId:
+      type: string
+      additionalProperties: false
+      format: flake-id
+      example: '411486491630370816'
+    GenericProfileDto:
+      required:
+        - id
+        - name
+        - platform
+      type: object
+      properties:
+        id:
+          type: string
+          description: The platform-specific identifier for the profile.
+        platform:
+          type: string
+          description: The name of the platform this profile belongs to.
+          example: steam
+        name:
+          type: string
+          description: The display name of the user on this platform.
+        avatar_url:
+          type: string
+          description: The URL to the user's avatar image on this platform.
+          nullable: true
+      additionalProperties: false
+      description: Represents a generic platform profile for a customer.
+    MinecraftProfileDto:
+      required:
+        - avatar_url
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          type: string
+          description: "The UUID of the Minecraft player.\nIf the platform is Minecraft Offline, this will be the name itself.\nIf the platform is Minecraft Geyser, and this is a Bedrock account, this ID will be an Xbox XUID."
+          example: f84c6a79-0a4e-45e0-879b-cd49ebd4c4e2
+        name:
+          type: string
+          description: The username of the Minecraft player.
+          example: notch
+        avatar_url:
+          type: string
+          description: The URL to the player's Minecraft skin rendered as an avatar.
+      additionalProperties: false
+      description: Represents a Minecraft profile for a customer.
+    PayNowError:
+      required:
+        - code
+        - message
+        - status
+      type: object
+      properties:
+        status:
+          type: integer
+          description: The HTTP status code.
+          format: int32
+          example: 400
+        code:
+          type: string
+          description: The PayNow parseable error code.
+          example: bad-request
+        message:
+          type: string
+          description: The human-readable error message.
+          example: Bad Request Example
+        trace_id:
+          type: string
+          description: A distributed trace ID used for debugging.
+          nullable: true
+          example: 234a5bcd543ef3fa53ce929d0e0e4736
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          description: An array of multiple errors. Only used by some API services.
+          nullable: true
+      additionalProperties: false
+      description: Represents a PayNow error
+    ProductDeliverableActionsDto:
+      required:
+        - grant_giftcard
+      type: object
+      properties:
+        grant_giftcard:
+          type: boolean
+          description: Value indicating whether to grant a giftcard with the product with the subtotal amount.
+      additionalProperties: false
+    ProductGameServerDto:
+      required:
+        - enabled
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        name:
+          type: string
+          description: The name of the game server.
+          example: US 2x TRIO
+        enabled:
+          type: boolean
+          description: Indicates whether this game server is enabled.
+      additionalProperties: false
+    ProductRemoveAfterIntervalScale:
+      enum:
+        - invalid
+        - day
+        - week
+        - month
+      type: string
+    ProductSubscriptionIntervalScale:
+      enum:
+        - invalid
+        - day
+        - week
+        - month
+        - year
+      type: string
+    ProductTagDto:
+      required:
+        - id
+        - name
+        - slug
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        slug:
+          type: string
+          description: The unique slug for the tag.
+          example: packages
+        name:
+          type: string
+          description: The display name of the tag.
+          example: Packages
+      additionalProperties: false
+    SaleDiscountType:
+      enum:
+        - percent
+        - amount
+      type: string
+    SteamId:
+      type: string
+      additionalProperties: false
+      description: A 64-bit Steam account identifier. Accepts string or numeric format.
+      format: steam-id
+      example: '76561197960287930'
+    SteamProfileDto:
+      required:
+        - avatar_url
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/SteamId'
+        name:
+          type: string
+          description: The display name of the user on Steam.
+        avatar_url:
+          type: string
+          description: The URL to the user's Steam avatar image.
+      additionalProperties: false
+      description: Represents a Steam profile for a customer.
+    StorefrontCustomVariableDto:
+      required:
+        - description
+        - identifier
+        - name
+        - options
+        - type
+      type: object
+      properties:
+        identifier:
+          type: string
+          description: "Unique identifier string used to reference this custom variable programmatically.\nMust contain only letters, numbers, underscores, and hyphens."
+        name:
+          type: string
+          description: Display name for the custom variable shown to customers.
+        description:
+          type: string
+          description: Description explaining what this custom variable is for. Can be shown to customers.
+        type:
+          $ref: '#/components/schemas/CustomVariableType'
+        value_regex:
+          type: string
+          description: "Optional regex pattern to validate text/number input values.\nOnly applies to text and number types.\nUses RE2 syntax - does not support negative lookarounds, backreferences, or other advanced regex features."
+          nullable: true
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/StorefrontCustomVariableOptionDto'
+          description: "Available options for dropdown type custom variables.\nEmpty for text and number types."
+      additionalProperties: false
+    StorefrontCustomVariableOptionDto:
+      required:
+        - is_default
+        - name
+        - price
+        - sort_order
+        - value
+      type: object
+      properties:
+        name:
+          type: string
+          description: Display name shown to customers for this option.
+        value:
+          type: string
+          description: 'Internal value used for product command variable replacement, without brackets.'
+        price:
+          type: integer
+          description: Additional price in the lowest denominator (e.g. cents) when this option is selected.
+          format: int64
+        is_default:
+          type: boolean
+          description: "Whether this option is selected by default when the custom variable is presented.\nOnly one option per custom variable should be marked as default."
+        sort_order:
+          type: integer
+          description: "Sort order for displaying options to customers.\nLower numbers appear first."
+          format: int32
+      additionalProperties: false
+    StorefrontDeliveryItemDto:
+      required:
+        - added_at
+        - customer_id
+        - expirable
+        - gift
+        - id
+        - product
+        - state
+        - store_id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        customer_id:
+          $ref: '#/components/schemas/FlakeId'
+        order_id:
+          $ref: '#/components/schemas/FlakeId'
+        order_line_id:
+          $ref: '#/components/schemas/FlakeId'
+        subscription_id:
+          $ref: '#/components/schemas/FlakeId'
+        execute_on_gameserver_id:
+          $ref: '#/components/schemas/FlakeId'
+        quantity_index:
+          type: integer
+          description: The index of the item when multiple quantities were assigned
+          format: int32
+          nullable: true
+        product:
+          $ref: '#/components/schemas/DeliveryItemProductDto'
+        state:
+          $ref: '#/components/schemas/DeliveryItemStateDto'
+        expirable:
+          type: boolean
+          description: Indicates whether the delivery item can expire
+        gift:
+          type: boolean
+          description: Indicates whether the item was given as a gift
+        added_at:
+          type: string
+          description: The date and time when the item was added
+          format: date-time
+        active_at:
+          type: string
+          description: The date and time when the item became active
+          format: date-time
+          nullable: true
+        expires_at:
+          type: string
+          description: The date and time when the item expires naturally
+          format: date-time
+          nullable: true
+        override_expires_at:
+          type: string
+          description: The override expiry date for the delivery item
+          format: date-time
+          nullable: true
+        removed_at:
+          type: string
+          description: The date and time when the item was removed
+          format: date-time
+          nullable: true
+        revoked_at:
+          type: string
+          description: The date and time when the item was revoked
+          format: date-time
+          nullable: true
+        revoke_reason:
+          type: string
+          description: The reason for revoking the delivery item
+          nullable: true
+      additionalProperties: false
+      description: Represents a delivery item assigned to a customer
+    StorefrontGameServerDto:
+      required:
+        - enabled
+        - id
+        - name
+        - store_id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        name:
+          type: string
+          description: The display name of the game server.
+        enabled:
+          type: boolean
+          description: Indicates whether the game server is currently enabled.
+      additionalProperties: false
+      description: Represents a simplified view of a game server for storefront display purposes.
+    StorefrontGiftCardDto:
+      required:
+        - balance
+        - code
+        - starting_balance
+      type: object
+      properties:
+        code:
+          type: string
+        balance:
+          type: integer
+          format: int32
+        starting_balance:
+          type: integer
+          format: int32
+        expires_at:
+          type: string
+          format: date-time
+          nullable: true
+      additionalProperties: false
+    StorefrontNavLinkDto:
+      required:
+        - children
+        - name
+        - node_id
+        - order
+        - tag_id
+        - tag_query
+        - tag_slug
+      type: object
+      properties:
+        node_id:
+          type: string
+          description: The unique identifier for this navigation node in the navigation tree.
+        parent_node_id:
+          type: string
+          description: 'The identifier of the parent navigation node, if this is a child node.'
+          nullable: true
+        tag_id:
+          $ref: '#/components/schemas/FlakeId'
+        tag_slug:
+          type: string
+          description: The URL-friendly slug for the tag associated with this navigation link.
+          example: perks
+        tag_query:
+          type: array
+          items:
+            type: string
+          description: 'A list containing all parent tags and this node''s tag, representing the complete path in the tag hierarchy.'
+          example:
+            - perks
+            - vip
+        name:
+          type: string
+          description: The display name of the associated tag shown to users in the UI.
+          example: Perks
+        order:
+          type: integer
+          description: The display order of this navigation link relative to its siblings.
+          format: int32
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/StorefrontNavLinkDto'
+          description: The collection of child navigation links that appear beneath this link in the hierarchy.
+      additionalProperties: false
+      description: Represents a navigation link in the storefront's hierarchical navigation structure.
+    StorefrontProductDto:
+      required:
+        - allow_one_time_purchase
+        - allow_subscription
+        - currency
+        - custom_variables
+        - description
+        - gameservers
+        - id
+        - is_gifting_disabled
+        - name
+        - price
+        - remove_after_enabled
+        - remove_after_time_scale
+        - remove_after_time_value
+        - single_game_server_only
+        - slug
+        - sort_order
+        - store_id
+        - subscription_interval_scale
+        - subscription_interval_value
+        - tags
+        - version_id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        version_id:
+          $ref: '#/components/schemas/FlakeId'
+        image_url:
+          type: string
+          description: The URL to the product image.
+          nullable: true
+          example: https://cdn.paynow.gg/logo/full/logotype-color.svg
+        slug:
+          type: string
+          description: The unique slug for the product.
+          example: premium-game-package
+        name:
+          type: string
+          description: The display name of the product.
+          example: Premium Game Package
+        description:
+          type: string
+          description: The detailed description of the product.
+          example: 'This premium package includes exclusive in-game items, bonus currency, and early access to new content.'
+        enabled_at:
+          type: string
+          description: The date and time when the product becomes enabled.
+          format: date-time
+          nullable: true
+        enabled_until:
+          type: string
+          description: The date and time until which the product remains enabled.
+          format: date-time
+          nullable: true
+        label:
+          type: string
+          description: The display label for the product.
+          nullable: true
+          example: Premium Items
+        sort_order:
+          type: integer
+          description: The sort order for displaying the product.
+          format: int32
+        price:
+          type: integer
+          description: 'The price of the product, in the lowest denominator (e.g. cents).'
+          format: int64
+          example: 1999
+        currency:
+          type: string
+          description: 'The ISO three-letter lowercase currency code (e.g., usd, eur, gbp) the product is denominated in.'
+        single_game_server_only:
+          type: boolean
+          description: Indicates whether the product is limited to a single game server.
+        allow_one_time_purchase:
+          type: boolean
+          description: Indicates whether one-time purchases are allowed.
+          example: true
+        allow_subscription:
+          type: boolean
+          description: Indicates whether subscription purchases are allowed.
+          example: true
+        is_gifting_disabled:
+          type: boolean
+          description: Indicates whether gifting is disabled for this product.
+        subscription_interval_value:
+          type: integer
+          description: The subscription interval value.
+          format: int32
+          example: 1
+        subscription_interval_scale:
+          $ref: '#/components/schemas/ProductSubscriptionIntervalScale'
+        remove_after_enabled:
+          type: boolean
+          description: Indicates whether automatic removal is enabled.
+          example: true
+        remove_after_time_value:
+          type: integer
+          description: The time value for automatic removal.
+          format: int32
+          example: 1
+        remove_after_time_scale:
+          $ref: '#/components/schemas/ProductRemoveAfterIntervalScale'
+        pricing:
+          $ref: '#/components/schemas/StorefrontProductPricingDetailsDto'
+        stock:
+          $ref: '#/components/schemas/StorefrontProductStockStatusDto'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductTagDto'
+          description: The tags associated with the product.
+        gameservers:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductGameServerDto'
+          description: The game servers associated with the product.
+        custom_variables:
+          type: array
+          items:
+            $ref: '#/components/schemas/StorefrontCustomVariableDto'
+          description: Custom Variables associated with the product.
+        deliverable_actions:
+          $ref: '#/components/schemas/ProductDeliverableActionsDto'
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Additional metadata for the product.
+          nullable: true
+        created_at:
+          type: string
+          description: The date and time when the product was created.
+          format: date-time
+          nullable: true
+        updated_at:
+          type: string
+          description: The date and time when the product was last updated.
+          format: date-time
+          nullable: true
+      additionalProperties: false
+    StorefrontProductPricingDetailsDto:
+      required:
+        - price_final
+        - price_original
+      type: object
+      properties:
+        active_sale:
+          $ref: '#/components/schemas/StorefrontSaleDto'
+        sale_value:
+          type: integer
+          description: The amount of the sale discount in the lowest denominator (e.g. cents).
+          format: int64
+          nullable: true
+          example: 500
+        vat_rate:
+          $ref: '#/components/schemas/VatRateDto'
+        regional_pricing:
+          $ref: '#/components/schemas/StorefrontProductPricingDetailsRegionalPricingDto'
+        price_original:
+          type: integer
+          description: 'The original price of the product before any discounts, in the lowest denominator (e.g. cents).'
+          format: int64
+          example: 1999
+        price_final:
+          type: integer
+          description: 'The final price of the product after all discounts, in the lowest denominator (e.g. cents).'
+          format: int64
+          example: 1499
+      additionalProperties: false
+      description: The pricing details for the product in the storefront.
+    StorefrontProductPricingDetailsRegionalPricingDto:
+      required:
+        - base_price
+        - currency
+        - region_id
+        - tax_inclusive
+      type: object
+      properties:
+        region_id:
+          type: string
+          description: The identifier for the region.
+          example: eu
+        currency:
+          type: string
+          description: The currency code used in the region.
+          example: eur
+        tax_inclusive:
+          type: boolean
+          description: Indicates whether the base price includes tax.
+          example: true
+        base_price:
+          type: integer
+          description: 'The base price in the regional currency, in the lowest denominator (e.g. cents).'
+          format: int64
+          example: 1799
+      additionalProperties: false
+      description: "Regional pricing information for this product.\nOnly present if there is a regional pricing configured."
+    StorefrontProductStockStatusDto:
+      required:
+        - available_to_purchase
+        - customer_available
+      type: object
+      properties:
+        available_to_purchase:
+          type: boolean
+          description: Indicates whether the product is currently available for purchase (there is available stock).
+          example: true
+        customer_available:
+          type: integer
+          description: The number of items available for the customer to purchase (customer stock limit remaining).
+          format: int32
+          example: 5
+      additionalProperties: false
+      description: The stock status information for the product in the storefront.
+    StorefrontSaleDto:
+      required:
+        - begins_at
+        - discount_amount
+        - discount_type
+        - id
+        - minimum_order_value
+        - name
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        name:
+          type: string
+          description: The name of the sale.
+          example: Summer Sale
+        discount_type:
+          $ref: '#/components/schemas/SaleDiscountType'
+        discount_amount:
+          type: integer
+          description: 'The amount of the discount, either as a percentage in permille or as an absolute value in cents.'
+          format: int64
+          example: 2000
+        minimum_order_value:
+          type: integer
+          description: 'The minimum order value required to apply the discount, in the lowest denominator (e.g. cents).'
+          format: int64
+          example: 0
+        begins_at:
+          type: string
+          description: The date and time when the sale begins.
+          format: date-time
+          example: '2025-06-01T00:00:00Z'
+        ends_at:
+          type: string
+          description: 'The date and time when the sale ends, if applicable.'
+          format: date-time
+          nullable: true
+          example: '2025-06-30T23:59:59Z'
+      additionalProperties: false
+    StorefrontStoreDto:
+      required:
+        - currency
+        - game
+        - id
+        - live_mode
+        - name
+        - platform
+        - slug
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        slug:
+          type: string
+          description: 'The URL-friendly identifier for the store, used in store URLs.'
+          example: m0ukas-awesome-store
+        name:
+          type: string
+          description: The display name of the store shown to customers.
+          example: m0uka's awesome store
+        platform:
+          type: string
+          description: The platform or the game of the store.
+          example: rust
+        game:
+          type: string
+          description: The game of the store. Equivalent to the `platform` for backwards compatibility.
+          readOnly: true
+        currency:
+          type: string
+          description: The three-letter ISO currency code used for pricing in this store.
+          example: usd
+        description:
+          type: string
+          description: A detailed description of the store. Only present for some platform types.
+          nullable: true
+        website_url:
+          type: string
+          description: 'The URL of the store''s main website, if not using Hosted Webstores.'
+          nullable: true
+        support_email:
+          type: string
+          description: The email address customers can use to contact store support.
+          nullable: true
+          example: support@example.com
+        integration_type:
+          type: string
+          description: The type of integration this store uses with external systems.
+          nullable: true
+        live_mode:
+          type: boolean
+          description: Indicates whether the store is in live mode (true) or test mode (false).
+        logo_url:
+          type: string
+          description: The URL to the store's main logo image.
+          nullable: true
+        logo_square_url:
+          type: string
+          description: The URL to the store's square logo image.
+          nullable: true
+        created_at:
+          type: string
+          description: The date and time when the store was created.
+          format: date-time
+          nullable: true
+        updated_at:
+          type: string
+          description: The date and time when the store was last updated.
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: Represents a store entity within the storefront system.
+    StorefrontTagDto:
+      required:
+        - created_at
+        - enabled
+        - id
+        - name
+        - slug
+        - store_id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        slug:
+          type: string
+          description: 'The URL-friendly identifier for the tag, used in category URLs.'
+        name:
+          type: string
+          description: The display name of the tag shown to customers.
+        description:
+          type: string
+          description: A detailed description of the tag's purpose or the category it represents.
+          nullable: true
+        image_url:
+          type: string
+          description: The URL to the tag image.
+          nullable: true
+          example: https://cdn.paynow.gg/logo/full/logotype-color.svg
+        enabled:
+          type: boolean
+          description: Indicates whether the tag is active and should be included in navigation and filtering.
+        created_at:
+          type: string
+          description: The date and time when the tag was created.
+          format: date-time
+        updated_at:
+          type: string
+          description: 'The date and time when the tag was last updated, if applicable.'
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: Represents a tag entity used for categorizing and filtering products within a store.
+    ValidationError:
+      required:
+        - code
+        - message
+        - path
+        - validation
+      type: object
+      properties:
+        code:
+          type: string
+          description: The parseable error code.
+        message:
+          type: string
+          description: The human-readable error message.
+        path:
+          type: string
+          description: The path leading to the validation error.
+        validation:
+          type: string
+          description: Type of the validation that failed.
+      additionalProperties: false
+      description: A validation error.
+    VatRateDto:
+      required:
+        - country_code
+        - country_name
+        - currency
+        - eservice_rate
+        - eu_member_state
+        - percentage
+        - vat_abbreviation
+        - vat_local_name
+      type: object
+      properties:
+        country_code:
+          type: string
+          description: The ISO country code.
+          example: CZ
+        country_name:
+          type: string
+          description: The full name of the country.
+          example: Czech Republic
+        currency:
+          type: string
+          description: The local currency used in the country.
+          example: CZK
+        vat_abbreviation:
+          type: string
+          description: The abbreviation of the VAT term in the local language.
+          example: DPH
+        vat_local_name:
+          type: string
+          description: The full name of the VAT term in the local language.
+          example: Daň z přidané hodnoty
+        eu_member_state:
+          type: boolean
+          description: Indicates whether the country is a member of the European Union.
+          example: true
+        eservice_rate:
+          type: number
+          description: 'The VAT rate applicable for electronic services, as a percentage.'
+          format: double
+          example: 21
+        percentage:
+          type: number
+          description: The VAT rate (synonym for EServiceRate).
+          format: double
+          readOnly: true
+          example: 21
+      additionalProperties: false
+      description: "The VAT rate estimation for the passed in customer country / IP.\nInclude the VAT percentage + abbreviation in your product view to inform your customers about the tax."
+  securitySchemes:
+    APIKey:
+      type: apiKey
+      description: An API Key token generated in the Dashboard in the format 'APIKey TOKEN_HERE'.
+      name: Authorization
+      in: header
+    Customer:
+      type: apiKey
+      description: A Customer token generated using an API Key in the format 'Customer TOKEN_HERE'.
+      name: Authorization
+      in: header

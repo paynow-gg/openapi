@@ -305,17 +305,13 @@ paths:
           in: query
           description: "Returns items after the specified ID.\nUsed for forward pagination through results."
           schema:
-            type: integer
-            format: int64
-            example: 
+            $ref: '#/components/schemas/FlakeId'
           example: 
         - name: before
           in: query
           description: "Returns items before the specified ID.\nUsed for backward pagination through results."
           schema:
-            type: integer
-            format: int64
-            example: 
+            $ref: '#/components/schemas/FlakeId'
           example: 
         - name: asc
           in: query

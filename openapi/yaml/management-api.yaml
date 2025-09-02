@@ -206,17 +206,13 @@ paths:
           in: query
           description: "Returns items after the specified ID.\nUsed for forward pagination through results."
           schema:
-            type: integer
-            format: int64
-            example: 
+            $ref: '#/components/schemas/FlakeId'
           example: 
         - name: before
           in: query
           description: "Returns items before the specified ID.\nUsed for backward pagination through results."
           schema:
-            type: integer
-            format: int64
-            example: 
+            $ref: '#/components/schemas/FlakeId'
           example: 
         - name: asc
           in: query
@@ -517,17 +513,13 @@ paths:
           in: query
           description: "Returns items after the specified ID.\nUsed for forward pagination through results."
           schema:
-            type: integer
-            format: int64
-            example: 
+            $ref: '#/components/schemas/FlakeId'
           example: 
         - name: before
           in: query
           description: "Returns items before the specified ID.\nUsed for backward pagination through results."
           schema:
-            type: integer
-            format: int64
-            example: 
+            $ref: '#/components/schemas/FlakeId'
           example: 
         - name: asc
           in: query
@@ -677,6 +669,43 @@ paths:
                 $ref: '#/components/schemas/PayNowError'
       security:
         - APIKey: [ ]
+  '/v1/stores/{storeId}/command-delivery/inventory-item/update-product-versions':
+    post:
+      tags:
+        - command-delivery
+      operationId: RootCommandDelivery_UpdateInventoryItemProductVersion
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateInventoryItemProductVersionRequestDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UpdateInventoryItemProductVersionRequestDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UpdateInventoryItemProductVersionRequestDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateInventoryItemProductVersionResponseDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
   '/v1/stores/{storeId}/coupons':
     post:
       tags:
@@ -738,17 +767,13 @@ paths:
           in: query
           description: "Returns items after the specified ID.\nUsed for forward pagination through results."
           schema:
-            type: integer
-            format: int64
-            example: 
+            $ref: '#/components/schemas/FlakeId'
           example: 
         - name: before
           in: query
           description: "Returns items before the specified ID.\nUsed for backward pagination through results."
           schema:
-            type: integer
-            format: int64
-            example: 
+            $ref: '#/components/schemas/FlakeId'
           example: 
         - name: asc
           in: query
@@ -1100,17 +1125,13 @@ paths:
           in: query
           description: "Returns items after the specified ID.\nUsed for forward pagination through results."
           schema:
-            type: integer
-            format: int64
-            example: 
+            $ref: '#/components/schemas/FlakeId'
           example: 
         - name: before
           in: query
           description: "Returns items before the specified ID.\nUsed for backward pagination through results."
           schema:
-            type: integer
-            format: int64
-            example: 
+            $ref: '#/components/schemas/FlakeId'
           example: 
         - name: asc
           in: query
@@ -1456,17 +1477,13 @@ paths:
           in: query
           description: "Returns items after the specified ID.\nUsed for forward pagination through results."
           schema:
-            type: integer
-            format: int64
-            example: 
+            $ref: '#/components/schemas/FlakeId'
           example: 
         - name: before
           in: query
           description: "Returns items before the specified ID.\nUsed for backward pagination through results."
           schema:
-            type: integer
-            format: int64
-            example: 
+            $ref: '#/components/schemas/FlakeId'
           example: 
         - name: asc
           in: query
@@ -2387,17 +2404,13 @@ paths:
           in: query
           description: "Returns items after the specified ID.\nUsed for forward pagination through results."
           schema:
-            type: integer
-            format: int64
-            example: 
+            $ref: '#/components/schemas/FlakeId'
           example: 
         - name: before
           in: query
           description: "Returns items before the specified ID.\nUsed for backward pagination through results."
           schema:
-            type: integer
-            format: int64
-            example: 
+            $ref: '#/components/schemas/FlakeId'
           example: 
         - name: asc
           in: query
@@ -3083,17 +3096,13 @@ paths:
           in: query
           description: "Returns items after the specified ID.\nUsed for forward pagination through results."
           schema:
-            type: integer
-            format: int64
-            example: 
+            $ref: '#/components/schemas/FlakeId'
           example: 
         - name: before
           in: query
           description: "Returns items before the specified ID.\nUsed for backward pagination through results."
           schema:
-            type: integer
-            format: int64
-            example: 
+            $ref: '#/components/schemas/FlakeId'
           example: 
         - name: asc
           in: query
@@ -3878,17 +3887,13 @@ paths:
           in: query
           description: "Returns items after the specified ID.\nUsed for forward pagination through results."
           schema:
-            type: integer
-            format: int64
-            example: 
+            $ref: '#/components/schemas/FlakeId'
           example: 
         - name: before
           in: query
           description: "Returns items before the specified ID.\nUsed for backward pagination through results."
           schema:
-            type: integer
-            format: int64
-            example: 
+            $ref: '#/components/schemas/FlakeId'
           example: 
         - name: asc
           in: query
@@ -4297,17 +4302,13 @@ paths:
           in: query
           description: "Returns items after the specified ID.\nUsed for forward pagination through results."
           schema:
-            type: integer
-            format: int64
-            example: 
+            $ref: '#/components/schemas/FlakeId'
           example: 
         - name: before
           in: query
           description: "Returns items before the specified ID.\nUsed for backward pagination through results."
           schema:
-            type: integer
-            format: int64
-            example: 
+            $ref: '#/components/schemas/FlakeId'
           example: 
         - name: asc
           in: query
@@ -8744,6 +8745,26 @@ components:
         expires_at:
           type: string
           format: date-time
+    UpdateInventoryItemProductVersionRequestDto:
+      required:
+        - product_id
+        - product_version_id
+      type: object
+      properties:
+        product_version_id:
+          $ref: '#/components/schemas/FlakeId'
+        product_id:
+          $ref: '#/components/schemas/FlakeId'
+      additionalProperties: false
+    UpdateInventoryItemProductVersionResponseDto:
+      required:
+        - updated_count
+      type: object
+      properties:
+        updated_count:
+          type: integer
+          format: int32
+      additionalProperties: false
     UpdateNavLinkDto:
       type: object
       properties:

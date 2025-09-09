@@ -1297,6 +1297,30 @@
             "schema": {
               "type": "boolean"
             }
+          },
+          {
+            "name": "created_by_id",
+            "in": "query",
+            "description": "Filters coupons by the ID of the creator.",
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "exclude_generated",
+            "in": "query",
+            "description": "Exclude auto-generated coupons from the results when set to true.",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "exclude_inactive",
+            "in": "query",
+            "description": "Exclude inactive coupons from the results when set to true.",
+            "schema": {
+              "type": "boolean"
+            }
           }
         ],
         "responses": {

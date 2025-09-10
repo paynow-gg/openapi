@@ -1297,30 +1297,6 @@
             "schema": {
               "type": "boolean"
             }
-          },
-          {
-            "name": "created_by_id",
-            "in": "query",
-            "description": "Filters coupons by the ID of the creator.",
-            "schema": {
-              "$ref": "#/components/schemas/FlakeId"
-            }
-          },
-          {
-            "name": "exclude_generated",
-            "in": "query",
-            "description": "Exclude auto-generated coupons from the results when set to true.",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "exclude_inactive",
-            "in": "query",
-            "description": "Exclude inactive coupons from the results when set to true.",
-            "schema": {
-              "type": "boolean"
-            }
           }
         ],
         "responses": {
@@ -6426,13 +6402,6 @@
             }
           },
           {
-            "name": "store_id",
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/FlakeId"
-            }
-          },
-          {
             "name": "customer_id",
             "in": "query",
             "schema": {
@@ -6462,6 +6431,13 @@
           },
           {
             "name": "checkout_id",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "trial_id",
             "in": "query",
             "schema": {
               "$ref": "#/components/schemas/FlakeId"
@@ -7087,6 +7063,401 @@
         "responses": {
           "204": {
             "description": "No Content"
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ]
+      }
+    },
+    "/v1/stores/{storeId}/customers/{customerId}/trial-eligibility/overrides": {
+      "get": {
+        "tags": [
+          "trial-eligibility"
+        ],
+        "operationId": "CustomersTrialEligibility_GetOverrides",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "customerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "The maximum number of items to return in a single request.",
+            "schema": {
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "description": "Returns items after the specified ID.\nUsed for forward pagination through results.",
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            },
+            "example": null
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "description": "Returns items before the specified ID.\nUsed for backward pagination through results.",
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            },
+            "example": null
+          },
+          {
+            "name": "asc",
+            "in": "query",
+            "description": "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order.",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TrialEligibilityOverrideDto"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "trial-eligibility"
+        ],
+        "operationId": "CustomersTrialEligibility_CreateOverride",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "customerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTrialEligibilityOverrideDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTrialEligibilityOverrideDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTrialEligibilityOverrideDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrialEligibilityOverrideDto"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ]
+      }
+    },
+    "/v1/stores/{storeId}/customers/{customerId}/trial-eligibility/overrides/{trialEligibilityOverrideId}": {
+      "delete": {
+        "tags": [
+          "trial-eligibility"
+        ],
+        "operationId": "CustomersTrialEligibility_DeleteOverride",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "trialEligibilityOverrideId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "customerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ]
+      }
+    },
+    "/v1/stores/{storeId}/trials": {
+      "get": {
+        "tags": [
+          "trials"
+        ],
+        "summary": "Get trials for a store",
+        "operationId": "Trials_GetTrials",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/TrialStatusDto"
+              }
+            }
+          },
+          {
+            "name": "customer_id",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "subscription_id",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "checkout_id",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "trial_id",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "The maximum number of items to return in a single request.",
+            "schema": {
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "description": "Returns items after the specified ID.\nUsed for forward pagination through results.",
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            },
+            "example": null
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "description": "Returns items before the specified ID.\nUsed for backward pagination through results.",
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            },
+            "example": null
+          },
+          {
+            "name": "asc",
+            "in": "query",
+            "description": "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order.",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TrialDto"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ]
+      }
+    },
+    "/v1/stores/{storeId}/trials/{trialId}": {
+      "get": {
+        "tags": [
+          "trials"
+        ],
+        "summary": "Get a trial by ID for a store",
+        "operationId": "Trials_GetTrial",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "trialId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrialDto"
+                }
+              }
+            }
           },
           "default": {
             "description": "Error response",
@@ -8221,6 +8592,11 @@
             "type": "boolean",
             "description": "Determines whether this line should create a subscription"
           },
+          "trial": {
+            "type": "boolean",
+            "description": "Indicates whether the product should be trialed",
+            "nullable": true
+          },
           "gift_to": {
             "$ref": "#/components/schemas/CustomerPlatformAccountDto"
           },
@@ -8265,6 +8641,11 @@
           "subscription": {
             "type": "boolean",
             "description": "Determines whether this line should create a subscription"
+          },
+          "trial": {
+            "type": "boolean",
+            "description": "Indicates whether the product should be trialed",
+            "nullable": true
           },
           "gift_to": {
             "$ref": "#/components/schemas/CustomerPlatformAccountDto"
@@ -8624,6 +9005,25 @@
           "ends_at": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "CreateTrialEligibilityOverrideDto": {
+        "required": [
+          "product_id",
+          "expires_at"
+        ],
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "note": {
+            "type": "string"
           }
         }
       },
@@ -9198,6 +9598,9 @@
             "$ref": "#/components/schemas/FlakeId"
           },
           "subscription_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "trial_id": {
             "$ref": "#/components/schemas/FlakeId"
           },
           "execute_on_gameserver_id": {
@@ -9895,6 +10298,9 @@
           },
           "subscription_interval_scale": {
             "$ref": "#/components/schemas/ProductSubscriptionIntervalScale"
+          },
+          "trial": {
+            "$ref": "#/components/schemas/UpsertProductTrialConfigurationDto"
           },
           "remove_after_enabled": {
             "type": "boolean",
@@ -10794,7 +11200,9 @@
           "on_expire",
           "on_refund",
           "on_renew",
-          "on_chargeback"
+          "on_chargeback",
+          "on_trial_start",
+          "on_trial_expire"
         ],
         "type": "string",
         "description": "Defines the stages at which product commands can be executed.",
@@ -10804,7 +11212,9 @@
           "on_expire": "Commands that should be executed when a product expires.",
           "on_refund": "Commands that should be executed when a product is refunded.",
           "on_renew": "Commands that should be executed when a subscription is renewed.",
-          "on_chargeback": "Commands that should be executed when an order is charged back."
+          "on_chargeback": "Commands that should be executed when an order is charged back.",
+          "on_trial_start": "Commands that should be executed when a trial is started.",
+          "on_trial_expire": "Commands that should be executed when a trial expires."
         }
       },
       "ProductDeliverableActionsDto": {
@@ -10905,6 +11315,7 @@
           "subscription_interval_scale",
           "subscription_interval_value",
           "tags",
+          "trial",
           "version_id"
         ],
         "type": "object",
@@ -10969,6 +11380,9 @@
           },
           "subscription_interval_scale": {
             "$ref": "#/components/schemas/ProductSubscriptionIntervalScale"
+          },
+          "trial": {
+            "$ref": "#/components/schemas/ProductTrialConfigurationDto"
           },
           "remove_after_enabled": {
             "type": "boolean",
@@ -11398,6 +11812,65 @@
           "digital_goods_subscription_gaming": "Cloud based or downloaded access to digital gaming services (used by default for game servers).",
           "digital_goods_permanent_gaming": "Permanent digital goods for gaming (not recommended)."
         }
+      },
+      "ProductTrialConfigurationDto": {
+        "required": [
+          "allow_repeat_trials",
+          "enabled",
+          "new_customer_order_lookback_scale",
+          "new_customer_order_lookback_value",
+          "new_customers_only",
+          "period_scale",
+          "period_value",
+          "repeat_trial_cooldown_scale",
+          "repeat_trial_cooldown_value",
+          "revoke_immediately_when_canceled"
+        ],
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "description": "Indicates if trials should be enabled for the product."
+          },
+          "period_value": {
+            "type": "integer",
+            "description": "The trial period value.",
+            "format": "int32"
+          },
+          "period_scale": {
+            "$ref": "#/components/schemas/ProductSubscriptionIntervalScale"
+          },
+          "revoke_immediately_when_canceled": {
+            "type": "boolean",
+            "description": "Indicates if the trial should be revoked immediately when canceled or at the end of the trial."
+          },
+          "new_customers_only": {
+            "type": "boolean",
+            "description": "Restricts trials to customers who have no orders within the lookback period.\nWhen enabled, customers with recent orders will be ineligible for trials."
+          },
+          "new_customer_order_lookback_value": {
+            "type": "integer",
+            "description": "The lookback period value for determining if a customer is \"new\".\nOnly used when new_customers_only is enabled.",
+            "format": "int32"
+          },
+          "new_customer_order_lookback_scale": {
+            "$ref": "#/components/schemas/ProductSubscriptionIntervalScale"
+          },
+          "allow_repeat_trials": {
+            "type": "boolean",
+            "description": "Allows customers to trial again after a cooldown period following their previous trial.\nWhen disabled, customers can only trial once and never become eligible again."
+          },
+          "repeat_trial_cooldown_value": {
+            "type": "integer",
+            "description": "The cooldown period value before a customer becomes eligible for another trial.\nOnly used when allow_repeat_trial is enabled.",
+            "format": "int32"
+          },
+          "repeat_trial_cooldown_scale": {
+            "$ref": "#/components/schemas/ProductSubscriptionIntervalScale"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents the configuration for trials of a product"
       },
       "PurchaseFollowUpStoreConfigurationDto": {
         "required": [
@@ -12659,6 +13132,179 @@
         },
         "additionalProperties": false
       },
+      "TrialDto": {
+        "required": [
+          "created_at",
+          "customer",
+          "customer_id",
+          "id",
+          "period_scale",
+          "period_value",
+          "pretty_id",
+          "product_id",
+          "product_name",
+          "product_version_id",
+          "status",
+          "store_id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "pretty_id": {
+            "type": "string",
+            "readOnly": true
+          },
+          "store_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "checkout_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "checkout_line_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "customer_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "customer": {
+            "$ref": "#/components/schemas/CustomerDto"
+          },
+          "product_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "product_version_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "product_name": {
+            "type": "string"
+          },
+          "product_image_url": {
+            "type": "string",
+            "nullable": true
+          },
+          "period_value": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "period_scale": {
+            "type": "string"
+          },
+          "starts_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "ends_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/TrialStatusDto"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "canceled_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "canceled_by": {
+            "$ref": "#/components/schemas/ActorDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TrialEligibilityOverrideDto": {
+        "required": [
+          "created_at",
+          "created_by",
+          "customer_id",
+          "expires_at",
+          "id",
+          "pretty_id",
+          "product_id",
+          "product_name",
+          "store_id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "pretty_id": {
+            "type": "string",
+            "readOnly": true
+          },
+          "store_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "customer_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "product_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "product_name": {
+            "type": "string"
+          },
+          "product_image_url": {
+            "type": "string",
+            "nullable": true
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "created_by": {
+            "$ref": "#/components/schemas/ActorDto"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "used_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "used_on_trial_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "deleted_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "deleted_by": {
+            "$ref": "#/components/schemas/ActorDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TrialStatusDto": {
+        "enum": [
+          "created",
+          "active",
+          "canceled",
+          "completed"
+        ],
+        "type": "string",
+        "x-enumDescriptions": {
+          "created": "The trial has been created but is not yet active.",
+          "active": "The trial is currently active.",
+          "canceled": "The trial has been canceled.",
+          "completed": "The trial has been completed."
+        }
+      },
       "TrustStoreOnboardingDto": {
         "required": [
           "downloadable_files_added",
@@ -13204,6 +13850,21 @@
           }
         }
       },
+      "UpdateTrialEligibilityOverrideDto": {
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      },
       "UpdateWebhookDto": {
         "required": [
           "reset_secret",
@@ -13418,6 +14079,9 @@
           "subscription_interval_scale": {
             "$ref": "#/components/schemas/ProductSubscriptionIntervalScale"
           },
+          "trial": {
+            "$ref": "#/components/schemas/UpsertProductTrialConfigurationDto"
+          },
           "remove_after_enabled": {
             "type": "boolean",
             "description": "Indicates whether automatic removal is enabled.",
@@ -13545,6 +14209,60 @@
         },
         "additionalProperties": false
       },
+      "UpsertProductTrialConfigurationDto": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "description": "Indicates if trials should be enabled for the product.",
+            "nullable": true
+          },
+          "period_value": {
+            "type": "integer",
+            "description": "The trial period value.",
+            "format": "int32",
+            "nullable": true
+          },
+          "period_scale": {
+            "$ref": "#/components/schemas/ProductSubscriptionIntervalScale"
+          },
+          "revoke_immediately_when_canceled": {
+            "type": "boolean",
+            "description": "Indicates if the trial should be revoked immediately when canceled or at the end of the trial.",
+            "nullable": true
+          },
+          "new_customers_only": {
+            "type": "boolean",
+            "description": "Restricts trials to customers who have no orders within the lookback period.\nWhen enabled, customers with recent orders will be ineligible for trials.",
+            "nullable": true
+          },
+          "new_customer_order_lookback_value": {
+            "type": "integer",
+            "description": "The lookback period value for determining if a customer is \"new\".\nOnly used when new_customers_only is enabled.",
+            "format": "int32",
+            "nullable": true
+          },
+          "new_customer_order_lookback_scale": {
+            "$ref": "#/components/schemas/ProductSubscriptionIntervalScale"
+          },
+          "allow_repeat_trials": {
+            "type": "boolean",
+            "description": "Allows customers to trial again after a cooldown period following their previous trial.\nWhen disabled, customers can only trial once and never become eligible again.",
+            "nullable": true
+          },
+          "repeat_trial_cooldown_value": {
+            "type": "integer",
+            "description": "The cooldown period value before a customer becomes eligible for another trial.\nOnly used when allow_repeat_trials is enabled.",
+            "format": "int32",
+            "nullable": true
+          },
+          "repeat_trial_cooldown_scale": {
+            "$ref": "#/components/schemas/ProductSubscriptionIntervalScale"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents the configuration for trials of a product"
+      },
       "UpsertTagRequestDto": {
         "type": "object",
         "properties": {
@@ -13615,7 +14333,10 @@
           "on_connected_user_payout_created",
           "on_connected_user_payout_completed",
           "on_connected_user_transaction_inserted",
-          "on_connected_user_became_unpayable"
+          "on_connected_user_became_unpayable",
+          "on_trial_activated",
+          "on_trial_completed",
+          "on_trial_canceled"
         ],
         "type": "string"
       },

@@ -1146,6 +1146,11 @@
             "type": "boolean",
             "description": "Determines whether this line should create a subscription"
           },
+          "trial": {
+            "type": "boolean",
+            "description": "Indicates whether the product should be trialed",
+            "nullable": true
+          },
           "gift_to": {
             "$ref": "#/components/schemas/CustomerPlatformAccountDto"
           },
@@ -1953,6 +1958,7 @@
           "subscription_interval_scale",
           "subscription_interval_value",
           "tags",
+          "trial",
           "version_id"
         ],
         "type": "object",
@@ -2066,6 +2072,9 @@
           },
           "stock": {
             "$ref": "#/components/schemas/StorefrontProductStockStatusDto"
+          },
+          "trial": {
+            "$ref": "#/components/schemas/StorefrontProductTrialDto"
           },
           "tags": {
             "type": "array",
@@ -2208,6 +2217,31 @@
         },
         "additionalProperties": false,
         "description": "The stock status information for the product in the storefront."
+      },
+      "StorefrontProductTrialDto": {
+        "required": [
+          "eligible",
+          "enabled",
+          "period_scale",
+          "period_value"
+        ],
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "eligible": {
+            "type": "boolean"
+          },
+          "period_value": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "period_scale": {
+            "$ref": "#/components/schemas/ProductSubscriptionIntervalScale"
+          }
+        },
+        "additionalProperties": false
       },
       "StorefrontSaleDto": {
         "required": [

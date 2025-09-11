@@ -161,6 +161,14 @@
             }
           },
           {
+            "name": "trial",
+            "in": "query",
+            "description": "Set to either '1' or 'true' to indicate if the line should be trialed.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "gameserver_id",
             "in": "query",
             "description": "A game server ID, required if single_game_server_only is enabled for the product.",
@@ -1033,7 +1041,8 @@
           "product_id",
           "quantity",
           "slug",
-          "subscription"
+          "subscription",
+          "trial"
         ],
         "type": "object",
         "properties": {
@@ -1065,6 +1074,10 @@
           "subscription": {
             "type": "boolean",
             "description": "Indicates whether this line item should be a subscription"
+          },
+          "trial": {
+            "type": "boolean",
+            "description": "Indicates whether this line will be trialied by the customer."
           },
           "image_url": {
             "type": "string",
@@ -2228,13 +2241,16 @@
         "type": "object",
         "properties": {
           "enabled": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Indicates whether the trial period is enabled for this product."
           },
           "eligible": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Indicates whether the customer is eligible for the trial period."
           },
           "period_value": {
             "type": "integer",
+            "description": "The duration value of the trial period.",
             "format": "int32"
           },
           "period_scale": {

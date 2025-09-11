@@ -4256,15 +4256,19 @@ paths:
     get:
       tags:
         - trial-eligibility
+      summary: Get trial eligibility overrides
+      description: Retrieves all trial eligibility overrides for the specified customer.
       operationId: CustomersTrialEligibility_GetOverrides
       parameters:
         - name: storeId
           in: path
+          description: The ID of the store to retrieve trial eligibility overrides for.
           required: true
           schema:
             $ref: '#/components/schemas/FlakeId'
         - name: customerId
           in: path
+          description: The ID of the customer to retrieve trial eligibility overrides for.
           required: true
           schema:
             $ref: '#/components/schemas/FlakeId'
@@ -4313,19 +4317,24 @@ paths:
     post:
       tags:
         - trial-eligibility
+      summary: Create trial eligibility override
+      description: Creates a new trial eligibility override for the specified customer.
       operationId: CustomersTrialEligibility_CreateOverride
       parameters:
         - name: storeId
           in: path
+          description: The ID of the store to create the trial eligibility override for.
           required: true
           schema:
             $ref: '#/components/schemas/FlakeId'
         - name: customerId
           in: path
+          description: The ID of the customer to create the trial eligibility override for.
           required: true
           schema:
             $ref: '#/components/schemas/FlakeId'
       requestBody:
+        description: The trial eligibility override data.
         content:
           application/json:
             schema:
@@ -4355,15 +4364,19 @@ paths:
     delete:
       tags:
         - trial-eligibility
+      summary: Delete trial eligibility override
+      description: Deletes an existing trial eligibility override.
       operationId: CustomersTrialEligibility_DeleteOverride
       parameters:
         - name: storeId
           in: path
+          description: The ID of the store to delete the trial eligibility override for.
           required: true
           schema:
             $ref: '#/components/schemas/FlakeId'
         - name: trialEligibilityOverrideId
           in: path
+          description: The ID of the trial eligibility override to delete.
           required: true
           schema:
             $ref: '#/components/schemas/FlakeId'
@@ -4397,24 +4410,29 @@ paths:
             $ref: '#/components/schemas/FlakeId'
         - name: status
           in: query
+          description: Filters trials by their status. Multiple statuses can be specified.
           schema:
             type: array
             items:
               $ref: '#/components/schemas/TrialStatusDto'
         - name: customer_id
           in: query
+          description: Filters trials by the customer identifier.
           schema:
             $ref: '#/components/schemas/FlakeId'
         - name: subscription_id
           in: query
+          description: Filters trials by the associated subscription identifier.
           schema:
             $ref: '#/components/schemas/FlakeId'
         - name: checkout_id
           in: query
+          description: Filters trials by the checkout session identifier that initiated them.
           schema:
             $ref: '#/components/schemas/FlakeId'
         - name: trial_id
           in: query
+          description: Filters to a specific trial by its identifier.
           schema:
             $ref: '#/components/schemas/FlakeId'
         - name: limit
@@ -8766,6 +8784,7 @@ components:
           $ref: '#/components/schemas/FlakeId'
         pretty_id:
           type: string
+          description: The human-readable formatted version of the trial identifier.
           readOnly: true
         store_id:
           $ref: '#/components/schemas/FlakeId'
@@ -8783,29 +8802,37 @@ components:
           $ref: '#/components/schemas/FlakeId'
         product_name:
           type: string
+          description: The name of the product being trialed.
         product_image_url:
           type: string
+          description: 'The URL of the product image, if available.'
           nullable: true
         period_value:
           type: integer
+          description: The duration value of the trial period.
           format: int32
         period_scale:
           type: string
+          description: 'The timescale unit for the trial period (e.g., "days", "weeks", "months").'
         starts_at:
           type: string
+          description: 'The date and time when the trial period starts, if applicable.'
           format: date-time
           nullable: true
         ends_at:
           type: string
+          description: 'The date and time when the trial period ends, if applicable.'
           format: date-time
           nullable: true
         status:
           $ref: '#/components/schemas/TrialStatusDto'
         created_at:
           type: string
+          description: The date and time when the trial was created.
           format: date-time
         canceled_at:
           type: string
+          description: 'The date and time when the trial was canceled, if applicable.'
           format: date-time
           nullable: true
         canceled_by:
@@ -8828,6 +8855,7 @@ components:
           $ref: '#/components/schemas/FlakeId'
         pretty_id:
           type: string
+          description: The human-readable formatted version of the override identifier.
           readOnly: true
         store_id:
           $ref: '#/components/schemas/FlakeId'
@@ -8837,28 +8865,35 @@ components:
           $ref: '#/components/schemas/FlakeId'
         product_name:
           type: string
+          description: The name of the product associated with this override.
         product_image_url:
           type: string
+          description: 'The URL of the product image, if available.'
           nullable: true
         created_at:
           type: string
+          description: The date and time when this override was created.
           format: date-time
         created_by:
           $ref: '#/components/schemas/ActorDto'
         expires_at:
           type: string
+          description: The date and time when this override expires and is no longer valid.
           format: date-time
         used_at:
           type: string
+          description: 'The date and time when this override was used to start a trial, if applicable.'
           format: date-time
           nullable: true
         used_on_trial_id:
           $ref: '#/components/schemas/FlakeId'
         note:
           type: string
+          description: An optional note or comment about this override.
           nullable: true
         deleted_at:
           type: string
+          description: 'The date and time when this override was deleted, if applicable.'
           format: date-time
           nullable: true
         deleted_by:

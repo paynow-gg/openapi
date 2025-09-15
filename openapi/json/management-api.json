@@ -10861,6 +10861,9 @@
           "subscription_id": {
             "$ref": "#/components/schemas/FlakeId"
           },
+          "trial_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
           "subscription_interval_value": {
             "type": "integer",
             "description": "The interval value for subscription products",

@@ -673,6 +673,7 @@ paths:
     post:
       tags:
         - command-delivery
+      summary: Update product version id for inventory items of given product id
       operationId: RootCommandDelivery_UpdateInventoryItemProductVersion
       parameters:
         - name: storeId
@@ -698,6 +699,44 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UpdateInventoryItemProductVersionResponseDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/command-delivery/unqueue':
+    post:
+      tags:
+        - command-delivery
+      summary: Unqueue commands by attempt IDs
+      operationId: RootCommandDelivery_UnqueueCommands
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnqueueCommandsRequestDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UnqueueCommandsRequestDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UnqueueCommandsRequestDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnqueueCommandsResponseDto'
         default:
           description: Error response
           content:
@@ -9116,6 +9155,25 @@ components:
           type: string
           description: The user agent string of the client that made the submission.
           nullable: true
+      additionalProperties: false
+    UnqueueCommandsRequestDto:
+      required:
+        - attempt_ids
+      type: object
+      properties:
+        attempt_ids:
+          type: array
+          items:
+            $ref: '#/components/schemas/FlakeId'
+      additionalProperties: false
+    UnqueueCommandsResponseDto:
+      required:
+        - unqueued_count
+      type: object
+      properties:
+        unqueued_count:
+          type: integer
+          format: int64
       additionalProperties: false
     UpdateAffiliateLinkDto:
       type: object

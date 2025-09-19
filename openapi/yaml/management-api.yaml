@@ -819,6 +819,16 @@ paths:
           description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
           schema:
             type: boolean
+        - name: status
+          in: query
+          description: Filter by status
+          schema:
+            $ref: '#/components/schemas/CouponFilterStatusEnum'
+        - name: type
+          in: query
+          description: Filter by creation type of coupons.
+          schema:
+            $ref: '#/components/schemas/CouponFilterTypeEnum'
       responses:
         '200':
           description: OK
@@ -5265,6 +5275,28 @@ components:
         once: The coupon can be used only once.
         forever: The coupon remains valid indefinitely (no expiration).
         repeating: 'The coupon is valid for a repeating period, typically specified in months.'
+    CouponFilterStatusEnum:
+      enum:
+        - all
+        - active
+        - inactive
+      type: string
+      description: Will filter by coupon status.
+      x-enumDescriptions:
+        all: List all coupons.
+        active: Coupon's that are active.
+        inactive: Coupon's that are inactive.
+    CouponFilterTypeEnum:
+      enum:
+        - all
+        - manual
+        - generated
+      type: string
+      description: Will filter by coupon creation type.
+      x-enumDescriptions:
+        all: List all coupons.
+        manual: Coupon's that were created by a user.
+        generated: 'Coupon''s that were created by the system (basket recover, etc.).'
     CreateAffiliateLinkDto:
       required:
         - apply_for_subscriptions

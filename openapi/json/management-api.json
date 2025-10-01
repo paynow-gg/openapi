@@ -8817,7 +8817,6 @@
       },
       "CreateCheckoutSessionManagementDto": {
         "required": [
-          "auto_redirect",
           "customer_id",
           "lines",
           "subscription"
@@ -8856,7 +8855,8 @@
           },
           "auto_redirect": {
             "type": "boolean",
-            "description": "Whether to automatically redirect the customer (return_url must be set)"
+            "description": "Whether to automatically redirect the customer (return_url must be set)",
+            "nullable": true
           },
           "metadata": {
             "type": "object",

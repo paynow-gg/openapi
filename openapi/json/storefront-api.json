@@ -1198,8 +1198,7 @@
       },
       "CreateCheckoutSessionRequestDto": {
         "required": [
-          "lines",
-          "subscription"
+          "lines"
         ],
         "type": "object",
         "properties": {
@@ -1213,6 +1212,7 @@
           "subscription": {
             "type": "boolean",
             "description": "Whether this checkout creates a subscription.\nDEPRECATED: Use 'subscription' field in 'lines' array objects instead.",
+            "nullable": true,
             "deprecated": true
           },
           "coupon_id": {

@@ -7743,6 +7743,7 @@ components:
     ProductStockLimitDto:
       required:
         - enabled
+        - include_trials
         - time_scale
       type: object
       properties:
@@ -7761,6 +7762,9 @@ components:
           nullable: true
         time_scale:
           $ref: '#/components/schemas/ProductStockTimeScale'
+        include_trials:
+          type: boolean
+          description: Indicates if trials should be included in the active stock limit calculation.
       additionalProperties: false
     ProductStockTimeScale:
       enum:

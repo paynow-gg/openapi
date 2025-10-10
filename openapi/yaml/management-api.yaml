@@ -446,305 +446,6 @@ paths:
                 $ref: '#/components/schemas/PayNowError'
       security:
         - APIKey: [ ]
-  '/v1/stores/{storeId}/orders/{orderId}/command-delivery':
-    get:
-      tags:
-        - command-delivery
-      summary: Get delivery items associated with an order
-      description: Retrieves all delivery items associated with a specific order.
-      operationId: RootOrdersCommandDelivery_GetOrderDeliveryItems
-      parameters:
-        - name: storeId
-          in: path
-          description: The ID of the store.
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-        - name: orderId
-          in: path
-          description: The ID of the order to retrieve delivery items from.
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/DeliveryItemDto'
-        default:
-          description: Error response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PayNowError'
-      security:
-        - APIKey: [ ]
-  '/v1/stores/{storeId}/customers/{customerId}/command-delivery':
-    get:
-      tags:
-        - command-delivery
-      summary: Get delivery items associated with a customer
-      description: Retrieves delivery items associated with a customer
-      operationId: RootCustomersCommandDeliveryControllerBase_GetDeliveryItems
-      parameters:
-        - name: storeId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-        - name: customerId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-        - name: limit
-          in: query
-          description: The maximum number of items to return in a single request.
-          schema:
-            maximum: 100
-            minimum: 1
-            type: integer
-            format: int32
-        - name: after
-          in: query
-          description: "Returns items after the specified ID.\nUsed for forward pagination through results."
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-          example: 
-        - name: before
-          in: query
-          description: "Returns items before the specified ID.\nUsed for backward pagination through results."
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-          example: 
-        - name: asc
-          in: query
-          description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
-          schema:
-            type: boolean
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/DeliveryItemDto'
-        default:
-          description: Error response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PayNowError'
-      security:
-        - APIKey: [ ]
-    post:
-      tags:
-        - command-delivery
-      summary: Assign a delivery item to a customer
-      description: Allows you to assign a delivery item to a customer
-      operationId: RootCustomersCommandDeliveryControllerBase_AssignDeliveryItem
-      parameters:
-        - name: storeId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-        - name: customerId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/DeliveryItemAssignmentDto'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/DeliveryItemAssignmentDto'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/DeliveryItemAssignmentDto'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/DeliveryItemDto'
-        default:
-          description: Error response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PayNowError'
-      security:
-        - APIKey: [ ]
-  '/v1/stores/{storeId}/customers/{customerId}/command-delivery/{deliveryItemId}':
-    delete:
-      tags:
-        - command-delivery
-      summary: Revoke a delivery item for a customer
-      description: Allows you to revoke a delivery item associated with a customer
-      operationId: RootCustomersCommandDeliveryControllerBase_RevokeDeliveryItem
-      parameters:
-        - name: storeId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-        - name: customerId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-        - name: deliveryItemId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-      responses:
-        '204':
-          description: No Content
-        default:
-          description: Error response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PayNowError'
-      security:
-        - APIKey: [ ]
-  '/v1/stores/{storeId}/command-delivery':
-    post:
-      tags:
-        - command-delivery
-      summary: Assign delivery items in bulk
-      description: Allows you to assign multiple delivery items for multiple customers in bulk
-      operationId: RootCommandDelivery_AssignDeliveryItemsBulk
-      parameters:
-        - name: storeId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/DeliveryItemAssignmentBulkDto'
-          text/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/DeliveryItemAssignmentBulkDto'
-          application/*+json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/DeliveryItemAssignmentBulkDto'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/DeliveryItemDto'
-        default:
-          description: Error response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PayNowError'
-      security:
-        - APIKey: [ ]
-  '/v1/stores/{storeId}/command-delivery/inventory-item/update-product-versions':
-    post:
-      tags:
-        - command-delivery
-      summary: Update product version id for inventory items of given product id
-      operationId: RootCommandDelivery_UpdateInventoryItemProductVersion
-      parameters:
-        - name: storeId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateInventoryItemProductVersionRequestDto'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/UpdateInventoryItemProductVersionRequestDto'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/UpdateInventoryItemProductVersionRequestDto'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UpdateInventoryItemProductVersionResponseDto'
-        default:
-          description: Error response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PayNowError'
-      security:
-        - APIKey: [ ]
-  '/v1/stores/{storeId}/command-delivery/unqueue':
-    post:
-      tags:
-        - command-delivery
-      summary: Unqueue commands by attempt IDs
-      operationId: RootCommandDelivery_UnqueueCommands
-      parameters:
-        - name: storeId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UnqueueCommandsRequestDto'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/UnqueueCommandsRequestDto'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/UnqueueCommandsRequestDto'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnqueueCommandsResponseDto'
-        default:
-          description: Error response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PayNowError'
-      security:
-        - APIKey: [ ]
   '/v1/stores/{storeId}/coupons':
     post:
       tags:
@@ -1595,18 +1296,647 @@ paths:
                 $ref: '#/components/schemas/PayNowError'
       security:
         - APIKey: [ ]
-  '/v1/stores/{storeId}/deliverables/{deliverableId}/commands/resend':
+  '/v1/stores/{storeId}/orders/{orderId}/delivery/items':
+    get:
+      tags:
+        - delivery
+      summary: Get delivery items associated with an order
+      description: Retrieves all delivery items associated with a specific order.
+      operationId: OrdersDelivery_GetOrderDeliveryItems
+      parameters:
+        - name: storeId
+          in: path
+          description: The ID of the store.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: orderId
+          in: path
+          description: The ID of the order to retrieve delivery items from.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeliveryItemDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/orders/{orderId}/command-delivery':
+    get:
+      tags:
+        - delivery
+      summary: Get delivery items associated with an order
+      description: "**Deprecated:** \n\nRetrieves all delivery items associated with a specific order."
+      operationId: LegacyOrdersCommandDeliveryControllerWithDash_GetOrderDeliveryItems
+      parameters:
+        - name: storeId
+          in: path
+          description: The ID of the store.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: orderId
+          in: path
+          description: The ID of the order to retrieve delivery items from.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeliveryItemDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      deprecated: true
+      security:
+        - APIKey: [ ]
+      x-gitbook-ignore: true
+  '/v1/stores/{storeId}/delivery/items':
     post:
       tags:
-        - deliverables
-      operationId: Deliverables_ResendCommandsForGameServer
+        - delivery
+      summary: Assign delivery items in bulk
+      description: Allows you to assign multiple delivery items for multiple customers in bulk
+      operationId: Delivery_AssignDeliveryItemsBulk
       parameters:
         - name: storeId
           in: path
           required: true
           schema:
             $ref: '#/components/schemas/FlakeId'
-        - name: deliverableId
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/DeliveryItemAssignmentBulkDto'
+          text/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/DeliveryItemAssignmentBulkDto'
+          application/*+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/DeliveryItemAssignmentBulkDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeliveryItemDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/delivery/commands/unqueue':
+    post:
+      tags:
+        - delivery
+      summary: Unqueue commands by Attempt IDs
+      operationId: Delivery_UnqueueDeliveryCommandAttemptByAttemptIDs
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnqueueCommandsRequestDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UnqueueCommandsRequestDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UnqueueCommandsRequestDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnqueueCommandsResponseDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/delivery/items/update-product-versions':
+    post:
+      tags:
+        - delivery
+      summary: Update product version id for delivery items of given product id
+      operationId: Delivery_UpdateDeliveryItemProductVersions
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDeliveryItemProductVersionRequestDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDeliveryItemProductVersionRequestDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UpdateDeliveryItemProductVersionRequestDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateDeliveryItemProductVersionRequestDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/command-delivery':
+    post:
+      tags:
+        - delivery
+      description: '**Deprecated:** '
+      operationId: LegacyCommandDelivery_AssignDeliveryItemsBulk
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/DeliveryItemAssignmentBulkDto'
+          text/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/DeliveryItemAssignmentBulkDto'
+          application/*+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/DeliveryItemAssignmentBulkDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeliveryItemDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      deprecated: true
+      security:
+        - APIKey: [ ]
+      x-gitbook-ignore: true
+  '/v1/stores/{storeId}/command-delivery/unqueue':
+    post:
+      tags:
+        - delivery
+      description: '**Deprecated:** '
+      operationId: LegacyCommandDelivery_UnqueueDeliveryCommandAttemptByAttemptIDs
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnqueueCommandsRequestDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UnqueueCommandsRequestDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UnqueueCommandsRequestDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnqueueCommandsResponseDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      deprecated: true
+      security:
+        - APIKey: [ ]
+      x-gitbook-ignore: true
+  '/v1/stores/{storeId}/customers/{customerId}/delivery/items':
+    get:
+      tags:
+        - delivery
+      summary: Get delivery items associated with a customer
+      description: Retrieves delivery items associated with a customer
+      operationId: CustomersDelivery_GetDeliveryItems
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: limit
+          in: query
+          description: The maximum number of items to return in a single request.
+          schema:
+            maximum: 100
+            minimum: 1
+            type: integer
+            format: int32
+        - name: after
+          in: query
+          description: "Returns items after the specified ID.\nUsed for forward pagination through results."
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+          example: 
+        - name: before
+          in: query
+          description: "Returns items before the specified ID.\nUsed for backward pagination through results."
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+          example: 
+        - name: asc
+          in: query
+          description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeliveryItemDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    post:
+      tags:
+        - delivery
+      summary: Assign a delivery item to a customer
+      description: Allows you to assign a delivery item to a customer
+      operationId: CustomersDelivery_AssignDeliveryItem
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryItemAssignmentDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryItemAssignmentDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DeliveryItemAssignmentDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeliveryItemDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/customers/{customerId}/delivery/items/{deliveryItemId}':
+    delete:
+      tags:
+        - delivery
+      summary: Revoke a delivery item from a customer
+      description: Allows you to revoke a delivery item associated with a customer
+      operationId: CustomersDelivery_RevokeDeliveryItem
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: deliveryItemId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/customers/{customerId}/delivery/commands':
+    get:
+      tags:
+        - delivery
+      summary: Get command attempts associated with a customer
+      description: Retrieves command attempts associated with a customer
+      operationId: CustomersDelivery_GetCommandAttempts
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: limit
+          in: query
+          description: The maximum number of items to return in a single request.
+          schema:
+            maximum: 100
+            minimum: 1
+            type: integer
+            format: int32
+        - name: after
+          in: query
+          description: "Returns items after the specified ID.\nUsed for forward pagination through results."
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+          example: 
+        - name: before
+          in: query
+          description: "Returns items before the specified ID.\nUsed for backward pagination through results."
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+          example: 
+        - name: asc
+          in: query
+          description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CommandAttemptDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/customers/{customerId}/command-delivery':
+    get:
+      tags:
+        - delivery
+      description: '**Deprecated:** '
+      operationId: LegacyCustomersDeliveryControllerWithDash_GetDeliveryItems
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: limit
+          in: query
+          description: The maximum number of items to return in a single request.
+          schema:
+            maximum: 100
+            minimum: 1
+            type: integer
+            format: int32
+        - name: after
+          in: query
+          description: "Returns items after the specified ID.\nUsed for forward pagination through results."
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+          example: 
+        - name: before
+          in: query
+          description: "Returns items before the specified ID.\nUsed for backward pagination through results."
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+          example: 
+        - name: asc
+          in: query
+          description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeliveryItemDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      deprecated: true
+      security:
+        - APIKey: [ ]
+      x-gitbook-ignore: true
+    post:
+      tags:
+        - delivery
+      description: '**Deprecated:** '
+      operationId: LegacyCustomersDeliveryControllerWithDash_AssignDeliveryItem
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryItemAssignmentDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryItemAssignmentDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DeliveryItemAssignmentDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeliveryItemDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      deprecated: true
+      security:
+        - APIKey: [ ]
+      x-gitbook-ignore: true
+  '/v1/stores/{storeId}/customers/{customerId}/command-delivery/{deliveryItemId}':
+    delete:
+      tags:
+        - delivery
+      description: '**Deprecated:** '
+      operationId: LegacyCustomersDeliveryControllerWithDash_RevokeDeliveryItem
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: deliveryItemId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      deprecated: true
+      security:
+        - APIKey: [ ]
+      x-gitbook-ignore: true
+  '/v1/stores/{storeId}/gameservers/{gameServerId}/delivery/commands/resend':
+    post:
+      tags:
+        - delivery
+      summary: Resend commands for a given Gameserver
+      operationId: GameServersDelivery_ResendDeliveryCommandsForGameServer
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: gameServerId
           in: path
           required: true
           schema:
@@ -3328,7 +3658,7 @@ paths:
       tags:
         - products
       summary: Get products
-      description: "Retrieves all products for the specified store.\nDO NOT USE THIS ROUTE FOR DISPLAYING PRODUCTS ON YOUR STOREFRONT, use the storefront API instead."
+      description: "Retrieves all products for the specified store.\nDO NOT USE THIS ROUTE FOR DISPLAYING PRODUCTS ON YOUR STOREFRONT, use the storefront API instead!"
       operationId: Products_GetProducts
       parameters:
         - name: storeId
@@ -4301,150 +4631,6 @@ paths:
                 $ref: '#/components/schemas/PayNowError'
       security:
         - APIKey: [ ]
-  '/v1/stores/{storeId}/customers/{customerId}/trial-eligibility/overrides':
-    get:
-      tags:
-        - trial-eligibility
-      summary: Get trial eligibility overrides
-      description: Retrieves all trial eligibility overrides for the specified customer.
-      operationId: CustomersTrialEligibility_GetOverrides
-      parameters:
-        - name: storeId
-          in: path
-          description: The ID of the store to retrieve trial eligibility overrides for.
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-        - name: customerId
-          in: path
-          description: The ID of the customer to retrieve trial eligibility overrides for.
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-        - name: limit
-          in: query
-          description: The maximum number of items to return in a single request.
-          schema:
-            maximum: 100
-            minimum: 1
-            type: integer
-            format: int32
-        - name: after
-          in: query
-          description: "Returns items after the specified ID.\nUsed for forward pagination through results."
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-          example: 
-        - name: before
-          in: query
-          description: "Returns items before the specified ID.\nUsed for backward pagination through results."
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-          example: 
-        - name: asc
-          in: query
-          description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
-          schema:
-            type: boolean
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/TrialEligibilityOverrideDto'
-        default:
-          description: Error response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PayNowError'
-      security:
-        - APIKey: [ ]
-    post:
-      tags:
-        - trial-eligibility
-      summary: Create trial eligibility override
-      description: Creates a new trial eligibility override for the specified customer.
-      operationId: CustomersTrialEligibility_CreateOverride
-      parameters:
-        - name: storeId
-          in: path
-          description: The ID of the store to create the trial eligibility override for.
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-        - name: customerId
-          in: path
-          description: The ID of the customer to create the trial eligibility override for.
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-      requestBody:
-        description: The trial eligibility override data.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateTrialEligibilityOverrideDto'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/CreateTrialEligibilityOverrideDto'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/CreateTrialEligibilityOverrideDto'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TrialEligibilityOverrideDto'
-        default:
-          description: Error response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PayNowError'
-      security:
-        - APIKey: [ ]
-  '/v1/stores/{storeId}/customers/{customerId}/trial-eligibility/overrides/{trialEligibilityOverrideId}':
-    delete:
-      tags:
-        - trial-eligibility
-      summary: Delete trial eligibility override
-      description: Deletes an existing trial eligibility override.
-      operationId: CustomersTrialEligibility_DeleteOverride
-      parameters:
-        - name: storeId
-          in: path
-          description: The ID of the store to delete the trial eligibility override for.
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-        - name: trialEligibilityOverrideId
-          in: path
-          description: The ID of the trial eligibility override to delete.
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-        - name: customerId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: No Content
-        default:
-          description: Error response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PayNowError'
-      security:
-        - APIKey: [ ]
   '/v1/stores/{storeId}/trials':
     get:
       tags:
@@ -4550,6 +4736,150 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TrialDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/customers/{customerId}/trials/eligibility/overrides':
+    get:
+      tags:
+        - trials
+      summary: Get trial eligibility overrides for a specific customer
+      description: Retrieves all trial eligibility overrides for the specified customer.
+      operationId: CustomersTrialEligibility_GetEligibilityOverridesForCustomer
+      parameters:
+        - name: storeId
+          in: path
+          description: The ID of the store to retrieve trial eligibility overrides for.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: customerId
+          in: path
+          description: The ID of the customer to retrieve trial eligibility overrides for.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: limit
+          in: query
+          description: The maximum number of items to return in a single request.
+          schema:
+            maximum: 100
+            minimum: 1
+            type: integer
+            format: int32
+        - name: after
+          in: query
+          description: "Returns items after the specified ID.\nUsed for forward pagination through results."
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+          example: 
+        - name: before
+          in: query
+          description: "Returns items before the specified ID.\nUsed for backward pagination through results."
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+          example: 
+        - name: asc
+          in: query
+          description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TrialEligibilityOverrideDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    post:
+      tags:
+        - trials
+      summary: Create trial eligibility override for a customer
+      description: Creates a new trial eligibility override for the specified customer.
+      operationId: CustomersTrialEligibility_CreateEligibilityOverrideForCustomer
+      parameters:
+        - name: storeId
+          in: path
+          description: The ID of the store to create the trial eligibility override for.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: customerId
+          in: path
+          description: The ID of the customer to create the trial eligibility override for.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        description: The trial eligibility override data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTrialEligibilityOverrideDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CreateTrialEligibilityOverrideDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/CreateTrialEligibilityOverrideDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrialEligibilityOverrideDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/customers/{customerId}/trials/eligibility/overrides/{trialEligibilityOverrideId}':
+    delete:
+      tags:
+        - trials
+      summary: Delete trial eligibility override for a customer
+      description: Deletes an existing trial eligibility override.
+      operationId: CustomersTrialEligibility_DeleteEligibilityOverrideForCustomer
+      parameters:
+        - name: storeId
+          in: path
+          description: The ID of the store to delete the trial eligibility override for.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: trialEligibilityOverrideId
+          in: path
+          description: The ID of the trial eligibility override to delete.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
         default:
           description: Error response
           content:
@@ -4841,8 +5171,29 @@ paths:
         - APIKey: [ ]
 components:
   schemas:
+    AbandonedCheckoutStoreConfigurationCommandDto:
+      required:
+        - command
+        - id
+        - online_only
+        - store_id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        command:
+          type: string
+          description: The command to execute.
+        online_only:
+          type: boolean
+          description: Indicates if the command should be executed if the player is online.
+      additionalProperties: false
+      description: Represents a command associated with the store-level abandoned checkout configuration.
     AbandonedCheckoutStoreConfigurationDto:
       required:
+        - commands
         - coupon_configuration
         - enabled
         - invalid
@@ -4888,6 +5239,11 @@ components:
           $ref: '#/components/schemas/Period'
         coupon_configuration:
           $ref: '#/components/schemas/MarketingCouponConfigurationDto'
+        commands:
+          type: array
+          items:
+            $ref: '#/components/schemas/AbandonedCheckoutStoreConfigurationCommandDto'
+          description: The commands you want to execute when the email is sent.
         updated_by:
           $ref: '#/components/schemas/ActorDto'
         updated_at:
@@ -4896,8 +5252,23 @@ components:
           format: date-time
       additionalProperties: false
       description: Represents the store-level configuration for abandoned checkout settings.
+    AbandonedCheckoutStoreConfigurationUpdateCommandDto:
+      required:
+        - command
+        - online_only
+      type: object
+      properties:
+        command:
+          type: string
+          description: The command to execute.
+        online_only:
+          type: boolean
+          description: Indicates if the command should be executed if the player is online.
+      additionalProperties: false
+      description: Represents a command associated with the store-level abandoned checkout configuration.
     AbandonedCheckoutStoreConfigurationUpdateDto:
       required:
+        - commands
         - coupon_configuration
         - enabled
         - minimum_order_value
@@ -4932,6 +5303,10 @@ components:
           nullable: true
         max_coupons_global_period:
           $ref: '#/components/schemas/Period'
+        commands:
+          type: array
+          items:
+            $ref: '#/components/schemas/AbandonedCheckoutStoreConfigurationUpdateCommandDto'
         coupon_configuration:
           $ref: '#/components/schemas/MarketingCouponConfigurationDto'
       additionalProperties: false
@@ -5093,16 +5468,17 @@ components:
     CommandAttemptDto:
       required:
         - command
-        - command_stage
         - gameserver_id
         - id
-        - inventory_item_id
         - online_only
         - queued_at
         - rerun
+        - store_id
       type: object
       properties:
         id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
           $ref: '#/components/schemas/FlakeId'
         inventory_item_id:
           $ref: '#/components/schemas/FlakeId'
@@ -5116,8 +5492,11 @@ components:
         customer_name:
           type: string
           nullable: true
+        customer_id:
+          $ref: '#/components/schemas/FlakeId'
         command_stage:
           type: string
+          nullable: true
         command:
           type: string
         online_only:
@@ -7865,8 +8244,29 @@ components:
           $ref: '#/components/schemas/ProductSubscriptionIntervalScale'
       additionalProperties: false
       description: Represents the configuration for trials of a product
+    PurchaseFollowUpStoreConfigurationCommandDto:
+      required:
+        - command
+        - id
+        - online_only
+        - store_id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        command:
+          type: string
+          description: The command to execute.
+        online_only:
+          type: boolean
+          description: Indicates if the command should be executed if the player is online.
+      additionalProperties: false
+      description: Represents a command associated with the store-level purchase follow uo configuration.
     PurchaseFollowUpStoreConfigurationDto:
       required:
+        - commands
         - coupon_configuration
         - enabled
         - invalid
@@ -7912,6 +8312,11 @@ components:
           $ref: '#/components/schemas/Period'
         coupon_configuration:
           $ref: '#/components/schemas/MarketingCouponConfigurationDto'
+        commands:
+          type: array
+          items:
+            $ref: '#/components/schemas/PurchaseFollowUpStoreConfigurationCommandDto'
+          description: The commands you want to execute when the email is sent.
         updated_by:
           $ref: '#/components/schemas/ActorDto'
         updated_at:
@@ -7920,8 +8325,23 @@ components:
           format: date-time
       additionalProperties: false
       description: Represents the store-level configuration for abandoned checkout settings.
+    PurchaseFollowUpStoreConfigurationUpdateCommandDto:
+      required:
+        - command
+        - online_only
+      type: object
+      properties:
+        command:
+          type: string
+          description: The command to execute.
+        online_only:
+          type: boolean
+          description: Indicates if the command should be executed if the player is online.
+      additionalProperties: false
+      description: Represents a command associated with the store-level purchase follow uo configuration.
     PurchaseFollowUpStoreConfigurationUpdateDto:
       required:
+        - commands
         - coupon_configuration
         - enabled
         - minimum_order_value
@@ -7956,6 +8376,10 @@ components:
           nullable: true
         max_coupons_global_period:
           $ref: '#/components/schemas/Period'
+        commands:
+          type: array
+          items:
+            $ref: '#/components/schemas/PurchaseFollowUpStoreConfigurationUpdateCommandDto'
         coupon_configuration:
           $ref: '#/components/schemas/MarketingCouponConfigurationDto'
       additionalProperties: false
@@ -9298,6 +9722,17 @@ components:
         expires_at:
           type: string
           format: date-time
+    UpdateDeliveryItemProductVersionRequestDto:
+      required:
+        - product_id
+        - product_version_id
+      type: object
+      properties:
+        product_version_id:
+          $ref: '#/components/schemas/FlakeId'
+        product_id:
+          $ref: '#/components/schemas/FlakeId'
+      additionalProperties: false
     UpdateGameServerDto:
       type: object
       properties:
@@ -9323,26 +9758,6 @@ components:
         expires_at:
           type: string
           format: date-time
-    UpdateInventoryItemProductVersionRequestDto:
-      required:
-        - product_id
-        - product_version_id
-      type: object
-      properties:
-        product_version_id:
-          $ref: '#/components/schemas/FlakeId'
-        product_id:
-          $ref: '#/components/schemas/FlakeId'
-      additionalProperties: false
-    UpdateInventoryItemProductVersionResponseDto:
-      required:
-        - updated_count
-      type: object
-      properties:
-        updated_count:
-          type: integer
-          format: int32
-      additionalProperties: false
     UpdateNavLinkDto:
       type: object
       properties:
@@ -9778,6 +10193,10 @@ components:
         - on_trial_activated
         - on_trial_completed
         - on_trial_canceled
+        - on_purchase_follow_up_attempt_email_sent
+        - on_purchase_follow_up_attempt_succeeded
+        - on_abandoned_checkout_recovery_attempt_email_sent
+        - on_abandoned_checkout_recovery_attempt_succeeded
       type: string
     WebhookHistoryDto:
       required:

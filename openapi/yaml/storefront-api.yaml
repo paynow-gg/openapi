@@ -291,12 +291,13 @@ paths:
                 $ref: '#/components/schemas/PayNowError'
       security:
         - Customer: [ ]
-  /v1/store/customer/command-delivery:
+  /v1/store/customer/delivery/items:
     get:
       tags:
-        - customer
-      summary: Get storefront customer delivery items
-      operationId: StorefrontCustomer_RootGetStorefrontCustomerDeliveryItems
+        - delivery
+      summary: Get the customers delivery items
+      description: Retrieves the current customers delivery items.
+      operationId: StorefrontCustomerDelivery_GetStorefrontCustomerDeliveryItems
       parameters:
         - name: limit
           in: query
@@ -340,6 +341,58 @@ paths:
                 $ref: '#/components/schemas/PayNowError'
       security:
         - Customer: [ ]
+  /v1/store/customer/command-delivery:
+    get:
+      tags:
+        - delivery
+      summary: Get the customers delivery items
+      description: "**Deprecated:** \n\nRetrieves the current customers delivery items."
+      operationId: LegacyStorefrontCustomerCommandDelivery_GetStorefrontCustomerDeliveryItems
+      parameters:
+        - name: limit
+          in: query
+          description: The maximum number of items to return in a single request.
+          schema:
+            maximum: 100
+            minimum: 1
+            type: integer
+            format: int32
+        - name: after
+          in: query
+          description: "Returns items after the specified ID.\nUsed for forward pagination through results."
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+          example: 
+        - name: before
+          in: query
+          description: "Returns items before the specified ID.\nUsed for backward pagination through results."
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+          example: 
+        - name: asc
+          in: query
+          description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StorefrontDeliveryItemDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      deprecated: true
+      security:
+        - Customer: [ ]
+      x-gitbook-ignore: true
   '/v1/stores/{storeId}/product_versions/discord_actions':
     get:
       tags:

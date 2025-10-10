@@ -14,7 +14,7 @@ paths:
       tags:
         - delivery
       summary: Update the link information for a Gameserver
-      operationId: GameServerDelivery_LinkGameServer
+      operationId: DeliveryGameServer_LinkGameServer
       requestBody:
         content:
           application/json:
@@ -43,8 +43,8 @@ paths:
     get:
       tags:
         - delivery
-      summary: Retrieve the queued to execute for a Gameserver
-      operationId: GameServerCommandQueue_GetQueuedCommands
+      summary: Retrieve the queue of commands to execute for a Gameserver
+      operationId: DeliveryCommandQueue_GetQueuedCommands
       responses:
         '200':
           description: OK
@@ -64,7 +64,7 @@ paths:
       tags:
         - delivery
       summary: 'Retrieve the queued commands, while supplying the online players for a gameserver'
-      operationId: GameServerCommandQueue_GetQueuedCommandsWithOnlinePlayers
+      operationId: DeliveryCommandQueue_GetQueuedCommandsWithOnlinePlayers
       requestBody:
         content:
           application/json:
@@ -95,7 +95,7 @@ paths:
       tags:
         - delivery
       summary: Mark commands as executed in bulk
-      operationId: GameServerCommandQueue_MarkQueuedCommandExecutedBulk
+      operationId: DeliveryCommandQueue_MarkQueuedCommandExecutedBulk
       requestBody:
         content:
           application/json:
@@ -127,7 +127,7 @@ paths:
       tags:
         - delivery
       summary: Mark a queued command as executed
-      operationId: GameServerCommandQueue_MarkQueuedCommandExecuted
+      operationId: DeliveryCommandQueue_MarkQueuedCommandExecuted
       parameters:
         - name: attemptId
           in: path
@@ -149,7 +149,7 @@ paths:
         - delivery
       summary: Mark commands as executed in bulk via a POST request
       description: "Mark commands as executed in bulk via a POST request.\nSome HTTP clients don't support bodies in DELETE requests, so for compatibility we have a POST route.\nPlease use the DELETE route if your HTTP client supports it."
-      operationId: GameServerCommandQueue_MarkQueuedCommandExecutedBulkViaPost
+      operationId: DeliveryCommandQueue_MarkQueuedCommandExecutedBulkViaPost
       requestBody:
         content:
           application/json:
@@ -180,7 +180,7 @@ paths:
     post:
       tags:
         - delivery
-      operationId: GameServerDeliveryEvents_ReportGameServerEvents
+      operationId: DeliveryEvents_ReportGameServerEvents
       requestBody:
         content:
           application/json:

@@ -3653,6 +3653,111 @@ paths:
                 $ref: '#/components/schemas/PayNowError'
       security:
         - APIKey: [ ]
+  '/v1/stores/{storeId}/payments':
+    get:
+      tags:
+        - payments
+      summary: Get payments
+      description: Retrieves all payments for the specified store using the filter specified.
+      operationId: Payments_GetPayments
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: limit
+          in: query
+          description: The maximum number of items to return in a single request.
+          schema:
+            maximum: 100
+            minimum: 1
+            type: integer
+            format: int32
+        - name: after
+          in: query
+          description: "Returns items after the specified ID.\nUsed for forward pagination through results."
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+          example: 
+        - name: before
+          in: query
+          description: "Returns items before the specified ID.\nUsed for backward pagination through results."
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+          example: 
+        - name: asc
+          in: query
+          description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
+          schema:
+            type: boolean
+        - name: status
+          in: query
+          description: Filter by payment statuses
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/PaymentStatusDto'
+        - name: order_id
+          in: query
+          description: Filter by order ID
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: customer_id
+          in: query
+          description: Filter by customer ID
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/payments/{paymentId}':
+    get:
+      tags:
+        - payments
+      summary: Get payment by ID
+      description: Retrieves a payment by an ID.
+      operationId: Payments_GetPaymentById
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
   '/v1/stores/{storeId}/products':
     get:
       tags:
@@ -5396,6 +5501,21 @@ components:
         - first_referer
         - last_referer
       type: string
+    AlipayDetailsDto:
+      type: object
+      properties:
+        buyer_id:
+          type: string
+          description: The Alipay buyer identifier
+          nullable: true
+          example: buyer_abc123
+        fingerprint:
+          type: string
+          description: A unique fingerprint for this Alipay account
+          nullable: true
+          example: fingerprint_xyz789
+      additionalProperties: false
+      description: Alipay payment method details
     BanDto:
       required:
         - created_at
@@ -5455,6 +5575,123 @@ components:
         - customer_name
         - email
       type: string
+    BancontactDetailsDto:
+      type: object
+      properties:
+        bank:
+          type: string
+          description: The bank identifier
+          nullable: true
+          example: bnp_paribas
+        bank_name:
+          type: string
+          description: The bank name
+          nullable: true
+          example: BNP Paribas
+        bic:
+          type: string
+          description: The Bank Identifier Code
+          nullable: true
+          example: GEBABEBB
+        iban_last4:
+          type: string
+          description: The last 4 digits of the IBAN
+          nullable: true
+          example: '3456'
+        payer_name:
+          type: string
+          description: The payer name
+          nullable: true
+          example: Jean Dupont
+      additionalProperties: false
+      description: Bancontact payment method details
+    CardDetailsDto:
+      required:
+        - brand
+        - country
+        - exp_month
+        - exp_year
+        - fingerprint
+        - funding
+        - last4
+      type: object
+      properties:
+        brand:
+          type: string
+          description: The card brand
+          example: visa
+        country:
+          type: string
+          description: The country code where the card was issued
+          example: US
+        exp_month:
+          type: integer
+          description: The card expiration month
+          format: int32
+          example: 12
+        exp_year:
+          type: integer
+          description: The card expiration year
+          format: int32
+          example: 2028
+        fingerprint:
+          type: string
+          description: A unique fingerprint for this card
+          example: abc123def456
+        funding:
+          type: string
+          description: The card funding type
+          example: credit
+        last4:
+          type: string
+          description: The last 4 digits of the card number
+          example: '4242'
+        bin:
+          type: string
+          description: "The Bank Identification Number (first 6/8 digits of card).\nOnly available internally."
+          nullable: true
+          example: '424242'
+        issuer:
+          type: string
+          description: "The card issuer/bank name.\nOnly available internally."
+          nullable: true
+          example: Chase Bank
+        description:
+          type: string
+          description: "The card description.\nOnly available internally."
+          nullable: true
+          example: Visa Signature
+        wallet:
+          $ref: '#/components/schemas/CardWalletDto'
+      additionalProperties: false
+      description: Card payment method details
+    CardWalletDto:
+      required:
+        - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: The type of digital wallet
+          example: apple_pay
+      additionalProperties: false
+      description: Digital wallet details for a card
+    CashAppDetailsDto:
+      required:
+        - buyer_id
+        - cashtag
+      type: object
+      properties:
+        buyer_id:
+          type: string
+          description: The Cash App buyer identifier
+          example: buyer_abc123
+        cashtag:
+          type: string
+          description: The Cash App cashtag
+          example: $johndoe
+      additionalProperties: false
+      description: Cash App payment method details
     CheckForBanIDByIdentitiesRequestDto:
       required:
         - identities
@@ -6064,6 +6301,33 @@ components:
           type: string
           nullable: true
       additionalProperties: false
+    CryptoDetailsDto:
+      required:
+        - confirmations
+        - crypto_amount
+        - crypto_currency
+        - total_paid
+      type: object
+      properties:
+        crypto_currency:
+          type: string
+          description: The cryptocurrency used
+          example: BTC
+        crypto_amount:
+          type: string
+          description: The amount in cryptocurrency
+          example: '0.00150000'
+        total_paid:
+          type: string
+          description: The total amount paid in cryptocurrency
+          example: '0.00150000'
+        confirmations:
+          type: integer
+          description: The number of blockchain confirmations
+          format: int32
+          example: 6
+      additionalProperties: false
+      description: Cryptocurrency payment method details
     CustomVariableDto:
       required:
         - created_at
@@ -6961,6 +7225,32 @@ components:
           $ref: '#/components/schemas/ActorDto'
       additionalProperties: false
       description: "Represents a global command in the system.\nGlobal commands are instructions that can be executed across a store's environment."
+    IdealDetailsDto:
+      required:
+        - bank
+        - bic
+      type: object
+      properties:
+        bank:
+          type: string
+          description: The bank identifier
+          example: abn_amro
+        bic:
+          type: string
+          description: The Bank Identifier Code
+          example: ABNANL2A
+        iban_last4:
+          type: string
+          description: The last 4 digits of the IBAN
+          nullable: true
+          example: '1234'
+        payer_name:
+          type: string
+          description: The payer name
+          nullable: true
+          example: John Doe
+      additionalProperties: false
+      description: iDEAL payment method details
     InlineProductCreateDto:
       type: object
       properties:
@@ -7103,6 +7393,21 @@ components:
           nullable: true
       additionalProperties: false
       description: "Optional inline product definition for dynamic products.\nRequires special approval, use `product_id` instead."
+    KlarnaDetailsDto:
+      type: object
+      properties:
+        country:
+          type: string
+          description: The country code
+          nullable: true
+          example: SE
+        method_category:
+          type: string
+          description: The Klarna payment method category
+          nullable: true
+          example: pay_later
+      additionalProperties: false
+      description: Klarna payment method details
     LastPaymentErrorDto:
       required:
         - decline_code
@@ -7116,6 +7421,17 @@ components:
           description: Human-readable decline reason message.
       additionalProperties: false
       description: The last payment decline object.
+    LinkDetailsDto:
+      required:
+        - email
+      type: object
+      properties:
+        email:
+          type: string
+          description: The email associated with the Link account
+          example: john.doe@example.com
+      additionalProperties: false
+      description: Link payment method details
     MarketingCouponConfigurationDto:
       required:
         - customer_redeem_limit
@@ -7571,6 +7887,47 @@ components:
         one_time: Order contains only one-time purchase items
         subscription: Order contains only subscription items
         mixed: Order contains both one-time purchase and subscription items
+    P24DetailsDto:
+      required:
+        - bank
+      type: object
+      properties:
+        bank:
+          type: string
+          description: The bank identifier
+          example: ing
+        payer_name:
+          type: string
+          description: The payer name
+          nullable: true
+          example: Jan Kowalski
+      additionalProperties: false
+      description: Przelewy24 payment method details
+    PayByBankDetailsDto:
+      type: object
+      properties:
+        bank_name:
+          type: string
+          description: The bank name
+          nullable: true
+          example: Chase Bank
+        bic:
+          type: string
+          description: The Bank Identifier Code
+          nullable: true
+          example: CHASUS33
+        country:
+          type: string
+          description: The country code
+          nullable: true
+          example: US
+        payer_name:
+          type: string
+          description: The payer name
+          nullable: true
+          example: John Smith
+      additionalProperties: false
+      description: Pay by Bank payment method details
     PayNowActorType:
       enum:
         - anonymous
@@ -7616,6 +7973,60 @@ components:
           nullable: true
       additionalProperties: false
       description: Represents a PayNow error
+    PayPalDetailsDto:
+      required:
+        - country
+        - payer_email
+        - payer_id
+        - payer_name
+        - vault
+      type: object
+      properties:
+        payer_id:
+          type: string
+          description: The PayPal payer identifier
+          example: PAYERID123
+        payer_email:
+          type: string
+          description: The PayPal account email
+          example: john.doe@example.com
+        payer_name:
+          type: string
+          description: The PayPal account holder name
+          example: John Doe
+        country:
+          type: string
+          description: The country code of the PayPal account
+          example: US
+        vault:
+          type: boolean
+          description: Indicates if this PayPal account is vaulted
+          example: true
+        pending_vault_approval:
+          type: boolean
+          description: Indicates if vault approval is pending
+          nullable: true
+          example: false
+        standalone_setup:
+          type: boolean
+          description: Indicates if this is a standalone setup
+          nullable: true
+          example: false
+      additionalProperties: false
+      description: PayPal payment method details
+    PaymentChargebackStatusDto:
+      enum:
+        - none
+        - pending
+        - won
+        - lost
+      type: string
+      description: Represents chargeback status of a payment
+      x-enumDescriptions:
+        none: No chargeback
+        pending: Chargeback is pending
+        won: Chargeback dispute was won
+        lost: Chargeback dispute was lost
     PaymentDeclineCode:
       enum:
         - unknown
@@ -7691,12 +8102,408 @@ components:
         card_not_supported: This payment method doesn't support this type of transaction.
         transaction_not_allowed: This specific transaction is not permitted for this payment method.
         authorization_revoked: The payment authorization has been revoked.
+    PaymentDto:
+      required:
+        - amount
+        - chargeback_status
+        - created_at
+        - currency
+        - customer
+        - customer_id
+        - gateway
+        - gateway_entity_identifier
+        - gateway_fee_amount
+        - gateway_id
+        - id
+        - method
+        - order_id
+        - platform_fee_amount
+        - platform_fee_rate
+        - presentment_amount
+        - presentment_currency
+        - status
+        - store_id
+        - store_net_amount
+        - tax_amount
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        order_id:
+          $ref: '#/components/schemas/FlakeId'
+        customer_id:
+          $ref: '#/components/schemas/FlakeId'
+        customer:
+          $ref: '#/components/schemas/CustomerDto'
+        refunds:
+          type: array
+          items:
+            $ref: '#/components/schemas/RefundDto'
+          description: The list of refunds associated with this payment
+          nullable: true
+        gateway:
+          type: string
+          description: The payment gateway provider
+          example: stripe
+        gateway_entity_identifier:
+          type: string
+          description: The gateway entity identifier
+        gateway_id:
+          type: string
+          description: The gateway payment identifier
+        method:
+          $ref: '#/components/schemas/PaymentMethodDto'
+        method_id:
+          $ref: '#/components/schemas/FlakeId'
+        status:
+          $ref: '#/components/schemas/PaymentStatusDto'
+        currency:
+          type: string
+          description: The currency code used for this payment in the store's currency
+          example: usd
+        amount:
+          type: integer
+          description: The total payment amount in smallest currency unit
+          format: int32
+          example: 10000
+        gateway_fee_amount:
+          type: integer
+          description: The gateway fee amount in smallest currency unit
+          format: int32
+          example: 320
+        tax_amount:
+          type: integer
+          description: The tax amount in smallest currency unit
+          format: int32
+          example: 850
+        platform_fee_amount:
+          type: integer
+          description: The platform fee amount in smallest currency unit
+          format: int32
+          example: 500
+        store_net_amount:
+          type: integer
+          description: The net amount going to the store in smallest currency unit
+          format: int32
+          example: 8330
+        presentment_currency:
+          type: string
+          description: The currency code used for presentment to the customer
+          example: eur
+        presentment_amount:
+          type: integer
+          description: The amount presented to the customer in smallest currency unit
+          format: int32
+          example: 9500
+        fx_rate:
+          type: number
+          description: The foreign exchange rate used for currency conversion
+          format: double
+          nullable: true
+          example: 1.085
+        platform_fee_rate:
+          type: integer
+          description: The platform fee rate applied to this payment (in basis points)
+          format: int32
+          example: 500
+        chargeback_status:
+          $ref: '#/components/schemas/PaymentChargebackStatusDto'
+        chargeback_status_updated_at:
+          type: string
+          description: The date and time when the chargeback status was last updated
+          format: date-time
+          nullable: true
+          example: 
+        payout_split_rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentPayoutSplitRuleDto'
+          description: The payout split rules for multi-party payments
+          nullable: true
+        payout_split_results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentPayoutSplitResultDto'
+          description: The payout split results for multi-party payments
+          nullable: true
+        created_at:
+          type: string
+          description: The date and time when this payment was created
+          format: date-time
+          example: '2025-04-01T15:30:45Z'
+        pending_at:
+          type: string
+          description: The date and time when this payment entered pending status
+          format: date-time
+          nullable: true
+          example: '2025-04-01T15:30:46Z'
+        completed_at:
+          type: string
+          description: The date and time when this payment was completed
+          format: date-time
+          nullable: true
+          example: '2025-04-01T15:31:12Z'
+        canceled_at:
+          type: string
+          description: The date and time when this payment was canceled
+          format: date-time
+          nullable: true
+          example: 
+        failed_at:
+          type: string
+          description: The date and time when this payment failed
+          format: date-time
+          nullable: true
+          example: 
+        refunded_at:
+          type: string
+          description: The date and time when this payment was last refunded
+          format: date-time
+          nullable: true
+          example: 
+        chargeback_at:
+          type: string
+          description: The date and time when a chargeback was initiated on this payment
+          format: date-time
+          nullable: true
+          example: 
+        last_payment_error:
+          $ref: '#/components/schemas/LastPaymentErrorDto'
+      additionalProperties: false
+      description: Represents a payment transaction
+    PaymentMethodDetailsDto:
+      type: object
+      properties:
+        card:
+          $ref: '#/components/schemas/CardDetailsDto'
+        cashapp:
+          $ref: '#/components/schemas/CashAppDetailsDto'
+        paypal:
+          $ref: '#/components/schemas/PayPalDetailsDto'
+        link:
+          $ref: '#/components/schemas/LinkDetailsDto'
+        crypto:
+          $ref: '#/components/schemas/CryptoDetailsDto'
+        steamskins:
+          $ref: '#/components/schemas/SteamSkinsDetailsDto'
+        ideal:
+          $ref: '#/components/schemas/IdealDetailsDto'
+        p24:
+          $ref: '#/components/schemas/P24DetailsDto'
+        bancontact:
+          $ref: '#/components/schemas/BancontactDetailsDto'
+        klarna:
+          $ref: '#/components/schemas/KlarnaDetailsDto'
+        alipay:
+          $ref: '#/components/schemas/AlipayDetailsDto'
+        pay_by_bank:
+          $ref: '#/components/schemas/PayByBankDetailsDto'
+        pix:
+          $ref: '#/components/schemas/PixDetailsDto'
+      additionalProperties: false
+      description: "Contains detailed information about a payment method.\nDISCLAIMER: These fields are not guaranteed to be backwards compatible and may change or be removed without notice."
+    PaymentMethodDto:
+      required:
+        - created_at
+        - customer_id
+        - gateway
+        - gateway_customer_id
+        - gateway_entity_identifier
+        - gateway_id
+        - gateway_type
+        - id
+        - method_details
+        - method_type
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        customer_id:
+          $ref: '#/components/schemas/FlakeId'
+        gateway:
+          type: string
+          description: The payment gateway provider
+        gateway_id:
+          type: string
+          description: The gateway's identifier for this payment method
+        gateway_customer_id:
+          type: string
+          description: The gateway's customer identifier
+        gateway_type:
+          type: string
+          description: The gateway-specific type identifier
+          example: card
+        method_type:
+          type: string
+          description: The payment method type
+          example: card
+        method_details:
+          $ref: '#/components/schemas/PaymentMethodDetailsDto'
+        created_at:
+          type: string
+          description: The date and time when this payment method was created
+          format: date-time
+          example: '2025-03-15T10:20:30Z'
+        gateway_entity_identifier:
+          type: string
+          description: The gateway entity identifier
+        updated_at:
+          type: string
+          description: The date and time when this payment method was last updated
+          format: date-time
+          nullable: true
+          example: '2025-03-20T14:30:00Z'
+      additionalProperties: false
+      description: Represents a stored payment method
+    PaymentPayoutSplitResultDto:
+      required:
+        - connected_platform_fee_amount
+        - gateway_fee_amount
+        - gross_amount
+        - line_id
+        - net_amount
+        - platform_fee_amount
+        - tax_amount
+        - user_id
+      type: object
+      properties:
+        user_id:
+          $ref: '#/components/schemas/FlakeId'
+        gross_amount:
+          type: integer
+          description: The gross amount before fees in smallest currency unit
+          format: int32
+          example: 10000
+        tax_amount:
+          type: integer
+          description: The tax amount in smallest currency unit
+          format: int32
+          example: 850
+        gateway_fee_amount:
+          type: integer
+          description: The gateway fee amount in smallest currency unit
+          format: int32
+          example: 320
+        platform_fee_amount:
+          type: integer
+          description: The platform fee amount in smallest currency unit
+          format: int32
+          example: 500
+        connected_platform_fee_amount:
+          type: integer
+          description: The connected platform fee amount in smallest currency unit
+          format: int32
+          example: 100
+        net_amount:
+          type: integer
+          description: The net amount after all fees in smallest currency unit
+          format: int32
+          example: 8230
+        line_id:
+          $ref: '#/components/schemas/FlakeId'
+      additionalProperties: false
+      description: Represents payout split results for multi-party payments
+    PaymentPayoutSplitRuleDto:
+      required:
+        - line_amount_tax
+        - line_amount_total
+        - line_id
+        - splits
+      type: object
+      properties:
+        line_id:
+          $ref: '#/components/schemas/FlakeId'
+        line_amount_total:
+          type: integer
+          description: The total amount of the line item in smallest currency unit
+          format: int32
+          example: 10000
+        line_amount_tax:
+          type: integer
+          description: The tax amount of the line item in smallest currency unit
+          format: int32
+          example: 850
+        splits:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentPayoutSplitRuleSplitDto'
+          description: The list of splits defining how the payout should be divided
+      additionalProperties: false
+      description: Represents payout split rules for a payment line
+    PaymentPayoutSplitRuleSplitDto:
+      required:
+        - platform_fee_percentage
+        - user_id
+      type: object
+      properties:
+        user_id:
+          $ref: '#/components/schemas/FlakeId'
+        percentage:
+          type: integer
+          description: 'The percentage of the line amount this user receives (in basis points, e.g., 5000 = 50%)'
+          format: int32
+          nullable: true
+          example: 5000
+        platform_fee_percentage:
+          type: integer
+          description: The platform fee percentage applied to this split (in basis points)
+          format: int32
+          example: 500
+      additionalProperties: false
+      description: Represents a single split configuration within a payout split rule
+    PaymentStatusDto:
+      enum:
+        - unknown
+        - created
+        - pending
+        - completed
+        - canceled
+        - failed
+        - refunded
+        - chargeback
+        - refund_failed
+        - refund_processing
+      type: string
+      description: Represents payment status
+      x-enumDescriptions:
+        unknown: Unknown status
+        created: Payment has been created but not yet processed
+        pending: Payment is pending processing
+        completed: Payment has been completed successfully
+        canceled: Payment has been canceled
+        failed: Payment has failed
+        refunded: Payment has been fully refunded
+        chargeback: Payment has been charged back
+        refund_failed: Refund processing failed
+        refund_processing: Refund is currently processing
     Period:
       type: string
       additionalProperties: false
       description: ISO 8601 duration format
       format: period
       example: P1Y2M3DT4H5M6S
+    PixDetailsDto:
+      type: object
+      properties:
+        bank_name:
+          type: string
+          description: The bank name
+          nullable: true
+          example: Banco do Brasil
+        bank_account_number:
+          type: string
+          description: The bank account number
+          nullable: true
+          example: 12345-6
+        payer_name:
+          type: string
+          description: The payer name
+          nullable: true
+          example: João Silva
+      additionalProperties: false
+      description: Pix payment method details
     ProductCommandDto:
       required:
         - content
@@ -8893,6 +9700,44 @@ components:
           description: The URL to the user's Steam avatar image.
       additionalProperties: false
       description: Represents a Steam profile for a customer.
+    SteamSkinsDetailsDto:
+      required:
+        - items
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SteamSkinsInventoryItemDetailsDto'
+          description: The list of Steam inventory items used for payment
+      additionalProperties: false
+      description: Steam Skins payment method details
+    SteamSkinsInventoryItemDetailsDto:
+      required:
+        - app_id
+        - id
+        - name
+        - price
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the Steam item
+        app_id:
+          type: integer
+          description: The Steam app ID
+          format: int32
+          example: 730
+        name:
+          type: string
+          description: The name of the item
+          example: AK-47 | Redline
+        price:
+          type: integer
+          description: The price of the item in the smallest currency unit
+          format: int32
+          example: 2500
+      additionalProperties: false
     StorePricingRegionOverrideDto:
       type: object
       properties:
@@ -9020,6 +9865,8 @@ components:
           $ref: '#/components/schemas/CustomerDto'
         payment_method_id:
           $ref: '#/components/schemas/FlakeId'
+        payment_method:
+          $ref: '#/components/schemas/PaymentMethodDto'
         status:
           $ref: '#/components/schemas/SubscriptionStatus'
         coupon_id:

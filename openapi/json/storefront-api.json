@@ -2445,6 +2445,11 @@
             "nullable": true,
             "example": "support@example.com"
           },
+          "support_url": {
+            "type": "string",
+            "description": "The URL of the store's support page.",
+            "nullable": true
+          },
           "integration_type": {
             "type": "string",
             "description": "The type of integration this store uses with external systems.",

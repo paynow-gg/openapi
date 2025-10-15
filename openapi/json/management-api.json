@@ -6233,6 +6233,110 @@
         ]
       }
     },
+    "/v1/stores/{storeId}/payments/settings": {
+      "get": {
+        "tags": [
+          "payments"
+        ],
+        "summary": "Get store payment settings",
+        "description": "Retrieves payment settings for a store.",
+        "operationId": "PaymentsSettings_GetStorePaymentSettings",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StorePaymentSettingsDto"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "payments"
+        ],
+        "summary": "Updates store payment settings",
+        "description": "Updates payment settings for a store.",
+        "operationId": "PaymentsSettings_UpdateStorePaymentSettings",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StorePaymentSettingsDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StorePaymentSettingsDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/StorePaymentSettingsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ]
+      }
+    },
     "/v1/stores/{storeId}/products": {
       "get": {
         "tags": [
@@ -9300,6 +9404,22 @@
         },
         "additionalProperties": false,
         "description": "Cash App payment method details"
+      },
+      "ChargebackCoverageTypeDto": {
+        "enum": [
+          "unspecified",
+          "none",
+          "fraudulent",
+          "all"
+        ],
+        "type": "string",
+        "description": "Defines the type of chargeback coverage provided.",
+        "x-enumDescriptions": {
+          "unspecified": "Chargeback coverage type is not specified.",
+          "none": "No chargeback coverage provided.",
+          "fraudulent": "Coverage for fraudulent/unauthorized chargebacks only.",
+          "all": "Coverage for all chargebacks including disputes."
+        }
       },
       "CheckForBanIDByIdentitiesRequestDto": {
         "required": [
@@ -14566,6 +14686,46 @@
           }
         },
         "additionalProperties": false
+      },
+      "StorePaymentSettingsDto": {
+        "required": [
+          "chargeback_coverage",
+          "force_3d_secure",
+          "max_checkout_amount",
+          "show_all_payment_methods_for_subscriptions",
+          "store_tax_inclusive_pricing"
+        ],
+        "type": "object",
+        "properties": {
+          "show_all_payment_methods_for_subscriptions": {
+            "type": "boolean",
+            "description": "Whether to show all available payment methods for subscription purchases."
+          },
+          "store_tax_inclusive_pricing": {
+            "type": "boolean",
+            "description": "Whether store pricing is tax-inclusive."
+          },
+          "max_checkout_amount": {
+            "type": "integer",
+            "description": "Maximum checkout amount allowed in cents.",
+            "format": "int64"
+          },
+          "force_3d_secure": {
+            "type": "boolean",
+            "description": "Whether to force 3D Secure authentication for all transactions."
+          },
+          "chargeback_coverage": {
+            "$ref": "#/components/schemas/ChargebackCoverageTypeDto"
+          },
+          "chargeback_coverage_max_amount": {
+            "type": "integer",
+            "description": "Maximum per-transaction chargeback coverage amount in cents.",
+            "format": "int64",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Store payment configuration settings."
       },
       "StorePricingRegionOverrideDto": {
         "type": "object",

@@ -6300,17 +6300,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/StorePaymentSettingsDto"
+                "$ref": "#/components/schemas/UpdateStorePaymentSettingsDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/StorePaymentSettingsDto"
+                "$ref": "#/components/schemas/UpdateStorePaymentSettingsDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/StorePaymentSettingsDto"
+                "$ref": "#/components/schemas/UpdateStorePaymentSettingsDto"
               }
             }
           }
@@ -10188,6 +10188,21 @@
           "ends_at": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "CreateStorePaymentSettingsDto": {
+        "required": [
+          "show_all_payment_methods_for_subscriptions",
+          "store_tax_inclusive_pricing"
+        ],
+        "type": "object",
+        "properties": {
+          "show_all_payment_methods_for_subscriptions": {
+            "type": "boolean"
+          },
+          "store_tax_inclusive_pricing": {
+            "type": "boolean"
           }
         }
       },
@@ -15942,6 +15957,17 @@
           "ends_at": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "UpdateStorePaymentSettingsDto": {
+        "type": "object",
+        "properties": {
+          "show_all_payment_methods_for_subscriptions": {
+            "type": "boolean"
+          },
+          "store_tax_inclusive_pricing": {
+            "type": "boolean"
           }
         }
       },

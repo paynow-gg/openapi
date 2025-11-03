@@ -6030,7 +6030,6 @@ components:
       required:
         - product_id
         - quantity
-        - subscription
       type: object
       properties:
         product_id:
@@ -6038,6 +6037,7 @@ components:
         subscription:
           type: boolean
           description: Determines whether this line should create a subscription
+          nullable: true
         trial:
           type: boolean
           description: Indicates whether the product should be trialed
@@ -6069,12 +6069,12 @@ components:
     CreateCheckoutSessionLineManagementDto:
       required:
         - quantity
-        - subscription
       type: object
       properties:
         subscription:
           type: boolean
           description: Determines whether this line should create a subscription
+          nullable: true
         trial:
           type: boolean
           description: Indicates whether the product should be trialed
@@ -6344,12 +6344,15 @@ components:
       required:
         - show_all_payment_methods_for_subscriptions
         - store_tax_inclusive_pricing
+        - block_prepaid_cards
       type: object
       properties:
         show_all_payment_methods_for_subscriptions:
           type: boolean
         store_tax_inclusive_pricing:
           type: boolean
+        block_prepaid_cards:
+          $ref: '#/components/schemas/PrepaidCardsBlockingTypeDto'
     CreateTrialEligibilityOverrideDto:
       required:
         - product_id
@@ -8149,6 +8152,7 @@ components:
         - card_not_supported
         - transaction_not_allowed
         - authorization_revoked
+        - store_blocked
       type: string
       description: A payment decline reason code.
       x-enumDescriptions:
@@ -8187,6 +8191,7 @@ components:
         card_not_supported: This payment method doesn't support this type of transaction.
         transaction_not_allowed: This specific transaction is not permitted for this payment method.
         authorization_revoked: The payment authorization has been revoked.
+        store_blocked: The payment was blocked by one of your store's configured rules.
     PaymentDto:
       required:
         - amount
@@ -8589,6 +8594,19 @@ components:
           example: João Silva
       additionalProperties: false
       description: Pix payment method details
+    PrepaidCardsBlockingTypeDto:
+      enum:
+        - unspecified
+        - none
+        - trials
+        - all_recurring
+      type: string
+      description: Defines when prepaid cards should be blocked from use.
+      x-enumDescriptions:
+        unspecified: Blocking type not specified.
+        none: Allow prepaid cards for all payment types.
+        trials: Block prepaid cards for trial subscriptions only.
+        all_recurring: Block prepaid cards for all recurring payments (trials and subscriptions).
     ProductCommandDto:
       required:
         - content
@@ -9825,6 +9843,7 @@ components:
       additionalProperties: false
     StorePaymentSettingsDto:
       required:
+        - block_prepaid_cards
         - chargeback_coverage
         - force_3d_secure
         - max_checkout_amount
@@ -9838,6 +9857,8 @@ components:
         store_tax_inclusive_pricing:
           type: boolean
           description: Whether store pricing is tax-inclusive.
+        block_prepaid_cards:
+          $ref: '#/components/schemas/PrepaidCardsBlockingTypeDto'
         max_checkout_amount:
           type: integer
           description: Maximum checkout amount allowed in cents.
@@ -10790,6 +10811,8 @@ components:
           type: boolean
         store_tax_inclusive_pricing:
           type: boolean
+        block_prepaid_cards:
+          $ref: '#/components/schemas/PrepaidCardsBlockingTypeDto'
     UpdateTrialEligibilityOverrideDto:
       type: object
       properties:

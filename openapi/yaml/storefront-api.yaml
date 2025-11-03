@@ -794,7 +794,6 @@ components:
       required:
         - product_id
         - quantity
-        - subscription
       type: object
       properties:
         product_id:
@@ -802,6 +801,7 @@ components:
         subscription:
           type: boolean
           description: Determines whether this line should create a subscription
+          nullable: true
         trial:
           type: boolean
           description: Indicates whether the product should be trialed

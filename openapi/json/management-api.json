@@ -9763,8 +9763,7 @@
       "CreateCheckoutSessionLineDto": {
         "required": [
           "product_id",
-          "quantity",
-          "subscription"
+          "quantity"
         ],
         "type": "object",
         "properties": {
@@ -9773,7 +9772,8 @@
           },
           "subscription": {
             "type": "boolean",
-            "description": "Determines whether this line should create a subscription"
+            "description": "Determines whether this line should create a subscription",
+            "nullable": true
           },
           "trial": {
             "type": "boolean",
@@ -9816,14 +9816,14 @@
       },
       "CreateCheckoutSessionLineManagementDto": {
         "required": [
-          "quantity",
-          "subscription"
+          "quantity"
         ],
         "type": "object",
         "properties": {
           "subscription": {
             "type": "boolean",
-            "description": "Determines whether this line should create a subscription"
+            "description": "Determines whether this line should create a subscription",
+            "nullable": true
           },
           "trial": {
             "type": "boolean",
@@ -10194,7 +10194,8 @@
       "CreateStorePaymentSettingsDto": {
         "required": [
           "show_all_payment_methods_for_subscriptions",
-          "store_tax_inclusive_pricing"
+          "store_tax_inclusive_pricing",
+          "block_prepaid_cards"
         ],
         "type": "object",
         "properties": {
@@ -10203,6 +10204,9 @@
           },
           "store_tax_inclusive_pricing": {
             "type": "boolean"
+          },
+          "block_prepaid_cards": {
+            "$ref": "#/components/schemas/PrepaidCardsBlockingTypeDto"
           }
         }
       },
@@ -12535,7 +12539,8 @@
           "processing_error",
           "card_not_supported",
           "transaction_not_allowed",
-          "authorization_revoked"
+          "authorization_revoked",
+          "store_blocked"
         ],
         "type": "string",
         "description": "A payment decline reason code.",
@@ -12574,7 +12579,8 @@
           "processing_error": "An error occurred while processing the payment.",
           "card_not_supported": "This payment method doesn't support this type of transaction.",
           "transaction_not_allowed": "This specific transaction is not permitted for this payment method.",
-          "authorization_revoked": "The payment authorization has been revoked."
+          "authorization_revoked": "The payment authorization has been revoked.",
+          "store_blocked": "The payment was blocked by one of your store's configured rules."
         }
       },
       "PaymentDto": {
@@ -13081,6 +13087,22 @@
         },
         "additionalProperties": false,
         "description": "Pix payment method details"
+      },
+      "PrepaidCardsBlockingTypeDto": {
+        "enum": [
+          "unspecified",
+          "none",
+          "trials",
+          "all_recurring"
+        ],
+        "type": "string",
+        "description": "Defines when prepaid cards should be blocked from use.",
+        "x-enumDescriptions": {
+          "unspecified": "Blocking type not specified.",
+          "none": "Allow prepaid cards for all payment types.",
+          "trials": "Block prepaid cards for trial subscriptions only.",
+          "all_recurring": "Block prepaid cards for all recurring payments (trials and subscriptions)."
+        }
       },
       "ProductCommandDto": {
         "required": [
@@ -14704,6 +14726,7 @@
       },
       "StorePaymentSettingsDto": {
         "required": [
+          "block_prepaid_cards",
           "chargeback_coverage",
           "force_3d_secure",
           "max_checkout_amount",
@@ -14719,6 +14742,9 @@
           "store_tax_inclusive_pricing": {
             "type": "boolean",
             "description": "Whether store pricing is tax-inclusive."
+          },
+          "block_prepaid_cards": {
+            "$ref": "#/components/schemas/PrepaidCardsBlockingTypeDto"
           },
           "max_checkout_amount": {
             "type": "integer",
@@ -15968,6 +15994,9 @@
           },
           "store_tax_inclusive_pricing": {
             "type": "boolean"
+          },
+          "block_prepaid_cards": {
+            "$ref": "#/components/schemas/PrepaidCardsBlockingTypeDto"
           }
         }
       },

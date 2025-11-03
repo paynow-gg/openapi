@@ -1227,8 +1227,7 @@
       "CreateCheckoutSessionLineDto": {
         "required": [
           "product_id",
-          "quantity",
-          "subscription"
+          "quantity"
         ],
         "type": "object",
         "properties": {
@@ -1237,7 +1236,8 @@
           },
           "subscription": {
             "type": "boolean",
-            "description": "Determines whether this line should create a subscription"
+            "description": "Determines whether this line should create a subscription",
+            "nullable": true
           },
           "trial": {
             "type": "boolean",

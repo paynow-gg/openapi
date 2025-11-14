@@ -127,6 +127,24 @@ paths:
             type: object
             additionalProperties:
               type: string
+        - name: gift_to_customer_id
+          in: query
+          description: The ID of the customer in which this line is a gift for.
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: gift_to.platform
+          in: query
+          description: The platform type
+          schema:
+            $ref: '#/components/schemas/CustomerProfilePlatform'
+          example: Steam
+        - name: gift_to.id
+          in: query
+          description: The account ID on the platform
+          schema:
+            type: string
+            example: '76561198152492642'
+          example: '76561198152492642'
         - name: x-paynow-customer-ip
           in: header
           description: The IP address (IPv4 or IPv6) of the customer. Required if the request is not being made from the customer's browser.
@@ -759,6 +777,10 @@ components:
           items:
             $ref: '#/components/schemas/CartLineCustomVariableDto'
           description: Selected custom variables for this cart line.
+        gift_to_customer:
+          $ref: '#/components/schemas/CustomerDto'
+        gift_to_customer_id:
+          $ref: '#/components/schemas/FlakeId'
       additionalProperties: false
       description: Represents a line item in a cart
     CreateCartCheckoutSessionDto:
@@ -977,12 +999,22 @@ components:
         - steam
         - minecraft
         - paynow_name
+        - paynow
+        - minecraft_java_name
+        - minecraft_bedrock_name
+        - xbox_xuid
+        - minecraft_uuid
       type: string
       description: A customer platform type used while gifting
       x-enumDescriptions:
         steam: Steam profile platform - the ID param must be a Steam ID 64.
-        minecraft: Minecraft profile platform - the ID param must be a Minecraft nick.
+        minecraft: "Minecraft profile platform - the ID param must be a Minecraft nick.\n            If your store platform is Geyser, this automatically sets the Minecraft platform based on the prefix configured in store settings."
         paynow_name: PayNow name profile platform - the ID param must be a PayNow username.
+        paynow: PayNow name profile platform - the ID param must be a PayNow username.
+        minecraft_java_name: Minecraft Java Profile Platform - the ID param must be a Java minecraft nick.
+        minecraft_bedrock_name: Minecraft Bedrock Profile Platform - the ID param must be a Bedrock minecraft nick.
+        xbox_xuid: Minecraft Xbox XUID Profile Platform - the ID param must be an xbox xuid
+        minecraft_uuid: Minecraft profile platform - the ID param must be a Minecraft UUID.
     DeliveryItemProductDto:
       required:
         - id

@@ -499,6 +499,87 @@
         ]
       }
     },
+    "/v1/store/customer/auth": {
+      "post": {
+        "tags": [
+          "customer"
+        ],
+        "summary": "Authenticate customer",
+        "description": "Creates a customer and returns a customer token from a platform account.",
+        "operationId": "StorefrontAuth_AuthenticateStorefrontCustomer",
+        "parameters": [
+          {
+            "name": "x-paynow-store-id",
+            "in": "header",
+            "description": "PayNow Store Identifier (Store ID) available in Store Settings",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "flake-id"
+            }
+          },
+          {
+            "name": "x-paynow-customer-ip",
+            "in": "header",
+            "description": "The IP address (IPv4 or IPv6) of the customer. Required if the request is not being made from the customer's browser.",
+            "schema": {
+              "type": "string",
+              "format": "ipv4"
+            }
+          },
+          {
+            "name": "x-paynow-customer-countrycode",
+            "in": "header",
+            "description": "The customer's country code in ISO 3166-1 alpha-2 format. Optional, but recommended if you have this available.",
+            "schema": {
+              "pattern": "^[A-Z]{2}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthenticateStorefrontCustomerRequestDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthenticateStorefrontCustomerRequestDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthenticateStorefrontCustomerRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticateStorefrontCustomerResponseDto"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/store/customer/delivery/items": {
       "get": {
         "tags": [
@@ -1057,6 +1138,37 @@
   },
   "components": {
     "schemas": {
+      "AuthenticateStorefrontCustomerRequestDto": {
+        "required": [
+          "id",
+          "platform"
+        ],
+        "type": "object",
+        "properties": {
+          "platform": {
+            "$ref": "#/components/schemas/CustomerProfilePlatform"
+          },
+          "id": {
+            "type": "string",
+            "description": "The account ID on the platform",
+            "example": "76561198152492642"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AuthenticateStorefrontCustomerResponseDto": {
+        "required": [
+          "customer_token"
+        ],
+        "type": "object",
+        "properties": {
+          "customer_token": {
+            "type": "string",
+            "description": "The token for the Customer"
+          }
+        },
+        "additionalProperties": false
+      },
       "CartDto": {
         "required": [
           "currency",
@@ -1511,7 +1623,6 @@
           "minecraft_uuid"
         ],
         "type": "string",
-        "description": "A customer platform type used while gifting",
         "x-enumDescriptions": {
           "steam": "Steam profile platform - the ID param must be a Steam ID 64.",
           "minecraft": "Minecraft profile platform - the ID param must be a Minecraft nick.\n            If your store platform is Geyser, this automatically sets the Minecraft platform based on the prefix configured in store settings.",

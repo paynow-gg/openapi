@@ -10623,7 +10623,6 @@
           "minecraft_uuid"
         ],
         "type": "string",
-        "description": "A customer platform type used while gifting",
         "x-enumDescriptions": {
           "steam": "Steam profile platform - the ID param must be a Steam ID 64.",
           "minecraft": "Minecraft profile platform - the ID param must be a Minecraft nick.\n            If your store platform is Geyser, this automatically sets the Minecraft platform based on the prefix configured in store settings.",

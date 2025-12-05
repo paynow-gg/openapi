@@ -1,4 +1,4 @@
-openapi: 3.0.4
+openapi: '3.1.1'
 info:
   title: PayNow Storefront (Headless) API
   description: 'The Storefront API lets you integrate your store into custom front-ends or games. It manages product catalogue displaying, VAT rate calculation, carts, checkout sessions, and more. This API can be safely called directly from customer browsers or client-side applications without requiring an API key.'
@@ -381,13 +381,13 @@ paths:
           description: "Returns items after the specified ID.\nUsed for forward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: before
           in: query
           description: "Returns items before the specified ID.\nUsed for backward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: asc
           in: query
           description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
@@ -431,13 +431,13 @@ paths:
           description: "Returns items after the specified ID.\nUsed for forward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: before
           in: query
           description: "Returns items before the specified ID.\nUsed for backward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: asc
           in: query
           description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
@@ -836,9 +836,10 @@ components:
           type: boolean
           description: Indicates whether this line will be trialied by the customer.
         image_url:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The URL to the product image
-          nullable: true
         selected_gameserver_id:
           $ref: '#/components/schemas/FlakeId'
         selected_gameserver:
@@ -862,27 +863,32 @@ components:
         coupon_id:
           $ref: '#/components/schemas/FlakeId'
         affiliate_code:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Optional affiliate code to track referrals
-          nullable: true
         return_url:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Optional URL to redirect to after successful checkout
-          nullable: true
         cancel_url:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Optional URL to redirect to if checkout is canceled
-          nullable: true
         auto_redirect:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Whether to automatically redirect the customer (return_url must be set)
-          nullable: true
         metadata:
-          type: object
+          type:
+            - 'null'
+            - object
           additionalProperties:
             type: string
           description: "Optional metadata to associate with the checkout session.\nDo not store any sensitive information here."
-          nullable: true
       additionalProperties: false
       description: Request to create a new checkout session from a cart
     CreateCheckoutSessionLineDto:
@@ -894,13 +900,15 @@ components:
         product_id:
           $ref: '#/components/schemas/FlakeId'
         subscription:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Determines whether this line should create a subscription
-          nullable: true
         trial:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates whether the product should be trialed
-          nullable: true
         gift_to:
           $ref: '#/components/schemas/CustomerPlatformAccountDto'
         gift_to_customer_id:
@@ -912,17 +920,19 @@ components:
         selected_gameserver_id:
           $ref: '#/components/schemas/FlakeId'
         metadata:
-          type: object
+          type:
+            - 'null'
+            - object
           additionalProperties:
             type: string
           description: "Optional metadata to associate with the checkout session line.\nDo not store any sensitive information here."
-          nullable: true
         custom_variables:
-          type: object
+          type:
+            - 'null'
+            - object
           additionalProperties:
             type: string
           description: "Key-value pair mapping custom variable identifiers to their selected values.\nRequired only when the product includes custom variables."
-          nullable: true
       additionalProperties: false
       description: Represents a line item in a checkout session request
     CreateCheckoutSessionRequestDto:
@@ -936,34 +946,40 @@ components:
             $ref: '#/components/schemas/CreateCheckoutSessionLineDto'
           description: The line items to include in the checkout.
         subscription:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: "Whether this checkout creates a subscription.\nDEPRECATED: Use 'subscription' field in 'lines' array objects instead."
-          nullable: true
           deprecated: true
         coupon_id:
           $ref: '#/components/schemas/FlakeId'
         affiliate_code:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Optional affiliate code to track referrals
-          nullable: true
         return_url:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Optional URL to redirect to after successful checkout
-          nullable: true
         cancel_url:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Optional URL to redirect to if checkout is canceled
-          nullable: true
         auto_redirect:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Whether to automatically redirect the customer (return_url must be set)
-          nullable: true
         metadata:
-          type: object
+          type:
+            - 'null'
+            - object
           additionalProperties:
             type: string
           description: "Optional metadata to associate with the checkout session.\nDo not store any sensitive information here."
-          nullable: true
       additionalProperties: false
       description: Request to create a new checkout session
     CreateCheckoutSessionResponseDto:
@@ -1013,32 +1029,36 @@ components:
         steam:
           $ref: '#/components/schemas/SteamProfileDto'
         minecraft_uuid:
-          type: string
+          type:
+            - 'null'
+            - string
           description: "The customer's Minecraft UUID, if they have linked their Minecraft account.\nNot set for offline Minecraft stores. If the platform type is Minecraft - Geyser,\nand the profile is a bedrock account, this will be a UUID generated from the Xbox XUID."
-          nullable: true
           example: f84c6a79-0a4e-45e0-879b-cd49ebd4c4e2
         minecraft:
           $ref: '#/components/schemas/MinecraftProfileDto'
         xbox_xuid:
-          type: string
+          type:
+            - 'null'
+            - string
           description: 'The customer''s Xbox XUID, if available.'
-          nullable: true
         minecraft_platform:
           $ref: '#/components/schemas/CustomerMinecraftPlatform'
         name:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The display name for the customer.
-          nullable: true
           example: m0uka
         created_at:
           type: string
           description: The date and time when the customer was created in the system.
           format: date-time
         updated_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: 'The date and time when the customer was last updated, if applicable.'
           format: date-time
-          nullable: true
         metadata:
           type: object
           additionalProperties:
@@ -1142,9 +1162,10 @@ components:
           type: string
           description: The display name of the user on this platform.
         avatar_url:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The URL to the user's avatar image on this platform.
-          nullable: true
       additionalProperties: false
       description: Represents a generic platform profile for a customer.
     MinecraftProfileDto:
@@ -1188,16 +1209,18 @@ components:
           description: The human-readable error message.
           example: Bad Request Example
         trace_id:
-          type: string
+          type:
+            - 'null'
+            - string
           description: A distributed trace ID used for debugging.
-          nullable: true
           example: 234a5bcd543ef3fa53ce929d0e0e4736
         errors:
-          type: array
+          type:
+            - 'null'
+            - array
           items:
             $ref: '#/components/schemas/ValidationError'
           description: An array of multiple errors. Only used by some API services.
-          nullable: true
       additionalProperties: false
       description: Represents a PayNow error
     ProductDeliverableActionsDto:
@@ -1308,9 +1331,10 @@ components:
         type:
           $ref: '#/components/schemas/CustomVariableType'
         value_regex:
-          type: string
+          type:
+            - 'null'
+            - string
           description: "Optional regex pattern to validate text/number input values.\nOnly applies to text and number types.\nUses RE2 syntax - does not support negative lookarounds, backreferences, or other advanced regex features."
-          nullable: true
         options:
           type: array
           items:
@@ -1371,10 +1395,11 @@ components:
         execute_on_gameserver_id:
           $ref: '#/components/schemas/FlakeId'
         quantity_index:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The index of the item when multiple quantities were assigned
           format: int32
-          nullable: true
         product:
           $ref: '#/components/schemas/DeliveryItemProductDto'
         state:
@@ -1390,34 +1415,40 @@ components:
           description: The date and time when the item was added
           format: date-time
         active_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when the item became active
           format: date-time
-          nullable: true
         expires_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when the item expires naturally
           format: date-time
-          nullable: true
         override_expires_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The override expiry date for the delivery item
           format: date-time
-          nullable: true
         removed_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when the item was removed
           format: date-time
-          nullable: true
         revoked_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when the item was revoked
           format: date-time
-          nullable: true
         revoke_reason:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The reason for revoking the delivery item
-          nullable: true
       additionalProperties: false
       description: Represents a delivery item assigned to a customer
     StorefrontGameServerDto:
@@ -1456,9 +1487,10 @@ components:
           type: integer
           format: int32
         expires_at:
-          type: string
+          type:
+            - 'null'
+            - string
           format: date-time
-          nullable: true
       additionalProperties: false
     StorefrontNavLinkDto:
       required:
@@ -1475,9 +1507,10 @@ components:
           type: string
           description: The unique identifier for this navigation node in the navigation tree.
         parent_node_id:
-          type: string
+          type:
+            - 'null'
+            - string
           description: 'The identifier of the parent navigation node, if this is a child node.'
-          nullable: true
         tag_id:
           $ref: '#/components/schemas/FlakeId'
         tag_slug:
@@ -1540,9 +1573,10 @@ components:
         version_id:
           $ref: '#/components/schemas/FlakeId'
         image_url:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The URL to the product image.
-          nullable: true
           example: https://cdn.paynow.gg/logo/full/logotype-color.svg
         slug:
           type: string
@@ -1557,19 +1591,22 @@ components:
           description: The detailed description of the product.
           example: 'This premium package includes exclusive in-game items, bonus currency, and early access to new content.'
         enabled_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when the product becomes enabled.
           format: date-time
-          nullable: true
         enabled_until:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time until which the product remains enabled.
           format: date-time
-          nullable: true
         label:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The display label for the product.
-          nullable: true
           example: Premium Items
         sort_order:
           type: integer
@@ -1639,21 +1676,24 @@ components:
         deliverable_actions:
           $ref: '#/components/schemas/ProductDeliverableActionsDto'
         metadata:
-          type: object
+          type:
+            - 'null'
+            - object
           additionalProperties:
             type: string
           description: Additional metadata for the product.
-          nullable: true
         created_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when the product was created.
           format: date-time
-          nullable: true
         updated_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when the product was last updated.
           format: date-time
-          nullable: true
       additionalProperties: false
     StorefrontProductPricingDetailsDto:
       required:
@@ -1664,10 +1704,11 @@ components:
         active_sale:
           $ref: '#/components/schemas/StorefrontSaleDto'
         sale_value:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The amount of the sale discount in the lowest denominator (e.g. cents).
           format: int64
-          nullable: true
           example: 500
         vat_rate:
           $ref: '#/components/schemas/VatRateDto'
@@ -1784,10 +1825,11 @@ components:
           format: date-time
           example: '2025-06-01T00:00:00Z'
         ends_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: 'The date and time when the sale ends, if applicable.'
           format: date-time
-          nullable: true
           example: '2025-06-30T23:59:59Z'
       additionalProperties: false
     StorefrontStoreDto:
@@ -1824,47 +1866,56 @@ components:
           description: The three-letter ISO currency code used for pricing in this store.
           example: usd
         description:
-          type: string
+          type:
+            - 'null'
+            - string
           description: A detailed description of the store. Only present for some platform types.
-          nullable: true
         website_url:
-          type: string
+          type:
+            - 'null'
+            - string
           description: 'The URL of the store''s main website, if not using Hosted Webstores.'
-          nullable: true
         support_email:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The email address customers can use to contact store support.
-          nullable: true
           example: support@example.com
         support_url:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The URL of the store's support page.
-          nullable: true
         integration_type:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The type of integration this store uses with external systems.
-          nullable: true
         live_mode:
           type: boolean
           description: Indicates whether the store is in live mode (true) or test mode (false).
         logo_url:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The URL to the store's main logo image.
-          nullable: true
         logo_square_url:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The URL to the store's square logo image.
-          nullable: true
         created_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when the store was created.
           format: date-time
-          nullable: true
         updated_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when the store was last updated.
           format: date-time
-          nullable: true
       additionalProperties: false
       description: Represents a store entity within the storefront system.
     StorefrontTagDto:
@@ -1888,13 +1939,15 @@ components:
           type: string
           description: The display name of the tag shown to customers.
         description:
-          type: string
+          type:
+            - 'null'
+            - string
           description: A detailed description of the tag's purpose or the category it represents.
-          nullable: true
         image_url:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The URL to the tag image.
-          nullable: true
           example: https://cdn.paynow.gg/logo/full/logotype-color.svg
         enabled:
           type: boolean
@@ -1904,10 +1957,11 @@ components:
           description: The date and time when the tag was created.
           format: date-time
         updated_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: 'The date and time when the tag was last updated, if applicable.'
           format: date-time
-          nullable: true
       additionalProperties: false
       description: Represents a tag entity used for categorizing and filtering products within a store.
     ValidationError:
@@ -1992,3 +2046,13 @@ components:
       description: A Customer token generated using an API Key in the format 'Customer TOKEN_HERE'.
       name: Authorization
       in: header
+tags:
+  - name: cart
+  - name: checkout
+  - name: customer
+  - name: delivery
+  - name: discord
+  - name: navlinks
+  - name: products
+  - name: store
+  - name: tags

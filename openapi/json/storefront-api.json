@@ -1,5 +1,5 @@
 {
-  "openapi": "3.0.4",
+  "openapi": "3.1.1",
   "info": {
     "title": "PayNow Storefront (Headless) API",
     "description": "The Storefront API lets you integrate your store into custom front-ends or games. It manages product catalogue displaying, VAT rate calculation, carts, checkout sessions, and more. This API can be safely called directly from customer browsers or client-side applications without requiring an API key.",
@@ -607,7 +607,7 @@
             "schema": {
               "$ref": "#/components/schemas/FlakeId"
             },
-            "example": null
+            "example": "null"
           },
           {
             "name": "before",
@@ -616,7 +616,7 @@
             "schema": {
               "$ref": "#/components/schemas/FlakeId"
             },
-            "example": null
+            "example": "null"
           },
           {
             "name": "asc",
@@ -686,7 +686,7 @@
             "schema": {
               "$ref": "#/components/schemas/FlakeId"
             },
-            "example": null
+            "example": "null"
           },
           {
             "name": "before",
@@ -695,7 +695,7 @@
             "schema": {
               "$ref": "#/components/schemas/FlakeId"
             },
-            "example": null
+            "example": "null"
           },
           {
             "name": "asc",
@@ -1301,9 +1301,11 @@
             "description": "Indicates whether this line will be trialied by the customer."
           },
           "image_url": {
-            "type": "string",
-            "description": "The URL to the product image",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The URL to the product image"
           },
           "selected_gameserver_id": {
             "$ref": "#/components/schemas/FlakeId"
@@ -1338,32 +1340,42 @@
             "$ref": "#/components/schemas/FlakeId"
           },
           "affiliate_code": {
-            "type": "string",
-            "description": "Optional affiliate code to track referrals",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Optional affiliate code to track referrals"
           },
           "return_url": {
-            "type": "string",
-            "description": "Optional URL to redirect to after successful checkout",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Optional URL to redirect to after successful checkout"
           },
           "cancel_url": {
-            "type": "string",
-            "description": "Optional URL to redirect to if checkout is canceled",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Optional URL to redirect to if checkout is canceled"
           },
           "auto_redirect": {
-            "type": "boolean",
-            "description": "Whether to automatically redirect the customer (return_url must be set)",
-            "nullable": true
+            "type": [
+              "null",
+              "boolean"
+            ],
+            "description": "Whether to automatically redirect the customer (return_url must be set)"
           },
           "metadata": {
-            "type": "object",
+            "type": [
+              "null",
+              "object"
+            ],
             "additionalProperties": {
               "type": "string"
             },
-            "description": "Optional metadata to associate with the checkout session.\nDo not store any sensitive information here.",
-            "nullable": true
+            "description": "Optional metadata to associate with the checkout session.\nDo not store any sensitive information here."
           }
         },
         "additionalProperties": false,
@@ -1380,14 +1392,18 @@
             "$ref": "#/components/schemas/FlakeId"
           },
           "subscription": {
-            "type": "boolean",
-            "description": "Determines whether this line should create a subscription",
-            "nullable": true
+            "type": [
+              "null",
+              "boolean"
+            ],
+            "description": "Determines whether this line should create a subscription"
           },
           "trial": {
-            "type": "boolean",
-            "description": "Indicates whether the product should be trialed",
-            "nullable": true
+            "type": [
+              "null",
+              "boolean"
+            ],
+            "description": "Indicates whether the product should be trialed"
           },
           "gift_to": {
             "$ref": "#/components/schemas/CustomerPlatformAccountDto"
@@ -1404,20 +1420,24 @@
             "$ref": "#/components/schemas/FlakeId"
           },
           "metadata": {
-            "type": "object",
+            "type": [
+              "null",
+              "object"
+            ],
             "additionalProperties": {
               "type": "string"
             },
-            "description": "Optional metadata to associate with the checkout session line.\nDo not store any sensitive information here.",
-            "nullable": true
+            "description": "Optional metadata to associate with the checkout session line.\nDo not store any sensitive information here."
           },
           "custom_variables": {
-            "type": "object",
+            "type": [
+              "null",
+              "object"
+            ],
             "additionalProperties": {
               "type": "string"
             },
-            "description": "Key-value pair mapping custom variable identifiers to their selected values.\nRequired only when the product includes custom variables.",
-            "nullable": true
+            "description": "Key-value pair mapping custom variable identifiers to their selected values.\nRequired only when the product includes custom variables."
           }
         },
         "additionalProperties": false,
@@ -1437,41 +1457,53 @@
             "description": "The line items to include in the checkout."
           },
           "subscription": {
-            "type": "boolean",
+            "type": [
+              "null",
+              "boolean"
+            ],
             "description": "Whether this checkout creates a subscription.\nDEPRECATED: Use 'subscription' field in 'lines' array objects instead.",
-            "nullable": true,
             "deprecated": true
           },
           "coupon_id": {
             "$ref": "#/components/schemas/FlakeId"
           },
           "affiliate_code": {
-            "type": "string",
-            "description": "Optional affiliate code to track referrals",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Optional affiliate code to track referrals"
           },
           "return_url": {
-            "type": "string",
-            "description": "Optional URL to redirect to after successful checkout",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Optional URL to redirect to after successful checkout"
           },
           "cancel_url": {
-            "type": "string",
-            "description": "Optional URL to redirect to if checkout is canceled",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Optional URL to redirect to if checkout is canceled"
           },
           "auto_redirect": {
-            "type": "boolean",
-            "description": "Whether to automatically redirect the customer (return_url must be set)",
-            "nullable": true
+            "type": [
+              "null",
+              "boolean"
+            ],
+            "description": "Whether to automatically redirect the customer (return_url must be set)"
           },
           "metadata": {
-            "type": "object",
+            "type": [
+              "null",
+              "object"
+            ],
             "additionalProperties": {
               "type": "string"
             },
-            "description": "Optional metadata to associate with the checkout session.\nDo not store any sensitive information here.",
-            "nullable": true
+            "description": "Optional metadata to associate with the checkout session.\nDo not store any sensitive information here."
           }
         },
         "additionalProperties": false,
@@ -1539,26 +1571,32 @@
             "$ref": "#/components/schemas/SteamProfileDto"
           },
           "minecraft_uuid": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "description": "The customer's Minecraft UUID, if they have linked their Minecraft account.\nNot set for offline Minecraft stores. If the platform type is Minecraft - Geyser,\nand the profile is a bedrock account, this will be a UUID generated from the Xbox XUID.",
-            "nullable": true,
             "example": "f84c6a79-0a4e-45e0-879b-cd49ebd4c4e2"
           },
           "minecraft": {
             "$ref": "#/components/schemas/MinecraftProfileDto"
           },
           "xbox_xuid": {
-            "type": "string",
-            "description": "The customer's Xbox XUID, if available.",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The customer's Xbox XUID, if available."
           },
           "minecraft_platform": {
             "$ref": "#/components/schemas/CustomerMinecraftPlatform"
           },
           "name": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "description": "The display name for the customer.",
-            "nullable": true,
             "example": "m0uka"
           },
           "created_at": {
@@ -1567,10 +1605,12 @@
             "format": "date-time"
           },
           "updated_at": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "description": "The date and time when the customer was last updated, if applicable.",
-            "format": "date-time",
-            "nullable": true
+            "format": "date-time"
           },
           "metadata": {
             "type": "object",
@@ -1703,9 +1743,11 @@
             "description": "The display name of the user on this platform."
           },
           "avatar_url": {
-            "type": "string",
-            "description": "The URL to the user's avatar image on this platform.",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The URL to the user's avatar image on this platform."
           }
         },
         "additionalProperties": false,
@@ -1762,18 +1804,22 @@
             "example": "Bad Request Example"
           },
           "trace_id": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "description": "A distributed trace ID used for debugging.",
-            "nullable": true,
             "example": "234a5bcd543ef3fa53ce929d0e0e4736"
           },
           "errors": {
-            "type": "array",
+            "type": [
+              "null",
+              "array"
+            ],
             "items": {
               "$ref": "#/components/schemas/ValidationError"
             },
-            "description": "An array of multiple errors. Only used by some API services.",
-            "nullable": true
+            "description": "An array of multiple errors. Only used by some API services."
           }
         },
         "additionalProperties": false,
@@ -1921,9 +1967,11 @@
             "$ref": "#/components/schemas/CustomVariableType"
           },
           "value_regex": {
-            "type": "string",
-            "description": "Optional regex pattern to validate text/number input values.\nOnly applies to text and number types.\nUses RE2 syntax - does not support negative lookarounds, backreferences, or other advanced regex features.",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Optional regex pattern to validate text/number input values.\nOnly applies to text and number types.\nUses RE2 syntax - does not support negative lookarounds, backreferences, or other advanced regex features."
           },
           "options": {
             "type": "array",
@@ -2005,10 +2053,12 @@
             "$ref": "#/components/schemas/FlakeId"
           },
           "quantity_index": {
-            "type": "integer",
+            "type": [
+              "null",
+              "integer"
+            ],
             "description": "The index of the item when multiple quantities were assigned",
-            "format": "int32",
-            "nullable": true
+            "format": "int32"
           },
           "product": {
             "$ref": "#/components/schemas/DeliveryItemProductDto"
@@ -2030,39 +2080,51 @@
             "format": "date-time"
           },
           "active_at": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "description": "The date and time when the item became active",
-            "format": "date-time",
-            "nullable": true
+            "format": "date-time"
           },
           "expires_at": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "description": "The date and time when the item expires naturally",
-            "format": "date-time",
-            "nullable": true
+            "format": "date-time"
           },
           "override_expires_at": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "description": "The override expiry date for the delivery item",
-            "format": "date-time",
-            "nullable": true
+            "format": "date-time"
           },
           "removed_at": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "description": "The date and time when the item was removed",
-            "format": "date-time",
-            "nullable": true
+            "format": "date-time"
           },
           "revoked_at": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "description": "The date and time when the item was revoked",
-            "format": "date-time",
-            "nullable": true
+            "format": "date-time"
           },
           "revoke_reason": {
-            "type": "string",
-            "description": "The reason for revoking the delivery item",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The reason for revoking the delivery item"
           }
         },
         "additionalProperties": false,
@@ -2115,9 +2177,11 @@
             "format": "int32"
           },
           "expires_at": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
           }
         },
         "additionalProperties": false
@@ -2139,9 +2203,11 @@
             "description": "The unique identifier for this navigation node in the navigation tree."
           },
           "parent_node_id": {
-            "type": "string",
-            "description": "The identifier of the parent navigation node, if this is a child node.",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The identifier of the parent navigation node, if this is a child node."
           },
           "tag_id": {
             "$ref": "#/components/schemas/FlakeId"
@@ -2220,9 +2286,11 @@
             "$ref": "#/components/schemas/FlakeId"
           },
           "image_url": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "description": "The URL to the product image.",
-            "nullable": true,
             "example": "https://cdn.paynow.gg/logo/full/logotype-color.svg"
           },
           "slug": {
@@ -2241,21 +2309,27 @@
             "example": "This premium package includes exclusive in-game items, bonus currency, and early access to new content."
           },
           "enabled_at": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "description": "The date and time when the product becomes enabled.",
-            "format": "date-time",
-            "nullable": true
+            "format": "date-time"
           },
           "enabled_until": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "description": "The date and time until which the product remains enabled.",
-            "format": "date-time",
-            "nullable": true
+            "format": "date-time"
           },
           "label": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "description": "The display label for the product.",
-            "nullable": true,
             "example": "Premium Items"
           },
           "sort_order": {
@@ -2348,24 +2422,30 @@
             "$ref": "#/components/schemas/ProductDeliverableActionsDto"
           },
           "metadata": {
-            "type": "object",
+            "type": [
+              "null",
+              "object"
+            ],
             "additionalProperties": {
               "type": "string"
             },
-            "description": "Additional metadata for the product.",
-            "nullable": true
+            "description": "Additional metadata for the product."
           },
           "created_at": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "description": "The date and time when the product was created.",
-            "format": "date-time",
-            "nullable": true
+            "format": "date-time"
           },
           "updated_at": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "description": "The date and time when the product was last updated.",
-            "format": "date-time",
-            "nullable": true
+            "format": "date-time"
           }
         },
         "additionalProperties": false
@@ -2381,10 +2461,12 @@
             "$ref": "#/components/schemas/StorefrontSaleDto"
           },
           "sale_value": {
-            "type": "integer",
+            "type": [
+              "null",
+              "integer"
+            ],
             "description": "The amount of the sale discount in the lowest denominator (e.g. cents).",
             "format": "int64",
-            "nullable": true,
             "example": 500
           },
           "vat_rate": {
@@ -2534,10 +2616,12 @@
             "example": "2025-06-01T00:00:00Z"
           },
           "ends_at": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "description": "The date and time when the sale ends, if applicable.",
             "format": "date-time",
-            "nullable": true,
             "example": "2025-06-30T23:59:59Z"
           }
         },
@@ -2584,56 +2668,74 @@
             "example": "usd"
           },
           "description": {
-            "type": "string",
-            "description": "A detailed description of the store. Only present for some platform types.",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "A detailed description of the store. Only present for some platform types."
           },
           "website_url": {
-            "type": "string",
-            "description": "The URL of the store's main website, if not using Hosted Webstores.",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The URL of the store's main website, if not using Hosted Webstores."
           },
           "support_email": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "description": "The email address customers can use to contact store support.",
-            "nullable": true,
             "example": "support@example.com"
           },
           "support_url": {
-            "type": "string",
-            "description": "The URL of the store's support page.",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The URL of the store's support page."
           },
           "integration_type": {
-            "type": "string",
-            "description": "The type of integration this store uses with external systems.",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The type of integration this store uses with external systems."
           },
           "live_mode": {
             "type": "boolean",
             "description": "Indicates whether the store is in live mode (true) or test mode (false)."
           },
           "logo_url": {
-            "type": "string",
-            "description": "The URL to the store's main logo image.",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The URL to the store's main logo image."
           },
           "logo_square_url": {
-            "type": "string",
-            "description": "The URL to the store's square logo image.",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The URL to the store's square logo image."
           },
           "created_at": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "description": "The date and time when the store was created.",
-            "format": "date-time",
-            "nullable": true
+            "format": "date-time"
           },
           "updated_at": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "description": "The date and time when the store was last updated.",
-            "format": "date-time",
-            "nullable": true
+            "format": "date-time"
           }
         },
         "additionalProperties": false,
@@ -2665,14 +2767,18 @@
             "description": "The display name of the tag shown to customers."
           },
           "description": {
-            "type": "string",
-            "description": "A detailed description of the tag's purpose or the category it represents.",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "A detailed description of the tag's purpose or the category it represents."
           },
           "image_url": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "description": "The URL to the tag image.",
-            "nullable": true,
             "example": "https://cdn.paynow.gg/logo/full/logotype-color.svg"
           },
           "enabled": {
@@ -2685,10 +2791,12 @@
             "format": "date-time"
           },
           "updated_at": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "description": "The date and time when the tag was last updated, if applicable.",
-            "format": "date-time",
-            "nullable": true
+            "format": "date-time"
           }
         },
         "additionalProperties": false,
@@ -2798,5 +2906,34 @@
         "in": "header"
       }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "cart"
+    },
+    {
+      "name": "checkout"
+    },
+    {
+      "name": "customer"
+    },
+    {
+      "name": "delivery"
+    },
+    {
+      "name": "discord"
+    },
+    {
+      "name": "navlinks"
+    },
+    {
+      "name": "products"
+    },
+    {
+      "name": "store"
+    },
+    {
+      "name": "tags"
+    }
+  ]
 }

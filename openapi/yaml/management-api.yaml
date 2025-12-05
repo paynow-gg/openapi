@@ -1,4 +1,4 @@
-openapi: 3.0.4
+openapi: '3.1.1'
 info:
   title: PayNow Management API
   description: 'The Management API provides tools for store administration, accessible by a store API key. It enables operations such as updating product prices, creating promotional coupons, managing customer inventories, and other backend store management functions.This API must be called from a secure server and requires proper authentication.'
@@ -207,13 +207,13 @@ paths:
           description: "Returns items after the specified ID.\nUsed for forward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: before
           in: query
           description: "Returns items before the specified ID.\nUsed for backward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: asc
           in: query
           description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
@@ -508,13 +508,13 @@ paths:
           description: "Returns items after the specified ID.\nUsed for forward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: before
           in: query
           description: "Returns items before the specified ID.\nUsed for backward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: asc
           in: query
           description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
@@ -876,13 +876,13 @@ paths:
           description: "Returns items after the specified ID.\nUsed for forward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: before
           in: query
           description: "Returns items before the specified ID.\nUsed for backward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: asc
           in: query
           description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
@@ -1228,13 +1228,13 @@ paths:
           description: "Returns items after the specified ID.\nUsed for forward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: before
           in: query
           description: "Returns items before the specified ID.\nUsed for backward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: asc
           in: query
           description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
@@ -1614,13 +1614,13 @@ paths:
           description: "Returns items after the specified ID.\nUsed for forward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: before
           in: query
           description: "Returns items before the specified ID.\nUsed for backward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: asc
           in: query
           description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
@@ -1753,13 +1753,13 @@ paths:
           description: "Returns items after the specified ID.\nUsed for forward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: before
           in: query
           description: "Returns items before the specified ID.\nUsed for backward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: asc
           in: query
           description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
@@ -1812,13 +1812,13 @@ paths:
           description: "Returns items after the specified ID.\nUsed for forward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: before
           in: query
           description: "Returns items before the specified ID.\nUsed for backward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: asc
           in: query
           description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
@@ -2784,13 +2784,13 @@ paths:
           description: "Returns items after the specified ID.\nUsed for forward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: before
           in: query
           description: "Returns items before the specified ID.\nUsed for backward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: asc
           in: query
           description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
@@ -3476,13 +3476,13 @@ paths:
           description: "Returns items after the specified ID.\nUsed for forward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: before
           in: query
           description: "Returns items before the specified ID.\nUsed for backward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: asc
           in: query
           description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
@@ -3679,13 +3679,13 @@ paths:
           description: "Returns items after the specified ID.\nUsed for forward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: before
           in: query
           description: "Returns items before the specified ID.\nUsed for backward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: asc
           in: query
           description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
@@ -4434,13 +4434,13 @@ paths:
           description: "Returns items after the specified ID.\nUsed for forward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: before
           in: query
           description: "Returns items before the specified ID.\nUsed for backward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: asc
           in: query
           description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
@@ -4850,13 +4850,13 @@ paths:
           description: "Returns items after the specified ID.\nUsed for forward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: before
           in: query
           description: "Returns items before the specified ID.\nUsed for backward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: asc
           in: query
           description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
@@ -4944,13 +4944,13 @@ paths:
           description: "Returns items after the specified ID.\nUsed for forward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: before
           in: query
           description: "Returns items before the specified ID.\nUsed for backward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: asc
           in: query
           description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
@@ -5106,13 +5106,13 @@ paths:
           description: "Returns items after the specified ID.\nUsed for forward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: before
           in: query
           description: "Returns items before the specified ID.\nUsed for backward pagination through results."
           schema:
             $ref: '#/components/schemas/FlakeId'
-          example: 
+          example: 'null'
         - name: asc
           in: query
           description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
@@ -5386,22 +5386,25 @@ components:
           description: The minimum order value required to trigger an abandoned checkout email.
           format: int64
         maximum_order_value:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The optional maximum order value beyond which an abandoned checkout email will not be sent.
           format: int64
-          nullable: true
         max_coupons_per_customer_amount:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The optional maximum coupons limit per customer beyond which an abandoned checkout email will not be sent.
           format: int32
-          nullable: true
         max_coupons_per_customer_period:
           $ref: '#/components/schemas/Period'
         max_coupons_global_amount:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The optional maximum coupons limit store wide beyond which an abandoned checkout email will not be sent.
           format: int32
-          nullable: true
         max_coupons_global_period:
           $ref: '#/components/schemas/Period'
         coupon_configuration:
@@ -5452,22 +5455,25 @@ components:
           description: The minimum order value required to trigger an abandoned checkout email.
           format: int64
         maximum_order_value:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The optional maximum order value beyond which an abandoned checkout email will not be sent.
           format: int64
-          nullable: true
         max_coupons_per_customer_amount:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The optional maximum coupons limit per customer beyond which an abandoned checkout email will not be sent.
           format: int32
-          nullable: true
         max_coupons_per_customer_period:
           $ref: '#/components/schemas/Period'
         max_coupons_global_amount:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The optional maximum coupons limit store wide beyond which an abandoned checkout email will not be sent.
           format: int32
-          nullable: true
         max_coupons_global_period:
           $ref: '#/components/schemas/Period'
         commands:
@@ -5553,9 +5559,10 @@ components:
         updated_by:
           $ref: '#/components/schemas/ActorDto'
         updated_at:
-          type: string
+          type:
+            - 'null'
+            - string
           format: date-time
-          nullable: true
       additionalProperties: false
     AffiliateLinkRefererType:
       enum:
@@ -5567,14 +5574,16 @@ components:
       type: object
       properties:
         buyer_id:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The Alipay buyer identifier
-          nullable: true
           example: buyer_abc123
         fingerprint:
-          type: string
+          type:
+            - 'null'
+            - string
           description: A unique fingerprint for this Alipay account
-          nullable: true
           example: fingerprint_xyz789
       additionalProperties: false
       description: Alipay payment method details
@@ -5607,15 +5616,17 @@ components:
           type: string
           format: date-time
         updated_at:
-          type: string
+          type:
+            - 'null'
+            - string
           format: date-time
-          nullable: true
         updated_by:
           $ref: '#/components/schemas/ActorDto'
         expires_at:
-          type: string
+          type:
+            - 'null'
+            - string
           format: date-time
-          nullable: true
       additionalProperties: false
     BanIdentityDto:
       required:
@@ -5641,29 +5652,34 @@ components:
       type: object
       properties:
         bank:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The bank identifier
-          nullable: true
           example: bnp_paribas
         bank_name:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The bank name
-          nullable: true
           example: BNP Paribas
         bic:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The Bank Identifier Code
-          nullable: true
           example: GEBABEBB
         iban_last4:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The last 4 digits of the IBAN
-          nullable: true
-          example: '3456'
+          example: 3456
         payer_name:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The payer name
-          nullable: true
           example: Jean Dupont
       additionalProperties: false
       description: Bancontact payment method details
@@ -5709,19 +5725,22 @@ components:
           description: The last 4 digits of the card number
           example: '4242'
         bin:
-          type: string
+          type:
+            - 'null'
+            - string
           description: "The Bank Identification Number (first 6/8 digits of card).\nOnly available internally."
-          nullable: true
-          example: '424242'
+          example: 424242
         issuer:
-          type: string
+          type:
+            - 'null'
+            - string
           description: "The card issuer/bank name.\nOnly available internally."
-          nullable: true
           example: Chase Bank
         description:
-          type: string
+          type:
+            - 'null'
+            - string
           description: "The card description.\nOnly available internally."
-          nullable: true
           example: Visa Signature
         wallet:
           $ref: '#/components/schemas/CardWalletDto'
@@ -5799,16 +5818,19 @@ components:
         steam_id:
           $ref: '#/components/schemas/SteamId'
         minecraft_uuid:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
         customer_name:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
         customer_id:
           $ref: '#/components/schemas/FlakeId'
         command_stage:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
         command:
           type: string
         online_only:
@@ -5819,13 +5841,15 @@ components:
           type: string
           format: date-time
         executed_at:
-          type: string
+          type:
+            - 'null'
+            - string
           format: date-time
-          nullable: true
         unqueued_at:
-          type: string
+          type:
+            - 'null'
+            - string
           format: date-time
-          nullable: true
       additionalProperties: false
     CouponDiscountTypeEnum:
       enum:
@@ -5870,16 +5894,18 @@ components:
           type: string
           description: The unique code associated with the coupon.
         note:
-          type: string
+          type:
+            - 'null'
+            - string
           description: A note or internal description of the coupon.
-          nullable: true
         duration:
           $ref: '#/components/schemas/CouponDurationEnum'
         duration_in_months:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: 'The number of months the coupon is valid, used if the duration is repeating.'
           format: int32
-          nullable: true
         discount_type:
           $ref: '#/components/schemas/CouponDiscountTypeEnum'
         discount_amount:
@@ -5893,17 +5919,19 @@ components:
           type: boolean
           description: Indicates whether the discount is applied before existing sales.
         apply_to_products:
-          type: array
+          type:
+            - 'null'
+            - array
           items:
             $ref: '#/components/schemas/FlakeId'
           description: A list of product IDs the coupon applies to.
-          nullable: true
         apply_to_tags:
-          type: array
+          type:
+            - 'null'
+            - array
           items:
             $ref: '#/components/schemas/FlakeId'
           description: A list of tag IDs the coupon applies to.
-          nullable: true
         usable_by_customer_id:
           $ref: '#/components/schemas/FlakeId'
         minimum_order_value:
@@ -5931,15 +5959,17 @@ components:
           type: boolean
           description: Indicates whether the coupon can be used for subscriptions.
         usable_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when the coupon becomes valid.
           format: date-time
-          nullable: true
         expires_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when the coupon expires.
           format: date-time
-          nullable: true
         created_by:
           $ref: '#/components/schemas/ActorDto'
         created_at:
@@ -5949,10 +5979,11 @@ components:
         updated_by:
           $ref: '#/components/schemas/ActorDto'
         updated_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when the coupon was last updated.
           format: date-time
-          nullable: true
       additionalProperties: false
       description: 'Represents a detailed view of a coupon, including configuration and audit information.'
     CouponDurationEnum:
@@ -6035,13 +6066,15 @@ components:
         product_id:
           $ref: '#/components/schemas/FlakeId'
         subscription:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Determines whether this line should create a subscription
-          nullable: true
         trial:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates whether the product should be trialed
-          nullable: true
         gift_to:
           $ref: '#/components/schemas/CustomerPlatformAccountDto'
         gift_to_customer_id:
@@ -6053,17 +6086,19 @@ components:
         selected_gameserver_id:
           $ref: '#/components/schemas/FlakeId'
         metadata:
-          type: object
+          type:
+            - 'null'
+            - object
           additionalProperties:
             type: string
           description: "Optional metadata to associate with the checkout session line.\nDo not store any sensitive information here."
-          nullable: true
         custom_variables:
-          type: object
+          type:
+            - 'null'
+            - object
           additionalProperties:
             type: string
           description: "Key-value pair mapping custom variable identifiers to their selected values.\nRequired only when the product includes custom variables."
-          nullable: true
       additionalProperties: false
       description: Represents a line item in a checkout session request
     CreateCheckoutSessionLineManagementDto:
@@ -6072,13 +6107,15 @@ components:
       type: object
       properties:
         subscription:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Determines whether this line should create a subscription
-          nullable: true
         trial:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates whether the product should be trialed
-          nullable: true
         gift_to:
           $ref: '#/components/schemas/CustomerPlatformAccountDto'
         gift_to_customer_id:
@@ -6090,17 +6127,19 @@ components:
         selected_gameserver_id:
           $ref: '#/components/schemas/FlakeId'
         metadata:
-          type: object
+          type:
+            - 'null'
+            - object
           additionalProperties:
             type: string
           description: "Optional metadata to associate with the checkout session line.\nDo not store any sensitive information here."
-          nullable: true
         custom_variables:
-          type: object
+          type:
+            - 'null'
+            - object
           additionalProperties:
             type: string
           description: "Key-value pair mapping custom variable identifiers to their selected values.\nRequired only when the product includes custom variables."
-          nullable: true
         product_id:
           $ref: '#/components/schemas/FlakeId'
         inline_product:
@@ -6119,34 +6158,40 @@ components:
             $ref: '#/components/schemas/CreateCheckoutSessionLineManagementDto'
           description: The line items to include in the checkout
         subscription:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: "Whether this checkout creates a subscription.\nDEPRECATED: Use 'subscription' field in 'lines' array objects instead."
-          nullable: true
           deprecated: true
         coupon_id:
           $ref: '#/components/schemas/FlakeId'
         affiliate_code:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Optional affiliate code to track referrals
-          nullable: true
         return_url:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Optional URL to redirect to after successful checkout
-          nullable: true
         cancel_url:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Optional URL to redirect to if checkout is canceled
-          nullable: true
         auto_redirect:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Whether to automatically redirect the customer (return_url must be set)
-          nullable: true
         metadata:
-          type: object
+          type:
+            - 'null'
+            - object
           additionalProperties:
             type: string
           description: "Optional metadata to associate with the checkout session.\nDo not store any sensitive information here."
-          nullable: true
         customer_id:
           $ref: '#/components/schemas/FlakeId'
       additionalProperties: false
@@ -6195,7 +6240,9 @@ components:
         duration:
           $ref: '#/components/schemas/CouponDurationEnum'
         duration_in_months:
-          type: integer
+          type:
+            - 'null'
+            - integer
           format: int32
         discount_type:
           $ref: '#/components/schemas/CouponDiscountTypeEnum'
@@ -6234,10 +6281,14 @@ components:
         usable_on_subscription:
           type: boolean
         usable_at:
-          type: string
+          type:
+            - 'null'
+            - string
           format: date-time
         expires_at:
-          type: string
+          type:
+            - 'null'
+            - string
           format: date-time
     CreateDownloadableFileDownloadUrlResponseDto:
       required:
@@ -6278,7 +6329,9 @@ components:
           type: string
           format: date-time
         expires_at:
-          type: string
+          type:
+            - 'null'
+            - string
           format: date-time
     CreateNavLinkDto:
       required:
@@ -6290,7 +6343,9 @@ components:
         parent_node_id:
           type: string
         order:
-          type: integer
+          type:
+            - 'null'
+            - integer
           format: int32
     CreateRefundRequestDto:
       type: object
@@ -6298,9 +6353,10 @@ components:
         order_line_id:
           $ref: '#/components/schemas/FlakeId'
         refund_from_connected_user_balance:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: "Determines if the refund should be taken from the connected user's balance.\nOnly relevant for connected platforms."
-          nullable: true
       additionalProperties: false
     CreateSaleDto:
       required:
@@ -6338,7 +6394,9 @@ components:
           type: string
           format: date-time
         ends_at:
-          type: string
+          type:
+            - 'null'
+            - string
           format: date-time
     CreateStorePaymentSettingsDto:
       required:
@@ -6380,14 +6438,17 @@ components:
         type:
           $ref: '#/components/schemas/WebhookType'
         discord_description_template:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
         discord_title:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
         discord_color:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
       additionalProperties: false
     CryptoDetailsDto:
       required:
@@ -6445,9 +6506,10 @@ components:
         type:
           $ref: '#/components/schemas/CustomVariableType'
         value_regex:
-          type: string
+          type:
+            - 'null'
+            - string
           description: "Optional regex pattern to validate text/number input values.\nOnly applies to text and number types.\nUses RE2 syntax - does not support negative lookarounds, backreferences, or other advanced regex features."
-          nullable: true
         options:
           type: array
           items:
@@ -6462,10 +6524,11 @@ components:
         updated_by:
           $ref: '#/components/schemas/ActorDto'
         updated_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: "When this custom variable was last updated.\nNull if never updated."
           format: date-time
-          nullable: true
       additionalProperties: false
     CustomVariableLineItemDto:
       required:
@@ -6602,32 +6665,36 @@ components:
         steam:
           $ref: '#/components/schemas/SteamProfileDto'
         minecraft_uuid:
-          type: string
+          type:
+            - 'null'
+            - string
           description: "The customer's Minecraft UUID, if they have linked their Minecraft account.\nNot set for offline Minecraft stores. If the platform type is Minecraft - Geyser,\nand the profile is a bedrock account, this will be a UUID generated from the Xbox XUID."
-          nullable: true
           example: f84c6a79-0a4e-45e0-879b-cd49ebd4c4e2
         minecraft:
           $ref: '#/components/schemas/MinecraftProfileDto'
         xbox_xuid:
-          type: string
+          type:
+            - 'null'
+            - string
           description: 'The customer''s Xbox XUID, if available.'
-          nullable: true
         minecraft_platform:
           $ref: '#/components/schemas/CustomerMinecraftPlatform'
         name:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The display name for the customer.
-          nullable: true
           example: m0uka
         created_at:
           type: string
           description: The date and time when the customer was created in the system.
           format: date-time
         updated_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: 'The date and time when the customer was last updated, if applicable.'
           format: date-time
-          nullable: true
         metadata:
           type: object
           additionalProperties:
@@ -6707,28 +6774,32 @@ components:
           type: string
           description: Masked authentication token used for accessing the source platform API.
         error:
-          type: string
+          type:
+            - 'null'
+            - string
           description: 'Error message if the migration encountered any errors, otherwise null.'
-          nullable: true
         started_at:
           type: string
           description: Timestamp when the migration was initiated.
           format: date-time
         failed_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: 'Timestamp when the migration failed, or null if it didn''t fail.'
           format: date-time
-          nullable: true
         completed_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: 'Timestamp when the migration was successfully completed, or null if not completed.'
           format: date-time
-          nullable: true
         total_entities_to_migrate:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: 'Total number of entities that need to be migrated, or null if unknown.'
           format: int64
-          nullable: true
         total_entities_migrated:
           type: integer
           description: Number of entities that have been successfully migrated.
@@ -6748,25 +6819,29 @@ components:
         execute_on_gameserver_id:
           $ref: '#/components/schemas/FlakeId'
         quantity:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: Quantity of products to assign.
           format: int32
-          nullable: true
         override_expires_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Override expiry date for the delivery item.
           format: date-time
-          nullable: true
         skip_commands:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Skip command execution when assigning the item.
-          nullable: true
         custom_variables:
-          type: object
+          type:
+            - 'null'
+            - object
           additionalProperties:
             type: string
           description: Custom variables for the assignment.
-          nullable: true
       additionalProperties: false
     DeliveryItemAssignmentDto:
       type: object
@@ -6778,25 +6853,29 @@ components:
         execute_on_gameserver_id:
           $ref: '#/components/schemas/FlakeId'
         quantity:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: Quantity of products to assign.
           format: int32
-          nullable: true
         override_expires_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Override expiry date for the delivery item.
           format: date-time
-          nullable: true
         skip_commands:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Skip command execution when assigning the item.
-          nullable: true
         custom_variables:
-          type: object
+          type:
+            - 'null'
+            - object
           additionalProperties:
             type: string
           description: Custom variables for the assignment.
-          nullable: true
       additionalProperties: false
     DeliveryItemDto:
       required:
@@ -6841,10 +6920,11 @@ components:
         execute_on_gameserver_id:
           $ref: '#/components/schemas/FlakeId'
         quantity_index:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The index of the item when multiple quantities were assigned
           format: int32
-          nullable: true
         product:
           $ref: '#/components/schemas/DeliveryItemProductDto'
         state:
@@ -6856,37 +6936,43 @@ components:
         added_by:
           $ref: '#/components/schemas/ActorDto'
         active_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when the item became active
           format: date-time
-          nullable: true
         expirable:
           type: boolean
           description: Indicates whether the delivery item can expire
         expires_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when the item expires naturally
           format: date-time
-          nullable: true
         override_expires_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The override expiry date for the delivery item
           format: date-time
-          nullable: true
         removed_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when the item was removed
           format: date-time
-          nullable: true
         revoked_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when the item was revoked
           format: date-time
-          nullable: true
         revoke_reason:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The reason for revoking the delivery item
-          nullable: true
         revoked_by:
           $ref: '#/components/schemas/ActorDto'
         command_attempts:
@@ -6974,8 +7060,9 @@ components:
         role_id:
           $ref: '#/components/schemas/FlakeId'
         message:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
       additionalProperties: false
     DiscordActionExecutionStage:
       enum:
@@ -7040,18 +7127,21 @@ components:
         server_id:
           $ref: '#/components/schemas/FlakeId'
         server_name:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
         server_icon_url:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
         created_at:
           type: string
           format: date-time
         linked_at:
-          type: string
+          type:
+            - 'null'
+            - string
           format: date-time
-          nullable: true
       additionalProperties: false
     DiscordServerRoleDto:
       required:
@@ -7077,15 +7167,17 @@ components:
           type: string
           format: date-time
         finished_at:
-          type: string
+          type:
+            - 'null'
+            - string
           format: date-time
-          nullable: true
         status_code:
           type: integer
           format: int32
         response:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
       additionalProperties: false
     FinishTagImageUploadUrlRequestDto:
       required:
@@ -7124,14 +7216,16 @@ components:
           type: boolean
           description: Indicates whether the game server is currently enabled.
         token:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The authentication token used by the game server to access the PayNow API.
-          nullable: true
         token_reset_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: 'The date and time when the authentication token was last reset, if applicable.'
           format: date-time
-          nullable: true
         linked_to:
           $ref: '#/components/schemas/GameServerLinkDto'
         created_at:
@@ -7141,10 +7235,11 @@ components:
         created_by:
           $ref: '#/components/schemas/ActorDto'
         updated_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: 'The date and time when the game server was last updated, if applicable.'
           format: date-time
-          nullable: true
         updated_by:
           $ref: '#/components/schemas/ActorDto'
       additionalProperties: false
@@ -7170,9 +7265,10 @@ components:
           type: string
           format: date-time
         last_fetched_commands_at:
-          type: string
+          type:
+            - 'null'
+            - string
           format: date-time
-          nullable: true
       additionalProperties: false
     GenericProfileDto:
       required:
@@ -7192,9 +7288,10 @@ components:
           type: string
           description: The display name of the user on this platform.
         avatar_url:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The URL to the user's avatar image on this platform.
-          nullable: true
       additionalProperties: false
       description: Represents a generic platform profile for a customer.
     GetTagImageUploadUrlResponseDto:
@@ -7233,9 +7330,10 @@ components:
           description: The unique code that customers use to redeem the gift card.
           example: GIFT-2024-ABCD1234
         note:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Optional note or description associated with the gift card.
-          nullable: true
         balance:
           type: integer
           description: The current balance remaining on the gift card in cents.
@@ -7251,29 +7349,33 @@ components:
           description: The date and time when the gift card becomes usable.
           format: date-time
         expires_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: 'The date and time when the gift card expires, if applicable.'
           format: date-time
-          nullable: true
         created_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when the gift card was created.
           format: date-time
-          nullable: true
         created_by:
           $ref: '#/components/schemas/ActorDto'
         updated_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: 'The date and time when the gift card was last updated, if applicable.'
           format: date-time
-          nullable: true
         updated_by:
           $ref: '#/components/schemas/ActorDto'
         canceled_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: 'The date and time when the gift card was canceled, if applicable.'
           format: date-time
-          nullable: true
         canceled_by:
           $ref: '#/components/schemas/ActorDto'
       additionalProperties: false
@@ -7314,10 +7416,11 @@ components:
         created_by:
           $ref: '#/components/schemas/ActorDto'
         updated_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: "Optional timestamp indicating when the command was last updated.\nNull if the command has never been updated."
           format: date-time
-          nullable: true
         updated_by:
           $ref: '#/components/schemas/ActorDto'
       additionalProperties: false
@@ -7337,14 +7440,16 @@ components:
           description: The Bank Identifier Code
           example: ABNANL2A
         iban_last4:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The last 4 digits of the IBAN
-          nullable: true
-          example: '1234'
+          example: 1234
         payer_name:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The payer name
-          nullable: true
           example: John Doe
       additionalProperties: false
       description: iDEAL payment method details
@@ -7352,56 +7457,67 @@ components:
       type: object
       properties:
         slug:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The unique URL-safe identifier (slug) for the product.
-          nullable: true
         name:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The display name of the product.
-          nullable: true
         description:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The detailed description of the product.
-          nullable: true
         label:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The display label for the product.
-          nullable: true
         price:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The price of the product in the lowest denominator (e.g. cents).
           format: int64
-          nullable: true
         single_game_server_only:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates whether the customer is prompted to select a game server before purchasing.
-          nullable: true
         allow_one_time_purchase:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates whether one-time purchases are allowed.
-          nullable: true
         allow_subscription:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates whether subscription purchases are allowed.
-          nullable: true
         subscription_interval_value:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The subscription interval value.
           format: int32
-          nullable: true
         subscription_interval_scale:
           $ref: '#/components/schemas/ProductSubscriptionIntervalScale'
         trial:
           $ref: '#/components/schemas/UpsertProductTrialConfigurationDto'
         remove_after_enabled:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates whether automatic removal is enabled.
-          nullable: true
         remove_after_time_value:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The time value for automatic removal.
           format: int32
-          nullable: true
         remove_after_time_scale:
           $ref: '#/components/schemas/ProductRemoveAfterIntervalScale'
         store_stock_limit:
@@ -7409,99 +7525,116 @@ components:
         customer_stock_limit:
           $ref: '#/components/schemas/ProductStockLimitDto'
         stock_limit_do_not_include_removed:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates whether removed items should be excluded from stock limits.
-          nullable: true
         tags:
-          type: array
+          type:
+            - 'null'
+            - array
           items:
             $ref: '#/components/schemas/FlakeId'
           description: The tag IDs associated with the product.
-          nullable: true
         gameservers:
-          type: array
+          type:
+            - 'null'
+            - array
           items:
             $ref: '#/components/schemas/FlakeId'
           description: The gameserver IDs associated with the product.
-          nullable: true
         commands:
-          type: array
+          type:
+            - 'null'
+            - array
           items:
             $ref: '#/components/schemas/ProductCommandDto'
           description: The commands to be executed at different stages.
-          nullable: true
         deliverable_actions:
           $ref: '#/components/schemas/ProductDeliverableActionsDto'
         metadata:
-          type: object
+          type:
+            - 'null'
+            - object
           additionalProperties:
             type: string
           description: Additional metadata for the product.
-          nullable: true
         payout_splits:
-          type: array
+          type:
+            - 'null'
+            - array
           items:
             $ref: '#/components/schemas/ProductPayoutSplitDto'
           description: "The payout splits for revenue distribution.\nRequires special approval."
-          nullable: true
         tax_code:
           $ref: '#/components/schemas/ProductTaxCode'
         allow_concurrent_active_items:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates whether concurrent active items are allowed.
-          nullable: true
         disable_promo_codes:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates whether using coupons and gift cards on this product is allowed.
-          nullable: true
         is_hidden:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates whether the product is hidden.
-          nullable: true
         is_gifting_disabled:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates whether gifting is disabled.
-          nullable: true
         enabled_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: "The date and time when the product becomes enabled.\nSet to `null` to keep enabled."
           format: date-time
-          nullable: true
         enabled_until:
-          type: string
+          type:
+            - 'null'
+            - string
           description: "The date and time until which the product remains enabled.\nSet to `null` to keep enabled."
           format: date-time
-          nullable: true
         required_product_ids:
-          type: array
+          type:
+            - 'null'
+            - array
           items:
             $ref: '#/components/schemas/FlakeId'
           description: The IDs of products required for purchasing this product.
-          nullable: true
         required_product_all:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates whether all required products are needed.
-          nullable: true
         custom_variable_ids:
-          type: array
+          type:
+            - 'null'
+            - array
           items:
             $ref: '#/components/schemas/FlakeId'
           description: The IDs of associated custom variables.
-          nullable: true
       additionalProperties: false
       description: "Optional inline product definition for dynamic products.\nRequires special approval, use `product_id` instead."
     KlarnaDetailsDto:
       type: object
       properties:
         country:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The country code
-          nullable: true
           example: SE
         method_category:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The Klarna payment method category
-          nullable: true
           example: pay_later
       additionalProperties: false
       description: Klarna payment method details
@@ -7548,10 +7681,11 @@ components:
         duration:
           $ref: '#/components/schemas/CouponDurationEnum'
         duration_in_months:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: 'Gets or sets the duration of the coupon in months, applicable only for repeating coupons.'
           format: int32
-          nullable: true
         discount_type:
           $ref: '#/components/schemas/CouponDiscountTypeEnum'
         discount_amount:
@@ -7628,16 +7762,18 @@ components:
         tag_id:
           $ref: '#/components/schemas/FlakeId'
         parent_node_id:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
         tag_slug:
           type: string
         name:
           type: string
         order:
-          type: integer
+          type:
+            - 'null'
+            - integer
           format: int32
-          nullable: true
       additionalProperties: false
     OrderDto:
       required:
@@ -7687,9 +7823,10 @@ components:
         checkout_id:
           $ref: '#/components/schemas/FlakeId'
         checkout_token:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The checkout token for this order
-          nullable: true
           example: c4qqilpphugeqf2gndnkk5ad8fdq
         subscription_id:
           $ref: '#/components/schemas/FlakeId'
@@ -7773,16 +7910,18 @@ components:
           description: The gift card usage amount formatted as a string
           example: $0.00
         created_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when this order was created
           format: date-time
-          nullable: true
           example: '2025-04-01T15:30:45Z'
         completed_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: 'The date and time when this order was completed, if applicable'
           format: date-time
-          nullable: true
           example: '2025-04-01T15:35:22Z'
         lines:
           type: array
@@ -7790,11 +7929,12 @@ components:
             $ref: '#/components/schemas/OrderLineDto'
           description: The line items in this order
         tax_jurisdictions:
-          type: array
+          type:
+            - 'null'
+            - array
           items:
             $ref: '#/components/schemas/SalesTaxJurisdictionDto'
           description: A list of all tax jurisdictions that were involved in the taxation of this order.
-          nullable: true
         last_payment_error:
           $ref: '#/components/schemas/LastPaymentErrorDto'
       additionalProperties: false
@@ -7836,23 +7976,26 @@ components:
           description: The name of the product in this order line
           example: Premium Game Pass
         product_image_url:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The URL of the product image
-          nullable: true
           example: https://cdn.example.com/images/premium-game-pass.jpg
         created_giftcard_id:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The Gift Card ID of that product in this order line
-          nullable: true
         subscription_id:
           $ref: '#/components/schemas/FlakeId'
         trial_id:
           $ref: '#/components/schemas/FlakeId'
         subscription_interval_value:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The interval value for subscription products
           format: int32
-          nullable: true
           example: 1
         subscription_interval_scale:
           $ref: '#/components/schemas/ProductSubscriptionIntervalScale'
@@ -7932,22 +8075,25 @@ components:
           description: 'Indicates whether tax is included in the base price, or added on top'
           example: false
         payout_splits:
-          type: array
+          type:
+            - 'null'
+            - array
           items:
             $ref: '#/components/schemas/OrderLinePayoutSplitDto'
           description: The payout splits for this order line
-          nullable: true
         pricing_region_id:
-          type: string
+          type:
+            - 'null'
+            - string
           description: 'The regional pricing region ID for this order line, null if no regional pricing set'
-          nullable: true
           example: eu
         custom_variables:
-          type: object
+          type:
+            - 'null'
+            - object
           additionalProperties:
             $ref: '#/components/schemas/CustomVariableLineItemDto'
           description: Key-value pair of selected custom variables for this order.
-          nullable: true
       additionalProperties: false
       description: Represents an order line item in a customer's order
     OrderLinePayoutSplitDto:
@@ -7959,10 +8105,11 @@ components:
         user_id:
           $ref: '#/components/schemas/FlakeId'
         percentage:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The percentage in basis points.
           format: int64
-          nullable: true
         platform_fee:
           type: integer
           description: "The platform fee percentage in basis points.\nOnly used by platforms."
@@ -7998,9 +8145,10 @@ components:
           description: The bank identifier
           example: ing
         payer_name:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The payer name
-          nullable: true
           example: Jan Kowalski
       additionalProperties: false
       description: Przelewy24 payment method details
@@ -8008,24 +8156,28 @@ components:
       type: object
       properties:
         bank_name:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The bank name
-          nullable: true
           example: Chase Bank
         bic:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The Bank Identifier Code
-          nullable: true
           example: CHASUS33
         country:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The country code
-          nullable: true
           example: US
         payer_name:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The payer name
-          nullable: true
           example: John Smith
       additionalProperties: false
       description: Pay by Bank payment method details
@@ -8062,16 +8214,18 @@ components:
           description: The human-readable error message.
           example: Bad Request Example
         trace_id:
-          type: string
+          type:
+            - 'null'
+            - string
           description: A distributed trace ID used for debugging.
-          nullable: true
           example: 234a5bcd543ef3fa53ce929d0e0e4736
         errors:
-          type: array
+          type:
+            - 'null'
+            - array
           items:
             $ref: '#/components/schemas/ValidationError'
           description: An array of multiple errors. Only used by some API services.
-          nullable: true
       additionalProperties: false
       description: Represents a PayNow error
     PayPalDetailsDto:
@@ -8104,14 +8258,16 @@ components:
           description: Indicates if this PayPal account is vaulted
           example: true
         pending_vault_approval:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates if vault approval is pending
-          nullable: true
           example: false
         standalone_setup:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates if this is a standalone setup
-          nullable: true
           example: false
       additionalProperties: false
       description: PayPal payment method details
@@ -8241,11 +8397,12 @@ components:
         customer:
           $ref: '#/components/schemas/CustomerDto'
         refunds:
-          type: array
+          type:
+            - 'null'
+            - array
           items:
             $ref: '#/components/schemas/RefundDto'
           description: The list of refunds associated with this payment
-          nullable: true
         gateway:
           type: string
           description: The payment gateway provider
@@ -8301,10 +8458,11 @@ components:
           format: int32
           example: 9500
         fx_rate:
-          type: number
+          type:
+            - 'null'
+            - number
           description: The foreign exchange rate used for currency conversion
           format: double
-          nullable: true
           example: 1.085
         platform_fee_rate:
           type: integer
@@ -8314,64 +8472,68 @@ components:
         chargeback_status:
           $ref: '#/components/schemas/PaymentChargebackStatusDto'
         chargeback_status_updated_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when the chargeback status was last updated
           format: date-time
-          nullable: true
-          example: 
         payout_split_rules:
-          type: array
+          type:
+            - 'null'
+            - array
           items:
             $ref: '#/components/schemas/PaymentPayoutSplitRuleDto'
           description: The payout split rules for multi-party payments
-          nullable: true
         payout_split_results:
-          type: array
+          type:
+            - 'null'
+            - array
           items:
             $ref: '#/components/schemas/PaymentPayoutSplitResultDto'
           description: The payout split results for multi-party payments
-          nullable: true
         created_at:
           type: string
           description: The date and time when this payment was created
           format: date-time
           example: '2025-04-01T15:30:45Z'
         pending_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when this payment entered pending status
           format: date-time
-          nullable: true
           example: '2025-04-01T15:30:46Z'
         completed_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when this payment was completed
           format: date-time
-          nullable: true
           example: '2025-04-01T15:31:12Z'
         canceled_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when this payment was canceled
           format: date-time
-          nullable: true
-          example: 
         failed_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when this payment failed
           format: date-time
-          nullable: true
-          example: 
         refunded_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when this payment was last refunded
           format: date-time
-          nullable: true
-          example: 
         chargeback_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when a chargeback was initiated on this payment
           format: date-time
-          nullable: true
-          example: 
         last_payment_error:
           $ref: '#/components/schemas/LastPaymentErrorDto'
       additionalProperties: false
@@ -8453,10 +8615,11 @@ components:
           type: string
           description: The gateway entity identifier
         updated_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when this payment method was last updated
           format: date-time
-          nullable: true
           example: '2025-03-20T14:30:00Z'
       additionalProperties: false
       description: Represents a stored payment method
@@ -8544,10 +8707,11 @@ components:
         user_id:
           $ref: '#/components/schemas/FlakeId'
         percentage:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: 'The percentage of the line amount this user receives (in basis points, e.g., 5000 = 50%)'
           format: int32
-          nullable: true
           example: 5000
         platform_fee_percentage:
           type: integer
@@ -8591,19 +8755,22 @@ components:
       type: object
       properties:
         bank_name:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The bank name
-          nullable: true
           example: Banco do Brasil
         bank_account_number:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The bank account number
-          nullable: true
           example: 12345-6
         payer_name:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The payer name
-          nullable: true
           example: João Silva
       additionalProperties: false
       description: Pix payment method details
@@ -8636,11 +8803,12 @@ components:
           type: boolean
           description: Value indicating whether the command should only execute when the player is online.
         override_execute_on_gameserver_ids:
-          type: array
+          type:
+            - 'null'
+            - array
           items:
             $ref: '#/components/schemas/FlakeId'
           description: "Value indicating on which game servers should the command be executed.\nIf left empty or null, then the default behavior applies\n(executing on all game servers or on the selected game server is selection is enabled)"
-          nullable: true
       additionalProperties: false
     ProductCommandStage:
       enum:
@@ -8691,30 +8859,36 @@ components:
         is_uploaded:
           type: boolean
         file_name:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
         file_content_type:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
         file_size:
-          type: integer
+          type:
+            - 'null'
+            - integer
           format: int64
-          nullable: true
         file_hash:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
         description:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
         created_at:
           type: string
           format: date-time
         created_by:
           $ref: '#/components/schemas/ActorDto'
         updated_at:
-          type: string
+          type:
+            - 'null'
+            - string
           format: date-time
-          nullable: true
         updated_by:
           $ref: '#/components/schemas/ActorDto'
       additionalProperties: false
@@ -8752,9 +8926,10 @@ components:
         version_id:
           $ref: '#/components/schemas/FlakeId'
         image_url:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The URL to the product image.
-          nullable: true
         slug:
           type: string
           description: The unique slug for the product.
@@ -8765,9 +8940,10 @@ components:
           type: string
           description: The detailed description of the product.
         label:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The display label for the product.
-          nullable: true
         sort_order:
           type: integer
           description: The sort order for displaying the product.
@@ -8809,9 +8985,10 @@ components:
         customer_stock_limit:
           $ref: '#/components/schemas/ProductStockLimitDto'
         stock_limit_do_not_include_removed:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates whether removed items should be excluded from stock limits.
-          nullable: true
         tags:
           type: array
           items:
@@ -8830,75 +9007,88 @@ components:
         created_by:
           $ref: '#/components/schemas/ActorDto'
         created_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when the product was created.
           format: date-time
-          nullable: true
         updated_by:
           $ref: '#/components/schemas/ActorDto'
         updated_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when the product was last updated.
           format: date-time
-          nullable: true
         deliverable_actions:
           $ref: '#/components/schemas/ProductDeliverableActionsDto'
         metadata:
-          type: object
+          type:
+            - 'null'
+            - object
           additionalProperties:
             type: string
           description: Additional metadata for the product.
-          nullable: true
         payout_splits:
-          type: array
+          type:
+            - 'null'
+            - array
           items:
             $ref: '#/components/schemas/ProductPayoutSplitDto'
           description: The payout splits for revenue distribution.
-          nullable: true
         tax_code:
           $ref: '#/components/schemas/ProductTaxCode'
         allow_concurrent_active_items:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates whether concurrent active items are allowed.
-          nullable: true
         disable_promo_codes:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates whether using coupons and gift cards on this product is allowed.
-          nullable: true
         is_hidden:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates whether the product is hidden.
-          nullable: true
         is_gifting_disabled:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates whether gifting is disabled.
-          nullable: true
         enabled_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when the product becomes enabled.
           format: date-time
-          nullable: true
         enabled_until:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time until which the product remains enabled.
           format: date-time
-          nullable: true
         required_product_ids:
-          type: array
+          type:
+            - 'null'
+            - array
           items:
             $ref: '#/components/schemas/FlakeId'
           description: The IDs of products required for purchasing this product.
-          nullable: true
         required_product_all:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates whether all required products are needed.
-          nullable: true
         custom_variable_ids:
-          type: array
+          type:
+            - 'null'
+            - array
           items:
             $ref: '#/components/schemas/FlakeId'
           description: The IDs of associated custom variables.
-          nullable: true
       additionalProperties: false
     ProductGameServerDto:
       required:
@@ -8926,10 +9116,11 @@ components:
         user_id:
           $ref: '#/components/schemas/FlakeId'
         percentage:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: "The percentage of the payment allocated to the user, in basis points (500 = 5%).\nThe last payout split must have this field set to `null` to receive the remaining portion."
           format: int64
-          nullable: true
         platform_fee:
           type: integer
           description: 'The platform fee percentage your platform receives, in basis points (500 = 5%).'
@@ -8968,23 +9159,28 @@ components:
         enabled:
           type: boolean
         price:
-          type: integer
+          type:
+            - 'null'
+            - integer
           format: int64
-          nullable: true
         default_price_multiplier:
-          type: integer
+          type:
+            - 'null'
+            - integer
           format: int64
-          nullable: true
         currency:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
         tax_inclusive:
-          type: boolean
-          nullable: true
+          type:
+            - 'null'
+            - boolean
         updated_at:
-          type: string
+          type:
+            - 'null'
+            - string
           format: date-time
-          nullable: true
       additionalProperties: false
     ProductPricingRegionGroupDto:
       required:
@@ -9008,18 +9204,22 @@ components:
       type: object
       properties:
         price:
-          type: integer
+          type:
+            - 'null'
+            - integer
           format: int64
-          nullable: true
         enabled:
-          type: boolean
-          nullable: true
+          type:
+            - 'null'
+            - boolean
         currency:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
         tax_inclusive:
-          type: boolean
-          nullable: true
+          type:
+            - 'null'
+            - boolean
       additionalProperties: false
     ProductRemoveAfterIntervalScale:
       enum:
@@ -9053,15 +9253,17 @@ components:
           type: boolean
           description: Indicates whether stock limit is enabled.
         quantity:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The quantity limit.
           format: int32
-          nullable: true
         time_value:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The time value for stock limit period.
           format: int32
-          nullable: true
         time_scale:
           $ref: '#/components/schemas/ProductStockTimeScale'
         include_trials:
@@ -9215,22 +9417,25 @@ components:
           description: The minimum order value required to trigger an abandoned checkout email.
           format: int64
         maximum_order_value:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The optional maximum order value beyond which an abandoned checkout email will not be sent.
           format: int64
-          nullable: true
         max_coupons_per_customer_amount:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The optional maximum coupons limit per customer beyond which an abandoned checkout email will not be sent.
           format: int32
-          nullable: true
         max_coupons_per_customer_period:
           $ref: '#/components/schemas/Period'
         max_coupons_global_amount:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The optional maximum coupons limit store wide beyond which an abandoned checkout email will not be sent.
           format: int32
-          nullable: true
         max_coupons_global_period:
           $ref: '#/components/schemas/Period'
         coupon_configuration:
@@ -9281,22 +9486,25 @@ components:
           description: The minimum order value required to trigger an abandoned checkout email.
           format: int64
         maximum_order_value:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The optional maximum order value beyond which an abandoned checkout email will not be sent.
           format: int64
-          nullable: true
         max_coupons_per_customer_amount:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The optional maximum coupons limit per customer beyond which an abandoned checkout email will not be sent.
           format: int32
-          nullable: true
         max_coupons_per_customer_period:
           $ref: '#/components/schemas/Period'
         max_coupons_global_amount:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The optional maximum coupons limit store wide beyond which an abandoned checkout email will not be sent.
           format: int32
-          nullable: true
         max_coupons_global_period:
           $ref: '#/components/schemas/Period'
         commands:
@@ -9355,8 +9563,9 @@ components:
         role_id:
           $ref: '#/components/schemas/FlakeId'
         message:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
         revocation_stages:
           type: array
           items:
@@ -9365,9 +9574,10 @@ components:
           type: string
           format: date-time
         finalised_at:
-          type: string
+          type:
+            - 'null'
+            - string
           format: date-time
-          nullable: true
         executions:
           type: array
           items:
@@ -9393,11 +9603,13 @@ components:
         execution_status:
           $ref: '#/components/schemas/QueuedDiscordActionExecutionStatus'
         message:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
         trace_id:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
       additionalProperties: false
     QueuedDiscordActionExecutionStatus:
       enum:
@@ -9432,9 +9644,10 @@ components:
         state:
           $ref: '#/components/schemas/WebhookState'
         next_retry:
-          type: string
+          type:
+            - 'null'
+            - string
           format: date-time
-          nullable: true
         event:
           $ref: '#/components/schemas/WebhookEventType'
         payload: { }
@@ -9480,9 +9693,10 @@ components:
         status:
           $ref: '#/components/schemas/RefundStatus'
         failure_reason:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Reason for failure if the refund has failed
-          nullable: true
         currency:
           type: string
           description: Three-letter currency code of the refund
@@ -9529,18 +9743,21 @@ components:
           type: string
           description: 'String representation of store refund amount, formatted for display'
         presentment_currency:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Optional currency code used for presentment to the customer if different from the base currency
-          nullable: true
         presentment_amount:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: Optional amount in presentment currency in smallest currency unit
           format: int64
-          nullable: true
         fx_rate:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Exchange rate used while refunding. Only present for payments made in non-settlement currency.
-          nullable: true
         refund_from_connected_user_balance:
           type: boolean
           description: "Indicates whether the refund should be taken from the connected user's balance.\nOnly relevant for platforms."
@@ -9549,30 +9766,35 @@ components:
           description: Date and time when the refund was created
           format: date-time
         approved_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Optional date and time when the refund was approved
           format: date-time
-          nullable: true
         pending_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Optional date and time when the refund entered pending status
           format: date-time
-          nullable: true
         completed_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Optional date and time when the refund was completed
           format: date-time
-          nullable: true
         canceled_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Optional date and time when the refund was canceled
           format: date-time
-          nullable: true
         failed_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Optional date and time when the refund failed
           format: date-time
-          nullable: true
       additionalProperties: false
     RefundStatus:
       enum:
@@ -9595,13 +9817,15 @@ components:
       type: object
       properties:
         starts_at:
-          type: string
+          type:
+            - 'null'
+            - string
           format: date-time
-          nullable: true
         ends_at:
-          type: string
+          type:
+            - 'null'
+            - string
           format: date-time
-          nullable: true
         inventory_item_id:
           $ref: '#/components/schemas/FlakeId'
         customer_id:
@@ -9678,10 +9902,11 @@ components:
           description: The date and time when the sale begins.
           format: date-time
         ends_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when the sale ends.
           format: date-time
-          nullable: true
         created_by:
           $ref: '#/components/schemas/ActorDto'
         created_at:
@@ -9691,10 +9916,11 @@ components:
         updated_by:
           $ref: '#/components/schemas/ActorDto'
         updated_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The date and time when the sale was last updated.
           format: date-time
-          nullable: true
       additionalProperties: false
       description: 'Represents a detailed view of a Sale, including configuration and audit information.'
     SalesTaxJurisdictionDto:
@@ -9713,9 +9939,10 @@ components:
             $ref: '#/components/schemas/SalesTaxJurisdictionTaxDto'
           description: List of taxes applied within this jurisdiction.
         not_taxed_reason:
-          type: string
+          type:
+            - 'null'
+            - string
           description: "Explanation for why taxes are not applied, if applicable.\nThis property is null when taxes are applied."
-          nullable: true
       additionalProperties: false
       description: Object representing a sales tax jurisdiction and its associated taxes.
     SalesTaxJurisdictionTaxDto:
@@ -9754,17 +9981,19 @@ components:
         execution_stage:
           $ref: '#/components/schemas/DiscordActionExecutionStage'
         revocation_stages:
-          type: array
+          type:
+            - 'null'
+            - array
           items:
             $ref: '#/components/schemas/DiscordActionRevocationStage'
-          nullable: true
         channel_id:
           $ref: '#/components/schemas/FlakeId'
         role_id:
           $ref: '#/components/schemas/FlakeId'
         message:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
       additionalProperties: false
     StartDataMigrationFromTebexRequestDto:
       required:
@@ -9790,8 +10019,9 @@ components:
         file_content_type:
           type: string
         description:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
       additionalProperties: false
     SteamId:
       type: string
@@ -9882,28 +10112,33 @@ components:
         chargeback_coverage:
           $ref: '#/components/schemas/ChargebackCoverageTypeDto'
         chargeback_coverage_max_amount:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: Maximum per-transaction chargeback coverage amount in cents.
           format: int64
-          nullable: true
       additionalProperties: false
       description: Store payment configuration settings.
     StorePricingRegionOverrideDto:
       type: object
       properties:
         default_price_multiplier:
-          type: integer
+          type:
+            - 'null'
+            - integer
           format: int64
-          nullable: true
         enabled:
-          type: boolean
-          nullable: true
+          type:
+            - 'null'
+            - boolean
         currency:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
         tax_inclusive:
-          type: boolean
-          nullable: true
+          type:
+            - 'null'
+            - boolean
       additionalProperties: false
     StoreRequirementActionParty:
       enum:
@@ -10022,10 +10257,11 @@ components:
         coupon_id:
           $ref: '#/components/schemas/FlakeId'
         coupon_repeating_ends_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Date when a repeating coupon ends for this subscription.
           format: date-time
-          nullable: true
         affiliate_id:
           $ref: '#/components/schemas/FlakeId'
         checkout_id:
@@ -10033,26 +10269,30 @@ components:
         checkout_line_id:
           $ref: '#/components/schemas/FlakeId'
         billing_name:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Name used for billing purposes.
-          nullable: true
         billing_email:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Email used for billing purposes.
-          nullable: true
         billing_country:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Country code used for billing purposes.
-          nullable: true
         tax_jurisdictions:
           type: array
           items:
             $ref: '#/components/schemas/SalesTaxJurisdictionDto'
           description: List of tax jurisdictions applicable to this subscription.
         customer_ip:
-          type: string
+          type:
+            - 'null'
+            - string
           description: IP address of the customer at the time of subscription.
-          nullable: true
         gift:
           type: boolean
           description: Indicates whether this subscription is a gift.
@@ -10066,9 +10306,10 @@ components:
           type: string
           description: Name of the product associated with this subscription.
         product_image_url:
-          type: string
+          type:
+            - 'null'
+            - string
           description: URL for the product image.
-          nullable: true
         interval_value:
           type: integer
           description: Numeric value of the billing interval.
@@ -10152,57 +10393,67 @@ components:
           type: string
           description: Formatted string representation of the initial total amount.
         pricing_region_id:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Identifier for the pricing region associated with this subscription.
-          nullable: true
         current_period_start:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Start date of the current billing period.
           format: date-time
-          nullable: true
         current_period_end:
-          type: string
+          type:
+            - 'null'
+            - string
           description: End date of the current billing period.
           format: date-time
-          nullable: true
         billing_cycle_sequence:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: Sequence number of the current billing cycle.
           format: int32
-          nullable: true
         next_attempt_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Date and time when the next payment attempt will occur.
           format: date-time
-          nullable: true
         attempt_count:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: Number of payment attempts made for the current billing cycle.
           format: int32
-          nullable: true
         created_at:
           type: string
           description: Date and time when the subscription was created.
           format: date-time
         updated_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Date and time when the subscription was last updated.
           format: date-time
-          nullable: true
         active_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Date and time when the subscription became active.
           format: date-time
-          nullable: true
         canceled_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Date and time when the subscription was canceled.
           format: date-time
-          nullable: true
         cancel_reason:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Reason provided for cancellation.
-          nullable: true
       additionalProperties: false
       description: Data transfer object representing a store subscription.
     SubscriptionStatus:
@@ -10244,21 +10495,24 @@ components:
           type: string
           description: The unique slug for the tag.
         description:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The description of the tag.
-          nullable: true
         image_url:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The Image URL associated with the tag.
-          nullable: true
         enabled:
           type: boolean
           description: Indicates whether this tag is enabled.
         updated_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: When the tag was last updated.
           format: date-time
-          nullable: true
         updated_by:
           $ref: '#/components/schemas/ActorDto'
       additionalProperties: false
@@ -10302,9 +10556,10 @@ components:
           type: string
           description: The name of the product being trialed.
         product_image_url:
-          type: string
+          type:
+            - 'null'
+            - string
           description: 'The URL of the product image, if available.'
-          nullable: true
         period_value:
           type: integer
           description: The duration value of the trial period.
@@ -10313,15 +10568,17 @@ components:
           type: string
           description: 'The timescale unit for the trial period (e.g., "days", "weeks", "months").'
         starts_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: 'The date and time when the trial period starts, if applicable.'
           format: date-time
-          nullable: true
         ends_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: 'The date and time when the trial period ends, if applicable.'
           format: date-time
-          nullable: true
         status:
           $ref: '#/components/schemas/TrialStatusDto'
         created_at:
@@ -10329,10 +10586,11 @@ components:
           description: The date and time when the trial was created.
           format: date-time
         canceled_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: 'The date and time when the trial was canceled, if applicable.'
           format: date-time
-          nullable: true
         canceled_by:
           $ref: '#/components/schemas/ActorDto'
       additionalProperties: false
@@ -10365,9 +10623,10 @@ components:
           type: string
           description: The name of the product associated with this override.
         product_image_url:
-          type: string
+          type:
+            - 'null'
+            - string
           description: 'The URL of the product image, if available.'
-          nullable: true
         created_at:
           type: string
           description: The date and time when this override was created.
@@ -10379,21 +10638,24 @@ components:
           description: The date and time when this override expires and is no longer valid.
           format: date-time
         used_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: 'The date and time when this override was used to start a trial, if applicable.'
           format: date-time
-          nullable: true
         used_on_trial_id:
           $ref: '#/components/schemas/FlakeId'
         note:
-          type: string
+          type:
+            - 'null'
+            - string
           description: An optional note or comment about this override.
-          nullable: true
         deleted_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: 'The date and time when this override was deleted, if applicable.'
           format: date-time
-          nullable: true
         deleted_by:
           $ref: '#/components/schemas/ActorDto'
       additionalProperties: false
@@ -10440,11 +10702,13 @@ components:
         manually_approved:
           type: boolean
         decline_reason:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
         requires_action_text:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
         products_created:
           type: boolean
         kyc_required:
@@ -10485,9 +10749,10 @@ components:
         store_id:
           $ref: '#/components/schemas/FlakeId'
         template_id:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Template ID if this requirement was created from a template. Null for ad-hoc requirements.
-          nullable: true
         originating_flag_id:
           $ref: '#/components/schemas/FlakeId'
         category:
@@ -10499,12 +10764,13 @@ components:
           type: string
           description: Human-readable name of the requirement. Copied from template or custom for ad-hoc requirements.
         description:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Detailed description explaining what the store needs to provide. Copied from template or custom for ad-hoc requirements.
-          nullable: true
         schema:
+          type: 'null'
           description: 'JSON schema defining the form fields, validation rules, and document requirements'
-          nullable: true
         metadata:
           type: object
           additionalProperties:
@@ -10515,38 +10781,44 @@ components:
         requested_by:
           $ref: '#/components/schemas/StoreRequirementActionParty'
         requested_by_detail:
-          type: string
+          type:
+            - 'null'
+            - string
           description: "Specifies the specific requester entity (e.g., \"stripe\", \"trolley\", or admin user ID)\nFree-form string for internal records"
-          nullable: true
         created_at:
           type: string
           description: When this requirement was created
           format: date-time
         updated_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: When this requirement was last updated
           format: date-time
-          nullable: true
         deadline_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: When this requirement must be completed by (optional)
           format: date-time
-          nullable: true
         submitted_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: When the store submitted their response to this requirement
           format: date-time
-          nullable: true
         verified_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: When this requirement was verified and approved
           format: date-time
-          nullable: true
         rejected_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: When this requirement was rejected for not meeting standards
           format: date-time
-          nullable: true
         restricts_capabilities:
           type: array
           items:
@@ -10578,26 +10850,31 @@ components:
           type: string
           description: The identifier of the specific field within the store requirement.
         text_value:
-          type: string
+          type:
+            - 'null'
+            - string
           description: 'The text value submitted for this field, if applicable.'
-          nullable: true
         file_id:
-          type: string
+          type:
+            - 'null'
+            - string
           description: 'The identifier of the uploaded file, if a file was submitted.'
-          nullable: true
         file_name:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The original name of the uploaded file.
-          nullable: true
         file_content_type:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The MIME content type of the uploaded file.
-          nullable: true
         file_size_bytes:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The size of the uploaded file in bytes.
           format: int64
-          nullable: true
         submitted_at:
           type: string
           description: The timestamp when this submission was made.
@@ -10605,13 +10882,15 @@ components:
         submitted_by:
           $ref: '#/components/schemas/ActorDto'
         submitted_by_ip_address:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The IP address from which the submission was made.
-          nullable: true
         submitted_by_user_agent:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The user agent string of the client that made the submission.
-          nullable: true
       additionalProperties: false
     UnqueueCommandsRequestDto:
       required:
@@ -10636,32 +10915,38 @@ components:
       type: object
       properties:
         enabled:
-          type: boolean
-          nullable: true
+          type:
+            - 'null'
+            - boolean
         code:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
         referer_type:
           $ref: '#/components/schemas/AffiliateLinkRefererType'
         tracking_length_days:
-          type: integer
+          type:
+            - 'null'
+            - integer
           format: int32
-          nullable: true
         apply_for_subscriptions:
-          type: boolean
-          nullable: true
+          type:
+            - 'null'
+            - boolean
         discount_type:
           $ref: '#/components/schemas/AffiliateLinkDiscountType'
         discount_amount:
-          type: integer
+          type:
+            - 'null'
+            - integer
           format: int64
-          nullable: true
         commission_type:
           $ref: '#/components/schemas/AffiliateLinkCommissionType'
         commission_amount:
-          type: integer
+          type:
+            - 'null'
+            - integer
           format: int64
-          nullable: true
       additionalProperties: false
     UpdateCouponDto:
       type: object
@@ -10675,7 +10960,9 @@ components:
         duration:
           $ref: '#/components/schemas/CouponDurationEnum'
         duration_in_months:
-          type: integer
+          type:
+            - 'null'
+            - integer
           format: int32
         discount_type:
           $ref: '#/components/schemas/CouponDiscountTypeEnum'
@@ -10714,10 +11001,14 @@ components:
         usable_on_subscription:
           type: boolean
         usable_at:
-          type: string
+          type:
+            - 'null'
+            - string
           format: date-time
         expires_at:
-          type: string
+          type:
+            - 'null'
+            - string
           format: date-time
     UpdateDeliveryItemProductVersionRequestDto:
       required:
@@ -10753,7 +11044,9 @@ components:
           type: string
           format: date-time
         expires_at:
-          type: string
+          type:
+            - 'null'
+            - string
           format: date-time
     UpdateNavLinkDto:
       type: object
@@ -10763,7 +11056,9 @@ components:
         parent_node_id:
           type: string
         order:
-          type: integer
+          type:
+            - 'null'
+            - integer
           format: int32
     UpdateNavLinkOrderChangeDto:
       required:
@@ -10815,7 +11110,9 @@ components:
           type: string
           format: date-time
         ends_at:
-          type: string
+          type:
+            - 'null'
+            - string
           format: date-time
     UpdateStorePaymentSettingsDto:
       type: object
@@ -10850,30 +11147,36 @@ components:
         subscribed_to:
           $ref: '#/components/schemas/WebhookEventType'
         discord_description_template:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
         discord_title:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
         discord_color:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
       additionalProperties: false
     UpsertBanRequestDto:
       type: object
       properties:
         reason:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
         identities:
-          type: array
+          type:
+            - 'null'
+            - array
           items:
             $ref: '#/components/schemas/BanIdentityDto'
-          nullable: true
         expires_at:
-          type: string
+          type:
+            - 'null'
+            - string
           format: date-time
-          nullable: true
       additionalProperties: false
     UpsertCustomVariableRequestDto:
       required:
@@ -10890,15 +11193,17 @@ components:
           type: string
           description: Display name shown to customers.
         description:
-          type: string
+          type:
+            - 'null'
+            - string
           description: Description explaining the purpose of this custom variable.
-          nullable: true
         type:
           $ref: '#/components/schemas/CustomVariableType'
         value_regex:
-          type: string
+          type:
+            - 'null'
+            - string
           description: "Optional regex pattern for validating customer input.\nOnly applies to text and number types. Ignored for dropdown types."
-          nullable: true
         options:
           type: array
           items:
@@ -10912,25 +11217,29 @@ components:
         steam_id:
           $ref: '#/components/schemas/SteamId'
         minecraft_uuid:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The Minecraft UUID for the customer.
-          nullable: true
         minecraft_platform:
           $ref: '#/components/schemas/CustomerMinecraftPlatform'
         xbox_xuid:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The Xbox XUID (Xbox User ID) for the customer.
-          nullable: true
         name:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The name of the customer.
-          nullable: true
         metadata:
-          type: object
+          type:
+            - 'null'
+            - object
           additionalProperties:
             type: string
           description: Additional customer information stored as key-value pairs.
-          nullable: true
       additionalProperties: false
     UpsertGlobalCommandDto:
       required:
@@ -10948,67 +11257,79 @@ components:
           type: boolean
           description: Indicates whether the command should only be executed when the player is online.
         override_execute_on_gameserver_ids:
-          type: array
+          type:
+            - 'null'
+            - array
           items:
             $ref: '#/components/schemas/FlakeId'
           description: List of specific game server IDs where this command should be executed.
-          nullable: true
       additionalProperties: false
       description: "Data transfer object used for creating new global commands or updating existing ones.\nSupports partial updates following PATCH semantics."
     UpsertProductRequestDto:
       type: object
       properties:
         slug:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The unique URL-safe identifier (slug) for the product.
-          nullable: true
         name:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The display name of the product.
-          nullable: true
         description:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The detailed description of the product.
-          nullable: true
         label:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The display label for the product.
-          nullable: true
         price:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The price of the product in the lowest denominator (e.g. cents).
           format: int64
-          nullable: true
         single_game_server_only:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates whether the customer is prompted to select a game server before purchasing.
-          nullable: true
         allow_one_time_purchase:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates whether one-time purchases are allowed.
-          nullable: true
         allow_subscription:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates whether subscription purchases are allowed.
-          nullable: true
         subscription_interval_value:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The subscription interval value.
           format: int32
-          nullable: true
         subscription_interval_scale:
           $ref: '#/components/schemas/ProductSubscriptionIntervalScale'
         trial:
           $ref: '#/components/schemas/UpsertProductTrialConfigurationDto'
         remove_after_enabled:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates whether automatic removal is enabled.
-          nullable: true
         remove_after_time_value:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The time value for automatic removal.
           format: int32
-          nullable: true
         remove_after_time_scale:
           $ref: '#/components/schemas/ProductRemoveAfterIntervalScale'
         store_stock_limit:
@@ -11016,124 +11337,146 @@ components:
         customer_stock_limit:
           $ref: '#/components/schemas/ProductStockLimitDto'
         stock_limit_do_not_include_removed:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates whether removed items should be excluded from stock limits.
-          nullable: true
         tags:
-          type: array
+          type:
+            - 'null'
+            - array
           items:
             $ref: '#/components/schemas/FlakeId'
           description: The tag IDs associated with the product.
-          nullable: true
         gameservers:
-          type: array
+          type:
+            - 'null'
+            - array
           items:
             $ref: '#/components/schemas/FlakeId'
           description: The gameserver IDs associated with the product.
-          nullable: true
         commands:
-          type: array
+          type:
+            - 'null'
+            - array
           items:
             $ref: '#/components/schemas/ProductCommandDto'
           description: The commands to be executed at different stages.
-          nullable: true
         deliverable_actions:
           $ref: '#/components/schemas/ProductDeliverableActionsDto'
         metadata:
-          type: object
+          type:
+            - 'null'
+            - object
           additionalProperties:
             type: string
           description: Additional metadata for the product.
-          nullable: true
         payout_splits:
-          type: array
+          type:
+            - 'null'
+            - array
           items:
             $ref: '#/components/schemas/ProductPayoutSplitDto'
           description: "The payout splits for revenue distribution.\nRequires special approval."
-          nullable: true
         tax_code:
           $ref: '#/components/schemas/ProductTaxCode'
         allow_concurrent_active_items:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates whether concurrent active items are allowed.
-          nullable: true
         disable_promo_codes:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates whether using coupons and gift cards on this product is allowed.
-          nullable: true
         is_hidden:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates whether the product is hidden.
-          nullable: true
         is_gifting_disabled:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates whether gifting is disabled.
-          nullable: true
         enabled_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: "The date and time when the product becomes enabled.\nSet to `null` to keep enabled."
           format: date-time
-          nullable: true
         enabled_until:
-          type: string
+          type:
+            - 'null'
+            - string
           description: "The date and time until which the product remains enabled.\nSet to `null` to keep enabled."
           format: date-time
-          nullable: true
         required_product_ids:
-          type: array
+          type:
+            - 'null'
+            - array
           items:
             $ref: '#/components/schemas/FlakeId'
           description: The IDs of products required for purchasing this product.
-          nullable: true
         required_product_all:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates whether all required products are needed.
-          nullable: true
         custom_variable_ids:
-          type: array
+          type:
+            - 'null'
+            - array
           items:
             $ref: '#/components/schemas/FlakeId'
           description: The IDs of associated custom variables.
-          nullable: true
       additionalProperties: false
     UpsertProductTrialConfigurationDto:
       type: object
       properties:
         enabled:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates if trials should be enabled for the product.
-          nullable: true
         period_value:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The trial period value.
           format: int32
-          nullable: true
         period_scale:
           $ref: '#/components/schemas/ProductSubscriptionIntervalScale'
         revoke_immediately_when_canceled:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: Indicates if the trial should be revoked immediately when canceled or at the end of the trial.
-          nullable: true
         new_customers_only:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: "Restricts trials to customers who have no orders within the lookback period.\nWhen enabled, customers with recent orders will be ineligible for trials."
-          nullable: true
         new_customer_order_lookback_value:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: "The lookback period value for determining if a customer is \"new\".\nOnly used when new_customers_only is enabled."
           format: int32
-          nullable: true
         new_customer_order_lookback_scale:
           $ref: '#/components/schemas/ProductSubscriptionIntervalScale'
         allow_repeat_trials:
-          type: boolean
+          type:
+            - 'null'
+            - boolean
           description: "Allows customers to trial again after a cooldown period following their previous trial.\nWhen disabled, customers can only trial once and never become eligible again."
-          nullable: true
         repeat_trial_cooldown_value:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: "The cooldown period value before a customer becomes eligible for another trial.\nOnly used when allow_repeat_trials is enabled."
           format: int32
-          nullable: true
         repeat_trial_cooldown_scale:
           $ref: '#/components/schemas/ProductSubscriptionIntervalScale'
       additionalProperties: false
@@ -11142,17 +11485,21 @@ components:
       type: object
       properties:
         name:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
         slug:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
         description:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
         enabled:
-          type: boolean
-          nullable: true
+          type:
+            - 'null'
+            - boolean
       additionalProperties: false
     ValidationError:
       required:
@@ -11245,14 +11592,17 @@ components:
         type:
           $ref: '#/components/schemas/WebhookType'
         discord_description_template:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
         discord_title:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
         discord_color:
-          type: string
-          nullable: true
+          type:
+            - 'null'
+            - string
       additionalProperties: false
     WebhookType:
       enum:
@@ -11283,3 +11633,29 @@ components:
       description: A Customer token generated using an API Key in the format 'Customer TOKEN_HERE'.
       name: Authorization
       in: header
+tags:
+  - name: affiliate-links
+  - name: bans
+  - name: checkout
+  - name: coupons
+  - name: custom-variables
+  - name: customers
+  - name: data-migrations
+  - name: delivery
+  - name: discord
+  - name: downloadable-files
+  - name: game-servers
+  - name: giftcards
+  - name: global-commands
+  - name: marketing
+  - name: navlinks
+  - name: orders
+  - name: payments
+  - name: products
+  - name: regional-pricing
+  - name: sales
+  - name: subscriptions
+  - name: tags
+  - name: trials
+  - name: trust
+  - name: webhooks

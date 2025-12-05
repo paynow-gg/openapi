@@ -1,5 +1,5 @@
 {
-  "openapi": "3.0.4",
+  "openapi": "3.1.1",
   "info": {
     "title": "PayNow Game Server API",
     "description": "The GameServer API facilitates integration with game servers, enabling command executions and server linking.It provides the necessary functionality to connect your store with game servers, manage in-game actions, and synchronize data between your store and game environments.This API must be called using a token created by creating a Game Server.",
@@ -396,25 +396,31 @@
         "type": "object",
         "properties": {
           "steam_ids": {
-            "type": "array",
+            "type": [
+              "null",
+              "array"
+            ],
             "items": {
               "$ref": "#/components/schemas/SteamId"
-            },
-            "nullable": true
+            }
           },
           "minecraft_uuids": {
-            "type": "array",
+            "type": [
+              "null",
+              "array"
+            ],
             "items": {
               "type": "string"
-            },
-            "nullable": true
+            }
           },
           "customer_names": {
-            "type": "array",
+            "type": [
+              "null",
+              "array"
+            ],
             "items": {
               "type": "string"
-            },
-            "nullable": true
+            }
           }
         },
         "additionalProperties": false
@@ -456,8 +462,10 @@
             "type": "boolean"
           },
           "latest_version": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ]
           },
           "previously_linked": {
             "$ref": "#/components/schemas/PreviousGameServerLinkDto"
@@ -532,18 +540,22 @@
             "example": "Bad Request Example"
           },
           "trace_id": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "description": "A distributed trace ID used for debugging.",
-            "nullable": true,
             "example": "234a5bcd543ef3fa53ce929d0e0e4736"
           },
           "errors": {
-            "type": "array",
+            "type": [
+              "null",
+              "array"
+            ],
             "items": {
               "$ref": "#/components/schemas/ValidationError"
             },
-            "description": "An array of multiple errors. Only used by some API services.",
-            "nullable": true
+            "description": "An array of multiple errors. Only used by some API services."
           }
         },
         "additionalProperties": false,
@@ -586,14 +598,18 @@
             "$ref": "#/components/schemas/SteamId"
           },
           "minecraft_uuid": {
-            "type": "string",
-            "description": "The Minecraft UUID of the customer, if applicable.",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The Minecraft UUID of the customer, if applicable."
           },
           "customer_name": {
-            "type": "string",
-            "description": "The name of the customer, if applicable.",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The name of the customer, if applicable."
           },
           "command": {
             "type": "string",
@@ -647,15 +663,19 @@
             "$ref": "#/components/schemas/SteamId"
           },
           "minecraft_uuid": {
-            "type": "string",
-            "description": "The Minecraft UUID of the player.",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The Minecraft UUID of the player."
           },
           "minecraft_name": {
             "maxLength": 128,
-            "type": "string",
-            "description": "The Minecraft username of the player.",
-            "nullable": true
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The Minecraft username of the player."
           }
         },
         "additionalProperties": false,
@@ -712,5 +732,10 @@
         "in": "header"
       }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "delivery"
+    }
+  ]
 }

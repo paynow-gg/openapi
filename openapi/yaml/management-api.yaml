@@ -398,7 +398,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CheckForBanIDByIdentitiesRequestDto'
+                $ref: '#/components/schemas/CheckForBanIDByIdentitiesResponseDto'
         default:
           description: Error response
           content:
@@ -5795,6 +5795,16 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BanIdentityDto'
+      additionalProperties: false
+    CheckForBanIDByIdentitiesResponseDto:
+      required:
+        - is_banned
+      type: object
+      properties:
+        is_banned:
+          type: boolean
+        ban_id:
+          $ref: '#/components/schemas/FlakeId'
       additionalProperties: false
     CommandAttemptDto:
       required:

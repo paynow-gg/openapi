@@ -1,0 +1,3319 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "PayNow Webhook Definitions",
+    "description": "Webhook event specifications triggered by the PayNow API. These events are sent to your configured webhook URLs and contain event data such as orders, refunds, and subscription changes. Each webhook below represents an event type that your application can subscribe to.",
+    "termsOfService": "https://paynow.gg/terms-of-use",
+    "contact": {
+      "name": "PayNow Services, Inc.",
+      "url": "https://paynow.gg",
+      "email": "support@paynow.gg"
+    },
+    "version": "v1"
+  },
+  "paths": { },
+  "components": {
+    "schemas": {
+      "CheckoutDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The Flake ID of the Checkout",
+            "format": "flake-id",
+            "example": "411486491630370816",
+            "x-discordVariable": "id"
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Metadata associated with the checkout",
+            "x-discordVariable": "metadata"
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CheckoutLineDTO"
+            },
+            "description": "The lines of the Checkout",
+            "x-discordVariable": "lines"
+          }
+        }
+      },
+      "CheckoutLineDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID of the Checkout line",
+            "format": "flake-id",
+            "example": "411486491630370816",
+            "x-discordVariable": "id"
+          },
+          "product_id": {
+            "type": "string",
+            "description": "The Product Flake ID of the Checkout Line",
+            "format": "flake-id",
+            "example": "411486491630370816",
+            "x-discordVariable": "product_id"
+          },
+          "product_version_id": {
+            "type": "string",
+            "description": "The Product Version Flake ID of the Checkout Line",
+            "format": "flake-id",
+            "example": "411486491630370816",
+            "x-discordVariable": "product_version_id"
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Metadata associated with the Checkout Line",
+            "x-discordVariable": "metadata"
+          }
+        }
+      },
+      "CustomerDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The Flake ID of the Customer",
+            "format": "flake-id",
+            "example": "411486491630370816",
+            "x-discordVariable": "id"
+          },
+          "name": {
+            "type": "string",
+            "description": "",
+            "example": "John",
+            "x-discordVariable": "name"
+          },
+          "steam": {
+            "$ref": "#/components/schemas/SteamCustomerDTO"
+          },
+          "minecraft": {
+            "$ref": "#/components/schemas/MinecraftCustomerDTO"
+          },
+          "profile": {
+            "$ref": "#/components/schemas/GenericProfileDTO"
+          }
+        }
+      },
+      "GameServerDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The Flake ID of the Game Server",
+            "format": "flake-id",
+            "example": "411486491630370816",
+            "x-discordVariable": "id"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the Game Server",
+            "example": "John",
+            "x-discordVariable": "name"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Indicates if the Game Server is enabled",
+            "x-discordVariable": "enabled"
+          }
+        }
+      },
+      "GenericProfileDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "",
+            "x-discordVariable": "id"
+          },
+          "platform": {
+            "type": "string",
+            "description": "",
+            "x-discordVariable": "platform"
+          },
+          "name": {
+            "type": "string",
+            "description": "",
+            "example": "John",
+            "x-discordVariable": "name"
+          },
+          "avatar_url": {
+            "type": "string",
+            "description": "",
+            "x-discordVariable": "avatar_url"
+          }
+        }
+      },
+      "MinecraftCustomerDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "",
+            "x-discordVariable": "id"
+          },
+          "name": {
+            "type": "string",
+            "description": "",
+            "example": "Notch",
+            "x-discordVariable": "name"
+          },
+          "avatar_url": {
+            "type": "string",
+            "description": "",
+            "x-discordVariable": "avatar_url"
+          }
+        }
+      },
+      "OrderDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The Flake ID of the Order",
+            "format": "flake-id",
+            "example": "411486491630370816",
+            "x-discordVariable": "id"
+          },
+          "store_id": {
+            "type": "string",
+            "description": "The Flake ID of the store associated with the order",
+            "format": "flake-id",
+            "example": "411486491630370816",
+            "x-discordVariable": "store_id"
+          },
+          "customer": {
+            "$ref": "#/components/schemas/CustomerDTO"
+          },
+          "checkout_id": {
+            "type": "string",
+            "description": "The Flake ID of the Checkout associated with the order",
+            "format": "flake-id",
+            "example": "411486491630370816",
+            "x-discordVariable": "checkout_id"
+          },
+          "checkout": {
+            "$ref": "#/components/schemas/CheckoutDTO"
+          },
+          "subscription_id": {
+            "type": "string",
+            "description": "The Flake ID of the Subscription associated with the order",
+            "format": "flake-id",
+            "example": "411486491630370816",
+            "x-discordVariable": "subscription_id"
+          },
+          "coupon_id": {
+            "type": "string",
+            "description": "The Flake ID of the Coupon associated with the order",
+            "format": "flake-id",
+            "example": "411486491630370816",
+            "x-discordVariable": "coupon_id"
+          },
+          "currency": {
+            "type": "string",
+            "description": "The ISO-4217 Currency Code of the order",
+            "example": "USD",
+            "x-discordVariable": "currency"
+          },
+          "tax_inclusive": {
+            "type": "boolean",
+            "description": "Indicates if the order value was inclusive of tax",
+            "example": true,
+            "x-discordVariable": "tax_inclusive"
+          },
+          "tax_amount": {
+            "type": "integer",
+            "description": "The tax amount, represented as cents",
+            "example": 1500,
+            "x-discordVariable": "tax_amount"
+          },
+          "discount_amount": {
+            "type": "integer",
+            "description": "The discount amount, represented as cents",
+            "example": 500,
+            "x-discordVariable": "discount_amount"
+          },
+          "subtotal_amount": {
+            "type": "integer",
+            "description": "The subtotal amount, represented as cents",
+            "example": 10000,
+            "x-discordVariable": "subtotal_amount"
+          },
+          "total_amount": {
+            "type": "integer",
+            "description": "The total amount, represented as cents",
+            "example": 11000,
+            "x-discordVariable": "total_amount"
+          },
+          "created_at": {
+            "type": "string",
+            "description": "Indicates when the order was created",
+            "format": "date-time",
+            "example": "2024-01-15T10:30:00Z",
+            "x-discordVariable": "created_at"
+          },
+          "completed_at": {
+            "type": "string",
+            "description": "Indicates when the order was completed",
+            "format": "date-time",
+            "example": "2024-01-15T10:35:00Z",
+            "x-discordVariable": "completed_at"
+          },
+          "billing_name": {
+            "type": "string",
+            "description": "The billing name of the customer associated with the order",
+            "example": "John Doe",
+            "x-discordVariable": "billing_name"
+          },
+          "billing_email": {
+            "type": "string",
+            "description": "The billing email address of the customer associated with the order",
+            "example": "john@doe.com",
+            "x-discordVariable": "billing_email"
+          },
+          "billing_address_country": {
+            "type": "string",
+            "description": "The ISO-3316 Country Code of the customer associated with the order",
+            "example": "US",
+            "x-discordVariable": "billing_address_country"
+          },
+          "customer_ip": {
+            "type": "string",
+            "description": "The IPv4 or IPv6 Address of the associated customer when creating the order",
+            "example": "127.0.0.1/24",
+            "x-discordVariable": "customer_ip"
+          },
+          "giftcard_usage_amount": {
+            "type": "integer",
+            "description": "The total amount of giftcard usage associated with the order, represented in cents",
+            "example": 0,
+            "x-discordVariable": "giftcard_usage_amount"
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderLineDTO"
+            },
+            "description": "The order lines associated with the order",
+            "x-discordVariable": "lines"
+          },
+          "product_names": {
+            "type": "string",
+            "description": "A comma-seperated string of the names of the product associated with the order",
+            "example": "Product A, Product B",
+            "x-discordVariable": "product_names"
+          },
+          "product_tags": {
+            "type": "string",
+            "description": "A comma-seperated string of the tags of the products associated with the order",
+            "example": "ranks, perks",
+            "x-discordVariable": "product_tags"
+          },
+          "product_gameservers": {
+            "type": "string",
+            "description": "A comma-seperated string of the gameservers of the product associated with the order",
+            "example": "game server one, game server two",
+            "x-discordVariable": "product_gameservers"
+          },
+          "status": {
+            "type": "string",
+            "description": "The status of the Order.  Possbile options: created, completed, canceled",
+            "example": "created",
+            "x-discordVariable": "status"
+          }
+        }
+      },
+      "OrderLineDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The Flake ID of the Order Line",
+            "format": "flake-id",
+            "example": "411486491630370816",
+            "x-discordVariable": "id"
+          },
+          "checkout_line_id": {
+            "type": "string",
+            "description": "The Flake ID of the Checkout Line associated with this Order Line",
+            "format": "flake-id",
+            "example": "411486491630370816",
+            "x-discordVariable": "checkout_line_id"
+          },
+          "product_id": {
+            "type": "string",
+            "description": "The Flake ID of the Product ID associated with this Order Line",
+            "format": "flake-id",
+            "example": "411486491630370816",
+            "x-discordVariable": "product_id"
+          },
+          "product_version_id": {
+            "type": "string",
+            "description": "The Flake ID of the Product Version ID associated with this Order Line",
+            "format": "flake-id",
+            "example": "411486491630370816",
+            "x-discordVariable": "product_version_id"
+          },
+          "product": {
+            "$ref": "#/components/schemas/ProductDTO"
+          },
+          "product_name": {
+            "type": "string",
+            "description": "The name of the product associated with this Order Line",
+            "x-discordVariable": "product_name"
+          },
+          "product_image_url": {
+            "type": "string",
+            "description": "The Image URL of the Product associated with this Order Line",
+            "x-discordVariable": "product_image_url"
+          },
+          "subscription_id": {
+            "type": "string",
+            "description": "The Flake ID of the Subscription associated with this Order Line",
+            "format": "flake-id",
+            "example": "411486491630370816",
+            "x-discordVariable": "subscription_id"
+          },
+          "subscription_interval_value": {
+            "type": "integer",
+            "description": "The value of the interval in which the subscription associated with this Order Line renews at",
+            "example": 1,
+            "x-discordVariable": "subscription_interval_value"
+          },
+          "subscription_interval_scale": {
+            "type": "string",
+            "description": "The value of the scale in which the subscription associated with this Order Line renews at",
+            "example": "month",
+            "x-discordVariable": "subscription_interval_scale"
+          },
+          "trial_id": {
+            "type": "string",
+            "description": "The Flake ID of the Trial associated with this Order Line",
+            "format": "flake-id",
+            "example": "411486491630370816",
+            "x-discordVariable": "trial_id"
+          },
+          "gift_to_customer": {
+            "$ref": "#/components/schemas/CustomerDTO"
+          },
+          "price": {
+            "type": "integer",
+            "description": "The price of the Order Line",
+            "example": 1000,
+            "x-discordVariable": "price"
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "The quantity of the Order Line",
+            "example": 1,
+            "x-discordVariable": "quantity"
+          },
+          "discount_amount": {
+            "type": "integer",
+            "description": "The discount amount of the order line, represented in cents",
+            "example": 0,
+            "x-discordVariable": "discount_amount"
+          },
+          "subtotal_amount": {
+            "type": "integer",
+            "description": "The subtotal amount of the order line, represented in cents",
+            "example": 1000,
+            "x-discordVariable": "subtotal_amount"
+          },
+          "tax_amount": {
+            "type": "integer",
+            "description": "The tax amount of the order line, represented in cents",
+            "example": 100,
+            "x-discordVariable": "tax_amount"
+          },
+          "total_amount": {
+            "type": "integer",
+            "description": "The total amount of the order line, represented in cents",
+            "example": 1100,
+            "x-discordVariable": "total_amount"
+          },
+          "selected_gameserver_id": {
+            "type": "string",
+            "description": "The Flake ID of which was the selected Game Server ID for the Order Line",
+            "format": "flake-id",
+            "example": "411486491630370816",
+            "x-discordVariable": "selected_gameserver_id"
+          }
+        }
+      },
+      "ProductCommandDTO": {
+        "type": "object",
+        "properties": {
+          "stage": {
+            "type": "string",
+            "description": "The stage of which the Product Command should be executed.  Possible options: on_purchase, on_expire, on_refund, on_renew, on_chargeback, on_trial_start, on_trial_expire",
+            "example": "on_purchase",
+            "x-discordVariable": "stage"
+          },
+          "content": {
+            "type": "string",
+            "description": "The command to execute",
+            "x-discordVariable": "content"
+          },
+          "online_only": {
+            "type": "boolean",
+            "description": "Indicated if the command should be executed only when the customer is online",
+            "x-discordVariable": "online_only"
+          }
+        }
+      },
+      "ProductDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The Flake ID of the Product",
+            "format": "flake-id",
+            "example": "411486491630370816",
+            "x-discordVariable": "id"
+          },
+          "store_id": {
+            "type": "string",
+            "description": "The Flake ID of the Store",
+            "format": "flake-id",
+            "example": "411486491630370816",
+            "x-discordVariable": "store_id"
+          },
+          "version_id": {
+            "type": "string",
+            "description": "The Flake ID of the Version of the Product",
+            "format": "flake-id",
+            "example": "411486491630370816",
+            "x-discordVariable": "version_id"
+          },
+          "image_url": {
+            "type": "string",
+            "description": "The Image URL of the product",
+            "x-discordVariable": "image_url"
+          },
+          "slug": {
+            "type": "string",
+            "description": "The URL-Friendly Slug of the Product",
+            "x-discordVariable": "slug"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the Product",
+            "x-discordVariable": "name"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the product",
+            "x-discordVariable": "description"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Indicates if the product is enabled.",
+            "x-discordVariable": "enabled"
+          },
+          "label": {
+            "type": "string",
+            "description": "The label of the product",
+            "x-discordVariable": "label"
+          },
+          "sort_order": {
+            "type": "integer",
+            "description": "The sort order of the product",
+            "x-discordVariable": "sort_order"
+          },
+          "price": {
+            "type": "integer",
+            "description": "The price of the product, represented in cents.",
+            "x-discordVariable": "price"
+          },
+          "single_game_server_only": {
+            "type": "boolean",
+            "description": "Indicates if the customer must select a single game server when purchasing the product",
+            "x-discordVariable": "single_game_server_only"
+          },
+          "allow_one_time_purchase": {
+            "type": "boolean",
+            "description": "Indicates if one-time purchases are supported on the product",
+            "x-discordVariable": "allow_one_time_purchase"
+          },
+          "allow_subscription": {
+            "type": "boolean",
+            "description": "Indicates if subscriptions are supported on the product",
+            "x-discordVariable": "allow_subscription"
+          },
+          "subscription_interval_value": {
+            "type": "integer",
+            "description": "The value of the interval in which the product subscription renews at",
+            "example": 1,
+            "x-discordVariable": "subscription_interval_value"
+          },
+          "subscription_interval_scale": {
+            "type": "string",
+            "description": "The value of the interval in which the product subscription renews at",
+            "example": "month",
+            "x-discordVariable": "subscription_interval_scale"
+          },
+          "remove_after_enabled": {
+            "type": "boolean",
+            "description": "Indicates whether automatic removal is enabled",
+            "x-discordVariable": "remove_after_enabled"
+          },
+          "remove_after_time_value": {
+            "type": "integer",
+            "description": "The value of the time in which this product should be removed",
+            "example": 1,
+            "x-discordVariable": "remove_after_time_value"
+          },
+          "remove_after_time_scale": {
+            "type": "string",
+            "description": "The scale of the time in which this product should be removed",
+            "example": "month",
+            "x-discordVariable": "remove_after_time_scale"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductTagDTO"
+            },
+            "description": "The tags associated with the product",
+            "x-discordVariable": "tags"
+          },
+          "tag_names": {
+            "type": "string",
+            "description": "A comma-seperated string of all the tags associated with the product",
+            "x-discordVariable": "tag_names"
+          },
+          "gameservers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductGameServerDTO"
+            },
+            "description": "The game servers associated with the product",
+            "x-discordVariable": "gameservers"
+          },
+          "gameserver_names": {
+            "type": "string",
+            "description": "A comma-seperated string of all the game servers associated with the product",
+            "x-discordVariable": "gameserver_names"
+          },
+          "commands": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductCommandDTO"
+            },
+            "description": "The commands associated with the product",
+            "x-discordVariable": "commands"
+          },
+          "created_at": {
+            "type": "string",
+            "description": "When the product was created",
+            "format": "date-time",
+            "x-discordVariable": "created_at"
+          },
+          "updated_at": {
+            "type": "string",
+            "description": "When the product was last updated",
+            "format": "date-time",
+            "x-discordVariable": "updated_at"
+          }
+        }
+      },
+      "ProductGameServerDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID of the Game Server",
+            "format": "flake-id",
+            "example": "411486491630370816",
+            "x-discordVariable": "id"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the Game Server",
+            "x-discordVariable": "name"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Indicates if the Game Server is enabled",
+            "x-discordVariable": "enabled"
+          }
+        }
+      },
+      "ProductTagDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The Flake ID of the Product Tag",
+            "format": "flake-id",
+            "example": "411486491630370816",
+            "x-discordVariable": "id"
+          },
+          "slug": {
+            "type": "string",
+            "description": "The URL-Friendly slug of the Product Tag",
+            "x-discordVariable": "slug"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the Product Tag",
+            "x-discordVariable": "name"
+          }
+        }
+      },
+      "SteamCustomerDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "SteamID64",
+            "example": "76561197960287930",
+            "x-discordVariable": "id"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name on the Steam Profile",
+            "example": "John",
+            "x-discordVariable": "name"
+          },
+          "avatar_url": {
+            "type": "string",
+            "description": "The Steam Avatar URL",
+            "x-discordVariable": "avatar_url"
+          }
+        }
+      }
+    }
+  },
+  "webhooks": {
+    "OnSubscriptionRenewed": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Triggered when a subscription is renewed",
+        "description": "Webhook for OnSubscriptionRenewed",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "event_type",
+                  "timestamp",
+                  "body"
+                ],
+                "type": "object",
+                "properties": {
+                  "event_type": {
+                    "type": "string",
+                    "description": "The type of webhook event",
+                    "example": "ON_SUBSCRIPTION_RENEWED"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "description": "When the event occurred in ISO 8601 format",
+                    "format": "date-time",
+                    "example": "2024-11-12T10:30:00Z"
+                  },
+                  "body": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Subscription",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "id"
+                      },
+                      "store_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Store associated with the Subscription",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "store_id"
+                      },
+                      "customer_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Customer associated with the Subscription",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "customer_id"
+                      },
+                      "customer": {
+                        "$ref": "#/components/schemas/CustomerDTO"
+                      },
+                      "billing_cycle_sequence": {
+                        "type": "integer",
+                        "description": "The current billing cycle number",
+                        "example": 2,
+                        "x-discordVariable": "billing_cycle_sequence"
+                      },
+                      "billing_email": {
+                        "type": "string",
+                        "description": "The billing email address of the customer associated with the Subscription",
+                        "example": "john@doe.com",
+                        "x-discordVariable": "billing_email"
+                      },
+                      "subtotal_amount": {
+                        "type": "integer",
+                        "description": "The subtotal amount of the Subscription represented in cents",
+                        "example": 8999,
+                        "x-discordVariable": "subtotal_amount"
+                      },
+                      "tax_amount": {
+                        "type": "integer",
+                        "description": "The tax amount of the Subscription represented in cents",
+                        "example": 1350,
+                        "x-discordVariable": "tax_amount"
+                      },
+                      "discount_amount": {
+                        "type": "integer",
+                        "description": "The discount amount applied to the Subscription represented in cents",
+                        "example": 0,
+                        "x-discordVariable": "discount_amount"
+                      },
+                      "total_amount": {
+                        "type": "integer",
+                        "description": "The total amount of the Subscription represented in cents",
+                        "example": 10349,
+                        "x-discordVariable": "total_amount"
+                      },
+                      "currency": {
+                        "type": "string",
+                        "description": "The currency code of the Subscription",
+                        "example": "USD",
+                        "x-discordVariable": "currency"
+                      },
+                      "interval_value": {
+                        "type": "integer",
+                        "description": "The interval value of the billing cycle",
+                        "example": 1,
+                        "x-discordVariable": "interval_value"
+                      },
+                      "interval_scale": {
+                        "type": "string",
+                        "description": "The interval scale of the billing cycle",
+                        "example": "month",
+                        "x-discordVariable": "interval_scale"
+                      },
+                      "product_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Product associated with the Subscription",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "product_id"
+                      },
+                      "product_version_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Product Version associated with the Subscription",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "product_version_id"
+                      },
+                      "product_name": {
+                        "type": "string",
+                        "description": "The name of the Product associated with the Subscription",
+                        "example": "Example Product",
+                        "x-discordVariable": "product_name"
+                      },
+                      "product_image_url": {
+                        "type": "string",
+                        "description": "The image URL of the Product associated with the Subscription",
+                        "example": "https://example.com/biz.jpg",
+                        "x-discordVariable": "product_image_url"
+                      },
+                      "product": {
+                        "$ref": "#/components/schemas/ProductDTO"
+                      },
+                      "billing_country": {
+                        "type": "string",
+                        "description": "The ISO-3166 country code of customer associated with the Subscription",
+                        "example": "US",
+                        "x-discordVariable": "billing_country"
+                      },
+                      "initial_subtotal_amount": {
+                        "type": "integer",
+                        "description": "The initial subtotal amount of the Subscription represented in cents",
+                        "example": 8999,
+                        "x-discordVariable": "initial_subtotal_amount"
+                      },
+                      "initial_tax_amount": {
+                        "type": "integer",
+                        "description": "The initial tax amount of the Subscription represented in cents",
+                        "example": 1350,
+                        "x-discordVariable": "initial_tax_amount"
+                      },
+                      "initial_discount_amount": {
+                        "type": "integer",
+                        "description": "The initial discount amount applied to the Subscription represented in cents",
+                        "example": 1500,
+                        "x-discordVariable": "initial_discount_amount"
+                      },
+                      "initial_giftcard_usage_amount": {
+                        "type": "integer",
+                        "description": "The initial gift card usage amount applied to the Subscription represented in cents",
+                        "example": 0,
+                        "x-discordVariable": "initial_giftcard_usage_amount"
+                      },
+                      "initial_total_amount": {
+                        "type": "integer",
+                        "description": "The initial total amount of the Subscription represented in cents",
+                        "example": 8849,
+                        "x-discordVariable": "initial_total_amount"
+                      },
+                      "customer_ip": {
+                        "type": "string",
+                        "description": "The IP address of the Customer",
+                        "example": "127.0.0.1/24",
+                        "x-discordVariable": "customer_ip"
+                      },
+                      "current_period_start": {
+                        "type": "string",
+                        "description": "The start date of the current billing period",
+                        "format": "date-time",
+                        "example": "2024-03-01T00:00:00Z",
+                        "x-discordVariable": "current_period_start"
+                      },
+                      "current_period_end": {
+                        "type": "string",
+                        "description": "The end date of the current billing period",
+                        "format": "date-time",
+                        "example": "2024-06-01T00:00:00Z",
+                        "x-discordVariable": "current_period_end"
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "description": "The date and time when the Subscription was created",
+                        "format": "date-time",
+                        "example": "2024-03-01T11:00:00Z",
+                        "x-discordVariable": "created_at"
+                      },
+                      "active_at": {
+                        "type": "string",
+                        "description": "Indicates when the subscription was active",
+                        "format": "date-time",
+                        "example": "2024-03-01T11:05:00Z",
+                        "x-discordVariable": "active_at"
+                      },
+                      "checkout_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Checkout associated with the Subscription",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "checkout_id"
+                      },
+                      "checkout_line_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Checkout Line associated with the Subscription",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "checkout_line_id"
+                      },
+                      "status": {
+                        "type": "string",
+                        "description": "The current status of the Subscription.  Possible options: created, active, canceled",
+                        "example": "created",
+                        "x-discordVariable": "status"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook processed successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "OnDiscordAccountLinkedToCheckout": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Triggered when a Discord account is successfully linked to a checkout.",
+        "description": "Webhook for OnDiscordAccountLinkedToCheckout",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "event_type",
+                  "timestamp",
+                  "body"
+                ],
+                "type": "object",
+                "properties": {
+                  "event_type": {
+                    "type": "string",
+                    "description": "The type of webhook event",
+                    "example": "ON_DISCORD_ACCOUNT_LINKED_TO_CHECKOUT"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "description": "When the event occurred in ISO 8601 format",
+                    "format": "date-time",
+                    "example": "2024-11-12T10:30:00Z"
+                  },
+                  "body": {
+                    "type": "object",
+                    "properties": {
+                      "store_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Store associated with the Checkout",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "store_id"
+                      },
+                      "customer_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Customer associated with the Checkout",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "customer_id"
+                      },
+                      "customer": {
+                        "$ref": "#/components/schemas/CustomerDTO"
+                      },
+                      "checkout_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Checkout",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "checkout_id"
+                      },
+                      "checkout_line_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Checkout Line",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "checkout_line_id"
+                      },
+                      "order_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Order associated with the Checkout",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "order_id"
+                      },
+                      "order": {
+                        "$ref": "#/components/schemas/OrderDTO"
+                      },
+                      "discord_user_id": {
+                        "type": "string",
+                        "description": "The Discord User ID of the linked account",
+                        "example": "123456789012345678",
+                        "x-discordVariable": "discord_user_id"
+                      },
+                      "discord_user_name": {
+                        "type": "string",
+                        "description": "The Discord username of the linked account",
+                        "example": "john_doe",
+                        "x-discordVariable": "discord_user_name"
+                      },
+                      "discord_user_avatar_hash": {
+                        "type": "string",
+                        "description": "The Discord avatar hash of the linked account",
+                        "example": "a1b2c3d4e5f6g7h8i9j0",
+                        "x-discordVariable": "discord_user_avatar_hash"
+                      },
+                      "product_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Product associated with the Checkout",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "product_id"
+                      },
+                      "product_version_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Product Version associated with the Checkout",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "product_version_id"
+                      },
+                      "product": {
+                        "$ref": "#/components/schemas/ProductDTO"
+                      },
+                      "enqueued_at": {
+                        "type": "string",
+                        "description": "Indicates when the Discord account link was enqueued",
+                        "format": "date-time",
+                        "example": "2024-01-15T10:30:00Z",
+                        "x-discordVariable": "enqueued_at"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook processed successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "OnDeliveryItemAdded": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Triggered when a delivery item is added to the customers inventory",
+        "description": "Webhook for OnDeliveryItemAdded",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "event_type",
+                  "timestamp",
+                  "body"
+                ],
+                "type": "object",
+                "properties": {
+                  "event_type": {
+                    "type": "string",
+                    "description": "The type of webhook event",
+                    "example": "ON_DELIVERY_ITEM_ADDED"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "description": "When the event occurred in ISO 8601 format",
+                    "format": "date-time",
+                    "example": "2024-11-12T10:30:00Z"
+                  },
+                  "body": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "id"
+                      },
+                      "store_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Store associated with the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "store_id"
+                      },
+                      "customer": {
+                        "$ref": "#/components/schemas/CustomerDTO"
+                      },
+                      "order_customer_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the customer who ordered the delivery item - which may differ to the customer because of gifting",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "order_customer_id"
+                      },
+                      "checkout_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Checkout associated with the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "checkout_id"
+                      },
+                      "order_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Order ID associated with the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "order_id"
+                      },
+                      "order_line_id": {
+                        "type": "string",
+                        "description": "The Flake Id of the Order Line ID associated with the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "order_line_id"
+                      },
+                      "subscription_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Subscription associated with the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "subscription_id"
+                      },
+                      "execute_on_gameserver_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Game Server the Delivery Item is associated with",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "execute_on_gameserver_id"
+                      },
+                      "execute_on_gameserver": {
+                        "$ref": "#/components/schemas/GameServerDTO"
+                      },
+                      "product_id": {
+                        "type": "string",
+                        "description": "The associated Product ID of the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "product_id"
+                      },
+                      "product_version_id": {
+                        "type": "string",
+                        "description": "The associated Product Version ID of the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "product_version_id"
+                      },
+                      "product": {
+                        "$ref": "#/components/schemas/ProductDTO"
+                      },
+                      "state": {
+                        "type": "string",
+                        "description": "The state of the Delivery Item.  Possible options: usable, active, used, revoked, renewed",
+                        "example": "usable",
+                        "x-discordVariable": "state"
+                      },
+                      "added_at": {
+                        "type": "string",
+                        "description": "Indicates when the Delivery Item was added to the customers inventory",
+                        "format": "date-time",
+                        "example": "2024-01-10T08:00:00Z",
+                        "x-discordVariable": "added_at"
+                      },
+                      "active_at": {
+                        "type": "string",
+                        "description": "Indicates when the Delivery Item become active",
+                        "format": "date-time",
+                        "example": "2024-01-10T09:00:00Z",
+                        "x-discordVariable": "active_at"
+                      },
+                      "expires_at": {
+                        "type": "string",
+                        "description": "Indicates when the Delivery Item expires",
+                        "format": "date-time",
+                        "example": "2024-12-31T23:59:59Z",
+                        "x-discordVariable": "expires_at"
+                      },
+                      "removed_at": {
+                        "type": "string",
+                        "description": "Indicates when the Delivery Item was removed from the customers inventory",
+                        "format": "date-time",
+                        "example": "2024-02-01T10:00:00Z",
+                        "x-discordVariable": "removed_at"
+                      },
+                      "revoked_at": {
+                        "type": "string",
+                        "description": "Indicates when the Delivery Item was revoked from the customers inventory",
+                        "format": "date-time",
+                        "example": "2024-02-05T14:30:00Z",
+                        "x-discordVariable": "revoked_at"
+                      },
+                      "revoke_reason": {
+                        "type": "string",
+                        "description": "Indicates the reason the delivery item was revoked from the customers inventory",
+                        "x-discordVariable": "revoke_reason"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook processed successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "OnDeliveryItemActivated": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Triggered when a delivery item in the customers inventory activates",
+        "description": "Webhook for OnDeliveryItemActivated",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "event_type",
+                  "timestamp",
+                  "body"
+                ],
+                "type": "object",
+                "properties": {
+                  "event_type": {
+                    "type": "string",
+                    "description": "The type of webhook event",
+                    "example": "ON_DELIVERY_ITEM_ACTIVATED"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "description": "When the event occurred in ISO 8601 format",
+                    "format": "date-time",
+                    "example": "2024-11-12T10:30:00Z"
+                  },
+                  "body": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "id"
+                      },
+                      "store_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Store associated with the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "store_id"
+                      },
+                      "customer": {
+                        "$ref": "#/components/schemas/CustomerDTO"
+                      },
+                      "order_customer_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the customer who ordered the delivery item - which may differ to the customer because of gifting",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "order_customer_id"
+                      },
+                      "checkout_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Checkout associated with the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "checkout_id"
+                      },
+                      "order_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Order ID associated with the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "order_id"
+                      },
+                      "order_line_id": {
+                        "type": "string",
+                        "description": "The Flake Id of the Order Line ID associated with the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "order_line_id"
+                      },
+                      "subscription_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Subscription associated with the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "subscription_id"
+                      },
+                      "execute_on_gameserver_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Game Server the Delivery Item is associated with",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "execute_on_gameserver_id"
+                      },
+                      "execute_on_gameserver": {
+                        "$ref": "#/components/schemas/GameServerDTO"
+                      },
+                      "product_id": {
+                        "type": "string",
+                        "description": "The associated Product ID of the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "product_id"
+                      },
+                      "product_version_id": {
+                        "type": "string",
+                        "description": "The associated Product Version ID of the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "product_version_id"
+                      },
+                      "product": {
+                        "$ref": "#/components/schemas/ProductDTO"
+                      },
+                      "state": {
+                        "type": "string",
+                        "description": "The state of the Delivery Item.  Possible options: usable, active, used, revoked, renewed",
+                        "example": "usable",
+                        "x-discordVariable": "state"
+                      },
+                      "added_at": {
+                        "type": "string",
+                        "description": "Indicates when the Delivery Item was added to the customers inventory",
+                        "format": "date-time",
+                        "example": "2024-01-10T08:00:00Z",
+                        "x-discordVariable": "added_at"
+                      },
+                      "active_at": {
+                        "type": "string",
+                        "description": "Indicates when the Delivery Item become active",
+                        "format": "date-time",
+                        "example": "2024-01-10T09:00:00Z",
+                        "x-discordVariable": "active_at"
+                      },
+                      "expires_at": {
+                        "type": "string",
+                        "description": "Indicates when the Delivery Item expires",
+                        "format": "date-time",
+                        "example": "2024-12-31T23:59:59Z",
+                        "x-discordVariable": "expires_at"
+                      },
+                      "removed_at": {
+                        "type": "string",
+                        "description": "Indicates when the Delivery Item was removed from the customers inventory",
+                        "format": "date-time",
+                        "example": "2024-02-01T10:00:00Z",
+                        "x-discordVariable": "removed_at"
+                      },
+                      "revoked_at": {
+                        "type": "string",
+                        "description": "Indicates when the Delivery Item was revoked from the customers inventory",
+                        "format": "date-time",
+                        "example": "2024-02-05T14:30:00Z",
+                        "x-discordVariable": "revoked_at"
+                      },
+                      "revoke_reason": {
+                        "type": "string",
+                        "description": "Indicates the reason the delivery item was revoked from the customers inventory",
+                        "x-discordVariable": "revoke_reason"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook processed successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "OnDeliveryItemUsed": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Triggered when a delivery item in the customers inventory becomes used",
+        "description": "Webhook for OnDeliveryItemUsed",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "event_type",
+                  "timestamp",
+                  "body"
+                ],
+                "type": "object",
+                "properties": {
+                  "event_type": {
+                    "type": "string",
+                    "description": "The type of webhook event",
+                    "example": "ON_DELIVERY_ITEM_USED"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "description": "When the event occurred in ISO 8601 format",
+                    "format": "date-time",
+                    "example": "2024-11-12T10:30:00Z"
+                  },
+                  "body": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "id"
+                      },
+                      "store_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Store associated with the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "store_id"
+                      },
+                      "customer": {
+                        "$ref": "#/components/schemas/CustomerDTO"
+                      },
+                      "order_customer_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the customer who ordered the delivery item - which may differ to the customer because of gifting",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "order_customer_id"
+                      },
+                      "checkout_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Checkout associated with the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "checkout_id"
+                      },
+                      "order_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Order ID associated with the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "order_id"
+                      },
+                      "order_line_id": {
+                        "type": "string",
+                        "description": "The Flake Id of the Order Line ID associated with the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "order_line_id"
+                      },
+                      "subscription_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Subscription associated with the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "subscription_id"
+                      },
+                      "execute_on_gameserver_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Game Server the Delivery Item is associated with",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "execute_on_gameserver_id"
+                      },
+                      "execute_on_gameserver": {
+                        "$ref": "#/components/schemas/GameServerDTO"
+                      },
+                      "product_id": {
+                        "type": "string",
+                        "description": "The associated Product ID of the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "product_id"
+                      },
+                      "product_version_id": {
+                        "type": "string",
+                        "description": "The associated Product Version ID of the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "product_version_id"
+                      },
+                      "product": {
+                        "$ref": "#/components/schemas/ProductDTO"
+                      },
+                      "state": {
+                        "type": "string",
+                        "description": "The state of the Delivery Item.  Possible options: usable, active, used, revoked, renewed",
+                        "example": "usable",
+                        "x-discordVariable": "state"
+                      },
+                      "added_at": {
+                        "type": "string",
+                        "description": "Indicates when the Delivery Item was added to the customers inventory",
+                        "format": "date-time",
+                        "example": "2024-01-10T08:00:00Z",
+                        "x-discordVariable": "added_at"
+                      },
+                      "active_at": {
+                        "type": "string",
+                        "description": "Indicates when the Delivery Item become active",
+                        "format": "date-time",
+                        "example": "2024-01-10T09:00:00Z",
+                        "x-discordVariable": "active_at"
+                      },
+                      "expires_at": {
+                        "type": "string",
+                        "description": "Indicates when the Delivery Item expires",
+                        "format": "date-time",
+                        "example": "2024-12-31T23:59:59Z",
+                        "x-discordVariable": "expires_at"
+                      },
+                      "removed_at": {
+                        "type": "string",
+                        "description": "Indicates when the Delivery Item was removed from the customers inventory",
+                        "format": "date-time",
+                        "example": "2024-02-01T10:00:00Z",
+                        "x-discordVariable": "removed_at"
+                      },
+                      "revoked_at": {
+                        "type": "string",
+                        "description": "Indicates when the Delivery Item was revoked from the customers inventory",
+                        "format": "date-time",
+                        "example": "2024-02-05T14:30:00Z",
+                        "x-discordVariable": "revoked_at"
+                      },
+                      "revoke_reason": {
+                        "type": "string",
+                        "description": "Indicates the reason the delivery item was revoked from the customers inventory",
+                        "x-discordVariable": "revoke_reason"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook processed successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "OnDeliveryItemRevoked": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Triggered when a delivery item is revoked from the customers inventory",
+        "description": "Webhook for OnDeliveryItemRevoked",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "event_type",
+                  "timestamp",
+                  "body"
+                ],
+                "type": "object",
+                "properties": {
+                  "event_type": {
+                    "type": "string",
+                    "description": "The type of webhook event",
+                    "example": "ON_DELIVERY_ITEM_REVOKED"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "description": "When the event occurred in ISO 8601 format",
+                    "format": "date-time",
+                    "example": "2024-11-12T10:30:00Z"
+                  },
+                  "body": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "id"
+                      },
+                      "store_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Store associated with the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "store_id"
+                      },
+                      "customer": {
+                        "$ref": "#/components/schemas/CustomerDTO"
+                      },
+                      "order_customer_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the customer who ordered the delivery item - which may differ to the customer because of gifting",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "order_customer_id"
+                      },
+                      "checkout_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Checkout associated with the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "checkout_id"
+                      },
+                      "order_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Order ID associated with the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "order_id"
+                      },
+                      "order_line_id": {
+                        "type": "string",
+                        "description": "The Flake Id of the Order Line ID associated with the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "order_line_id"
+                      },
+                      "subscription_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Subscription associated with the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "subscription_id"
+                      },
+                      "execute_on_gameserver_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Game Server the Delivery Item is associated with",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "execute_on_gameserver_id"
+                      },
+                      "execute_on_gameserver": {
+                        "$ref": "#/components/schemas/GameServerDTO"
+                      },
+                      "product_id": {
+                        "type": "string",
+                        "description": "The associated Product ID of the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "product_id"
+                      },
+                      "product_version_id": {
+                        "type": "string",
+                        "description": "The associated Product Version ID of the Delivery Item",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "product_version_id"
+                      },
+                      "product": {
+                        "$ref": "#/components/schemas/ProductDTO"
+                      },
+                      "state": {
+                        "type": "string",
+                        "description": "The state of the Delivery Item.  Possible options: usable, active, used, revoked, renewed",
+                        "example": "usable",
+                        "x-discordVariable": "state"
+                      },
+                      "added_at": {
+                        "type": "string",
+                        "description": "Indicates when the Delivery Item was added to the customers inventory",
+                        "format": "date-time",
+                        "example": "2024-01-10T08:00:00Z",
+                        "x-discordVariable": "added_at"
+                      },
+                      "active_at": {
+                        "type": "string",
+                        "description": "Indicates when the Delivery Item become active",
+                        "format": "date-time",
+                        "example": "2024-01-10T09:00:00Z",
+                        "x-discordVariable": "active_at"
+                      },
+                      "expires_at": {
+                        "type": "string",
+                        "description": "Indicates when the Delivery Item expires",
+                        "format": "date-time",
+                        "example": "2024-12-31T23:59:59Z",
+                        "x-discordVariable": "expires_at"
+                      },
+                      "removed_at": {
+                        "type": "string",
+                        "description": "Indicates when the Delivery Item was removed from the customers inventory",
+                        "format": "date-time",
+                        "example": "2024-02-01T10:00:00Z",
+                        "x-discordVariable": "removed_at"
+                      },
+                      "revoked_at": {
+                        "type": "string",
+                        "description": "Indicates when the Delivery Item was revoked from the customers inventory",
+                        "format": "date-time",
+                        "example": "2024-02-05T14:30:00Z",
+                        "x-discordVariable": "revoked_at"
+                      },
+                      "revoke_reason": {
+                        "type": "string",
+                        "description": "Indicates the reason the delivery item was revoked from the customers inventory",
+                        "x-discordVariable": "revoke_reason"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook processed successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "OnOrderCompleted": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Triggered when an order is completed",
+        "description": "Webhook for OnOrderCompleted",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "event_type",
+                  "timestamp",
+                  "body"
+                ],
+                "type": "object",
+                "properties": {
+                  "event_type": {
+                    "type": "string",
+                    "description": "The type of webhook event",
+                    "example": "ON_ORDER_COMPLETED"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "description": "When the event occurred in ISO 8601 format",
+                    "format": "date-time",
+                    "example": "2024-11-12T10:30:00Z"
+                  },
+                  "body": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Order",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "id"
+                      },
+                      "store_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the store associated with the order",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "store_id"
+                      },
+                      "customer": {
+                        "$ref": "#/components/schemas/CustomerDTO"
+                      },
+                      "checkout_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Checkout associated with the order",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "checkout_id"
+                      },
+                      "checkout": {
+                        "$ref": "#/components/schemas/CheckoutDTO"
+                      },
+                      "subscription_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Subscription associated with the order",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "subscription_id"
+                      },
+                      "coupon_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Coupon associated with the order",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "coupon_id"
+                      },
+                      "currency": {
+                        "type": "string",
+                        "description": "The ISO-4217 Currency Code of the order",
+                        "example": "USD",
+                        "x-discordVariable": "currency"
+                      },
+                      "tax_inclusive": {
+                        "type": "boolean",
+                        "description": "Indicates if the order value was inclusive of tax",
+                        "example": true,
+                        "x-discordVariable": "tax_inclusive"
+                      },
+                      "tax_amount": {
+                        "type": "integer",
+                        "description": "The tax amount, represented as cents",
+                        "example": 1500,
+                        "x-discordVariable": "tax_amount"
+                      },
+                      "discount_amount": {
+                        "type": "integer",
+                        "description": "The discount amount, represented as cents",
+                        "example": 500,
+                        "x-discordVariable": "discount_amount"
+                      },
+                      "subtotal_amount": {
+                        "type": "integer",
+                        "description": "The subtotal amount, represented as cents",
+                        "example": 10000,
+                        "x-discordVariable": "subtotal_amount"
+                      },
+                      "total_amount": {
+                        "type": "integer",
+                        "description": "The total amount, represented as cents",
+                        "example": 11000,
+                        "x-discordVariable": "total_amount"
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "description": "Indicates when the order was created",
+                        "format": "date-time",
+                        "example": "2024-01-15T10:30:00Z",
+                        "x-discordVariable": "created_at"
+                      },
+                      "completed_at": {
+                        "type": "string",
+                        "description": "Indicates when the order was completed",
+                        "format": "date-time",
+                        "example": "2024-01-15T10:35:00Z",
+                        "x-discordVariable": "completed_at"
+                      },
+                      "billing_name": {
+                        "type": "string",
+                        "description": "The billing name of the customer associated with the order",
+                        "example": "John Doe",
+                        "x-discordVariable": "billing_name"
+                      },
+                      "billing_email": {
+                        "type": "string",
+                        "description": "The billing email address of the customer associated with the order",
+                        "example": "john@doe.com",
+                        "x-discordVariable": "billing_email"
+                      },
+                      "billing_address_country": {
+                        "type": "string",
+                        "description": "The ISO-3316 Country Code of the customer associated with the order",
+                        "example": "US",
+                        "x-discordVariable": "billing_address_country"
+                      },
+                      "customer_ip": {
+                        "type": "string",
+                        "description": "The IPv4 or IPv6 Address of the associated customer when creating the order",
+                        "example": "127.0.0.1/24",
+                        "x-discordVariable": "customer_ip"
+                      },
+                      "giftcard_usage_amount": {
+                        "type": "integer",
+                        "description": "The total amount of giftcard usage associated with the order, represented in cents",
+                        "example": 0,
+                        "x-discordVariable": "giftcard_usage_amount"
+                      },
+                      "lines": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/OrderLineDTO"
+                        },
+                        "description": "The order lines associated with the order",
+                        "x-discordVariable": "lines"
+                      },
+                      "product_names": {
+                        "type": "string",
+                        "description": "A comma-seperated string of the names of the product associated with the order",
+                        "example": "Product A, Product B",
+                        "x-discordVariable": "product_names"
+                      },
+                      "product_tags": {
+                        "type": "string",
+                        "description": "A comma-seperated string of the tags of the products associated with the order",
+                        "example": "ranks, perks",
+                        "x-discordVariable": "product_tags"
+                      },
+                      "product_gameservers": {
+                        "type": "string",
+                        "description": "A comma-seperated string of the gameservers of the product associated with the order",
+                        "example": "game server one, game server two",
+                        "x-discordVariable": "product_gameservers"
+                      },
+                      "status": {
+                        "type": "string",
+                        "description": "The status of the Order.  Possbile options: created, completed, canceled",
+                        "example": "created",
+                        "x-discordVariable": "status"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook processed successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "OnChargeback": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Triggered when a chargeback is created",
+        "description": "Webhook for OnChargeback",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "event_type",
+                  "timestamp",
+                  "body"
+                ],
+                "type": "object",
+                "properties": {
+                  "event_type": {
+                    "type": "string",
+                    "description": "The type of webhook event",
+                    "example": "ON_CHARGEBACK"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "description": "When the event occurred in ISO 8601 format",
+                    "format": "date-time",
+                    "example": "2024-11-12T10:30:00Z"
+                  },
+                  "body": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Payment associated with the Payment",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "id"
+                      },
+                      "store_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Store associated with the Payment",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "store_id"
+                      },
+                      "order_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Order associated with Payment",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "order_id"
+                      },
+                      "customer": {
+                        "$ref": "#/components/schemas/CustomerDTO"
+                      },
+                      "gateway": {
+                        "type": "string",
+                        "description": "The Payment Gateway of the Payment",
+                        "example": "stripe",
+                        "x-discordVariable": "gateway"
+                      },
+                      "currency": {
+                        "type": "string",
+                        "description": "The ISO-4217 Currency Code of the Payment",
+                        "example": "USD",
+                        "x-discordVariable": "currency"
+                      },
+                      "tax_inclusive": {
+                        "type": "boolean",
+                        "description": "Indicates if the payment was Tax Inclusive",
+                        "example": true,
+                        "x-discordVariable": "tax_inclusive"
+                      },
+                      "amount": {
+                        "type": "integer",
+                        "description": "The payment amount, represented in cents",
+                        "example": 7500,
+                        "x-discordVariable": "amount"
+                      },
+                      "gateway_fee_amount": {
+                        "type": "integer",
+                        "description": "The gateway fee  amount, represented in cents",
+                        "example": 200,
+                        "x-discordVariable": "gateway_fee_amount"
+                      },
+                      "tax_amount": {
+                        "type": "integer",
+                        "description": "The tax amount, represented in cents",
+                        "example": 1200,
+                        "x-discordVariable": "tax_amount"
+                      },
+                      "platform_fee_amount": {
+                        "type": "integer",
+                        "description": "The platform fee amount, represented in cents",
+                        "example": 375,
+                        "x-discordVariable": "platform_fee_amount"
+                      },
+                      "store_net_amount": {
+                        "type": "integer",
+                        "description": "The net amount recieved by the associated store, represented in cents",
+                        "example": 5925,
+                        "x-discordVariable": "store_net_amount"
+                      },
+                      "status": {
+                        "type": "string",
+                        "description": "The status of the payment",
+                        "x-discordVariable": "status"
+                      },
+                      "chargeback_at": {
+                        "type": "string",
+                        "description": "Indicated when a chargeback was opened for the payment",
+                        "format": "date-time",
+                        "example": "2024-01-25T14:45:00Z",
+                        "x-discordVariable": "chargeback_at"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook processed successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "OnRefund": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Triggered when a refund is completed",
+        "description": "Webhook for OnRefund",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "event_type",
+                  "timestamp",
+                  "body"
+                ],
+                "type": "object",
+                "properties": {
+                  "event_type": {
+                    "type": "string",
+                    "description": "The type of webhook event",
+                    "example": "ON_REFUND"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "description": "When the event occurred in ISO 8601 format",
+                    "format": "date-time",
+                    "example": "2024-11-12T10:30:00Z"
+                  },
+                  "body": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Refund",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "id"
+                      },
+                      "store_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the store associated with the Refund",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "store_id"
+                      },
+                      "order_id": {
+                        "type": "string",
+                        "description": "The Flake ID of Order associated with the refund",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "order_id"
+                      },
+                      "customer": {
+                        "$ref": "#/components/schemas/CustomerDTO"
+                      },
+                      "payment_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Payment associated with the refund",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "payment_id"
+                      },
+                      "gateway": {
+                        "type": "string",
+                        "description": "The Payment Gateway associated with the refund",
+                        "x-discordVariable": "gateway"
+                      },
+                      "currency": {
+                        "type": "string",
+                        "description": "The ISO-4217 Currency Code of the Payment",
+                        "example": "USD",
+                        "x-discordVariable": "currency"
+                      },
+                      "tax_inclusive": {
+                        "type": "boolean",
+                        "description": "Indicates if taxes were inclusive in the associated payment",
+                        "example": false,
+                        "x-discordVariable": "tax_inclusive"
+                      },
+                      "amount": {
+                        "type": "integer",
+                        "description": "The initial payment amount, represented in cents",
+                        "example": 5000,
+                        "x-discordVariable": "amount"
+                      },
+                      "gateway_fee_amount": {
+                        "type": "integer",
+                        "description": "The initial gateway fee amount, represented in cents",
+                        "example": 150,
+                        "x-discordVariable": "gateway_fee_amount"
+                      },
+                      "tax_amount": {
+                        "type": "integer",
+                        "description": "The initial tax amount, represented in cents",
+                        "example": 800,
+                        "x-discordVariable": "tax_amount"
+                      },
+                      "platform_fee_amount": {
+                        "type": "integer",
+                        "description": "The initial platform fee amount, represented in cents",
+                        "example": 250,
+                        "x-discordVariable": "platform_fee_amount"
+                      },
+                      "store_net_amount": {
+                        "type": "integer",
+                        "description": "The initial store net amount, represented in cents",
+                        "example": 3800,
+                        "x-discordVariable": "store_net_amount"
+                      },
+                      "store_refund_amount": {
+                        "type": "integer",
+                        "description": "The amount refunded to the store, represented in cents",
+                        "example": 5000,
+                        "x-discordVariable": "store_refund_amount"
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "description": "Indicates when the refund was created",
+                        "format": "date-time",
+                        "example": "2024-01-20T12:00:00Z",
+                        "x-discordVariable": "created_at"
+                      },
+                      "approved_at": {
+                        "type": "string",
+                        "description": "Indicates when the refund was approved",
+                        "format": "date-time",
+                        "example": "2024-01-20T12:30:00Z",
+                        "x-discordVariable": "approved_at"
+                      },
+                      "pending_at": {
+                        "type": "string",
+                        "description": "Indicates when the refund was pending",
+                        "format": "date-time",
+                        "example": "2024-01-20T12:15:00Z",
+                        "x-discordVariable": "pending_at"
+                      },
+                      "completed_at": {
+                        "type": "string",
+                        "description": "Indicates when the refund was completed",
+                        "format": "date-time",
+                        "example": "2024-01-20T13:00:00Z",
+                        "x-discordVariable": "completed_at"
+                      },
+                      "billing_email": {
+                        "type": "string",
+                        "description": "The email address of the intial payment customer",
+                        "example": "john@doe.com",
+                        "x-discordVariable": "billing_email"
+                      },
+                      "status": {
+                        "type": "string",
+                        "description": "The status of the refund.  Possible options: created, approved, processing, completed, canceled, failed",
+                        "example": "created",
+                        "x-discordVariable": "status"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook processed successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "OnSubscriptionActivated": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Triggered when a subscription is activated",
+        "description": "Webhook for OnSubscriptionActivated",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "event_type",
+                  "timestamp",
+                  "body"
+                ],
+                "type": "object",
+                "properties": {
+                  "event_type": {
+                    "type": "string",
+                    "description": "The type of webhook event",
+                    "example": "ON_SUBSCRIPTION_ACTIVATED"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "description": "When the event occurred in ISO 8601 format",
+                    "format": "date-time",
+                    "example": "2024-11-12T10:30:00Z"
+                  },
+                  "body": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Subscription",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "id"
+                      },
+                      "store_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Store associated with the Subscription",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "store_id"
+                      },
+                      "customer_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Customer associated with the Subscription",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "customer_id"
+                      },
+                      "customer": {
+                        "$ref": "#/components/schemas/CustomerDTO"
+                      },
+                      "billing_cycle_sequence": {
+                        "type": "integer",
+                        "description": "The current billing cycle number",
+                        "example": 1,
+                        "x-discordVariable": "billing_cycle_sequence"
+                      },
+                      "billing_email": {
+                        "type": "string",
+                        "description": "The billing email address of the customer associated with the Subscription",
+                        "example": "john@doe.com",
+                        "x-discordVariable": "billing_email"
+                      },
+                      "subtotal_amount": {
+                        "type": "integer",
+                        "description": "The subtotal amount of the Subscription represented in cents",
+                        "example": 9999,
+                        "x-discordVariable": "subtotal_amount"
+                      },
+                      "tax_amount": {
+                        "type": "integer",
+                        "description": "The tax amount of the Subscription represented in cents",
+                        "example": 1500,
+                        "x-discordVariable": "tax_amount"
+                      },
+                      "discount_amount": {
+                        "type": "integer",
+                        "description": "The discount amount applied to the Subscription represented in cents",
+                        "example": 1000,
+                        "x-discordVariable": "discount_amount"
+                      },
+                      "total_amount": {
+                        "type": "integer",
+                        "description": "The total amount of the Subscription represented in cents",
+                        "example": 10499,
+                        "x-discordVariable": "total_amount"
+                      },
+                      "currency": {
+                        "type": "string",
+                        "description": "The currency code of the Subscription",
+                        "example": "USD",
+                        "x-discordVariable": "currency"
+                      },
+                      "interval_value": {
+                        "type": "integer",
+                        "description": "The interval value of the billing cycle",
+                        "example": 1,
+                        "x-discordVariable": "interval_value"
+                      },
+                      "interval_scale": {
+                        "type": "string",
+                        "description": "The interval scale of the billing cycle",
+                        "example": "month",
+                        "x-discordVariable": "interval_scale"
+                      },
+                      "product_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Product associated with the Subscription",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "product_id"
+                      },
+                      "product_version_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Product Version associated with the Subscription",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "product_version_id"
+                      },
+                      "product_name": {
+                        "type": "string",
+                        "description": "The name of the Product associated with the Subscription",
+                        "example": "Example Product",
+                        "x-discordVariable": "product_name"
+                      },
+                      "product_image_url": {
+                        "type": "string",
+                        "description": "The image URL of the Product associated with the Subscription",
+                        "example": "https://example.com/image.jpg",
+                        "x-discordVariable": "product_image_url"
+                      },
+                      "product": {
+                        "$ref": "#/components/schemas/ProductDTO"
+                      },
+                      "billing_country": {
+                        "type": "string",
+                        "description": "The ISO-3166 Country Code of customer associated with the Subscription",
+                        "example": "US",
+                        "x-discordVariable": "billing_country"
+                      },
+                      "initial_subtotal_amount": {
+                        "type": "integer",
+                        "description": "The initial subtotal amount of the Subscription represented in cents",
+                        "example": 9999,
+                        "x-discordVariable": "initial_subtotal_amount"
+                      },
+                      "initial_tax_amount": {
+                        "type": "integer",
+                        "description": "The initial tax amount of the Subscription represented in cents",
+                        "example": 1500,
+                        "x-discordVariable": "initial_tax_amount"
+                      },
+                      "initial_discount_amount": {
+                        "type": "integer",
+                        "description": "The initial discount amount applied to the Subscription represented in cents",
+                        "example": 2000,
+                        "x-discordVariable": "initial_discount_amount"
+                      },
+                      "initial_giftcard_usage_amount": {
+                        "type": "integer",
+                        "description": "The initial gift card usage amount applied to the Subscription represented in cents",
+                        "example": 0,
+                        "x-discordVariable": "initial_giftcard_usage_amount"
+                      },
+                      "initial_total_amount": {
+                        "type": "integer",
+                        "description": "The initial total amount of the Subscription represented in cents",
+                        "example": 9499,
+                        "x-discordVariable": "initial_total_amount"
+                      },
+                      "customer_ip": {
+                        "type": "string",
+                        "description": "The IP address of the Customer",
+                        "example": "127.0.0.1/24",
+                        "x-discordVariable": "customer_ip"
+                      },
+                      "current_period_start": {
+                        "type": "string",
+                        "description": "The start date of the current billing period",
+                        "format": "date-time",
+                        "example": "2024-02-01T00:00:00Z",
+                        "x-discordVariable": "current_period_start"
+                      },
+                      "current_period_end": {
+                        "type": "string",
+                        "description": "The end date of the current billing period",
+                        "format": "date-time",
+                        "example": "2024-03-01T00:00:00Z",
+                        "x-discordVariable": "current_period_end"
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "description": "The date and time when the Subscription was created",
+                        "format": "date-time",
+                        "example": "2024-02-01T10:15:00Z",
+                        "x-discordVariable": "created_at"
+                      },
+                      "active_at": {
+                        "type": "string",
+                        "description": "Indicates when the subscription was active",
+                        "format": "date-time",
+                        "example": "2024-02-01T10:20:00Z",
+                        "x-discordVariable": "active_at"
+                      },
+                      "checkout_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Checkout associated with the Subscription",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "checkout_id"
+                      },
+                      "checkout_line_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Checkout Line associated with the Subscription",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "checkout_line_id"
+                      },
+                      "status": {
+                        "type": "string",
+                        "description": "The current status of the Subscription.  Possible options: created, active, canceled",
+                        "example": "created",
+                        "x-discordVariable": "status"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook processed successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "OnSubscriptionCanceled": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Triggered when a subscription is canceled",
+        "description": "Webhook for OnSubscriptionCanceled",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "event_type",
+                  "timestamp",
+                  "body"
+                ],
+                "type": "object",
+                "properties": {
+                  "event_type": {
+                    "type": "string",
+                    "description": "The type of webhook event",
+                    "example": "ON_SUBSCRIPTION_CANCELED"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "description": "When the event occurred in ISO 8601 format",
+                    "format": "date-time",
+                    "example": "2024-11-12T10:30:00Z"
+                  },
+                  "body": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Subscription",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "id"
+                      },
+                      "store_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Store associated with the Subscription",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "store_id"
+                      },
+                      "customer_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Customer associated with the Subscription",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "customer_id"
+                      },
+                      "customer": {
+                        "$ref": "#/components/schemas/CustomerDTO"
+                      },
+                      "billing_cycle_sequence": {
+                        "type": "integer",
+                        "description": "The current billing cycle number",
+                        "example": 1,
+                        "x-discordVariable": "billing_cycle_sequence"
+                      },
+                      "billing_email": {
+                        "type": "string",
+                        "description": "The billing email address of the customer associated with the Subscription",
+                        "example": "cancel@example.com",
+                        "x-discordVariable": "billing_email"
+                      },
+                      "subtotal_amount": {
+                        "type": "integer",
+                        "description": "The subtotal amount of the Subscription represented in cents",
+                        "example": 4999,
+                        "x-discordVariable": "subtotal_amount"
+                      },
+                      "tax_amount": {
+                        "type": "integer",
+                        "description": "The tax amount of the Subscription represented in cents",
+                        "example": 750,
+                        "x-discordVariable": "tax_amount"
+                      },
+                      "discount_amount": {
+                        "type": "integer",
+                        "description": "The discount amount applied to the Subscription represented in cents",
+                        "example": 0,
+                        "x-discordVariable": "discount_amount"
+                      },
+                      "total_amount": {
+                        "type": "integer",
+                        "description": "The total amount of the Subscription represented in cents",
+                        "example": 5749,
+                        "x-discordVariable": "total_amount"
+                      },
+                      "currency": {
+                        "type": "string",
+                        "description": "The currency code of the Subscription",
+                        "example": "USD",
+                        "x-discordVariable": "currency"
+                      },
+                      "interval_value": {
+                        "type": "integer",
+                        "description": "The interval value of the billing cycle",
+                        "example": 1,
+                        "x-discordVariable": "interval_value"
+                      },
+                      "interval_scale": {
+                        "type": "string",
+                        "description": "The interval scale of the billing cycle",
+                        "example": "annually",
+                        "x-discordVariable": "interval_scale"
+                      },
+                      "product_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Product associated with the Subscription",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "product_id"
+                      },
+                      "product_version_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Product Version associated with the Subscription",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "product_version_id"
+                      },
+                      "product_name": {
+                        "type": "string",
+                        "description": "The name of the Product associated with the Subscription",
+                        "example": "Starter Plan",
+                        "x-discordVariable": "product_name"
+                      },
+                      "product_image_url": {
+                        "type": "string",
+                        "description": "The image URL of the Product associated with the Subscription",
+                        "example": "https://example.com/starter.jpg",
+                        "x-discordVariable": "product_image_url"
+                      },
+                      "product": {
+                        "$ref": "#/components/schemas/ProductDTO"
+                      },
+                      "billing_country": {
+                        "type": "string",
+                        "description": "The ISO-3166 country code of customer associated with the Subscription",
+                        "example": "US",
+                        "x-discordVariable": "billing_country"
+                      },
+                      "initial_subtotal_amount": {
+                        "type": "integer",
+                        "description": "The initial subtotal amount of the Subscription represented in cents",
+                        "example": 4999,
+                        "x-discordVariable": "initial_subtotal_amount"
+                      },
+                      "initial_tax_amount": {
+                        "type": "integer",
+                        "description": "The initial tax amount of the Subscription represented in cents",
+                        "example": 750,
+                        "x-discordVariable": "initial_tax_amount"
+                      },
+                      "initial_discount_amount": {
+                        "type": "integer",
+                        "description": "The initial discount amount applied to the Subscription represented in cents",
+                        "example": 500,
+                        "x-discordVariable": "initial_discount_amount"
+                      },
+                      "initial_giftcard_usage_amount": {
+                        "type": "integer",
+                        "description": "The initial gift card usage amount applied to the Subscription represented in cents",
+                        "example": 0,
+                        "x-discordVariable": "initial_giftcard_usage_amount"
+                      },
+                      "initial_total_amount": {
+                        "type": "integer",
+                        "description": "The initial total amount of the Subscription represented in cents",
+                        "example": 5249,
+                        "x-discordVariable": "initial_total_amount"
+                      },
+                      "customer_ip": {
+                        "type": "string",
+                        "description": "The IP address of the Customer",
+                        "example": "127.0.0.1/24",
+                        "x-discordVariable": "customer_ip"
+                      },
+                      "current_period_start": {
+                        "type": "string",
+                        "description": "The start date of the current billing period",
+                        "format": "date-time",
+                        "example": "2024-04-01T00:00:00Z",
+                        "x-discordVariable": "current_period_start"
+                      },
+                      "current_period_end": {
+                        "type": "string",
+                        "description": "The end date of the current billing period",
+                        "format": "date-time",
+                        "example": "2025-04-01T00:00:00Z",
+                        "x-discordVariable": "current_period_end"
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "description": "The date and time when the Subscription was created",
+                        "format": "date-time",
+                        "example": "2024-04-01T09:30:00Z",
+                        "x-discordVariable": "created_at"
+                      },
+                      "active_at": {
+                        "type": "string",
+                        "description": "Indicates when the subscription was active",
+                        "format": "date-time",
+                        "example": "2024-04-01T09:35:00Z",
+                        "x-discordVariable": "active_at"
+                      },
+                      "canceled_at": {
+                        "type": "string",
+                        "description": "Indicates when the subscription was canceled",
+                        "format": "date-time",
+                        "example": "2024-05-15T14:20:00Z",
+                        "x-discordVariable": "canceled_at"
+                      },
+                      "cancel_reason": {
+                        "type": "string",
+                        "description": "The reason for the subscription cancellation",
+                        "example": "customer_request",
+                        "x-discordVariable": "cancel_reason"
+                      },
+                      "checkout_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Checkout associated with the Subscription",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "checkout_id"
+                      },
+                      "checkout_line_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Checkout Line associated with the Subscription",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "checkout_line_id"
+                      },
+                      "status": {
+                        "type": "string",
+                        "description": "The current status of the Subscription.  Possible options: created, active, canceled",
+                        "example": "created",
+                        "x-discordVariable": "status"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook processed successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "OnTrialActivated": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Triggered when a trial is activated",
+        "description": "Webhook for OnTrialActivated",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "event_type",
+                  "timestamp",
+                  "body"
+                ],
+                "type": "object",
+                "properties": {
+                  "event_type": {
+                    "type": "string",
+                    "description": "The type of webhook event",
+                    "example": "ON_TRIAL_ACTIVATED"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "description": "When the event occurred in ISO 8601 format",
+                    "format": "date-time",
+                    "example": "2024-11-12T10:30:00Z"
+                  },
+                  "body": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Trial",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "id"
+                      },
+                      "store_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Store associated with the Trial",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "store_id"
+                      },
+                      "customer_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Customer associated with the Trial",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "customer_id"
+                      },
+                      "customer": {
+                        "$ref": "#/components/schemas/CustomerDTO"
+                      },
+                      "checkout_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Checkout associated with the Trial",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "checkout_id"
+                      },
+                      "checkout_line_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Checkout Line associated with the Trial",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "checkout_line_id"
+                      },
+                      "product_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Product associated with the Trial",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "product_id"
+                      },
+                      "product_version_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Product Version associated with the Trial",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "product_version_id"
+                      },
+                      "product_name": {
+                        "type": "string",
+                        "description": "The name of the Product associated with the Trial",
+                        "example": "Example Product",
+                        "x-discordVariable": "product_name"
+                      },
+                      "product_image_url": {
+                        "type": "string",
+                        "description": "The image URL of the Product associated with the Trial",
+                        "example": "https://example.com/image.jpg",
+                        "x-discordVariable": "product_image_url"
+                      },
+                      "period_value": {
+                        "type": "integer",
+                        "description": "The period value of the Trial",
+                        "example": 1,
+                        "x-discordVariable": "period_value"
+                      },
+                      "period_scale": {
+                        "type": "string",
+                        "description": "The period scale of the Trial",
+                        "example": "month",
+                        "x-discordVariable": "period_scale"
+                      },
+                      "starts_at": {
+                        "type": "string",
+                        "description": "The start date of the Trial",
+                        "format": "date-time",
+                        "example": "2024-06-10T00:00:00Z",
+                        "x-discordVariable": "starts_at"
+                      },
+                      "ends_at": {
+                        "type": "string",
+                        "description": "The end date of the Trial",
+                        "format": "date-time",
+                        "example": "2024-06-17T23:59:59Z",
+                        "x-discordVariable": "ends_at"
+                      },
+                      "status": {
+                        "type": "string",
+                        "description": "The current status of the Trial.  Possible options: created, active, canceled, completed",
+                        "example": "created",
+                        "x-discordVariable": "status"
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "description": "The date and time when the Trial was created",
+                        "format": "date-time",
+                        "example": "2024-06-10T08:30:00Z",
+                        "x-discordVariable": "created_at"
+                      },
+                      "canceled_at": {
+                        "type": "string",
+                        "description": "Indicates when the Trial was canceled",
+                        "format": "date-time",
+                        "example": "2024-06-15T10:15:00Z",
+                        "x-discordVariable": "canceled_at"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook processed successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "OnTrialCompleted": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Triggered when a trial is completed",
+        "description": "Webhook for OnTrialCompleted",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "event_type",
+                  "timestamp",
+                  "body"
+                ],
+                "type": "object",
+                "properties": {
+                  "event_type": {
+                    "type": "string",
+                    "description": "The type of webhook event",
+                    "example": "ON_TRIAL_COMPLETED"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "description": "When the event occurred in ISO 8601 format",
+                    "format": "date-time",
+                    "example": "2024-11-12T10:30:00Z"
+                  },
+                  "body": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Trial",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "id"
+                      },
+                      "store_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Store associated with the Trial",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "store_id"
+                      },
+                      "customer_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Customer associated with the Trial",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "customer_id"
+                      },
+                      "customer": {
+                        "$ref": "#/components/schemas/CustomerDTO"
+                      },
+                      "checkout_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Checkout associated with the Trial",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "checkout_id"
+                      },
+                      "checkout_line_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Checkout Line associated with the Trial",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "checkout_line_id"
+                      },
+                      "product_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Product associated with the Trial",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "product_id"
+                      },
+                      "product_version_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Product Version associated with the Trial",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "product_version_id"
+                      },
+                      "product_name": {
+                        "type": "string",
+                        "description": "The name of the Product associated with the Trial",
+                        "example": "Example Product",
+                        "x-discordVariable": "product_name"
+                      },
+                      "product_image_url": {
+                        "type": "string",
+                        "description": "The image URL of the Product associated with the Trial",
+                        "example": "https://example.com/image.jpg",
+                        "x-discordVariable": "product_image_url"
+                      },
+                      "period_value": {
+                        "type": "integer",
+                        "description": "The period value of the Trial",
+                        "example": 1,
+                        "x-discordVariable": "period_value"
+                      },
+                      "period_scale": {
+                        "type": "string",
+                        "description": "The period scale of the Trial",
+                        "example": "month",
+                        "x-discordVariable": "period_scale"
+                      },
+                      "starts_at": {
+                        "type": "string",
+                        "description": "The start date of the Trial",
+                        "format": "date-time",
+                        "example": "2024-06-10T00:00:00Z",
+                        "x-discordVariable": "starts_at"
+                      },
+                      "ends_at": {
+                        "type": "string",
+                        "description": "The end date of the Trial",
+                        "format": "date-time",
+                        "example": "2024-06-17T23:59:59Z",
+                        "x-discordVariable": "ends_at"
+                      },
+                      "status": {
+                        "type": "string",
+                        "description": "The current status of the Trial.  Possible options: created, active, canceled, completed",
+                        "example": "created",
+                        "x-discordVariable": "status"
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "description": "The date and time when the Trial was created",
+                        "format": "date-time",
+                        "example": "2024-06-10T08:30:00Z",
+                        "x-discordVariable": "created_at"
+                      },
+                      "canceled_at": {
+                        "type": "string",
+                        "description": "Indicates when the Trial was canceled",
+                        "format": "date-time",
+                        "example": "2024-06-15T10:15:00Z",
+                        "x-discordVariable": "canceled_at"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook processed successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "OnTrialCanceled": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Triggered when a trial is canceled",
+        "description": "Webhook for OnTrialCanceled",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "event_type",
+                  "timestamp",
+                  "body"
+                ],
+                "type": "object",
+                "properties": {
+                  "event_type": {
+                    "type": "string",
+                    "description": "The type of webhook event",
+                    "example": "ON_TRIAL_CANCELLED"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "description": "When the event occurred in ISO 8601 format",
+                    "format": "date-time",
+                    "example": "2024-11-12T10:30:00Z"
+                  },
+                  "body": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Trial",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "id"
+                      },
+                      "store_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Store associated with the Trial",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "store_id"
+                      },
+                      "customer_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Customer associated with the Trial",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "customer_id"
+                      },
+                      "customer": {
+                        "$ref": "#/components/schemas/CustomerDTO"
+                      },
+                      "checkout_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Checkout associated with the Trial",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "checkout_id"
+                      },
+                      "checkout_line_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Checkout Line associated with the Trial",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "checkout_line_id"
+                      },
+                      "product_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Product associated with the Trial",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "product_id"
+                      },
+                      "product_version_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Product Version associated with the Trial",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "product_version_id"
+                      },
+                      "product_name": {
+                        "type": "string",
+                        "description": "The name of the Product associated with the Trial",
+                        "example": "Example Product",
+                        "x-discordVariable": "product_name"
+                      },
+                      "product_image_url": {
+                        "type": "string",
+                        "description": "The image URL of the Product associated with the Trial",
+                        "example": "https://example.com/image.jpg",
+                        "x-discordVariable": "product_image_url"
+                      },
+                      "period_value": {
+                        "type": "integer",
+                        "description": "The period value of the Trial",
+                        "example": 1,
+                        "x-discordVariable": "period_value"
+                      },
+                      "period_scale": {
+                        "type": "string",
+                        "description": "The period scale of the Trial",
+                        "example": "month",
+                        "x-discordVariable": "period_scale"
+                      },
+                      "starts_at": {
+                        "type": "string",
+                        "description": "The start date of the Trial",
+                        "format": "date-time",
+                        "example": "2024-06-10T00:00:00Z",
+                        "x-discordVariable": "starts_at"
+                      },
+                      "ends_at": {
+                        "type": "string",
+                        "description": "The end date of the Trial",
+                        "format": "date-time",
+                        "example": "2024-06-17T23:59:59Z",
+                        "x-discordVariable": "ends_at"
+                      },
+                      "status": {
+                        "type": "string",
+                        "description": "The current status of the Trial.  Possible options: created, active, canceled, completed",
+                        "example": "created",
+                        "x-discordVariable": "status"
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "description": "The date and time when the Trial was created",
+                        "format": "date-time",
+                        "example": "2024-06-10T08:30:00Z",
+                        "x-discordVariable": "created_at"
+                      },
+                      "canceled_at": {
+                        "type": "string",
+                        "description": "Indicates when the Trial was canceled",
+                        "format": "date-time",
+                        "example": "2024-06-15T10:15:00Z",
+                        "x-discordVariable": "canceled_at"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook processed successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  }
+}

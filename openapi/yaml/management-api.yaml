@@ -5296,6 +5296,39 @@ paths:
                 $ref: '#/components/schemas/PayNowError'
       security:
         - APIKey: [ ]
+  '/v1/stores/{storeId}/webhooks/resend':
+    post:
+      tags:
+        - webhooks
+      operationId: Webhooks_Resend
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResendWebhookDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ResendWebhookDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ResendWebhookDto'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
   '/v1/stores/{storeId}/webhooks/{webhookId}/history':
     get:
       tags:
@@ -9855,6 +9888,14 @@ components:
         enqueued_commands_count:
           type: integer
           format: int32
+      additionalProperties: false
+    ResendWebhookDto:
+      required:
+        - webhook_id
+      type: object
+      properties:
+        webhook_id:
+          $ref: '#/components/schemas/FlakeId'
       additionalProperties: false
     SaleDiscountType:
       enum:

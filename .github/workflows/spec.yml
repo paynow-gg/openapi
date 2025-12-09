@@ -30,7 +30,8 @@ jobs:
           declare -a apis=(
             "storefront-api"
             "management-api"
-            "gameserver-api"
+            "gameserver-api",
+            "webhook-definitions"
           )
           
           base_url="https://api.paynow.gg/swagger"

@@ -2,23 +2,6 @@
 
 OpenAPI specifications for PayNow's merchant of record platform.
 
-## Available APIs
-
-### Storefront API
-Customer-facing endpoints for building custom storefronts and enabling purchases.
-- **YAML**: [`openapi/yaml/storefront-api.yaml`](openapi/yaml/storefront-api.yaml)
-- **JSON**: [`openapi/json/storefront-api.json`](openapi/json/storefront-api.json)
-
-### Management API
-Administrative endpoints for managing your store, products, subscriptions, and customers.
-- **YAML**: [`openapi/yaml/management-api.yaml`](openapi/yaml/management-api.yaml)
-- **JSON**: [`openapi/json/management-api.json`](openapi/json/management-api.json)
-
-### Gameserver API
-Specialized endpoints for game server integration and in-game purchases.
-- **YAML**: [`openapi/yaml/gameserver-api.yaml`](openapi/yaml/gameserver-api.yaml)
-- **JSON**: [`openapi/json/gameserver-api.json`](openapi/json/gameserver-api.json)
-
 ## Getting Started
 
 ### Authentication

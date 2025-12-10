@@ -11968,13 +11968,6 @@
             ],
             "description": "Indicates whether concurrent active items are allowed."
           },
-          "disable_promo_codes": {
-            "type": [
-              "null",
-              "boolean"
-            ],
-            "description": "Indicates whether using coupons and gift cards on this product is allowed."
-          },
           "is_hidden": {
             "type": [
               "null",
@@ -12031,6 +12024,27 @@
               "$ref": "#/components/schemas/FlakeId"
             },
             "description": "The IDs of associated custom variables."
+          },
+          "is_gift_cards_disabled": {
+            "type": [
+              "null",
+              "boolean"
+            ],
+            "description": "Indicates if applying gift cards should be disabled on the product."
+          },
+          "is_coupons_disabled": {
+            "type": [
+              "null",
+              "boolean"
+            ],
+            "description": "Indicates if applying coupons should be disabled on the product."
+          },
+          "is_affiliate_links_disabled": {
+            "type": [
+              "null",
+              "boolean"
+            ],
+            "description": "Indicates if applying affiliate links should be disabled on the product."
           }
         },
         "additionalProperties": false,
@@ -13866,13 +13880,6 @@
             ],
             "description": "Indicates whether concurrent active items are allowed."
           },
-          "disable_promo_codes": {
-            "type": [
-              "null",
-              "boolean"
-            ],
-            "description": "Indicates whether using coupons and gift cards on this product is allowed."
-          },
           "is_hidden": {
             "type": [
               "null",
@@ -13929,6 +13936,27 @@
               "$ref": "#/components/schemas/FlakeId"
             },
             "description": "The IDs of associated custom variables."
+          },
+          "is_gift_cards_disabled": {
+            "type": [
+              "null",
+              "boolean"
+            ],
+            "description": "Indicates if applying gift cards should be disabled on the product."
+          },
+          "is_coupons_disabled": {
+            "type": [
+              "null",
+              "boolean"
+            ],
+            "description": "Indicates if applying coupons should be disabled on the product."
+          },
+          "is_affiliate_links_disabled": {
+            "type": [
+              "null",
+              "boolean"
+            ],
+            "description": "Indicates if applying affiliate links should be disabled on the product."
           }
         },
         "additionalProperties": false
@@ -17055,13 +17083,6 @@
             ],
             "description": "Indicates whether concurrent active items are allowed."
           },
-          "disable_promo_codes": {
-            "type": [
-              "null",
-              "boolean"
-            ],
-            "description": "Indicates whether using coupons and gift cards on this product is allowed."
-          },
           "is_hidden": {
             "type": [
               "null",
@@ -17118,6 +17139,27 @@
               "$ref": "#/components/schemas/FlakeId"
             },
             "description": "The IDs of associated custom variables."
+          },
+          "is_gift_cards_disabled": {
+            "type": [
+              "null",
+              "boolean"
+            ],
+            "description": "Indicates if applying gift cards should be disabled on the product."
+          },
+          "is_coupons_disabled": {
+            "type": [
+              "null",
+              "boolean"
+            ],
+            "description": "Indicates if applying coupons should be disabled on the product."
+          },
+          "is_affiliate_links_disabled": {
+            "type": [
+              "null",
+              "boolean"
+            ],
+            "description": "Indicates if applying affiliate links should be disabled on the product."
           }
         },
         "additionalProperties": false

@@ -501,6 +501,11 @@ components:
           description: When the product was last updated
           format: date-time
           x-discordVariable: updated_at
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: The metadata of the product
     ProductGameServerDTO:
       type: object
       properties:

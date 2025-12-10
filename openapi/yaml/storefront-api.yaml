@@ -1549,6 +1549,9 @@ components:
         - description
         - gameservers
         - id
+        - is_affiliate_links_disabled
+        - is_coupons_disabled
+        - is_gift_cards_disabled
         - is_gifting_disabled
         - name
         - price
@@ -1634,6 +1637,15 @@ components:
         is_gifting_disabled:
           type: boolean
           description: Indicates whether gifting is disabled for this product.
+        is_gift_cards_disabled:
+          type: boolean
+          description: Indicates whether gift cards are disabled entirely for the product.
+        is_coupons_disabled:
+          type: boolean
+          description: Indicates whether coupons are disabled entirely for the product.
+        is_affiliate_links_disabled:
+          type: boolean
+          description: Indicates whether affiliate links are disabled entirely for the product.
         subscription_interval_value:
           type: integer
           description: The subscription interval value.

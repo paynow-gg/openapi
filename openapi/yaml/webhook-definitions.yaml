@@ -12,6 +12,10 @@ paths: { }
 components:
   schemas:
     CheckoutDTO:
+      required:
+        - id
+        - metadata
+        - lines
       type: object
       properties:
         id:
@@ -33,6 +37,11 @@ components:
           description: The lines of the Checkout
           x-discordVariable: lines
     CheckoutLineDTO:
+      required:
+        - id
+        - product_id
+        - product_version_id
+        - metadata
       type: object
       properties:
         id:
@@ -60,6 +69,11 @@ components:
           description: Metadata associated with the Checkout Line
           x-discordVariable: metadata
     CustomerDTO:
+      required:
+        - id
+        - steam
+        - minecraft
+        - profile
       type: object
       properties:
         id:
@@ -69,7 +83,9 @@ components:
           example: '411486491630370816'
           x-discordVariable: id
         name:
-          type: string
+          type:
+            - 'null'
+            - string
           description: ''
           example: John
           x-discordVariable: name
@@ -80,6 +96,10 @@ components:
         profile:
           $ref: '#/components/schemas/GenericProfileDTO'
     GameServerDTO:
+      required:
+        - id
+        - name
+        - enabled
       type: object
       properties:
         id:
@@ -98,6 +118,11 @@ components:
           description: Indicates if the Game Server is enabled
           x-discordVariable: enabled
     GenericProfileDTO:
+      required:
+        - id
+        - platform
+        - name
+        - avatar_url
       type: object
       properties:
         id:
@@ -118,6 +143,10 @@ components:
           description: ''
           x-discordVariable: avatar_url
     MinecraftCustomerDTO:
+      required:
+        - id
+        - name
+        - avatar_url
       type: object
       properties:
         id:
@@ -134,6 +163,30 @@ components:
           description: ''
           x-discordVariable: avatar_url
     OrderDTO:
+      required:
+        - id
+        - store_id
+        - customer
+        - checkout_id
+        - checkout
+        - currency
+        - tax_inclusive
+        - tax_amount
+        - discount_amount
+        - subtotal_amount
+        - total_amount
+        - created_at
+        - completed_at
+        - billing_name
+        - billing_email
+        - billing_address_country
+        - customer_ip
+        - giftcard_usage_amount
+        - lines
+        - product_names
+        - product_tags
+        - product_gameservers
+        - status
       type: object
       properties:
         id:
@@ -159,13 +212,17 @@ components:
         checkout:
           $ref: '#/components/schemas/CheckoutDTO'
         subscription_id:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The Flake ID of the Subscription associated with the order
           format: flake-id
           example: '411486491630370816'
           x-discordVariable: subscription_id
         coupon_id:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The Flake ID of the Coupon associated with the order
           format: flake-id
           example: '411486491630370816'
@@ -264,6 +321,19 @@ components:
           example: created
           x-discordVariable: status
     OrderLineDTO:
+      required:
+        - id
+        - checkout_line_id
+        - product_id
+        - product_version_id
+        - product
+        - product_name
+        - price
+        - quantity
+        - discount_amount
+        - subtotal_amount
+        - tax_amount
+        - total_amount
       type: object
       properties:
         id:
@@ -297,33 +367,46 @@ components:
           description: The name of the product associated with this Order Line
           x-discordVariable: product_name
         product_image_url:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The Image URL of the Product associated with this Order Line
           x-discordVariable: product_image_url
         subscription_id:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The Flake ID of the Subscription associated with this Order Line
           format: flake-id
           example: '411486491630370816'
           x-discordVariable: subscription_id
         subscription_interval_value:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The value of the interval in which the subscription associated with this Order Line renews at
           example: 1
           x-discordVariable: subscription_interval_value
         subscription_interval_scale:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The value of the scale in which the subscription associated with this Order Line renews at
           example: month
           x-discordVariable: subscription_interval_scale
         trial_id:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The Flake ID of the Trial associated with this Order Line
           format: flake-id
           example: '411486491630370816'
           x-discordVariable: trial_id
         gift_to_customer:
-          $ref: '#/components/schemas/CustomerDTO'
+          oneOf:
+            - $ref: '#/components/schemas/CustomerDTO'
+            - type: 'null'
+          x-discordVariable: gift_to_customer
         price:
           type: integer
           description: The price of the Order Line
@@ -355,12 +438,18 @@ components:
           example: 1100
           x-discordVariable: total_amount
         selected_gameserver_id:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The Flake ID of which was the selected Game Server ID for the Order Line
           format: flake-id
           example: '411486491630370816'
           x-discordVariable: selected_gameserver_id
     ProductCommandDTO:
+      required:
+        - stage
+        - content
+        - online_only
       type: object
       properties:
         stage:
@@ -377,6 +466,26 @@ components:
           description: Indicated if the command should be executed only when the customer is online
           x-discordVariable: online_only
     ProductDTO:
+      required:
+        - id
+        - store_id
+        - version_id
+        - slug
+        - name
+        - description
+        - enabled
+        - sort_order
+        - price
+        - single_game_server_only
+        - allow_one_time_purchase
+        - allow_subscription
+        - remove_after_enabled
+        - tags
+        - tag_names
+        - gameservers
+        - gameserver_names
+        - commands
+        - metadata
       type: object
       properties:
         id:
@@ -398,7 +507,9 @@ components:
           example: '411486491630370816'
           x-discordVariable: version_id
         image_url:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The Image URL of the product
           x-discordVariable: image_url
         slug:
@@ -418,7 +529,9 @@ components:
           description: Indicates if the product is enabled.
           x-discordVariable: enabled
         label:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The label of the product
           x-discordVariable: label
         sort_order:
@@ -442,12 +555,16 @@ components:
           description: Indicates if subscriptions are supported on the product
           x-discordVariable: allow_subscription
         subscription_interval_value:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The value of the interval in which the product subscription renews at
           example: 1
           x-discordVariable: subscription_interval_value
         subscription_interval_scale:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The value of the interval in which the product subscription renews at
           example: month
           x-discordVariable: subscription_interval_scale
@@ -456,12 +573,16 @@ components:
           description: Indicates whether automatic removal is enabled
           x-discordVariable: remove_after_enabled
         remove_after_time_value:
-          type: integer
+          type:
+            - 'null'
+            - integer
           description: The value of the time in which this product should be removed
           example: 1
           x-discordVariable: remove_after_time_value
         remove_after_time_scale:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The scale of the time in which this product should be removed
           example: month
           x-discordVariable: remove_after_time_scale
@@ -492,12 +613,16 @@ components:
           description: The commands associated with the product
           x-discordVariable: commands
         created_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: When the product was created
           format: date-time
           x-discordVariable: created_at
         updated_at:
-          type: string
+          type:
+            - 'null'
+            - string
           description: When the product was last updated
           format: date-time
           x-discordVariable: updated_at
@@ -507,6 +632,10 @@ components:
             type: string
           description: The metadata of the product
     ProductGameServerDTO:
+      required:
+        - id
+        - name
+        - enabled
       type: object
       properties:
         id:
@@ -524,6 +653,10 @@ components:
           description: Indicates if the Game Server is enabled
           x-discordVariable: enabled
     ProductTagDTO:
+      required:
+        - id
+        - slug
+        - name
       type: object
       properties:
         id:
@@ -541,6 +674,10 @@ components:
           description: The name of the Product Tag
           x-discordVariable: name
     SteamCustomerDTO:
+      required:
+        - id
+        - name
+        - avatar_url
       type: object
       properties:
         id:
@@ -557,33 +694,90 @@ components:
           type: string
           description: The Steam Avatar URL
           x-discordVariable: avatar_url
+    WebhookEventType:
+      enum:
+        - ON_ORDER_COMPLETED
+        - ON_REFUND
+        - ON_CHARGEBACK
+        - ON_DELIVERY_ITEM_ADDED
+        - ON_DELIVERY_ITEM_ACTIVATED
+        - ON_DELIVERY_ITEM_USED
+        - ON_DELIVERY_ITEM_REVOKED
+        - ON_SUBSCRIPTION_ACTIVATED
+        - ON_SUBSCRIPTION_RENEWED
+        - ON_SUBSCRIPTION_CANCELED
+        - ON_DISCORD_ACCOUNT_LINKED_TO_CHECKOUT
+        - ON_CONNECTED_USER_REGISTERED
+        - ON_CONNECTED_USER_BECAME_PAYABLE
+        - ON_CONNECTED_USER_PAYOUT_CREATED
+        - ON_CONNECTED_USER_PAYOUT_COMPLETED
+        - ON_CONNECTED_USER_TRANSACTION_INSERTED
+        - ON_CONNECTED_USER_BECAME_UNPAYABLE
+        - ON_TRIAL_ACTIVATED
+        - ON_TRIAL_COMPLETED
+        - ON_TRIAL_CANCELED
+        - ON_PURCHASE_FOLLOW_UP_ATTEMPT_EMAIL_SENT
+        - ON_PURCHASE_FOLLOW_UP_ATTEMPT_SUCCEEDED
+        - ON_ABANDONED_CHECKOUT_RECOVERY_ATTEMPT_EMAIL_SENT
+        - ON_ABANDONED_CHECKOUT_RECOVERY_ATTEMPT_SUCCEEDED
+      type: string
+      description: The type of webhook event
 webhooks:
-  OnSubscriptionRenewed:
+  ON_SUBSCRIPTION_RENEWED:
     post:
       tags:
         - Webhooks
       summary: Triggered when a subscription is renewed
-      description: Webhook for OnSubscriptionRenewed
+      description: Webhook for ON_SUBSCRIPTION_RENEWED
       requestBody:
         content:
           application/json:
             schema:
               required:
                 - event_type
-                - timestamp
+                - event_id
                 - body
               type: object
               properties:
                 event_type:
-                  type: string
+                  allOf:
+                    - $ref: '#/components/schemas/WebhookEventType'
                   description: The type of webhook event
                   example: ON_SUBSCRIPTION_RENEWED
-                timestamp:
+                event_id:
                   type: string
-                  description: When the event occurred in ISO 8601 format
-                  format: date-time
-                  example: '2024-11-12T10:30:00Z'
+                  description: The ID of the Webhook Event
+                  format: flake-id
+                  example: '411486491630370816'
                 body:
+                  required:
+                    - id
+                    - store_id
+                    - customer_id
+                    - customer
+                    - billing_cycle_sequence
+                    - billing_email
+                    - subtotal_amount
+                    - tax_amount
+                    - discount_amount
+                    - total_amount
+                    - currency
+                    - interval_value
+                    - interval_scale
+                    - product_id
+                    - product_version_id
+                    - product_name
+                    - product
+                    - billing_country
+                    - initial_subtotal_amount
+                    - initial_tax_amount
+                    - initial_discount_amount
+                    - initial_giftcard_usage_amount
+                    - initial_total_amount
+                    - customer_ip
+                    - checkout_id
+                    - checkout_line_id
+                    - status
                   type: object
                   properties:
                     id:
@@ -669,7 +863,9 @@ webhooks:
                       example: Example Product
                       x-discordVariable: product_name
                     product_image_url:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The image URL of the Product associated with the Subscription
                       example: https://example.com/biz.jpg
                       x-discordVariable: product_image_url
@@ -711,25 +907,33 @@ webhooks:
                       example: 127.0.0.1/24
                       x-discordVariable: customer_ip
                     current_period_start:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The start date of the current billing period
                       format: date-time
                       example: '2024-03-01T00:00:00Z'
                       x-discordVariable: current_period_start
                     current_period_end:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The end date of the current billing period
                       format: date-time
                       example: '2024-06-01T00:00:00Z'
                       x-discordVariable: current_period_end
                     created_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The date and time when the Subscription was created
                       format: date-time
                       example: '2024-03-01T11:00:00Z'
                       x-discordVariable: created_at
                     active_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: Indicates when the subscription was active
                       format: date-time
                       example: '2024-03-01T11:05:00Z'
@@ -759,32 +963,47 @@ webhooks:
           description: Bad request
         '500':
           description: Internal server error
-  OnDiscordAccountLinkedToCheckout:
+  ON_DISCORD_ACCOUNT_LINKED_TO_CHECKOUT:
     post:
       tags:
         - Webhooks
       summary: Triggered when a Discord account is successfully linked to a checkout.
-      description: Webhook for OnDiscordAccountLinkedToCheckout
+      description: Webhook for ON_DISCORD_ACCOUNT_LINKED_TO_CHECKOUT
       requestBody:
         content:
           application/json:
             schema:
               required:
                 - event_type
-                - timestamp
+                - event_id
                 - body
               type: object
               properties:
                 event_type:
-                  type: string
+                  allOf:
+                    - $ref: '#/components/schemas/WebhookEventType'
                   description: The type of webhook event
                   example: ON_DISCORD_ACCOUNT_LINKED_TO_CHECKOUT
-                timestamp:
+                event_id:
                   type: string
-                  description: When the event occurred in ISO 8601 format
-                  format: date-time
-                  example: '2024-11-12T10:30:00Z'
+                  description: The ID of the Webhook Event
+                  format: flake-id
+                  example: '411486491630370816'
                 body:
+                  required:
+                    - store_id
+                    - customer_id
+                    - customer
+                    - checkout_id
+                    - checkout_line_id
+                    - order_id
+                    - order
+                    - discord_user_id
+                    - discord_user_name
+                    - discord_user_avatar_hash
+                    - product_id
+                    - product_version_id
+                    - product
                   type: object
                   properties:
                     store_id:
@@ -851,7 +1070,9 @@ webhooks:
                     product:
                       $ref: '#/components/schemas/ProductDTO'
                     enqueued_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: Indicates when the Discord account link was enqueued
                       format: date-time
                       example: '2024-01-15T10:30:00Z'
@@ -864,32 +1085,41 @@ webhooks:
           description: Bad request
         '500':
           description: Internal server error
-  OnDeliveryItemAdded:
+  ON_DELIVERY_ITEM_ADDED:
     post:
       tags:
         - Webhooks
       summary: Triggered when a delivery item is added to the customers inventory
-      description: Webhook for OnDeliveryItemAdded
+      description: Webhook for ON_DELIVERY_ITEM_ADDED
       requestBody:
         content:
           application/json:
             schema:
               required:
                 - event_type
-                - timestamp
+                - event_id
                 - body
               type: object
               properties:
                 event_type:
-                  type: string
+                  allOf:
+                    - $ref: '#/components/schemas/WebhookEventType'
                   description: The type of webhook event
                   example: ON_DELIVERY_ITEM_ADDED
-                timestamp:
+                event_id:
                   type: string
-                  description: When the event occurred in ISO 8601 format
-                  format: date-time
-                  example: '2024-11-12T10:30:00Z'
+                  description: The ID of the Webhook Event
+                  format: flake-id
+                  example: '411486491630370816'
                 body:
+                  required:
+                    - id
+                    - store_id
+                    - product_id
+                    - product_version_id
+                    - product
+                    - state
+                    - added_at
                   type: object
                   properties:
                     id:
@@ -905,45 +1135,63 @@ webhooks:
                       example: '411486491630370816'
                       x-discordVariable: store_id
                     customer:
-                      $ref: '#/components/schemas/CustomerDTO'
+                      oneOf:
+                        - $ref: '#/components/schemas/CustomerDTO'
+                        - type: 'null'
+                      x-discordVariable: customer
                     order_customer_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake ID of the customer who ordered the delivery item - which may differ to the customer because of gifting
                       format: flake-id
                       example: '411486491630370816'
                       x-discordVariable: order_customer_id
                     checkout_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake ID of the Checkout associated with the Delivery Item
                       format: flake-id
                       example: '411486491630370816'
                       x-discordVariable: checkout_id
                     order_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake ID of the Order ID associated with the Delivery Item
                       format: flake-id
                       example: '411486491630370816'
                       x-discordVariable: order_id
                     order_line_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake Id of the Order Line ID associated with the Delivery Item
                       format: flake-id
                       example: '411486491630370816'
                       x-discordVariable: order_line_id
                     subscription_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake ID of the Subscription associated with the Delivery Item
                       format: flake-id
                       example: '411486491630370816'
                       x-discordVariable: subscription_id
                     execute_on_gameserver_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake ID of the Game Server the Delivery Item is associated with
                       format: flake-id
                       example: '411486491630370816'
                       x-discordVariable: execute_on_gameserver_id
                     execute_on_gameserver:
-                      $ref: '#/components/schemas/GameServerDTO'
+                      oneOf:
+                        - $ref: '#/components/schemas/GameServerDTO'
+                        - type: 'null'
+                      x-discordVariable: execute_on_gameserver
                     product_id:
                       type: string
                       description: The associated Product ID of the Delivery Item
@@ -970,31 +1218,41 @@ webhooks:
                       example: '2024-01-10T08:00:00Z'
                       x-discordVariable: added_at
                     active_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: Indicates when the Delivery Item become active
                       format: date-time
                       example: '2024-01-10T09:00:00Z'
                       x-discordVariable: active_at
                     expires_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: Indicates when the Delivery Item expires
                       format: date-time
                       example: '2024-12-31T23:59:59Z'
                       x-discordVariable: expires_at
                     removed_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: Indicates when the Delivery Item was removed from the customers inventory
                       format: date-time
                       example: '2024-02-01T10:00:00Z'
                       x-discordVariable: removed_at
                     revoked_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: Indicates when the Delivery Item was revoked from the customers inventory
                       format: date-time
                       example: '2024-02-05T14:30:00Z'
                       x-discordVariable: revoked_at
                     revoke_reason:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: Indicates the reason the delivery item was revoked from the customers inventory
                       x-discordVariable: revoke_reason
         required: true
@@ -1005,32 +1263,41 @@ webhooks:
           description: Bad request
         '500':
           description: Internal server error
-  OnDeliveryItemActivated:
+  ON_DELIVERY_ITEM_ACTIVATED:
     post:
       tags:
         - Webhooks
       summary: Triggered when a delivery item in the customers inventory activates
-      description: Webhook for OnDeliveryItemActivated
+      description: Webhook for ON_DELIVERY_ITEM_ACTIVATED
       requestBody:
         content:
           application/json:
             schema:
               required:
                 - event_type
-                - timestamp
+                - event_id
                 - body
               type: object
               properties:
                 event_type:
-                  type: string
+                  allOf:
+                    - $ref: '#/components/schemas/WebhookEventType'
                   description: The type of webhook event
                   example: ON_DELIVERY_ITEM_ACTIVATED
-                timestamp:
+                event_id:
                   type: string
-                  description: When the event occurred in ISO 8601 format
-                  format: date-time
-                  example: '2024-11-12T10:30:00Z'
+                  description: The ID of the Webhook Event
+                  format: flake-id
+                  example: '411486491630370816'
                 body:
+                  required:
+                    - id
+                    - store_id
+                    - product_id
+                    - product_version_id
+                    - product
+                    - state
+                    - added_at
                   type: object
                   properties:
                     id:
@@ -1046,45 +1313,63 @@ webhooks:
                       example: '411486491630370816'
                       x-discordVariable: store_id
                     customer:
-                      $ref: '#/components/schemas/CustomerDTO'
+                      oneOf:
+                        - $ref: '#/components/schemas/CustomerDTO'
+                        - type: 'null'
+                      x-discordVariable: customer
                     order_customer_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake ID of the customer who ordered the delivery item - which may differ to the customer because of gifting
                       format: flake-id
                       example: '411486491630370816'
                       x-discordVariable: order_customer_id
                     checkout_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake ID of the Checkout associated with the Delivery Item
                       format: flake-id
                       example: '411486491630370816'
                       x-discordVariable: checkout_id
                     order_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake ID of the Order ID associated with the Delivery Item
                       format: flake-id
                       example: '411486491630370816'
                       x-discordVariable: order_id
                     order_line_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake Id of the Order Line ID associated with the Delivery Item
                       format: flake-id
                       example: '411486491630370816'
                       x-discordVariable: order_line_id
                     subscription_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake ID of the Subscription associated with the Delivery Item
                       format: flake-id
                       example: '411486491630370816'
                       x-discordVariable: subscription_id
                     execute_on_gameserver_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake ID of the Game Server the Delivery Item is associated with
                       format: flake-id
                       example: '411486491630370816'
                       x-discordVariable: execute_on_gameserver_id
                     execute_on_gameserver:
-                      $ref: '#/components/schemas/GameServerDTO'
+                      oneOf:
+                        - $ref: '#/components/schemas/GameServerDTO'
+                        - type: 'null'
+                      x-discordVariable: execute_on_gameserver
                     product_id:
                       type: string
                       description: The associated Product ID of the Delivery Item
@@ -1111,31 +1396,41 @@ webhooks:
                       example: '2024-01-10T08:00:00Z'
                       x-discordVariable: added_at
                     active_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: Indicates when the Delivery Item become active
                       format: date-time
                       example: '2024-01-10T09:00:00Z'
                       x-discordVariable: active_at
                     expires_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: Indicates when the Delivery Item expires
                       format: date-time
                       example: '2024-12-31T23:59:59Z'
                       x-discordVariable: expires_at
                     removed_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: Indicates when the Delivery Item was removed from the customers inventory
                       format: date-time
                       example: '2024-02-01T10:00:00Z'
                       x-discordVariable: removed_at
                     revoked_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: Indicates when the Delivery Item was revoked from the customers inventory
                       format: date-time
                       example: '2024-02-05T14:30:00Z'
                       x-discordVariable: revoked_at
                     revoke_reason:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: Indicates the reason the delivery item was revoked from the customers inventory
                       x-discordVariable: revoke_reason
         required: true
@@ -1146,32 +1441,41 @@ webhooks:
           description: Bad request
         '500':
           description: Internal server error
-  OnDeliveryItemUsed:
+  ON_DELIVERY_ITEM_USED:
     post:
       tags:
         - Webhooks
       summary: Triggered when a delivery item in the customers inventory becomes used
-      description: Webhook for OnDeliveryItemUsed
+      description: Webhook for ON_DELIVERY_ITEM_USED
       requestBody:
         content:
           application/json:
             schema:
               required:
                 - event_type
-                - timestamp
+                - event_id
                 - body
               type: object
               properties:
                 event_type:
-                  type: string
+                  allOf:
+                    - $ref: '#/components/schemas/WebhookEventType'
                   description: The type of webhook event
                   example: ON_DELIVERY_ITEM_USED
-                timestamp:
+                event_id:
                   type: string
-                  description: When the event occurred in ISO 8601 format
-                  format: date-time
-                  example: '2024-11-12T10:30:00Z'
+                  description: The ID of the Webhook Event
+                  format: flake-id
+                  example: '411486491630370816'
                 body:
+                  required:
+                    - id
+                    - store_id
+                    - product_id
+                    - product_version_id
+                    - product
+                    - state
+                    - added_at
                   type: object
                   properties:
                     id:
@@ -1187,45 +1491,63 @@ webhooks:
                       example: '411486491630370816'
                       x-discordVariable: store_id
                     customer:
-                      $ref: '#/components/schemas/CustomerDTO'
+                      oneOf:
+                        - $ref: '#/components/schemas/CustomerDTO'
+                        - type: 'null'
+                      x-discordVariable: customer
                     order_customer_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake ID of the customer who ordered the delivery item - which may differ to the customer because of gifting
                       format: flake-id
                       example: '411486491630370816'
                       x-discordVariable: order_customer_id
                     checkout_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake ID of the Checkout associated with the Delivery Item
                       format: flake-id
                       example: '411486491630370816'
                       x-discordVariable: checkout_id
                     order_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake ID of the Order ID associated with the Delivery Item
                       format: flake-id
                       example: '411486491630370816'
                       x-discordVariable: order_id
                     order_line_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake Id of the Order Line ID associated with the Delivery Item
                       format: flake-id
                       example: '411486491630370816'
                       x-discordVariable: order_line_id
                     subscription_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake ID of the Subscription associated with the Delivery Item
                       format: flake-id
                       example: '411486491630370816'
                       x-discordVariable: subscription_id
                     execute_on_gameserver_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake ID of the Game Server the Delivery Item is associated with
                       format: flake-id
                       example: '411486491630370816'
                       x-discordVariable: execute_on_gameserver_id
                     execute_on_gameserver:
-                      $ref: '#/components/schemas/GameServerDTO'
+                      oneOf:
+                        - $ref: '#/components/schemas/GameServerDTO'
+                        - type: 'null'
+                      x-discordVariable: execute_on_gameserver
                     product_id:
                       type: string
                       description: The associated Product ID of the Delivery Item
@@ -1252,31 +1574,41 @@ webhooks:
                       example: '2024-01-10T08:00:00Z'
                       x-discordVariable: added_at
                     active_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: Indicates when the Delivery Item become active
                       format: date-time
                       example: '2024-01-10T09:00:00Z'
                       x-discordVariable: active_at
                     expires_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: Indicates when the Delivery Item expires
                       format: date-time
                       example: '2024-12-31T23:59:59Z'
                       x-discordVariable: expires_at
                     removed_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: Indicates when the Delivery Item was removed from the customers inventory
                       format: date-time
                       example: '2024-02-01T10:00:00Z'
                       x-discordVariable: removed_at
                     revoked_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: Indicates when the Delivery Item was revoked from the customers inventory
                       format: date-time
                       example: '2024-02-05T14:30:00Z'
                       x-discordVariable: revoked_at
                     revoke_reason:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: Indicates the reason the delivery item was revoked from the customers inventory
                       x-discordVariable: revoke_reason
         required: true
@@ -1287,32 +1619,41 @@ webhooks:
           description: Bad request
         '500':
           description: Internal server error
-  OnDeliveryItemRevoked:
+  ON_DELIVERY_ITEM_REVOKED:
     post:
       tags:
         - Webhooks
       summary: Triggered when a delivery item is revoked from the customers inventory
-      description: Webhook for OnDeliveryItemRevoked
+      description: Webhook for ON_DELIVERY_ITEM_REVOKED
       requestBody:
         content:
           application/json:
             schema:
               required:
                 - event_type
-                - timestamp
+                - event_id
                 - body
               type: object
               properties:
                 event_type:
-                  type: string
+                  allOf:
+                    - $ref: '#/components/schemas/WebhookEventType'
                   description: The type of webhook event
                   example: ON_DELIVERY_ITEM_REVOKED
-                timestamp:
+                event_id:
                   type: string
-                  description: When the event occurred in ISO 8601 format
-                  format: date-time
-                  example: '2024-11-12T10:30:00Z'
+                  description: The ID of the Webhook Event
+                  format: flake-id
+                  example: '411486491630370816'
                 body:
+                  required:
+                    - id
+                    - store_id
+                    - product_id
+                    - product_version_id
+                    - product
+                    - state
+                    - added_at
                   type: object
                   properties:
                     id:
@@ -1328,45 +1669,63 @@ webhooks:
                       example: '411486491630370816'
                       x-discordVariable: store_id
                     customer:
-                      $ref: '#/components/schemas/CustomerDTO'
+                      oneOf:
+                        - $ref: '#/components/schemas/CustomerDTO'
+                        - type: 'null'
+                      x-discordVariable: customer
                     order_customer_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake ID of the customer who ordered the delivery item - which may differ to the customer because of gifting
                       format: flake-id
                       example: '411486491630370816'
                       x-discordVariable: order_customer_id
                     checkout_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake ID of the Checkout associated with the Delivery Item
                       format: flake-id
                       example: '411486491630370816'
                       x-discordVariable: checkout_id
                     order_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake ID of the Order ID associated with the Delivery Item
                       format: flake-id
                       example: '411486491630370816'
                       x-discordVariable: order_id
                     order_line_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake Id of the Order Line ID associated with the Delivery Item
                       format: flake-id
                       example: '411486491630370816'
                       x-discordVariable: order_line_id
                     subscription_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake ID of the Subscription associated with the Delivery Item
                       format: flake-id
                       example: '411486491630370816'
                       x-discordVariable: subscription_id
                     execute_on_gameserver_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake ID of the Game Server the Delivery Item is associated with
                       format: flake-id
                       example: '411486491630370816'
                       x-discordVariable: execute_on_gameserver_id
                     execute_on_gameserver:
-                      $ref: '#/components/schemas/GameServerDTO'
+                      oneOf:
+                        - $ref: '#/components/schemas/GameServerDTO'
+                        - type: 'null'
+                      x-discordVariable: execute_on_gameserver
                     product_id:
                       type: string
                       description: The associated Product ID of the Delivery Item
@@ -1393,31 +1752,41 @@ webhooks:
                       example: '2024-01-10T08:00:00Z'
                       x-discordVariable: added_at
                     active_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: Indicates when the Delivery Item become active
                       format: date-time
                       example: '2024-01-10T09:00:00Z'
                       x-discordVariable: active_at
                     expires_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: Indicates when the Delivery Item expires
                       format: date-time
                       example: '2024-12-31T23:59:59Z'
                       x-discordVariable: expires_at
                     removed_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: Indicates when the Delivery Item was removed from the customers inventory
                       format: date-time
                       example: '2024-02-01T10:00:00Z'
                       x-discordVariable: removed_at
                     revoked_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: Indicates when the Delivery Item was revoked from the customers inventory
                       format: date-time
                       example: '2024-02-05T14:30:00Z'
                       x-discordVariable: revoked_at
                     revoke_reason:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: Indicates the reason the delivery item was revoked from the customers inventory
                       x-discordVariable: revoke_reason
         required: true
@@ -1428,32 +1797,57 @@ webhooks:
           description: Bad request
         '500':
           description: Internal server error
-  OnOrderCompleted:
+  ON_ORDER_COMPLETED:
     post:
       tags:
         - Webhooks
       summary: Triggered when an order is completed
-      description: Webhook for OnOrderCompleted
+      description: Webhook for ON_ORDER_COMPLETED
       requestBody:
         content:
           application/json:
             schema:
               required:
                 - event_type
-                - timestamp
+                - event_id
                 - body
               type: object
               properties:
                 event_type:
-                  type: string
+                  allOf:
+                    - $ref: '#/components/schemas/WebhookEventType'
                   description: The type of webhook event
                   example: ON_ORDER_COMPLETED
-                timestamp:
+                event_id:
                   type: string
-                  description: When the event occurred in ISO 8601 format
-                  format: date-time
-                  example: '2024-11-12T10:30:00Z'
+                  description: The ID of the Webhook Event
+                  format: flake-id
+                  example: '411486491630370816'
                 body:
+                  required:
+                    - id
+                    - store_id
+                    - customer
+                    - checkout_id
+                    - checkout
+                    - currency
+                    - tax_inclusive
+                    - tax_amount
+                    - discount_amount
+                    - subtotal_amount
+                    - total_amount
+                    - created_at
+                    - completed_at
+                    - billing_name
+                    - billing_email
+                    - billing_address_country
+                    - customer_ip
+                    - giftcard_usage_amount
+                    - lines
+                    - product_names
+                    - product_tags
+                    - product_gameservers
+                    - status
                   type: object
                   properties:
                     id:
@@ -1479,13 +1873,17 @@ webhooks:
                     checkout:
                       $ref: '#/components/schemas/CheckoutDTO'
                     subscription_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake ID of the Subscription associated with the order
                       format: flake-id
                       example: '411486491630370816'
                       x-discordVariable: subscription_id
                     coupon_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake ID of the Coupon associated with the order
                       format: flake-id
                       example: '411486491630370816'
@@ -1591,32 +1989,47 @@ webhooks:
           description: Bad request
         '500':
           description: Internal server error
-  OnChargeback:
+  ON_CHARGEBACK:
     post:
       tags:
         - Webhooks
       summary: Triggered when a chargeback is created
-      description: Webhook for OnChargeback
+      description: Webhook for ON_CHARGEBACK
       requestBody:
         content:
           application/json:
             schema:
               required:
                 - event_type
-                - timestamp
+                - event_id
                 - body
               type: object
               properties:
                 event_type:
-                  type: string
+                  allOf:
+                    - $ref: '#/components/schemas/WebhookEventType'
                   description: The type of webhook event
                   example: ON_CHARGEBACK
-                timestamp:
+                event_id:
                   type: string
-                  description: When the event occurred in ISO 8601 format
-                  format: date-time
-                  example: '2024-11-12T10:30:00Z'
+                  description: The ID of the Webhook Event
+                  format: flake-id
+                  example: '411486491630370816'
                 body:
+                  required:
+                    - id
+                    - store_id
+                    - order_id
+                    - gateway
+                    - currency
+                    - tax_inclusive
+                    - amount
+                    - gateway_fee_amount
+                    - tax_amount
+                    - platform_fee_amount
+                    - store_net_amount
+                    - status
+                    - chargeback_at
                   type: object
                   properties:
                     id:
@@ -1638,7 +2051,10 @@ webhooks:
                       example: '411486491630370816'
                       x-discordVariable: order_id
                     customer:
-                      $ref: '#/components/schemas/CustomerDTO'
+                      oneOf:
+                        - $ref: '#/components/schemas/CustomerDTO'
+                        - type: 'null'
+                      x-discordVariable: customer
                     gateway:
                       type: string
                       description: The Payment Gateway of the Payment
@@ -1697,32 +2113,53 @@ webhooks:
           description: Bad request
         '500':
           description: Internal server error
-  OnRefund:
+  ON_REFUND:
     post:
       tags:
         - Webhooks
       summary: Triggered when a refund is completed
-      description: Webhook for OnRefund
+      description: Webhook for ON_REFUND
       requestBody:
         content:
           application/json:
             schema:
               required:
                 - event_type
-                - timestamp
+                - event_id
                 - body
               type: object
               properties:
                 event_type:
-                  type: string
+                  allOf:
+                    - $ref: '#/components/schemas/WebhookEventType'
                   description: The type of webhook event
                   example: ON_REFUND
-                timestamp:
+                event_id:
                   type: string
-                  description: When the event occurred in ISO 8601 format
-                  format: date-time
-                  example: '2024-11-12T10:30:00Z'
+                  description: The ID of the Webhook Event
+                  format: flake-id
+                  example: '411486491630370816'
                 body:
+                  required:
+                    - id
+                    - store_id
+                    - order_id
+                    - payment_id
+                    - gateway
+                    - currency
+                    - tax_inclusive
+                    - amount
+                    - gateway_fee_amount
+                    - tax_amount
+                    - platform_fee_amount
+                    - store_net_amount
+                    - store_refund_amount
+                    - created_at
+                    - approved_at
+                    - pending_at
+                    - completed_at
+                    - billing_email
+                    - status
                   type: object
                   properties:
                     id:
@@ -1744,7 +2181,10 @@ webhooks:
                       example: '411486491630370816'
                       x-discordVariable: order_id
                     customer:
-                      $ref: '#/components/schemas/CustomerDTO'
+                      oneOf:
+                        - $ref: '#/components/schemas/CustomerDTO'
+                        - type: 'null'
+                      x-discordVariable: customer
                     payment_id:
                       type: string
                       description: The Flake ID of the Payment associated with the refund
@@ -1837,32 +2277,61 @@ webhooks:
           description: Bad request
         '500':
           description: Internal server error
-  OnSubscriptionActivated:
+  ON_SUBSCRIPTION_ACTIVATED:
     post:
       tags:
         - Webhooks
       summary: Triggered when a subscription is activated
-      description: Webhook for OnSubscriptionActivated
+      description: Webhook for ON_SUBSCRIPTION_ACTIVATED
       requestBody:
         content:
           application/json:
             schema:
               required:
                 - event_type
-                - timestamp
+                - event_id
                 - body
               type: object
               properties:
                 event_type:
-                  type: string
+                  allOf:
+                    - $ref: '#/components/schemas/WebhookEventType'
                   description: The type of webhook event
                   example: ON_SUBSCRIPTION_ACTIVATED
-                timestamp:
+                event_id:
                   type: string
-                  description: When the event occurred in ISO 8601 format
-                  format: date-time
-                  example: '2024-11-12T10:30:00Z'
+                  description: The ID of the Webhook Event
+                  format: flake-id
+                  example: '411486491630370816'
                 body:
+                  required:
+                    - id
+                    - store_id
+                    - customer_id
+                    - customer
+                    - billing_cycle_sequence
+                    - billing_email
+                    - subtotal_amount
+                    - tax_amount
+                    - discount_amount
+                    - total_amount
+                    - currency
+                    - interval_value
+                    - interval_scale
+                    - product_id
+                    - product_version_id
+                    - product_name
+                    - product
+                    - billing_country
+                    - initial_subtotal_amount
+                    - initial_tax_amount
+                    - initial_discount_amount
+                    - initial_giftcard_usage_amount
+                    - initial_total_amount
+                    - customer_ip
+                    - checkout_id
+                    - checkout_line_id
+                    - status
                   type: object
                   properties:
                     id:
@@ -1948,7 +2417,9 @@ webhooks:
                       example: Example Product
                       x-discordVariable: product_name
                     product_image_url:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The image URL of the Product associated with the Subscription
                       example: https://example.com/image.jpg
                       x-discordVariable: product_image_url
@@ -1990,25 +2461,33 @@ webhooks:
                       example: 127.0.0.1/24
                       x-discordVariable: customer_ip
                     current_period_start:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The start date of the current billing period
                       format: date-time
                       example: '2024-02-01T00:00:00Z'
                       x-discordVariable: current_period_start
                     current_period_end:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The end date of the current billing period
                       format: date-time
                       example: '2024-03-01T00:00:00Z'
                       x-discordVariable: current_period_end
                     created_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The date and time when the Subscription was created
                       format: date-time
                       example: '2024-02-01T10:15:00Z'
                       x-discordVariable: created_at
                     active_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: Indicates when the subscription was active
                       format: date-time
                       example: '2024-02-01T10:20:00Z'
@@ -2038,32 +2517,61 @@ webhooks:
           description: Bad request
         '500':
           description: Internal server error
-  OnSubscriptionCanceled:
+  ON_SUBSCRIPTION_CANCELED:
     post:
       tags:
         - Webhooks
       summary: Triggered when a subscription is canceled
-      description: Webhook for OnSubscriptionCanceled
+      description: Webhook for ON_SUBSCRIPTION_CANCELED
       requestBody:
         content:
           application/json:
             schema:
               required:
                 - event_type
-                - timestamp
+                - event_id
                 - body
               type: object
               properties:
                 event_type:
-                  type: string
+                  allOf:
+                    - $ref: '#/components/schemas/WebhookEventType'
                   description: The type of webhook event
                   example: ON_SUBSCRIPTION_CANCELED
-                timestamp:
+                event_id:
                   type: string
-                  description: When the event occurred in ISO 8601 format
-                  format: date-time
-                  example: '2024-11-12T10:30:00Z'
+                  description: The ID of the Webhook Event
+                  format: flake-id
+                  example: '411486491630370816'
                 body:
+                  required:
+                    - id
+                    - store_id
+                    - customer_id
+                    - customer
+                    - billing_cycle_sequence
+                    - billing_email
+                    - subtotal_amount
+                    - tax_amount
+                    - discount_amount
+                    - total_amount
+                    - currency
+                    - interval_value
+                    - interval_scale
+                    - product_id
+                    - product_version_id
+                    - product_name
+                    - product
+                    - billing_country
+                    - initial_subtotal_amount
+                    - initial_tax_amount
+                    - initial_discount_amount
+                    - initial_giftcard_usage_amount
+                    - initial_total_amount
+                    - customer_ip
+                    - checkout_id
+                    - checkout_line_id
+                    - status
                   type: object
                   properties:
                     id:
@@ -2149,7 +2657,9 @@ webhooks:
                       example: Starter Plan
                       x-discordVariable: product_name
                     product_image_url:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The image URL of the Product associated with the Subscription
                       example: https://example.com/starter.jpg
                       x-discordVariable: product_image_url
@@ -2191,37 +2701,49 @@ webhooks:
                       example: 127.0.0.1/24
                       x-discordVariable: customer_ip
                     current_period_start:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The start date of the current billing period
                       format: date-time
                       example: '2024-04-01T00:00:00Z'
                       x-discordVariable: current_period_start
                     current_period_end:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The end date of the current billing period
                       format: date-time
                       example: '2025-04-01T00:00:00Z'
                       x-discordVariable: current_period_end
                     created_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The date and time when the Subscription was created
                       format: date-time
                       example: '2024-04-01T09:30:00Z'
                       x-discordVariable: created_at
                     active_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: Indicates when the subscription was active
                       format: date-time
                       example: '2024-04-01T09:35:00Z'
                       x-discordVariable: active_at
                     canceled_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: Indicates when the subscription was canceled
                       format: date-time
                       example: '2024-05-15T14:20:00Z'
                       x-discordVariable: canceled_at
                     cancel_reason:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The reason for the subscription cancellation
                       example: customer_request
                       x-discordVariable: cancel_reason
@@ -2250,32 +2772,45 @@ webhooks:
           description: Bad request
         '500':
           description: Internal server error
-  OnTrialActivated:
+  ON_TRIAL_ACTIVATED:
     post:
       tags:
         - Webhooks
       summary: Triggered when a trial is activated
-      description: Webhook for OnTrialActivated
+      description: Webhook for ON_TRIAL_ACTIVATED
       requestBody:
         content:
           application/json:
             schema:
               required:
                 - event_type
-                - timestamp
+                - event_id
                 - body
               type: object
               properties:
                 event_type:
-                  type: string
+                  allOf:
+                    - $ref: '#/components/schemas/WebhookEventType'
                   description: The type of webhook event
                   example: ON_TRIAL_ACTIVATED
-                timestamp:
+                event_id:
                   type: string
-                  description: When the event occurred in ISO 8601 format
-                  format: date-time
-                  example: '2024-11-12T10:30:00Z'
+                  description: The ID of the Webhook Event
+                  format: flake-id
+                  example: '411486491630370816'
                 body:
+                  required:
+                    - id
+                    - store_id
+                    - customer_id
+                    - customer
+                    - product_id
+                    - product_version_id
+                    - product_name
+                    - period_value
+                    - period_scale
+                    - status
+                    - created_at
                   type: object
                   properties:
                     id:
@@ -2299,13 +2834,17 @@ webhooks:
                     customer:
                       $ref: '#/components/schemas/CustomerDTO'
                     checkout_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake ID of the Checkout associated with the Trial
                       format: flake-id
                       example: '411486491630370816'
                       x-discordVariable: checkout_id
                     checkout_line_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake ID of the Checkout Line associated with the Trial
                       format: flake-id
                       example: '411486491630370816'
@@ -2328,7 +2867,9 @@ webhooks:
                       example: Example Product
                       x-discordVariable: product_name
                     product_image_url:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The image URL of the Product associated with the Trial
                       example: https://example.com/image.jpg
                       x-discordVariable: product_image_url
@@ -2343,13 +2884,17 @@ webhooks:
                       example: month
                       x-discordVariable: period_scale
                     starts_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The start date of the Trial
                       format: date-time
                       example: '2024-06-10T00:00:00Z'
                       x-discordVariable: starts_at
                     ends_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The end date of the Trial
                       format: date-time
                       example: '2024-06-17T23:59:59Z'
@@ -2366,7 +2911,9 @@ webhooks:
                       example: '2024-06-10T08:30:00Z'
                       x-discordVariable: created_at
                     canceled_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: Indicates when the Trial was canceled
                       format: date-time
                       example: '2024-06-15T10:15:00Z'
@@ -2379,32 +2926,45 @@ webhooks:
           description: Bad request
         '500':
           description: Internal server error
-  OnTrialCompleted:
+  ON_TRIAL_COMPLETED:
     post:
       tags:
         - Webhooks
       summary: Triggered when a trial is completed
-      description: Webhook for OnTrialCompleted
+      description: Webhook for ON_TRIAL_COMPLETED
       requestBody:
         content:
           application/json:
             schema:
               required:
                 - event_type
-                - timestamp
+                - event_id
                 - body
               type: object
               properties:
                 event_type:
-                  type: string
+                  allOf:
+                    - $ref: '#/components/schemas/WebhookEventType'
                   description: The type of webhook event
                   example: ON_TRIAL_COMPLETED
-                timestamp:
+                event_id:
                   type: string
-                  description: When the event occurred in ISO 8601 format
-                  format: date-time
-                  example: '2024-11-12T10:30:00Z'
+                  description: The ID of the Webhook Event
+                  format: flake-id
+                  example: '411486491630370816'
                 body:
+                  required:
+                    - id
+                    - store_id
+                    - customer_id
+                    - customer
+                    - product_id
+                    - product_version_id
+                    - product_name
+                    - period_value
+                    - period_scale
+                    - status
+                    - created_at
                   type: object
                   properties:
                     id:
@@ -2428,13 +2988,17 @@ webhooks:
                     customer:
                       $ref: '#/components/schemas/CustomerDTO'
                     checkout_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake ID of the Checkout associated with the Trial
                       format: flake-id
                       example: '411486491630370816'
                       x-discordVariable: checkout_id
                     checkout_line_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake ID of the Checkout Line associated with the Trial
                       format: flake-id
                       example: '411486491630370816'
@@ -2457,7 +3021,9 @@ webhooks:
                       example: Example Product
                       x-discordVariable: product_name
                     product_image_url:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The image URL of the Product associated with the Trial
                       example: https://example.com/image.jpg
                       x-discordVariable: product_image_url
@@ -2472,13 +3038,17 @@ webhooks:
                       example: month
                       x-discordVariable: period_scale
                     starts_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The start date of the Trial
                       format: date-time
                       example: '2024-06-10T00:00:00Z'
                       x-discordVariable: starts_at
                     ends_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The end date of the Trial
                       format: date-time
                       example: '2024-06-17T23:59:59Z'
@@ -2495,7 +3065,9 @@ webhooks:
                       example: '2024-06-10T08:30:00Z'
                       x-discordVariable: created_at
                     canceled_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: Indicates when the Trial was canceled
                       format: date-time
                       example: '2024-06-15T10:15:00Z'
@@ -2508,32 +3080,45 @@ webhooks:
           description: Bad request
         '500':
           description: Internal server error
-  OnTrialCanceled:
+  ON_TRIAL_CANCELED:
     post:
       tags:
         - Webhooks
       summary: Triggered when a trial is canceled
-      description: Webhook for OnTrialCanceled
+      description: Webhook for ON_TRIAL_CANCELED
       requestBody:
         content:
           application/json:
             schema:
               required:
                 - event_type
-                - timestamp
+                - event_id
                 - body
               type: object
               properties:
                 event_type:
-                  type: string
+                  allOf:
+                    - $ref: '#/components/schemas/WebhookEventType'
                   description: The type of webhook event
-                  example: ON_TRIAL_CANCELLED
-                timestamp:
+                  example: ON_TRIAL_CANCELED
+                event_id:
                   type: string
-                  description: When the event occurred in ISO 8601 format
-                  format: date-time
-                  example: '2024-11-12T10:30:00Z'
+                  description: The ID of the Webhook Event
+                  format: flake-id
+                  example: '411486491630370816'
                 body:
+                  required:
+                    - id
+                    - store_id
+                    - customer_id
+                    - customer
+                    - product_id
+                    - product_version_id
+                    - product_name
+                    - period_value
+                    - period_scale
+                    - status
+                    - created_at
                   type: object
                   properties:
                     id:
@@ -2557,13 +3142,17 @@ webhooks:
                     customer:
                       $ref: '#/components/schemas/CustomerDTO'
                     checkout_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake ID of the Checkout associated with the Trial
                       format: flake-id
                       example: '411486491630370816'
                       x-discordVariable: checkout_id
                     checkout_line_id:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The Flake ID of the Checkout Line associated with the Trial
                       format: flake-id
                       example: '411486491630370816'
@@ -2586,7 +3175,9 @@ webhooks:
                       example: Example Product
                       x-discordVariable: product_name
                     product_image_url:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The image URL of the Product associated with the Trial
                       example: https://example.com/image.jpg
                       x-discordVariable: product_image_url
@@ -2601,13 +3192,17 @@ webhooks:
                       example: month
                       x-discordVariable: period_scale
                     starts_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The start date of the Trial
                       format: date-time
                       example: '2024-06-10T00:00:00Z'
                       x-discordVariable: starts_at
                     ends_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: The end date of the Trial
                       format: date-time
                       example: '2024-06-17T23:59:59Z'
@@ -2624,7 +3219,9 @@ webhooks:
                       example: '2024-06-10T08:30:00Z'
                       x-discordVariable: created_at
                     canceled_at:
-                      type: string
+                      type:
+                        - 'null'
+                        - string
                       description: Indicates when the Trial was canceled
                       format: date-time
                       example: '2024-06-15T10:15:00Z'

@@ -7312,6 +7312,10 @@ components:
             - 'null'
             - string
           format: date-time
+        last_fetched_commands_from_ip:
+          type:
+            - 'null'
+            - string
       additionalProperties: false
     GenericProfileDto:
       required:

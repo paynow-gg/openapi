@@ -433,6 +433,7 @@
       },
       "LinkGameServerRequestDto": {
         "required": [
+          "hostname",
           "ip",
           "platform",
           "version"
@@ -440,6 +441,9 @@
         "type": "object",
         "properties": {
           "ip": {
+            "type": "string"
+          },
+          "hostname": {
             "type": "string"
           },
           "platform": {

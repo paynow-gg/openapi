@@ -286,12 +286,15 @@ components:
       example: 127.0.0.1
     LinkGameServerRequestDto:
       required:
+        - hostname
         - ip
         - platform
         - version
       type: object
       properties:
         ip:
+          type: string
+        hostname:
           type: string
         platform:
           type: string

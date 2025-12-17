@@ -5888,6 +5888,10 @@ components:
             - 'null'
             - string
           format: date-time
+        executed_by_ip:
+          type:
+            - 'null'
+            - string
         unqueued_at:
           type:
             - 'null'

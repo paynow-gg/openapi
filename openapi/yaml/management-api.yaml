@@ -3653,6 +3653,138 @@ paths:
                 $ref: '#/components/schemas/PayNowError'
       security:
         - APIKey: [ ]
+  '/v1/stores/{storeId}/payment-method-types':
+    get:
+      tags:
+        - payment-method-types
+      summary: Get store payment method types
+      description: Retrieves all payment method types associated with a store
+      operationId: StorePaymentMethodTypes_GetStorePaymentMethodTypes
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentMethodTypeDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/payment-method-types/{paymentMethodTypeId}/toggle':
+    patch:
+      tags:
+        - payment-method-types
+      summary: Toggle a store payment method type
+      description: Enables or disabled a payment method type for a store
+      operationId: StorePaymentMethodTypes_ToggleStorePaymentMethodType
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: paymentMethodTypeId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ToggleStorePaymentMethodTypeRequestDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ToggleStorePaymentMethodTypeRequestDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ToggleStorePaymentMethodTypeRequestDto'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/payment-settings':
+    get:
+      tags:
+        - payment-settings
+      summary: Get store payment settings
+      description: Retrieves payment settings for a store.
+      operationId: PaymentsSettings_GetStorePaymentSettings
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StorePaymentSettingsDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    patch:
+      tags:
+        - payment-settings
+      summary: Updates store payment settings
+      description: Updates payment settings for a store.
+      operationId: PaymentsSettings_UpdateStorePaymentSettings
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateStorePaymentSettingsDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UpdateStorePaymentSettingsDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UpdateStorePaymentSettingsDto'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
   '/v1/stores/{storeId}/payments':
     get:
       tags:
@@ -3750,68 +3882,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaymentDto'
-        default:
-          description: Error response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PayNowError'
-      security:
-        - APIKey: [ ]
-  '/v1/stores/{storeId}/payments/settings':
-    get:
-      tags:
-        - payments
-      summary: Get store payment settings
-      description: Retrieves payment settings for a store.
-      operationId: PaymentsSettings_GetStorePaymentSettings
-      parameters:
-        - name: storeId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StorePaymentSettingsDto'
-        default:
-          description: Error response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PayNowError'
-      security:
-        - APIKey: [ ]
-    patch:
-      tags:
-        - payments
-      summary: Updates store payment settings
-      description: Updates payment settings for a store.
-      operationId: PaymentsSettings_UpdateStorePaymentSettings
-      parameters:
-        - name: storeId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateStorePaymentSettingsDto'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/UpdateStorePaymentSettingsDto'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/UpdateStorePaymentSettingsDto'
-      responses:
-        '204':
-          description: No Content
         default:
           description: Error response
           content:
@@ -8599,6 +8669,17 @@ components:
           $ref: '#/components/schemas/LastPaymentErrorDto'
       additionalProperties: false
       description: Represents a payment transaction
+    PaymentGatewayDto:
+      enum:
+        - invalid
+        - stripe
+        - paypal
+        - forumpay
+        - steamskins
+        - nuvei
+        - pagseguro
+        - tazapay
+      type: string
     PaymentMethodDetailsDto:
       type: object
       properties:
@@ -8684,6 +8765,126 @@ components:
           example: '2025-03-20T14:30:00Z'
       additionalProperties: false
       description: Represents a stored payment method
+    PaymentMethodTypeCountryCurrencyMappingDto:
+      required:
+        - country
+        - currencies
+      type: object
+      properties:
+        country:
+          type: string
+        currencies:
+          type: array
+          items:
+            type: string
+      additionalProperties: false
+    PaymentMethodTypeDto:
+      required:
+        - category
+        - confirmation
+        - country_currency_mapping
+        - enabled
+        - fee_overrides
+        - gateways
+        - id
+        - kyc_required
+        - name
+        - refunds_supported
+        - revenue_usage
+        - subscriptions_supported
+        - supported_countries
+        - supported_currencies
+        - supported_settlement_currencies
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        logo_url:
+          type:
+            - 'null'
+            - string
+        checkout_logo_url_light:
+          type:
+            - 'null'
+            - string
+        checkout_logo_url_dark:
+          type:
+            - 'null'
+            - string
+        category:
+          type: string
+        confirmation:
+          type: string
+        enabled:
+          type: boolean
+        refunds_supported:
+          type: boolean
+        subscriptions_supported:
+          type: boolean
+        kyc_required:
+          type: boolean
+        supported_currencies:
+          type: array
+          items:
+            type: string
+        supported_settlement_currencies:
+          type: array
+          items:
+            type: string
+        supported_countries:
+          type: array
+          items:
+            type: string
+        gateways:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentGatewayDto'
+        fee_overrides:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentMethodTypeFeeOverrideDto'
+        country_currency_mapping:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentMethodTypeCountryCurrencyMappingDto'
+        revenue_usage:
+          type: integer
+          format: int64
+        monthly_revenue_limit:
+          type:
+            - 'null'
+            - integer
+          format: int64
+        default_monthly_revenue_limit:
+          type:
+            - 'null'
+            - integer
+          format: int64
+        settlement_time:
+          type:
+            - 'null'
+            - string
+      additionalProperties: false
+    PaymentMethodTypeFeeOverrideDto:
+      required:
+        - countries
+        - fee_cents
+        - fee_percentage
+      type: object
+      properties:
+        fee_percentage:
+          type: integer
+          format: int32
+        fee_cents:
+          type: integer
+          format: int32
+        countries:
+          type: array
+          items:
+            type: string
+      additionalProperties: false
     PaymentPayoutSplitResultDto:
       required:
         - connected_platform_fee_amount
@@ -10595,6 +10796,14 @@ components:
         updated_by:
           $ref: '#/components/schemas/ActorDto'
       additionalProperties: false
+    ToggleStorePaymentMethodTypeRequestDto:
+      required:
+        - enabled
+      type: object
+      properties:
+        enabled:
+          type: boolean
+      additionalProperties: false
     TrialDto:
       required:
         - created_at
@@ -11614,31 +11823,31 @@ components:
       description: A validation error.
     WebhookEventType:
       enum:
-        - on_ignore
-        - on_order_completed
-        - on_refund
-        - on_chargeback
-        - on_delivery_item_added
-        - on_delivery_item_activated
-        - on_delivery_item_used
-        - on_delivery_item_revoked
-        - on_subscription_activated
-        - on_subscription_renewed
-        - on_subscription_canceled
-        - on_discord_order_actions_queued
-        - on_connected_user_registered
-        - on_connected_user_became_payable
-        - on_connected_user_payout_created
-        - on_connected_user_payout_completed
-        - on_connected_user_transaction_inserted
-        - on_connected_user_became_unpayable
-        - on_trial_activated
-        - on_trial_completed
-        - on_trial_canceled
-        - on_purchase_follow_up_attempt_email_sent
-        - on_purchase_follow_up_attempt_succeeded
-        - on_abandoned_checkout_recovery_attempt_email_sent
-        - on_abandoned_checkout_recovery_attempt_succeeded
+        - OnIgnore
+        - OnOrderCompleted
+        - OnRefund
+        - OnChargeback
+        - OnDeliveryItemAdded
+        - OnDeliveryItemActivated
+        - OnDeliveryItemUsed
+        - OnDeliveryItemRevoked
+        - OnSubscriptionActivated
+        - OnSubscriptionRenewed
+        - OnSubscriptionCanceled
+        - OnDiscordOrderActionsQueued
+        - OnConnectedUserRegistered
+        - OnConnectedUserBecamePayable
+        - OnConnectedUserPayoutCreated
+        - OnConnectedUserPayoutCompleted
+        - OnConnectedUserTransactionInserted
+        - OnConnectedUserBecameUnpayable
+        - OnTrialActivated
+        - OnTrialCompleted
+        - OnTrialCanceled
+        - OnPurchaseFollowUpAttemptEmailSent
+        - OnPurchaseFollowUpAttemptSucceeded
+        - OnAbandonedCheckoutRecoveryAttemptEmailSent
+        - OnAbandonedCheckoutRecoveryAttemptSucceeded
       type: string
     WebhookHistoryDto:
       required:
@@ -11739,6 +11948,8 @@ tags:
   - name: marketing
   - name: navlinks
   - name: orders
+  - name: payment-method-types
+  - name: payment-settings
   - name: payments
   - name: products
   - name: regional-pricing

@@ -11837,6 +11837,7 @@
           "content",
           "created_at",
           "created_by",
+          "execution_rule",
           "id",
           "online_only",
           "override_execute_on_gameserver_ids",
@@ -11868,6 +11869,9 @@
               "$ref": "#/components/schemas/FlakeId"
             },
             "description": "List of specific game server IDs where this command should be executed, overriding default behavior."
+          },
+          "execution_rule": {
+            "$ref": "#/components/schemas/ProductCommandExecutionRuleDto"
           },
           "created_at": {
             "type": "string",
@@ -13879,6 +13883,18 @@
           }
         },
         "additionalProperties": false
+      },
+      "ProductCommandExecutionRuleDto": {
+        "enum": [
+          "invalid",
+          "once_per_item",
+          "once_per_order"
+        ],
+        "type": "string",
+        "x-enumDescriptions": {
+          "once_per_item": "Executes commands regularly, once per item (number of products * quantity times)",
+          "once_per_order": "Executes command only once per entire order"
+        }
       },
       "ProductCommandStage": {
         "enum": [
@@ -17208,6 +17224,7 @@
       "UpsertGlobalCommandDto": {
         "required": [
           "content",
+          "execution_rule",
           "online_only",
           "stage"
         ],
@@ -17233,6 +17250,9 @@
               "$ref": "#/components/schemas/FlakeId"
             },
             "description": "List of specific game server IDs where this command should be executed."
+          },
+          "execution_rule": {
+            "$ref": "#/components/schemas/ProductCommandExecutionRuleDto"
           }
         },
         "additionalProperties": false,

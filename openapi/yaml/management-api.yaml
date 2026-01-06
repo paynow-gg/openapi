@@ -7506,6 +7506,7 @@ components:
         - content
         - created_at
         - created_by
+        - execution_rule
         - id
         - online_only
         - override_execute_on_gameserver_ids
@@ -7530,6 +7531,8 @@ components:
           items:
             $ref: '#/components/schemas/FlakeId'
           description: 'List of specific game server IDs where this command should be executed, overriding default behavior.'
+        execution_rule:
+          $ref: '#/components/schemas/ProductCommandExecutionRuleDto'
         created_at:
           type: string
           description: Timestamp when the command was created.
@@ -9072,6 +9075,15 @@ components:
             $ref: '#/components/schemas/FlakeId'
           description: "Value indicating on which game servers should the command be executed.\nIf left empty or null, then the default behavior applies\n(executing on all game servers or on the selected game server is selection is enabled)"
       additionalProperties: false
+    ProductCommandExecutionRuleDto:
+      enum:
+        - invalid
+        - once_per_item
+        - once_per_order
+      type: string
+      x-enumDescriptions:
+        once_per_item: 'Executes commands regularly, once per item (number of products * quantity times)'
+        once_per_order: Executes command only once per entire order
     ProductCommandStage:
       enum:
         - invalid
@@ -11532,6 +11544,7 @@ components:
     UpsertGlobalCommandDto:
       required:
         - content
+        - execution_rule
         - online_only
         - stage
       type: object
@@ -11551,6 +11564,8 @@ components:
           items:
             $ref: '#/components/schemas/FlakeId'
           description: List of specific game server IDs where this command should be executed.
+        execution_rule:
+          $ref: '#/components/schemas/ProductCommandExecutionRuleDto'
       additionalProperties: false
       description: "Data transfer object used for creating new global commands or updating existing ones.\nSupports partial updates following PATCH semantics."
     UpsertProductRequestDto:

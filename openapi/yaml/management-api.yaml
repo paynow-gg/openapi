@@ -6277,13 +6277,6 @@ components:
           format: int32
         selected_gameserver_id:
           $ref: '#/components/schemas/FlakeId'
-        metadata:
-          type:
-            - 'null'
-            - object
-          additionalProperties:
-            type: string
-          description: "Optional metadata to associate with the checkout session line.\nDo not store any sensitive information here."
         custom_variables:
           type:
             - 'null'
@@ -6318,13 +6311,6 @@ components:
           format: int32
         selected_gameserver_id:
           $ref: '#/components/schemas/FlakeId'
-        metadata:
-          type:
-            - 'null'
-            - object
-          additionalProperties:
-            type: string
-          description: "Optional metadata to associate with the checkout session line.\nDo not store any sensitive information here."
         custom_variables:
           type:
             - 'null'
@@ -6336,6 +6322,13 @@ components:
           $ref: '#/components/schemas/FlakeId'
         inline_product:
           $ref: '#/components/schemas/InlineProductCreateDto'
+        metadata:
+          type:
+            - 'null'
+            - object
+          additionalProperties:
+            type: string
+          description: "Optional metadata to associate with the checkout session line.\nDo not store any sensitive information here."
       additionalProperties: false
       description: "Represents a line item in a checkout session request.\nOpposed to CreateCheckoutSessionLineDto, this is used while creating a checkout session using the Management API,\nand allows for creating inline products (which is subject to special approval)"
     CreateCheckoutSessionManagementDto:
@@ -6377,6 +6370,8 @@ components:
             - 'null'
             - boolean
           description: Whether to automatically redirect the customer (return_url must be set)
+        customer_id:
+          $ref: '#/components/schemas/FlakeId'
         metadata:
           type:
             - 'null'
@@ -6384,8 +6379,6 @@ components:
           additionalProperties:
             type: string
           description: "Optional metadata to associate with the checkout session.\nDo not store any sensitive information here."
-        customer_id:
-          $ref: '#/components/schemas/FlakeId'
       additionalProperties: false
       description: "Request to create a new checkout session from your back-end server using the management API.\n`customer_id` needs to be specified explicitly here instead of using a Customer token."
     CreateCheckoutSessionResponseDto:

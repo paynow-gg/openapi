@@ -943,6 +943,7 @@
                       "store_id",
                       "customer_id",
                       "customer",
+                      "checkout",
                       "billing_cycle_sequence",
                       "billing_email",
                       "subtotal_amount",
@@ -992,6 +993,9 @@
                       },
                       "customer": {
                         "$ref": "#/components/schemas/CustomerDTO"
+                      },
+                      "checkout": {
+                        "$ref": "#/components/schemas/CheckoutDTO"
                       },
                       "billing_cycle_sequence": {
                         "type": "integer",
@@ -2974,6 +2978,7 @@
                       "store_id",
                       "customer_id",
                       "customer",
+                      "checkout",
                       "billing_cycle_sequence",
                       "billing_email",
                       "subtotal_amount",
@@ -3023,6 +3028,9 @@
                       },
                       "customer": {
                         "$ref": "#/components/schemas/CustomerDTO"
+                      },
+                      "checkout": {
+                        "$ref": "#/components/schemas/CheckoutDTO"
                       },
                       "billing_cycle_sequence": {
                         "type": "integer",
@@ -3272,6 +3280,7 @@
                       "store_id",
                       "customer_id",
                       "customer",
+                      "checkout",
                       "billing_cycle_sequence",
                       "billing_email",
                       "subtotal_amount",
@@ -3321,6 +3330,9 @@
                       },
                       "customer": {
                         "$ref": "#/components/schemas/CustomerDTO"
+                      },
+                      "checkout": {
+                        "$ref": "#/components/schemas/CheckoutDTO"
                       },
                       "billing_cycle_sequence": {
                         "type": "integer",

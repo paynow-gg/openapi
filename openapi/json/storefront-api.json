@@ -1366,16 +1366,6 @@
               "boolean"
             ],
             "description": "Whether to automatically redirect the customer (return_url must be set)"
-          },
-          "metadata": {
-            "type": [
-              "null",
-              "object"
-            ],
-            "additionalProperties": {
-              "type": "string"
-            },
-            "description": "Optional metadata to associate with the checkout session.\nDo not store any sensitive information here."
           }
         },
         "additionalProperties": false,
@@ -1418,16 +1408,6 @@
           },
           "selected_gameserver_id": {
             "$ref": "#/components/schemas/FlakeId"
-          },
-          "metadata": {
-            "type": [
-              "null",
-              "object"
-            ],
-            "additionalProperties": {
-              "type": "string"
-            },
-            "description": "Optional metadata to associate with the checkout session line.\nDo not store any sensitive information here."
           },
           "custom_variables": {
             "type": [
@@ -1494,16 +1474,6 @@
               "boolean"
             ],
             "description": "Whether to automatically redirect the customer (return_url must be set)"
-          },
-          "metadata": {
-            "type": [
-              "null",
-              "object"
-            ],
-            "additionalProperties": {
-              "type": "string"
-            },
-            "description": "Optional metadata to associate with the checkout session.\nDo not store any sensitive information here."
           }
         },
         "additionalProperties": false,

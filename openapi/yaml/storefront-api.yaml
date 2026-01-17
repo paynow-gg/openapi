@@ -882,13 +882,6 @@ components:
             - 'null'
             - boolean
           description: Whether to automatically redirect the customer (return_url must be set)
-        metadata:
-          type:
-            - 'null'
-            - object
-          additionalProperties:
-            type: string
-          description: "Optional metadata to associate with the checkout session.\nDo not store any sensitive information here."
       additionalProperties: false
       description: Request to create a new checkout session from a cart
     CreateCheckoutSessionLineDto:
@@ -919,13 +912,6 @@ components:
           format: int32
         selected_gameserver_id:
           $ref: '#/components/schemas/FlakeId'
-        metadata:
-          type:
-            - 'null'
-            - object
-          additionalProperties:
-            type: string
-          description: "Optional metadata to associate with the checkout session line.\nDo not store any sensitive information here."
         custom_variables:
           type:
             - 'null'
@@ -973,13 +959,6 @@ components:
             - 'null'
             - boolean
           description: Whether to automatically redirect the customer (return_url must be set)
-        metadata:
-          type:
-            - 'null'
-            - object
-          additionalProperties:
-            type: string
-          description: "Optional metadata to associate with the checkout session.\nDo not store any sensitive information here."
       additionalProperties: false
       description: Request to create a new checkout session
     CreateCheckoutSessionResponseDto:

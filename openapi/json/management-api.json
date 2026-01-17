@@ -10177,16 +10177,6 @@
           "selected_gameserver_id": {
             "$ref": "#/components/schemas/FlakeId"
           },
-          "metadata": {
-            "type": [
-              "null",
-              "object"
-            ],
-            "additionalProperties": {
-              "type": "string"
-            },
-            "description": "Optional metadata to associate with the checkout session line.\nDo not store any sensitive information here."
-          },
           "custom_variables": {
             "type": [
               "null",
@@ -10235,16 +10225,6 @@
           "selected_gameserver_id": {
             "$ref": "#/components/schemas/FlakeId"
           },
-          "metadata": {
-            "type": [
-              "null",
-              "object"
-            ],
-            "additionalProperties": {
-              "type": "string"
-            },
-            "description": "Optional metadata to associate with the checkout session line.\nDo not store any sensitive information here."
-          },
           "custom_variables": {
             "type": [
               "null",
@@ -10260,6 +10240,16 @@
           },
           "inline_product": {
             "$ref": "#/components/schemas/InlineProductCreateDto"
+          },
+          "metadata": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Optional metadata to associate with the checkout session line.\nDo not store any sensitive information here."
           }
         },
         "additionalProperties": false,
@@ -10318,6 +10308,9 @@
             ],
             "description": "Whether to automatically redirect the customer (return_url must be set)"
           },
+          "customer_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
           "metadata": {
             "type": [
               "null",
@@ -10327,9 +10320,6 @@
               "type": "string"
             },
             "description": "Optional metadata to associate with the checkout session.\nDo not store any sensitive information here."
-          },
-          "customer_id": {
-            "$ref": "#/components/schemas/FlakeId"
           }
         },
         "additionalProperties": false,

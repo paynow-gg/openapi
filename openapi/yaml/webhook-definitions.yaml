@@ -755,6 +755,7 @@ webhooks:
                     - store_id
                     - customer_id
                     - customer
+                    - checkout
                     - billing_cycle_sequence
                     - billing_email
                     - subtotal_amount
@@ -800,6 +801,8 @@ webhooks:
                       x-discordVariable: customer_id
                     customer:
                       $ref: '#/components/schemas/CustomerDTO'
+                    checkout:
+                      $ref: '#/components/schemas/CheckoutDTO'
                     billing_cycle_sequence:
                       type: integer
                       description: The current billing cycle number
@@ -2309,6 +2312,7 @@ webhooks:
                     - store_id
                     - customer_id
                     - customer
+                    - checkout
                     - billing_cycle_sequence
                     - billing_email
                     - subtotal_amount
@@ -2354,6 +2358,8 @@ webhooks:
                       x-discordVariable: customer_id
                     customer:
                       $ref: '#/components/schemas/CustomerDTO'
+                    checkout:
+                      $ref: '#/components/schemas/CheckoutDTO'
                     billing_cycle_sequence:
                       type: integer
                       description: The current billing cycle number
@@ -2549,6 +2555,7 @@ webhooks:
                     - store_id
                     - customer_id
                     - customer
+                    - checkout
                     - billing_cycle_sequence
                     - billing_email
                     - subtotal_amount
@@ -2594,6 +2601,8 @@ webhooks:
                       x-discordVariable: customer_id
                     customer:
                       $ref: '#/components/schemas/CustomerDTO'
+                    checkout:
+                      $ref: '#/components/schemas/CheckoutDTO'
                     billing_cycle_sequence:
                       type: integer
                       description: The current billing cycle number

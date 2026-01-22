@@ -2422,71 +2422,6 @@
         ]
       }
     },
-    "/v1/stores/{storeId}/delivery/items/update-product-versions": {
-      "post": {
-        "tags": [
-          "delivery"
-        ],
-        "summary": "Update product version id for delivery items of given product id",
-        "operationId": "Delivery_UpdateDeliveryItemProductVersions",
-        "parameters": [
-          {
-            "name": "storeId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/FlakeId"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateDeliveryItemProductVersionRequestDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateDeliveryItemProductVersionRequestDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateDeliveryItemProductVersionRequestDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UpdateDeliveryItemProductVersionRequestDto"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Error response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PayNowError"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "APIKey": [ ]
-          }
-        ]
-      }
-    },
     "/v1/stores/{storeId}/command-delivery": {
       "post": {
         "tags": [
@@ -2640,7 +2575,7 @@
         ],
         "summary": "Get delivery items associated with a customer",
         "description": "Retrieves delivery items associated with a customer",
-        "operationId": "CustomersDelivery_GetDeliveryItems",
+        "operationId": "CustomersDelivery_GetCustomerDeliveryItems",
         "parameters": [
           {
             "name": "storeId",
@@ -2873,7 +2808,7 @@
         ],
         "summary": "Get command attempts associated with a customer",
         "description": "Retrieves command attempts associated with a customer",
-        "operationId": "CustomersDelivery_GetCommandAttempts",
+        "operationId": "CustomersDelivery_GetCommandAttemptsForCustomer",
         "parameters": [
           {
             "name": "storeId",
@@ -3196,7 +3131,7 @@
           "delivery"
         ],
         "summary": "Returns delivery items in which an associated command attempt is for the gameserver",
-        "operationId": "GameServersDelivery_GetDeliveryItems",
+        "operationId": "GameServersDelivery_GetGameServerDeliveryItems",
         "parameters": [
           {
             "name": "storeId",
@@ -6554,6 +6489,278 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PaymentDto"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ]
+      }
+    },
+    "/v1/stores/{storeId}/products/{productId}/dependent-migrations": {
+      "get": {
+        "tags": [
+          "product-dependent-migrations"
+        ],
+        "operationId": "ProductsDependentMigrations_GetProductDependentMigrations",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "The maximum number of items to return in a single request.",
+            "schema": {
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "description": "Returns items after the specified ID.\nUsed for forward pagination through results.",
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            },
+            "example": "null"
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "description": "Returns items before the specified ID.\nUsed for backward pagination through results.",
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            },
+            "example": "null"
+          },
+          {
+            "name": "asc",
+            "in": "query",
+            "description": "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order.",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductDependentMigrationDto"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "product-dependent-migrations"
+        ],
+        "operationId": "ProductsDependentMigrations_CreateProductDependentMigration",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProductDependentMigrationRequestDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProductDependentMigrationRequestDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProductDependentMigrationRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductDependentMigrationDto"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ]
+      }
+    },
+    "/v1/stores/{storeId}/products/{productId}/dependent-migrations/estimate": {
+      "get": {
+        "tags": [
+          "product-dependent-migrations"
+        ],
+        "operationId": "ProductsDependentMigrations_GetProductDependentMigrationEstimate",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductDependentMigrationEstimateVersionDto"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ]
+      }
+    },
+    "/v1/stores/{storeId}/product-dependent-migrations/{productDependentMigrationId}": {
+      "get": {
+        "tags": [
+          "product-dependent-migrations"
+        ],
+        "operationId": "ProductsDependentMigrations_GetProductDependentMigrationById",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "productDependentMigrationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductDependentMigrationDto"
                 }
               }
             }
@@ -10537,6 +10744,21 @@
           }
         }
       },
+      "CreateProductDependentMigrationRequestDto": {
+        "required": [
+          "types"
+        ],
+        "type": "object",
+        "properties": {
+          "types": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductDependentMigrationTargetTypeDto"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
       "CreateRefundRequestDto": {
         "type": "object",
         "properties": {
@@ -14045,6 +14267,159 @@
         },
         "additionalProperties": false
       },
+      "ProductDependentMigrationDto": {
+        "required": [
+          "created_at",
+          "created_by",
+          "id",
+          "migration_targets",
+          "product_id",
+          "status",
+          "store_id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "store_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "product_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "created_by": {
+            "$ref": "#/components/schemas/ActorDto"
+          },
+          "migration_targets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductDependentMigrationTargetDto"
+            }
+          },
+          "status": {
+            "$ref": "#/components/schemas/ProductDependentMigrationStatusDto"
+          },
+          "completed_at": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProductDependentMigrationEstimateTargetCountDto": {
+        "required": [
+          "total_entities",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/ProductDependentMigrationTargetTypeDto"
+          },
+          "total_entities": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProductDependentMigrationEstimateVersionDto": {
+        "required": [
+          "product_version_created_at",
+          "product_version_id",
+          "target_counts"
+        ],
+        "type": "object",
+        "properties": {
+          "product_version_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "product_version_created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "target_counts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductDependentMigrationEstimateTargetCountDto"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProductDependentMigrationStatusDto": {
+        "enum": [
+          "invalid",
+          "created",
+          "completed"
+        ],
+        "type": "string"
+      },
+      "ProductDependentMigrationTargetDto": {
+        "required": [
+          "type",
+          "versions"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/ProductDependentMigrationTargetTypeDto"
+          },
+          "versions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductDependentMigrationTargetVersionDto"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProductDependentMigrationTargetTypeDto": {
+        "enum": [
+          "invalid",
+          "active_subscriptions",
+          "active_unused_delivery_items"
+        ],
+        "type": "string"
+      },
+      "ProductDependentMigrationTargetVersionDto": {
+        "required": [
+          "migrated",
+          "new_product_version_id",
+          "old_product_version_created_at",
+          "old_product_version_id",
+          "total_entities_migrated"
+        ],
+        "type": "object",
+        "properties": {
+          "old_product_version_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "old_product_version_created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "new_product_version_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "total_entities_migrated": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "migrated": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
       "ProductDownloadableFileDto": {
         "required": [
           "created_at",
@@ -16998,22 +17373,6 @@
           }
         }
       },
-      "UpdateDeliveryItemProductVersionRequestDto": {
-        "required": [
-          "product_id",
-          "product_version_id"
-        ],
-        "type": "object",
-        "properties": {
-          "product_version_id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "product_id": {
-            "$ref": "#/components/schemas/FlakeId"
-          }
-        },
-        "additionalProperties": false
-      },
       "UpdateGameServerDto": {
         "type": "object",
         "properties": {
@@ -17950,6 +18309,9 @@
     },
     {
       "name": "payments"
+    },
+    {
+      "name": "product-dependent-migrations"
     },
     {
       "name": "products"

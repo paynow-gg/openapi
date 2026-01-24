@@ -10746,15 +10746,16 @@
       },
       "CreateProductDependentMigrationRequestDto": {
         "required": [
-          "types"
+          "send_all_commands_to_new_servers",
+          "send_new_commands_to_all_servers"
         ],
         "type": "object",
         "properties": {
-          "types": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ProductDependentMigrationTargetTypeDto"
-            }
+          "send_new_commands_to_all_servers": {
+            "type": "boolean"
+          },
+          "send_all_commands_to_new_servers": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -14274,6 +14275,8 @@
           "id",
           "migration_targets",
           "product_id",
+          "send_all_commands_to_new_servers",
+          "send_new_commands_to_all_servers",
           "status",
           "store_id"
         ],
@@ -14303,6 +14306,12 @@
           },
           "status": {
             "$ref": "#/components/schemas/ProductDependentMigrationStatusDto"
+          },
+          "send_new_commands_to_all_servers": {
+            "type": "boolean"
+          },
+          "send_all_commands_to_new_servers": {
+            "type": "boolean"
           },
           "completed_at": {
             "type": [

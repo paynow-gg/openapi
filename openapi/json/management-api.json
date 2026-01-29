@@ -10747,7 +10747,8 @@
       "CreateProductDependentMigrationRequestDto": {
         "required": [
           "send_all_commands_to_new_servers",
-          "send_new_commands_to_all_servers"
+          "send_new_commands_to_all_servers",
+          "target_types"
         ],
         "type": "object",
         "properties": {
@@ -10756,6 +10757,12 @@
           },
           "send_all_commands_to_new_servers": {
             "type": "boolean"
+          },
+          "target_types": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductDependentMigrationTargetTypeDto"
+            }
           }
         },
         "additionalProperties": false
@@ -14395,7 +14402,8 @@
         "enum": [
           "invalid",
           "active_subscriptions",
-          "active_unused_delivery_items"
+          "active_unused_delivery_items",
+          "non_expirable_delivery_items"
         ],
         "type": "string"
       },

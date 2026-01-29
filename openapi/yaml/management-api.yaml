@@ -6661,12 +6661,17 @@ components:
       required:
         - send_all_commands_to_new_servers
         - send_new_commands_to_all_servers
+        - target_types
       type: object
       properties:
         send_new_commands_to_all_servers:
           type: boolean
         send_all_commands_to_new_servers:
           type: boolean
+        target_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductDependentMigrationTargetTypeDto'
       additionalProperties: false
     CreateRefundRequestDto:
       type: object
@@ -9411,6 +9416,7 @@ components:
         - invalid
         - active_subscriptions
         - active_unused_delivery_items
+        - non_expirable_delivery_items
       type: string
     ProductDependentMigrationTargetVersionDto:
       required:

@@ -6729,6 +6729,7 @@ components:
         - show_all_payment_methods_for_subscriptions
         - store_tax_inclusive_pricing
         - block_prepaid_cards
+        - adaptive_currency_enabled
       type: object
       properties:
         show_all_payment_methods_for_subscriptions:
@@ -6737,6 +6738,8 @@ components:
           type: boolean
         block_prepaid_cards:
           $ref: '#/components/schemas/PrepaidCardsBlockingTypeDto'
+        adaptive_currency_enabled:
+          type: boolean
     CreateTrialEligibilityOverrideDto:
       required:
         - product_id
@@ -8135,6 +8138,17 @@ components:
         - id
         - is_subscription
         - lines
+        - presentment_currency
+        - presentment_discount_amount
+        - presentment_discount_amount_str
+        - presentment_giftcard_usage_amount
+        - presentment_giftcard_usage_amount_str
+        - presentment_subtotal_amount
+        - presentment_subtotal_amount_str
+        - presentment_tax_amount
+        - presentment_tax_amount_str
+        - presentment_total_amount
+        - presentment_total_amount_str
         - pretty_id
         - status
         - store_id
@@ -8252,6 +8266,60 @@ components:
           type: string
           description: The gift card usage amount formatted as a string
           example: $0.00
+        presentment_currency:
+          type: string
+          description: The presentment currency code used for this order (currency shown to customer)
+          example: eur
+        presentment_subtotal_amount:
+          type: integer
+          description: The presentment subtotal amount in smallest currency unit
+          format: int32
+          example: 9995
+        presentment_subtotal_amount_str:
+          type: string
+          description: The presentment subtotal amount formatted as a string
+          readOnly: true
+          example: €99.95
+        presentment_discount_amount:
+          type: integer
+          description: The presentment discount amount in smallest currency unit
+          format: int32
+          example: 500
+        presentment_discount_amount_str:
+          type: string
+          description: The presentment discount amount formatted as a string
+          readOnly: true
+          example: €5.00
+        presentment_giftcard_usage_amount:
+          type: integer
+          description: The presentment gift card usage amount in smallest currency unit
+          format: int32
+          example: 0
+        presentment_giftcard_usage_amount_str:
+          type: string
+          description: The presentment gift card usage amount formatted as a string
+          readOnly: true
+          example: €0.00
+        presentment_tax_amount:
+          type: integer
+          description: The presentment tax amount in smallest currency unit
+          format: int32
+          example: 999
+        presentment_tax_amount_str:
+          type: string
+          description: The presentment tax amount formatted as a string
+          readOnly: true
+          example: €9.99
+        presentment_total_amount:
+          type: integer
+          description: The presentment total amount in smallest currency unit
+          format: int32
+          example: 10494
+        presentment_total_amount_str:
+          type: string
+          description: The presentment total amount formatted as a string
+          readOnly: true
+          example: €104.94
         created_at:
           type:
             - 'null'
@@ -8291,6 +8359,16 @@ components:
         - giftcard_usage_amount
         - giftcard_usage_amount_str
         - id
+        - presentment_discount_amount
+        - presentment_discount_amount_str
+        - presentment_giftcard_usage_amount
+        - presentment_giftcard_usage_amount_str
+        - presentment_subtotal_amount
+        - presentment_subtotal_amount_str
+        - presentment_tax_amount
+        - presentment_tax_amount_str
+        - presentment_total_amount
+        - presentment_total_amount_str
         - price
         - price_str
         - product_id
@@ -8411,6 +8489,56 @@ components:
           type: string
           description: The total amount formatted as a string
           example: $21.99
+        presentment_subtotal_amount:
+          type: integer
+          description: The presentment subtotal amount for this order line
+          format: int32
+          example: 1999
+        presentment_subtotal_amount_str:
+          type: string
+          description: The presentment subtotal amount formatted as a string
+          readOnly: true
+          example: €19.99
+        presentment_discount_amount:
+          type: integer
+          description: The presentment discount amount for this order line
+          format: int32
+          example: 0
+        presentment_discount_amount_str:
+          type: string
+          description: The presentment discount amount formatted as a string
+          readOnly: true
+          example: €0.00
+        presentment_tax_amount:
+          type: integer
+          description: The presentment tax amount for this order line
+          format: int32
+          example: 200
+        presentment_tax_amount_str:
+          type: string
+          description: The presentment tax amount formatted as a string
+          readOnly: true
+          example: €2.00
+        presentment_giftcard_usage_amount:
+          type: integer
+          description: The presentment gift card usage amount for this order line
+          format: int32
+          example: 0
+        presentment_giftcard_usage_amount_str:
+          type: string
+          description: The presentment gift card usage amount formatted as a string
+          readOnly: true
+          example: €0.00
+        presentment_total_amount:
+          type: integer
+          description: The presentment total amount for this order line
+          format: int32
+          example: 2199
+        presentment_total_amount_str:
+          type: string
+          description: The presentment total amount formatted as a string
+          readOnly: true
+          example: €21.99
         selected_gameserver_id:
           $ref: '#/components/schemas/FlakeId'
         tax_inclusive:
@@ -10704,6 +10832,7 @@ components:
       additionalProperties: false
     StorePaymentSettingsDto:
       required:
+        - adaptive_currency_enabled
         - block_prepaid_cards
         - chargeback_coverage
         - force_3d_secure
@@ -10720,6 +10849,9 @@ components:
           description: Whether store pricing is tax-inclusive.
         block_prepaid_cards:
           $ref: '#/components/schemas/PrepaidCardsBlockingTypeDto'
+        adaptive_currency_enabled:
+          type: boolean
+          description: Whether the 'Adaptive Currency' feature is enabled.
         max_checkout_amount:
           type: integer
           description: Maximum checkout amount allowed in cents.
@@ -11010,6 +11142,124 @@ components:
         initial_total_amount_str:
           type: string
           description: Formatted string representation of the initial total amount.
+        presentment_currency:
+          type:
+            - 'null'
+            - string
+          description: Presentment currency code (currency shown to customer).
+        presentment_subtotal_amount:
+          type:
+            - 'null'
+            - integer
+          description: Presentment subtotal amount in smallest currency units.
+          format: int64
+        presentment_subtotal_amount_str:
+          type:
+            - 'null'
+            - string
+          description: Formatted string representation of the presentment subtotal amount.
+          readOnly: true
+        presentment_discount_amount:
+          type:
+            - 'null'
+            - integer
+          description: Presentment discount amount in smallest currency units.
+          format: int64
+        presentment_discount_amount_str:
+          type:
+            - 'null'
+            - string
+          description: Formatted string representation of the presentment discount amount.
+          readOnly: true
+        presentment_tax_amount:
+          type:
+            - 'null'
+            - integer
+          description: Presentment tax amount in smallest currency units.
+          format: int64
+        presentment_tax_amount_str:
+          type:
+            - 'null'
+            - string
+          description: Formatted string representation of the presentment tax amount.
+          readOnly: true
+        presentment_total_amount:
+          type:
+            - 'null'
+            - integer
+          description: Presentment total amount in smallest currency units.
+          format: int64
+        presentment_total_amount_str:
+          type:
+            - 'null'
+            - string
+          description: Formatted string representation of the presentment total amount.
+          readOnly: true
+        initial_presentment_discount_amount:
+          type:
+            - 'null'
+            - integer
+          description: Initial presentment discount amount in smallest currency units for the first billing cycle.
+          format: int64
+        initial_presentment_discount_amount_str:
+          type:
+            - 'null'
+            - string
+          description: Formatted string representation of the initial presentment discount amount.
+          readOnly: true
+        initial_presentment_subtotal_amount:
+          type:
+            - 'null'
+            - integer
+          description: Initial presentment subtotal amount in smallest currency units for the first billing cycle.
+          format: int64
+        initial_presentment_subtotal_amount_str:
+          type:
+            - 'null'
+            - string
+          description: Formatted string representation of the initial presentment subtotal amount.
+          readOnly: true
+        initial_presentment_giftcard_usage_amount:
+          type:
+            - 'null'
+            - integer
+          description: Initial presentment gift card usage amount in smallest currency units.
+          format: int64
+        initial_presentment_giftcard_usage_amount_str:
+          type:
+            - 'null'
+            - string
+          description: Formatted string representation of the initial presentment gift card usage amount.
+          readOnly: true
+        initial_presentment_tax_amount:
+          type:
+            - 'null'
+            - integer
+          description: Initial presentment tax amount in smallest currency units for the first billing cycle.
+          format: int64
+        initial_presentment_tax_amount_str:
+          type:
+            - 'null'
+            - string
+          description: Formatted string representation of the initial presentment tax amount.
+          readOnly: true
+        initial_presentment_total_amount:
+          type:
+            - 'null'
+            - integer
+          description: Initial presentment total amount in smallest currency units for the first billing cycle.
+          format: int64
+        initial_presentment_total_amount_str:
+          type:
+            - 'null'
+            - string
+          description: Formatted string representation of the initial presentment total amount.
+          readOnly: true
+        fx_rate:
+          type:
+            - 'null'
+            - string
+          description: The foreign exchange rate applied (if presentment currency differs from settlement currency).
         pricing_region_id:
           type:
             - 'null'
@@ -11738,6 +11988,8 @@ components:
           type: boolean
         block_prepaid_cards:
           $ref: '#/components/schemas/PrepaidCardsBlockingTypeDto'
+        adaptive_currency_enabled:
+          type: boolean
     UpdateTrialEligibilityOverrideDto:
       type: object
       properties:

@@ -10448,6 +10448,16 @@
           "inline_product": {
             "$ref": "#/components/schemas/InlineProductCreateDto"
           },
+          "payout_splits": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/components/schemas/CreateCheckoutSessionLineManagementPayoutSplitDto"
+            },
+            "description": "Optional payout splits for line items (requires approval)"
+          },
           "metadata": {
             "type": [
               "null",
@@ -10460,7 +10470,38 @@
           }
         },
         "additionalProperties": false,
-        "description": "Represents a line item in a checkout session request.\nOpposed to CreateCheckoutSessionLineDto, this is used while creating a checkout session using the Management API,\nand allows for creating inline products (which is subject to special approval)"
+        "description": "Represents a line item in a checkout session request.\nOpposed to CreateCheckoutSessionLineDto, this is used while creating a checkout session using the Management API,\nand allows for creating inline products and payout splits (subject to special approval)"
+      },
+      "CreateCheckoutSessionLineManagementPayoutSplitDto": {
+        "required": [
+          "payout_id"
+        ],
+        "type": "object",
+        "properties": {
+          "payout_id": {
+            "type": "string",
+            "description": "The ID of the user's payout balance."
+          },
+          "percentage": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "description": "The percentage of the line amount this user receives (in basis points, e.g., 5000 = 50%)\nNOTE: The last payout split needs to have a null percentage set (so the remaining amount gets properly allocated)",
+            "format": "int64",
+            "example": 5000
+          },
+          "platform_fee": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "description": "The platform fee percentage applied to this split (in basis points)\nOnly applicable to platforms.",
+            "format": "int64",
+            "example": 500
+          }
+        },
+        "additionalProperties": false
       },
       "CreateCheckoutSessionManagementDto": {
         "required": [
@@ -10843,7 +10884,8 @@
           "show_all_payment_methods_for_subscriptions",
           "store_tax_inclusive_pricing",
           "block_prepaid_cards",
-          "adaptive_currency_enabled"
+          "adaptive_currency_enabled",
+          "show_adaptive_currency_on_storefront"
         ],
         "type": "object",
         "properties": {
@@ -10857,6 +10899,9 @@
             "$ref": "#/components/schemas/PrepaidCardsBlockingTypeDto"
           },
           "adaptive_currency_enabled": {
+            "type": "boolean"
+          },
+          "show_adaptive_currency_on_storefront": {
             "type": "boolean"
           }
         }
@@ -16297,6 +16342,7 @@
           "chargeback_coverage",
           "force_3d_secure",
           "max_checkout_amount",
+          "show_adaptive_currency_on_storefront",
           "show_all_payment_methods_for_subscriptions",
           "store_tax_inclusive_pricing"
         ],
@@ -16316,6 +16362,10 @@
           "adaptive_currency_enabled": {
             "type": "boolean",
             "description": "Whether the 'Adaptive Currency' feature is enabled."
+          },
+          "show_adaptive_currency_on_storefront": {
+            "type": "boolean",
+            "description": "Whether the displayed currency on the storefront should be the Adaptive Currency by default."
           },
           "max_checkout_amount": {
             "type": "integer",
@@ -17852,6 +17902,9 @@
             "$ref": "#/components/schemas/PrepaidCardsBlockingTypeDto"
           },
           "adaptive_currency_enabled": {
+            "type": "boolean"
+          },
+          "show_adaptive_currency_on_storefront": {
             "type": "boolean"
           }
         }

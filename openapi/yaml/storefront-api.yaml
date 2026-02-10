@@ -659,6 +659,18 @@ paths:
           schema:
             type: string
             format: flake-id
+        - name: x-paynow-customer-ip
+          in: header
+          description: The IP address (IPv4 or IPv6) of the customer. Required if the request is not being made from the customer's browser.
+          schema:
+            type: string
+            format: ipv4
+        - name: x-paynow-customer-countrycode
+          in: header
+          description: 'The customer''s country code in ISO 3166-1 alpha-2 format. Optional, but recommended if you have this available.'
+          schema:
+            pattern: '^[A-Z]{2}$'
+            type: string
       responses:
         '200':
           description: OK
@@ -1825,6 +1837,7 @@ components:
       additionalProperties: false
     StorefrontStoreDto:
       required:
+        - creator_currency
         - currency
         - game
         - id
@@ -1854,7 +1867,11 @@ components:
           readOnly: true
         currency:
           type: string
-          description: The three-letter ISO currency code used for pricing in this store.
+          description: "The three-letter ISO currency code used for pricing in this store.\nIf using the Adaptive Currency feature, this will be updated to reflect customer's local currency\n(based on passed in IP / country headers)."
+          example: eur
+        creator_currency:
+          type: string
+          description: The three-letter ISO currency code signifying the main currency of the store.
           example: usd
         description:
           type:

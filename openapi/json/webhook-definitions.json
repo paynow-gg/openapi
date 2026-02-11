@@ -896,7 +896,8 @@
           "ON_PURCHASE_FOLLOW_UP_ATTEMPT_EMAIL_SENT",
           "ON_PURCHASE_FOLLOW_UP_ATTEMPT_SUCCEEDED",
           "ON_ABANDONED_CHECKOUT_RECOVERY_ATTEMPT_EMAIL_SENT",
-          "ON_ABANDONED_CHECKOUT_RECOVERY_ATTEMPT_SUCCEEDED"
+          "ON_ABANDONED_CHECKOUT_RECOVERY_ATTEMPT_SUCCEEDED",
+          "ON_CHARGEBACK_CLOSED"
         ],
         "type": "string",
         "description": "The type of webhook event"
@@ -1184,6 +1185,346 @@
                         "description": "The current status of the Subscription.  Possible options: created, active, canceled",
                         "example": "created",
                         "x-discordVariable": "status"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook processed successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "ON_CHARGEBACK": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Triggered when a chargeback is created",
+        "description": "Webhook for ON_CHARGEBACK",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "event_type",
+                  "event_id",
+                  "body"
+                ],
+                "type": "object",
+                "properties": {
+                  "event_type": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/WebhookEventType"
+                      }
+                    ],
+                    "description": "The type of webhook event",
+                    "example": "ON_CHARGEBACK"
+                  },
+                  "event_id": {
+                    "type": "string",
+                    "description": "The ID of the Webhook Event",
+                    "format": "flake-id",
+                    "example": "411486491630370816"
+                  },
+                  "body": {
+                    "required": [
+                      "id",
+                      "store_id",
+                      "order_id",
+                      "gateway",
+                      "currency",
+                      "tax_inclusive",
+                      "amount",
+                      "gateway_fee_amount",
+                      "tax_amount",
+                      "platform_fee_amount",
+                      "store_net_amount",
+                      "status",
+                      "chargeback_status",
+                      "chargeback_at"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Payment associated with the Payment",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "id"
+                      },
+                      "store_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Store associated with the Payment",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "store_id"
+                      },
+                      "order_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Order associated with Payment",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "order_id"
+                      },
+                      "customer": {
+                        "oneOf": [
+                          {
+                            "$ref": "#/components/schemas/CustomerDTO"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ],
+                        "x-discordVariable": "customer"
+                      },
+                      "gateway": {
+                        "type": "string",
+                        "description": "The Payment Gateway of the Payment",
+                        "example": "stripe",
+                        "x-discordVariable": "gateway"
+                      },
+                      "currency": {
+                        "type": "string",
+                        "description": "The ISO-4217 Currency Code of the Payment",
+                        "example": "USD",
+                        "x-discordVariable": "currency"
+                      },
+                      "tax_inclusive": {
+                        "type": "boolean",
+                        "description": "Indicates if the payment was Tax Inclusive",
+                        "example": true,
+                        "x-discordVariable": "tax_inclusive"
+                      },
+                      "amount": {
+                        "type": "integer",
+                        "description": "The payment amount, represented in cents",
+                        "example": 7500,
+                        "x-discordVariable": "amount"
+                      },
+                      "gateway_fee_amount": {
+                        "type": "integer",
+                        "description": "The gateway fee  amount, represented in cents",
+                        "example": 200,
+                        "x-discordVariable": "gateway_fee_amount"
+                      },
+                      "tax_amount": {
+                        "type": "integer",
+                        "description": "The tax amount, represented in cents",
+                        "example": 1200,
+                        "x-discordVariable": "tax_amount"
+                      },
+                      "platform_fee_amount": {
+                        "type": "integer",
+                        "description": "The platform fee amount, represented in cents",
+                        "example": 375,
+                        "x-discordVariable": "platform_fee_amount"
+                      },
+                      "store_net_amount": {
+                        "type": "integer",
+                        "description": "The net amount recieved by the associated store, represented in cents",
+                        "example": 5925,
+                        "x-discordVariable": "store_net_amount"
+                      },
+                      "status": {
+                        "type": "string",
+                        "description": "The status of the payment",
+                        "x-discordVariable": "status"
+                      },
+                      "chargeback_status": {
+                        "type": "string",
+                        "description": "The chargeback outcome",
+                        "x-discordVariable": "chargeback_status"
+                      },
+                      "chargeback_at": {
+                        "type": "string",
+                        "description": "Indicated when a chargeback was opened for the payment",
+                        "format": "date-time",
+                        "example": "2024-01-25T14:45:00Z",
+                        "x-discordVariable": "chargeback_at"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook processed successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "ON_CHARGEBACK_CLOSED": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Triggered when a chargeback is resolved",
+        "description": "Webhook for ON_CHARGEBACK_CLOSED",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "event_type",
+                  "event_id",
+                  "body"
+                ],
+                "type": "object",
+                "properties": {
+                  "event_type": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/WebhookEventType"
+                      }
+                    ],
+                    "description": "The type of webhook event",
+                    "example": "ON_CHARGEBACK_CLOSED"
+                  },
+                  "event_id": {
+                    "type": "string",
+                    "description": "The ID of the Webhook Event",
+                    "format": "flake-id",
+                    "example": "411486491630370816"
+                  },
+                  "body": {
+                    "required": [
+                      "id",
+                      "store_id",
+                      "order_id",
+                      "gateway",
+                      "currency",
+                      "tax_inclusive",
+                      "amount",
+                      "gateway_fee_amount",
+                      "tax_amount",
+                      "platform_fee_amount",
+                      "store_net_amount",
+                      "status",
+                      "chargeback_status",
+                      "chargeback_at"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Payment associated with the Payment",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "id"
+                      },
+                      "store_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Store associated with the Payment",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "store_id"
+                      },
+                      "order_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Order associated with Payment",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "order_id"
+                      },
+                      "customer": {
+                        "oneOf": [
+                          {
+                            "$ref": "#/components/schemas/CustomerDTO"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ],
+                        "x-discordVariable": "customer"
+                      },
+                      "gateway": {
+                        "type": "string",
+                        "description": "The Payment Gateway of the Payment",
+                        "example": "stripe",
+                        "x-discordVariable": "gateway"
+                      },
+                      "currency": {
+                        "type": "string",
+                        "description": "The ISO-4217 Currency Code of the Payment",
+                        "example": "USD",
+                        "x-discordVariable": "currency"
+                      },
+                      "tax_inclusive": {
+                        "type": "boolean",
+                        "description": "Indicates if the payment was Tax Inclusive",
+                        "example": true,
+                        "x-discordVariable": "tax_inclusive"
+                      },
+                      "amount": {
+                        "type": "integer",
+                        "description": "The payment amount, represented in cents",
+                        "example": 7500,
+                        "x-discordVariable": "amount"
+                      },
+                      "gateway_fee_amount": {
+                        "type": "integer",
+                        "description": "The gateway fee  amount, represented in cents",
+                        "example": 200,
+                        "x-discordVariable": "gateway_fee_amount"
+                      },
+                      "tax_amount": {
+                        "type": "integer",
+                        "description": "The tax amount, represented in cents",
+                        "example": 1200,
+                        "x-discordVariable": "tax_amount"
+                      },
+                      "platform_fee_amount": {
+                        "type": "integer",
+                        "description": "The platform fee amount, represented in cents",
+                        "example": 375,
+                        "x-discordVariable": "platform_fee_amount"
+                      },
+                      "store_net_amount": {
+                        "type": "integer",
+                        "description": "The net amount recieved by the associated store, represented in cents",
+                        "example": 5925,
+                        "x-discordVariable": "store_net_amount"
+                      },
+                      "status": {
+                        "type": "string",
+                        "description": "The status of the payment",
+                        "x-discordVariable": "status"
+                      },
+                      "chargeback_status": {
+                        "type": "string",
+                        "description": "The chargeback outcome",
+                        "x-discordVariable": "chargeback_status"
+                      },
+                      "chargeback_at": {
+                        "type": "string",
+                        "description": "Indicated when a chargeback was opened for the payment",
+                        "format": "date-time",
+                        "example": "2024-01-25T14:45:00Z",
+                        "x-discordVariable": "chargeback_at"
                       }
                     }
                   }
@@ -2543,170 +2884,6 @@
                         "description": "The status of the Order.  Possbile options: created, completed, canceled",
                         "example": "created",
                         "x-discordVariable": "status"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Webhook processed successfully"
-          },
-          "400": {
-            "description": "Bad request"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
-    "ON_CHARGEBACK": {
-      "post": {
-        "tags": [
-          "Webhooks"
-        ],
-        "summary": "Triggered when a chargeback is created",
-        "description": "Webhook for ON_CHARGEBACK",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "required": [
-                  "event_type",
-                  "event_id",
-                  "body"
-                ],
-                "type": "object",
-                "properties": {
-                  "event_type": {
-                    "allOf": [
-                      {
-                        "$ref": "#/components/schemas/WebhookEventType"
-                      }
-                    ],
-                    "description": "The type of webhook event",
-                    "example": "ON_CHARGEBACK"
-                  },
-                  "event_id": {
-                    "type": "string",
-                    "description": "The ID of the Webhook Event",
-                    "format": "flake-id",
-                    "example": "411486491630370816"
-                  },
-                  "body": {
-                    "required": [
-                      "id",
-                      "store_id",
-                      "order_id",
-                      "gateway",
-                      "currency",
-                      "tax_inclusive",
-                      "amount",
-                      "gateway_fee_amount",
-                      "tax_amount",
-                      "platform_fee_amount",
-                      "store_net_amount",
-                      "status",
-                      "chargeback_at"
-                    ],
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string",
-                        "description": "The Flake ID of the Payment associated with the Payment",
-                        "format": "flake-id",
-                        "example": "411486491630370816",
-                        "x-discordVariable": "id"
-                      },
-                      "store_id": {
-                        "type": "string",
-                        "description": "The Flake ID of the Store associated with the Payment",
-                        "format": "flake-id",
-                        "example": "411486491630370816",
-                        "x-discordVariable": "store_id"
-                      },
-                      "order_id": {
-                        "type": "string",
-                        "description": "The Flake ID of the Order associated with Payment",
-                        "format": "flake-id",
-                        "example": "411486491630370816",
-                        "x-discordVariable": "order_id"
-                      },
-                      "customer": {
-                        "oneOf": [
-                          {
-                            "$ref": "#/components/schemas/CustomerDTO"
-                          },
-                          {
-                            "type": "null"
-                          }
-                        ],
-                        "x-discordVariable": "customer"
-                      },
-                      "gateway": {
-                        "type": "string",
-                        "description": "The Payment Gateway of the Payment",
-                        "example": "stripe",
-                        "x-discordVariable": "gateway"
-                      },
-                      "currency": {
-                        "type": "string",
-                        "description": "The ISO-4217 Currency Code of the Payment",
-                        "example": "USD",
-                        "x-discordVariable": "currency"
-                      },
-                      "tax_inclusive": {
-                        "type": "boolean",
-                        "description": "Indicates if the payment was Tax Inclusive",
-                        "example": true,
-                        "x-discordVariable": "tax_inclusive"
-                      },
-                      "amount": {
-                        "type": "integer",
-                        "description": "The payment amount, represented in cents",
-                        "example": 7500,
-                        "x-discordVariable": "amount"
-                      },
-                      "gateway_fee_amount": {
-                        "type": "integer",
-                        "description": "The gateway fee  amount, represented in cents",
-                        "example": 200,
-                        "x-discordVariable": "gateway_fee_amount"
-                      },
-                      "tax_amount": {
-                        "type": "integer",
-                        "description": "The tax amount, represented in cents",
-                        "example": 1200,
-                        "x-discordVariable": "tax_amount"
-                      },
-                      "platform_fee_amount": {
-                        "type": "integer",
-                        "description": "The platform fee amount, represented in cents",
-                        "example": 375,
-                        "x-discordVariable": "platform_fee_amount"
-                      },
-                      "store_net_amount": {
-                        "type": "integer",
-                        "description": "The net amount recieved by the associated store, represented in cents",
-                        "example": 5925,
-                        "x-discordVariable": "store_net_amount"
-                      },
-                      "status": {
-                        "type": "string",
-                        "description": "The status of the payment",
-                        "x-discordVariable": "status"
-                      },
-                      "chargeback_at": {
-                        "type": "string",
-                        "description": "Indicated when a chargeback was opened for the payment",
-                        "format": "date-time",
-                        "example": "2024-01-25T14:45:00Z",
-                        "x-discordVariable": "chargeback_at"
                       }
                     }
                   }

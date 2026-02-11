@@ -18517,7 +18517,8 @@
           "OnPurchaseFollowUpAttemptEmailSent",
           "OnPurchaseFollowUpAttemptSucceeded",
           "OnAbandonedCheckoutRecoveryAttemptEmailSent",
-          "OnAbandonedCheckoutRecoveryAttemptSucceeded"
+          "OnAbandonedCheckoutRecoveryAttemptSucceeded",
+          "OnChargebackClosed"
         ],
         "type": "string"
       },

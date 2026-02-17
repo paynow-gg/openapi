@@ -8961,6 +8961,110 @@
         "x-gitbook-ignore": true
       }
     },
+    "/v1/stores/{storeId}/upsell-settings": {
+      "get": {
+        "tags": [
+          "upsell-settings"
+        ],
+        "summary": "Get store upselling settings",
+        "description": "Retrieves upselling settings for the store.",
+        "operationId": "UpsellSettings_GetStoreUpsellSettings",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreUpsellSettingsDto"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "upsell-settings"
+        ],
+        "summary": "Updates store upselling settings",
+        "description": "Updates upselling settings for a store.",
+        "operationId": "UpsellSettings_UpdateStoreUpsellSettings",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateStoreUpsellSettingsDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateStoreUpsellSettingsDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateStoreUpsellSettingsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ]
+      }
+    },
     "/v1/stores/{storeId}/webhooks": {
       "get": {
         "tags": [
@@ -10906,6 +11010,32 @@
           }
         }
       },
+      "CreateStoreUpsellSettingsDto": {
+        "required": [
+          "enabled",
+          "automatic_recommendations_enabled",
+          "recommendation_overrides_enabled",
+          "recommendation_overrides"
+        ],
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "automatic_recommendations_enabled": {
+            "type": "boolean"
+          },
+          "recommendation_overrides_enabled": {
+            "type": "boolean"
+          },
+          "recommendation_overrides": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StoreUpsellRecommendationDto"
+            }
+          }
+        }
+      },
       "CreateTrialEligibilityOverrideDto": {
         "required": [
           "product_id",
@@ -12397,6 +12527,9 @@
           },
           "trial": {
             "$ref": "#/components/schemas/UpsertProductTrialConfigurationDto"
+          },
+          "upselling": {
+            "$ref": "#/components/schemas/UpsertProductUpsellConfigurationDto"
           },
           "remove_after_enabled": {
             "type": [
@@ -14730,6 +14863,7 @@
           "subscription_interval_value",
           "tags",
           "trial",
+          "upselling",
           "version_id"
         ],
         "type": "object",
@@ -14801,6 +14935,9 @@
           },
           "trial": {
             "$ref": "#/components/schemas/ProductTrialConfigurationDto"
+          },
+          "upselling": {
+            "$ref": "#/components/schemas/ProductUpsellConfigurationDto"
           },
           "remove_after_enabled": {
             "type": "boolean",
@@ -15360,6 +15497,82 @@
         },
         "additionalProperties": false,
         "description": "Represents the configuration for trials of a product"
+      },
+      "ProductUpsellConfigurationDto": {
+        "required": [
+          "enabled",
+          "recommendations"
+        ],
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "description": "Indicates if upselling should be enabled for the product.\nIf disabled, the product will never be recommended regardless of the global config."
+          },
+          "recommendations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductUpsellRecommendationDto"
+            },
+            "description": "Upselling recommendation for the product."
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProductUpsellRecommendationDto": {
+        "required": [
+          "discount_amount",
+          "discount_type",
+          "prefer_as_subscription",
+          "priority",
+          "recommended_product_id",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "recommended_product_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "type": {
+            "$ref": "#/components/schemas/UpsellTypeDto"
+          },
+          "priority": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "discount_type": {
+            "$ref": "#/components/schemas/UpsellDiscountTypeDto"
+          },
+          "discount_amount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "minimum_base_product_quantity": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "minimum_recommended_product_quantity": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "quantity_to_add": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "prefer_as_subscription": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
       },
       "PurchaseFollowUpStoreConfigurationCommandDto": {
         "required": [
@@ -16983,6 +17196,90 @@
         "additionalProperties": false,
         "description": "Data transfer object representing a store subscription."
       },
+      "StoreUpsellRecommendationDto": {
+        "required": [
+          "discount_amount",
+          "discount_type",
+          "prefer_as_subscription",
+          "priority",
+          "recommended_product_id",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "recommended_product_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "type": {
+            "$ref": "#/components/schemas/UpsellTypeDto"
+          },
+          "priority": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "discount_type": {
+            "$ref": "#/components/schemas/UpsellDiscountTypeDto"
+          },
+          "discount_amount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "minimum_base_product_quantity": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "quantity_to_add": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "prefer_as_subscription": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "StoreUpsellSettingsDto": {
+        "required": [
+          "automatic_recommendations_enabled",
+          "enabled",
+          "recommendation_overrides",
+          "recommendation_overrides_enabled",
+          "updated_at",
+          "updated_by"
+        ],
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "automatic_recommendations_enabled": {
+            "type": "boolean"
+          },
+          "recommendation_overrides_enabled": {
+            "type": "boolean"
+          },
+          "recommendation_overrides": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StoreUpsellRecommendationDto"
+            }
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_by": {
+            "$ref": "#/components/schemas/ActorDto"
+          }
+        },
+        "additionalProperties": false
+      },
       "SubscriptionStatus": {
         "enum": [
           "created",
@@ -17909,6 +18206,26 @@
           }
         }
       },
+      "UpdateStoreUpsellSettingsDto": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "automatic_recommendations_enabled": {
+            "type": "boolean"
+          },
+          "recommendation_overrides_enabled": {
+            "type": "boolean"
+          },
+          "recommendation_overrides": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StoreUpsellRecommendationDto"
+            }
+          }
+        }
+      },
       "UpdateTrialEligibilityOverrideDto": {
         "type": "object",
         "properties": {
@@ -17961,6 +18278,24 @@
           }
         },
         "additionalProperties": false
+      },
+      "UpsellDiscountTypeDto": {
+        "enum": [
+          "unknown",
+          "none",
+          "fixed",
+          "percentage"
+        ],
+        "type": "string"
+      },
+      "UpsellTypeDto": {
+        "enum": [
+          "unknown",
+          "additional",
+          "alternative",
+          "increase_quantity"
+        ],
+        "type": "string"
       },
       "UpsertBanRequestDto": {
         "type": "object",
@@ -18188,6 +18523,9 @@
           },
           "trial": {
             "$ref": "#/components/schemas/UpsertProductTrialConfigurationDto"
+          },
+          "upselling": {
+            "$ref": "#/components/schemas/UpsertProductUpsellConfigurationDto"
           },
           "remove_after_enabled": {
             "type": [
@@ -18431,6 +18769,82 @@
         },
         "additionalProperties": false,
         "description": "Represents the configuration for trials of a product"
+      },
+      "UpsertProductUpsellConfigurationDto": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": [
+              "null",
+              "boolean"
+            ]
+          },
+          "recommendations": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/components/schemas/UpsertProductUpsellRecommendationDto"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpsertProductUpsellRecommendationDto": {
+        "required": [
+          "discount_amount",
+          "discount_type",
+          "prefer_as_subscription",
+          "priority",
+          "recommended_product_id",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "recommended_product_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "type": {
+            "$ref": "#/components/schemas/UpsellTypeDto"
+          },
+          "priority": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "discount_type": {
+            "$ref": "#/components/schemas/UpsellDiscountTypeDto"
+          },
+          "discount_amount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "minimum_base_product_quantity": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "minimum_recommended_product_quantity": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "quantity_to_add": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "prefer_as_subscription": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
       },
       "UpsertTagRequestDto": {
         "type": "object",
@@ -18720,6 +19134,9 @@
     },
     {
       "name": "trust"
+    },
+    {
+      "name": "upsell-settings"
     },
     {
       "name": "webhooks"

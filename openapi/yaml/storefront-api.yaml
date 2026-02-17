@@ -1702,6 +1702,7 @@ components:
       required:
         - price_final
         - price_original
+        - upsell_discount_amount
       type: object
       properties:
         active_sale:
@@ -1713,6 +1714,11 @@ components:
           description: The amount of the sale discount in the lowest denominator (e.g. cents).
           format: int64
           example: 500
+        upsell_offer_id:
+          $ref: '#/components/schemas/FlakeId'
+        upsell_discount_amount:
+          type: integer
+          format: int64
         vat_rate:
           $ref: '#/components/schemas/VatRateDto'
         regional_pricing:

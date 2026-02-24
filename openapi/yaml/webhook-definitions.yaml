@@ -721,6 +721,8 @@ components:
         - ON_ABANDONED_CHECKOUT_RECOVERY_ATTEMPT_EMAIL_SENT
         - ON_ABANDONED_CHECKOUT_RECOVERY_ATTEMPT_SUCCEEDED
         - ON_CHARGEBACK_CLOSED
+        - ON_DELIVERY_ITEM_EXPIRED
+        - ON_DELIVERY_ITEM_RENEWED
       type: string
       description: The type of webhook event
 webhooks:
@@ -1724,6 +1726,363 @@ webhooks:
                     - $ref: '#/components/schemas/WebhookEventType'
                   description: The type of webhook event
                   example: ON_DELIVERY_ITEM_USED
+                event_id:
+                  type: string
+                  description: The ID of the Webhook Event
+                  format: flake-id
+                  example: '411486491630370816'
+                body:
+                  required:
+                    - id
+                    - store_id
+                    - product_id
+                    - product_version_id
+                    - product
+                    - state
+                    - added_at
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The Flake ID of the Delivery Item
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: id
+                    store_id:
+                      type: string
+                      description: The Flake ID of the Store associated with the Delivery Item
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: store_id
+                    customer:
+                      oneOf:
+                        - $ref: '#/components/schemas/CustomerDTO'
+                        - type: 'null'
+                      x-discordVariable: customer
+                    order_customer_id:
+                      type:
+                        - 'null'
+                        - string
+                      description: The Flake ID of the customer who ordered the delivery item - which may differ to the customer because of gifting
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: order_customer_id
+                    checkout_id:
+                      type:
+                        - 'null'
+                        - string
+                      description: The Flake ID of the Checkout associated with the Delivery Item
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: checkout_id
+                    order_id:
+                      type:
+                        - 'null'
+                        - string
+                      description: The Flake ID of the Order ID associated with the Delivery Item
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: order_id
+                    order_line_id:
+                      type:
+                        - 'null'
+                        - string
+                      description: The Flake Id of the Order Line ID associated with the Delivery Item
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: order_line_id
+                    subscription_id:
+                      type:
+                        - 'null'
+                        - string
+                      description: The Flake ID of the Subscription associated with the Delivery Item
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: subscription_id
+                    execute_on_gameserver_id:
+                      type:
+                        - 'null'
+                        - string
+                      description: The Flake ID of the Game Server the Delivery Item is associated with
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: execute_on_gameserver_id
+                    execute_on_gameserver:
+                      oneOf:
+                        - $ref: '#/components/schemas/GameServerDTO'
+                        - type: 'null'
+                      x-discordVariable: execute_on_gameserver
+                    product_id:
+                      type: string
+                      description: The associated Product ID of the Delivery Item
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: product_id
+                    product_version_id:
+                      type: string
+                      description: The associated Product Version ID of the Delivery Item
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: product_version_id
+                    product:
+                      $ref: '#/components/schemas/ProductDTO'
+                    state:
+                      type: string
+                      description: 'The state of the Delivery Item.  Possible options: usable, active, used, revoked, renewed'
+                      example: usable
+                      x-discordVariable: state
+                    added_at:
+                      type: string
+                      description: Indicates when the Delivery Item was added to the customers inventory
+                      format: date-time
+                      example: '2024-01-10T08:00:00Z'
+                      x-discordVariable: added_at
+                    active_at:
+                      type:
+                        - 'null'
+                        - string
+                      description: Indicates when the Delivery Item become active
+                      format: date-time
+                      example: '2024-01-10T09:00:00Z'
+                      x-discordVariable: active_at
+                    expires_at:
+                      type:
+                        - 'null'
+                        - string
+                      description: Indicates when the Delivery Item expires
+                      format: date-time
+                      example: '2024-12-31T23:59:59Z'
+                      x-discordVariable: expires_at
+                    removed_at:
+                      type:
+                        - 'null'
+                        - string
+                      description: Indicates when the Delivery Item was removed from the customers inventory
+                      format: date-time
+                      example: '2024-02-01T10:00:00Z'
+                      x-discordVariable: removed_at
+                    revoked_at:
+                      type:
+                        - 'null'
+                        - string
+                      description: Indicates when the Delivery Item was revoked from the customers inventory
+                      format: date-time
+                      example: '2024-02-05T14:30:00Z'
+                      x-discordVariable: revoked_at
+                    revoke_reason:
+                      type:
+                        - 'null'
+                        - string
+                      description: Indicates the reason the delivery item was revoked from the customers inventory
+                      x-discordVariable: revoke_reason
+        required: true
+      responses:
+        '200':
+          description: Webhook processed successfully
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+      deprecated: true
+  ON_DELIVERY_ITEM_RENEWED:
+    post:
+      tags:
+        - Webhooks
+      summary: Triggered when a delivery item in the customers inventory is renewed
+      description: Webhook for ON_DELIVERY_ITEM_RENEWED
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - event_type
+                - event_id
+                - body
+              type: object
+              properties:
+                event_type:
+                  allOf:
+                    - $ref: '#/components/schemas/WebhookEventType'
+                  description: The type of webhook event
+                  example: ON_DELIVERY_ITEM_RENEWED
+                event_id:
+                  type: string
+                  description: The ID of the Webhook Event
+                  format: flake-id
+                  example: '411486491630370816'
+                body:
+                  required:
+                    - id
+                    - store_id
+                    - product_id
+                    - product_version_id
+                    - product
+                    - state
+                    - added_at
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The Flake ID of the Delivery Item
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: id
+                    store_id:
+                      type: string
+                      description: The Flake ID of the Store associated with the Delivery Item
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: store_id
+                    customer:
+                      oneOf:
+                        - $ref: '#/components/schemas/CustomerDTO'
+                        - type: 'null'
+                      x-discordVariable: customer
+                    order_customer_id:
+                      type:
+                        - 'null'
+                        - string
+                      description: The Flake ID of the customer who ordered the delivery item - which may differ to the customer because of gifting
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: order_customer_id
+                    checkout_id:
+                      type:
+                        - 'null'
+                        - string
+                      description: The Flake ID of the Checkout associated with the Delivery Item
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: checkout_id
+                    order_id:
+                      type:
+                        - 'null'
+                        - string
+                      description: The Flake ID of the Order ID associated with the Delivery Item
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: order_id
+                    order_line_id:
+                      type:
+                        - 'null'
+                        - string
+                      description: The Flake Id of the Order Line ID associated with the Delivery Item
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: order_line_id
+                    subscription_id:
+                      type:
+                        - 'null'
+                        - string
+                      description: The Flake ID of the Subscription associated with the Delivery Item
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: subscription_id
+                    execute_on_gameserver_id:
+                      type:
+                        - 'null'
+                        - string
+                      description: The Flake ID of the Game Server the Delivery Item is associated with
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: execute_on_gameserver_id
+                    execute_on_gameserver:
+                      oneOf:
+                        - $ref: '#/components/schemas/GameServerDTO'
+                        - type: 'null'
+                      x-discordVariable: execute_on_gameserver
+                    product_id:
+                      type: string
+                      description: The associated Product ID of the Delivery Item
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: product_id
+                    product_version_id:
+                      type: string
+                      description: The associated Product Version ID of the Delivery Item
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: product_version_id
+                    product:
+                      $ref: '#/components/schemas/ProductDTO'
+                    state:
+                      type: string
+                      description: 'The state of the Delivery Item.  Possible options: usable, active, used, revoked, renewed'
+                      example: usable
+                      x-discordVariable: state
+                    added_at:
+                      type: string
+                      description: Indicates when the Delivery Item was added to the customers inventory
+                      format: date-time
+                      example: '2024-01-10T08:00:00Z'
+                      x-discordVariable: added_at
+                    active_at:
+                      type:
+                        - 'null'
+                        - string
+                      description: Indicates when the Delivery Item become active
+                      format: date-time
+                      example: '2024-01-10T09:00:00Z'
+                      x-discordVariable: active_at
+                    expires_at:
+                      type:
+                        - 'null'
+                        - string
+                      description: Indicates when the Delivery Item expires
+                      format: date-time
+                      example: '2024-12-31T23:59:59Z'
+                      x-discordVariable: expires_at
+                    removed_at:
+                      type:
+                        - 'null'
+                        - string
+                      description: Indicates when the Delivery Item was removed from the customers inventory
+                      format: date-time
+                      example: '2024-02-01T10:00:00Z'
+                      x-discordVariable: removed_at
+                    revoked_at:
+                      type:
+                        - 'null'
+                        - string
+                      description: Indicates when the Delivery Item was revoked from the customers inventory
+                      format: date-time
+                      example: '2024-02-05T14:30:00Z'
+                      x-discordVariable: revoked_at
+                    revoke_reason:
+                      type:
+                        - 'null'
+                        - string
+                      description: Indicates the reason the delivery item was revoked from the customers inventory
+                      x-discordVariable: revoke_reason
+        required: true
+      responses:
+        '200':
+          description: Webhook processed successfully
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+  ON_DELIVERY_ITEM_EXPIRED:
+    post:
+      tags:
+        - Webhooks
+      summary: Triggered when a delivery item in the customers inventory expires
+      description: Webhook for ON_DELIVERY_ITEM_EXPIRED
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - event_type
+                - event_id
+                - body
+              type: object
+              properties:
+                event_type:
+                  allOf:
+                    - $ref: '#/components/schemas/WebhookEventType'
+                  description: The type of webhook event
+                  example: ON_DELIVERY_ITEM_EXPIRED
                 event_id:
                   type: string
                   description: The ID of the Webhook Event

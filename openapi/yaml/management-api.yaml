@@ -6841,6 +6841,7 @@ components:
         - automatic_recommendations_enabled
         - recommendation_overrides_enabled
         - recommendation_overrides
+        - checkout_style
       type: object
       properties:
         enabled:
@@ -6853,6 +6854,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/StoreUpsellRecommendationDto'
+        checkout_style:
+          $ref: '#/components/schemas/StoreUpsellCheckoutStyleDto'
     CreateTrialEligibilityOverrideDto:
       required:
         - product_id
@@ -10245,7 +10248,6 @@ components:
         - discount_amount
         - discount_type
         - prefer_as_subscription
-        - priority
         - recommended_product_id
         - type
       type: object
@@ -10254,9 +10256,6 @@ components:
           $ref: '#/components/schemas/FlakeId'
         type:
           $ref: '#/components/schemas/UpsellTypeDto'
-        priority:
-          type: integer
-          format: int32
         discount_type:
           $ref: '#/components/schemas/UpsellDiscountTypeDto'
         discount_amount:
@@ -11501,12 +11500,18 @@ components:
           description: Reason provided for cancellation.
       additionalProperties: false
       description: Data transfer object representing a store subscription.
+    StoreUpsellCheckoutStyleDto:
+      enum:
+        - unknown
+        - inline
+        - inline_and_prepayment_dialog
+        - dedicated_step
+      type: string
     StoreUpsellRecommendationDto:
       required:
         - discount_amount
         - discount_type
         - prefer_as_subscription
-        - priority
         - recommended_product_id
         - type
       type: object
@@ -11515,9 +11520,6 @@ components:
           $ref: '#/components/schemas/FlakeId'
         type:
           $ref: '#/components/schemas/UpsellTypeDto'
-        priority:
-          type: integer
-          format: int32
         discount_type:
           $ref: '#/components/schemas/UpsellDiscountTypeDto'
         discount_amount:
@@ -11539,6 +11541,7 @@ components:
     StoreUpsellSettingsDto:
       required:
         - automatic_recommendations_enabled
+        - checkout_style
         - enabled
         - recommendation_overrides
         - recommendation_overrides_enabled
@@ -11556,6 +11559,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/StoreUpsellRecommendationDto'
+        checkout_style:
+          $ref: '#/components/schemas/StoreUpsellCheckoutStyleDto'
         updated_at:
           type: string
           format: date-time
@@ -12243,6 +12248,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/StoreUpsellRecommendationDto'
+        checkout_style:
+          $ref: '#/components/schemas/StoreUpsellCheckoutStyleDto'
     UpdateTrialEligibilityOverrideDto:
       type: object
       properties:
@@ -12649,7 +12656,6 @@ components:
         - discount_amount
         - discount_type
         - prefer_as_subscription
-        - priority
         - recommended_product_id
         - type
       type: object
@@ -12658,9 +12664,6 @@ components:
           $ref: '#/components/schemas/FlakeId'
         type:
           $ref: '#/components/schemas/UpsellTypeDto'
-        priority:
-          type: integer
-          format: int32
         discount_type:
           $ref: '#/components/schemas/UpsellDiscountTypeDto'
         discount_amount:

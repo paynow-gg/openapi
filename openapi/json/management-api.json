@@ -11015,7 +11015,8 @@
           "enabled",
           "automatic_recommendations_enabled",
           "recommendation_overrides_enabled",
-          "recommendation_overrides"
+          "recommendation_overrides",
+          "checkout_style"
         ],
         "type": "object",
         "properties": {
@@ -11033,6 +11034,9 @@
             "items": {
               "$ref": "#/components/schemas/StoreUpsellRecommendationDto"
             }
+          },
+          "checkout_style": {
+            "$ref": "#/components/schemas/StoreUpsellCheckoutStyleDto"
           }
         }
       },
@@ -15524,7 +15528,6 @@
           "discount_amount",
           "discount_type",
           "prefer_as_subscription",
-          "priority",
           "recommended_product_id",
           "type"
         ],
@@ -15535,10 +15538,6 @@
           },
           "type": {
             "$ref": "#/components/schemas/UpsellTypeDto"
-          },
-          "priority": {
-            "type": "integer",
-            "format": "int32"
           },
           "discount_type": {
             "$ref": "#/components/schemas/UpsellDiscountTypeDto"
@@ -17196,12 +17195,20 @@
         "additionalProperties": false,
         "description": "Data transfer object representing a store subscription."
       },
+      "StoreUpsellCheckoutStyleDto": {
+        "enum": [
+          "unknown",
+          "inline",
+          "inline_and_prepayment_dialog",
+          "dedicated_step"
+        ],
+        "type": "string"
+      },
       "StoreUpsellRecommendationDto": {
         "required": [
           "discount_amount",
           "discount_type",
           "prefer_as_subscription",
-          "priority",
           "recommended_product_id",
           "type"
         ],
@@ -17212,10 +17219,6 @@
           },
           "type": {
             "$ref": "#/components/schemas/UpsellTypeDto"
-          },
-          "priority": {
-            "type": "integer",
-            "format": "int32"
           },
           "discount_type": {
             "$ref": "#/components/schemas/UpsellDiscountTypeDto"
@@ -17247,6 +17250,7 @@
       "StoreUpsellSettingsDto": {
         "required": [
           "automatic_recommendations_enabled",
+          "checkout_style",
           "enabled",
           "recommendation_overrides",
           "recommendation_overrides_enabled",
@@ -17269,6 +17273,9 @@
             "items": {
               "$ref": "#/components/schemas/StoreUpsellRecommendationDto"
             }
+          },
+          "checkout_style": {
+            "$ref": "#/components/schemas/StoreUpsellCheckoutStyleDto"
           },
           "updated_at": {
             "type": "string",
@@ -18223,6 +18230,9 @@
             "items": {
               "$ref": "#/components/schemas/StoreUpsellRecommendationDto"
             }
+          },
+          "checkout_style": {
+            "$ref": "#/components/schemas/StoreUpsellCheckoutStyleDto"
           }
         }
       },
@@ -18796,7 +18806,6 @@
           "discount_amount",
           "discount_type",
           "prefer_as_subscription",
-          "priority",
           "recommended_product_id",
           "type"
         ],
@@ -18807,10 +18816,6 @@
           },
           "type": {
             "$ref": "#/components/schemas/UpsellTypeDto"
-          },
-          "priority": {
-            "type": "integer",
-            "format": "int32"
           },
           "discount_type": {
             "$ref": "#/components/schemas/UpsellDiscountTypeDto"

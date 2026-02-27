@@ -4647,6 +4647,28 @@ paths:
                 $ref: '#/components/schemas/PayNowError'
       security:
         - APIKey: [ ]
+  '/v1/stores/{storeId}':
+    get:
+      tags:
+        - store
+      operationId: Store_GetStore
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
   '/v1/stores/{storeId}/subscriptions':
     get:
       tags:
@@ -5325,33 +5347,6 @@ paths:
                 $ref: '#/components/schemas/PayNowError'
       security:
         - APIKey: [ ]
-  '/v1/stores/{storeId}/trust/onboarding/status':
-    get:
-      tags:
-        - trust
-      operationId: TrustStoreOnboarding_GetStoreOnboardingStatus
-      parameters:
-        - name: storeId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TrustStoreOnboardingDto'
-        default:
-          description: Error response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PayNowError'
-      security:
-        - APIKey: [ ]
-      x-gitbook-ignore: true
   '/v1/stores/{storeId}/trust/requirements':
     get:
       tags:
@@ -7103,6 +7098,8 @@ components:
           $ref: '#/components/schemas/FlakeId'
         store_id:
           $ref: '#/components/schemas/FlakeId'
+        store:
+          $ref: '#/components/schemas/StoreDto'
         profile:
           $ref: '#/components/schemas/GenericProfileDto'
         steam_id:
@@ -9494,6 +9491,62 @@ components:
           example: João Silva
       additionalProperties: false
       description: Pix payment method details
+    PlatformCapability:
+      enum:
+        - invalid
+        - connected_users
+      type: string
+    PlatformStoreTypeAssociationDetailsDto:
+      required:
+        - disable_billing_plans
+        - display_disclaimers
+        - full_external_management
+        - platform_id
+        - store_platform
+      type: object
+      properties:
+        platform_id:
+          $ref: '#/components/schemas/FlakeId'
+        associated_platform:
+          $ref: '#/components/schemas/PublicPlatformDto'
+        store_platform:
+          type: string
+          description: 'The store platform identifier string (e.g. "rust", "minecraft").'
+        paynow_platform_fee_percentage_override:
+          type:
+            - 'null'
+            - integer
+          description: "Overrides the default PayNow platform fee percentage for this association.\nExpressed in basis points (e.g. 250 = 2.50%)."
+          format: int64
+        connected_platform_fee_percentage:
+          type:
+            - 'null'
+            - integer
+          description: "The fee percentage charged by the connected platform.\nExpressed in basis points (e.g. 250 = 2.50%)."
+          format: int64
+        connected_platform_wallet_id:
+          type:
+            - 'null'
+            - integer
+          description: The payout ID associated with the connected platform.
+          format: int64
+        disable_billing_plans:
+          type: boolean
+          description: 'When true, billing plans are disabled for this platform/store type combination.'
+        display_disclaimers:
+          type: boolean
+          description: 'When true, legal or compliance disclaimers should be displayed to the end user.'
+        full_external_management:
+          type: boolean
+          description: Whether the management hides some PayNow UI
+      additionalProperties: false
+    PlatformType:
+      enum:
+        - invalid
+        - marketplace
+        - store_platform
+        - other
+      type: string
     PrepaidCardsBlockingTypeDto:
       enum:
         - unspecified
@@ -10279,6 +10332,59 @@ components:
         prefer_as_subscription:
           type: boolean
       additionalProperties: false
+    PublicPlatformDto:
+      required:
+        - accent_color
+        - business_name
+        - capabilities
+        - country_code
+        - created_at
+        - description
+        - id
+        - logo_url
+        - name
+        - slug
+        - type
+        - updated_at
+        - website_url
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        slug:
+          type: string
+        type:
+          $ref: '#/components/schemas/PlatformType'
+        country_code:
+          type: string
+        business_name:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        website_url:
+          type: string
+        logo_url:
+          type: string
+        accent_color:
+          type: string
+        capabilities:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlatformCapability'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        disabled_at:
+          type:
+            - 'null'
+            - string
+          format: date-time
+      additionalProperties: false
     PurchaseFollowUpStoreConfigurationCommandDto:
       required:
         - command
@@ -11002,6 +11108,153 @@ components:
           format: int32
           example: 2500
       additionalProperties: false
+    StoreDto:
+      required:
+        - currency
+        - description
+        - game
+        - id
+        - live_mode
+        - name
+        - owner_id
+        - platform
+        - slug
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        trust:
+          $ref: '#/components/schemas/StoreTrustDto'
+        owner_id:
+          $ref: '#/components/schemas/FlakeId'
+        slug:
+          type: string
+          description: The URL-safe slug used to identify the store (e.g. "my-rust-server").
+        name:
+          type: string
+          description: The display name of the store.
+        platform:
+          type: string
+          description: 'The platform this store is associated with (e.g. "rust", "minecraft").'
+        game:
+          type: string
+          description: Alias for PayNow.Services.HttpGateway.DataTransferObjects.V1.Stores.StoreDto.Platform. Returns the platform identifier as a game name.
+          readOnly: true
+        currency:
+          type: string
+          description: 'The ISO 4217 currency code used by this store for pricing (e.g. "usd", "eur")'
+        description:
+          type: string
+          description: A human-readable description of the store shown to customers and PayNow.
+        website_url:
+          type:
+            - 'null'
+            - string
+          description: The store's public website URL.
+        contact_email:
+          type:
+            - 'null'
+            - string
+          description: General contact email address for the store.
+        support_email:
+          type:
+            - 'null'
+            - string
+          description: Dedicated support email address for customer inquiries.
+        support_url:
+          type:
+            - 'null'
+            - string
+          description: URL to the store's support portal or help page.
+        integration_type:
+          type:
+            - 'null'
+            - string
+          description: The integration type used by the store.
+        live_mode:
+          type: boolean
+          description: 'When set to true, the store is processing real transactions in live mode.'
+        logo_url:
+          type:
+            - 'null'
+            - string
+          description: URL of the store's full-size logo image.
+        logo_square_url:
+          type:
+            - 'null'
+            - string
+          description: URL of the store's square/icon logo image.
+        minecraft_bedrock_username_prefix:
+          type:
+            - 'null'
+            - string
+          description: Username prefix used to identify Minecraft Bedrock players (e.g. ".").
+        created_at:
+          type:
+            - 'null'
+            - string
+          description: The UTC timestamp when the store was created.
+          format: date-time
+        updated_at:
+          type:
+            - 'null'
+            - string
+          description: The UTC timestamp when the store was last updated.
+          format: date-time
+        onboarding_completed_at:
+          type:
+            - 'null'
+            - string
+          description: The UTC timestamp when the store completed onboarding.
+          format: date-time
+        platform_store_type_association:
+          $ref: '#/components/schemas/PlatformStoreTypeAssociationDetailsDto'
+        members:
+          type:
+            - 'null'
+            - array
+          items:
+            $ref: '#/components/schemas/StoreMemberDto'
+          description: The list of members who have access to manage this store.
+      additionalProperties: false
+      description: Represents a PayNow store and its associated configuration.
+    StoreMemberDto:
+      required:
+        - user
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/StoreMemberUserDto'
+        added_at:
+          type:
+            - 'null'
+            - string
+          format: date-time
+        added_by:
+          $ref: '#/components/schemas/ActorDto'
+        role_id:
+          $ref: '#/components/schemas/FlakeId'
+      additionalProperties: false
+    StoreMemberUserDto:
+      required:
+        - email
+        - first_name
+        - id
+        - last_name
+        - type
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PayNowActorType'
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        email:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+      additionalProperties: false
     StorePaymentSettingsDto:
       required:
         - adaptive_currency_enabled
@@ -11126,6 +11379,12 @@ components:
         expired: Requirement expired and needs renewal
         waived: Requirement waived by PayNow (manual override)
         rejected_final: Requirement fully rejected - usually terminal state for the entire store
+    StoreRestrictionFlagDto:
+      enum:
+        - none
+        - payments_disabled
+        - payouts_disabled
+      type: string
     StoreSubscriptionDto:
       required:
         - created_at
@@ -11500,6 +11759,134 @@ components:
           description: Reason provided for cancellation.
       additionalProperties: false
       description: Data transfer object representing a store subscription.
+    StoreTrustDto:
+      required:
+        - created_at
+        - events
+        - pending_requirements
+        - restrictions
+        - status
+        - store_id
+      type: object
+      properties:
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        status:
+          $ref: '#/components/schemas/StoreTrustStatusDto'
+        status_reason:
+          type:
+            - 'null'
+            - string
+        restrictions:
+          $ref: '#/components/schemas/StoreRestrictionFlagDto'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type:
+            - 'null'
+            - string
+          format: date-time
+        onboarding_steps:
+          $ref: '#/components/schemas/StoreTrustOnboardingStepsDto'
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/StoreTrustEventDto'
+        pending_requirements:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrustStoreRequirementDto'
+      additionalProperties: false
+    StoreTrustEventDto:
+      required:
+        - actor
+        - created_at
+        - id
+        - store_id
+        - type
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        type:
+          $ref: '#/components/schemas/StoreTrustEventTypeDto'
+        description:
+          type:
+            - 'null'
+            - string
+        store_requirement_id:
+          $ref: '#/components/schemas/FlakeId'
+        store_review_id:
+          $ref: '#/components/schemas/FlakeId'
+        actor:
+          $ref: '#/components/schemas/ActorDto'
+        created_at:
+          type: string
+          format: date-time
+      additionalProperties: false
+    StoreTrustEventTypeDto:
+      enum:
+        - invalid
+        - onboarded
+        - escalated_to_review
+        - action_required
+        - restricted
+        - offboarded
+        - reactivated
+        - requirement_added
+        - requirement_submitted
+        - requirement_verified
+        - requirement_rejected
+        - requirement_deadline_missed
+        - requirement_waived
+        - requirement_requires_revision
+        - restriction_added
+        - restriction_lifted
+        - review_scheduled
+        - review_completed
+      type: string
+    StoreTrustOnboardingStepsDto:
+      required:
+        - downloadable_files_added
+        - gameserver_linked
+        - kyc_completed
+        - payout_onboarding_completed
+        - products_created
+        - store_id
+        - store_owner_id
+        - webhooks_active
+      type: object
+      properties:
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        store_owner_id:
+          $ref: '#/components/schemas/FlakeId'
+        payout_onboarding_completed:
+          type: boolean
+        kyc_completed:
+          type: boolean
+        products_created:
+          type: boolean
+        gameserver_linked:
+          type: boolean
+        webhooks_active:
+          type: boolean
+        downloadable_files_added:
+          type: boolean
+      additionalProperties: false
+    StoreTrustStatusDto:
+      enum:
+        - invalid
+        - pending_review
+        - requires_action
+        - under_review
+        - active
+        - restricted
+        - offboarded
+      type: string
     StoreUpsellCheckoutStyleDto:
       enum:
         - unknown
@@ -11790,64 +12177,6 @@ components:
         active: The trial is currently active.
         canceled: The trial has been canceled.
         completed: The trial has been completed.
-    TrustStoreOnboardingDto:
-      required:
-        - downloadable_files_added
-        - gameserver_linked
-        - kyc_completed
-        - kyc_required
-        - manually_approved
-        - payout_onboarding_completed
-        - products_created
-        - requires_approval
-        - status
-        - store_id
-        - user_id
-        - webhooks_active
-      type: object
-      properties:
-        store_id:
-          $ref: '#/components/schemas/FlakeId'
-        user_id:
-          $ref: '#/components/schemas/FlakeId'
-        status:
-          $ref: '#/components/schemas/TrustStoreOnboardingStatus'
-        payout_onboarding_completed:
-          type: boolean
-        kyc_completed:
-          type: boolean
-        requires_approval:
-          type: boolean
-        manually_approved:
-          type: boolean
-        decline_reason:
-          type:
-            - 'null'
-            - string
-        requires_action_text:
-          type:
-            - 'null'
-            - string
-        products_created:
-          type: boolean
-        kyc_required:
-          type: boolean
-        gameserver_linked:
-          type: boolean
-        webhooks_active:
-          type: boolean
-        downloadable_files_added:
-          type: boolean
-      additionalProperties: false
-    TrustStoreOnboardingStatus:
-      enum:
-        - invalid
-        - pending
-        - approved
-        - declined
-        - requires_action
-        - under_review
-      type: string
     TrustStoreRequirementDto:
       required:
         - category
@@ -12864,6 +13193,7 @@ tags:
   - name: products
   - name: regional-pricing
   - name: sales
+  - name: store
   - name: subscriptions
   - name: tags
   - name: trials

@@ -724,6 +724,16 @@ paths:
           APIKey: [ ]
 components:
   schemas:
+    ActorDto:
+      required:
+        - type
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PayNowActorType'
+        id:
+          $ref: '#/components/schemas/FlakeId'
+      additionalProperties: false
     AuthenticateStorefrontCustomerRequestDto:
       required:
         - id
@@ -1013,6 +1023,8 @@ components:
           $ref: '#/components/schemas/FlakeId'
         store_id:
           $ref: '#/components/schemas/FlakeId'
+        store:
+          $ref: '#/components/schemas/StoreDto'
         profile:
           $ref: '#/components/schemas/GenericProfileDto'
         steam_id:
@@ -1179,6 +1191,18 @@ components:
           description: The URL to the player's Minecraft skin rendered as an avatar.
       additionalProperties: false
       description: Represents a Minecraft profile for a customer.
+    PayNowActorType:
+      enum:
+        - anonymous
+        - user
+        - customer
+        - api_key
+        - game_server
+        - admin
+        - internal
+        - platform
+        - global_customer
+      type: string
     PayNowError:
       required:
         - code
@@ -1214,6 +1238,62 @@ components:
           description: An array of multiple errors. Only used by some API services.
       additionalProperties: false
       description: Represents a PayNow error
+    PlatformCapability:
+      enum:
+        - invalid
+        - connected_users
+      type: string
+    PlatformStoreTypeAssociationDetailsDto:
+      required:
+        - disable_billing_plans
+        - display_disclaimers
+        - full_external_management
+        - platform_id
+        - store_platform
+      type: object
+      properties:
+        platform_id:
+          $ref: '#/components/schemas/FlakeId'
+        associated_platform:
+          $ref: '#/components/schemas/PublicPlatformDto'
+        store_platform:
+          type: string
+          description: 'The store platform identifier string (e.g. "rust", "minecraft").'
+        paynow_platform_fee_percentage_override:
+          type:
+            - 'null'
+            - integer
+          description: "Overrides the default PayNow platform fee percentage for this association.\nExpressed in basis points (e.g. 250 = 2.50%)."
+          format: int64
+        connected_platform_fee_percentage:
+          type:
+            - 'null'
+            - integer
+          description: "The fee percentage charged by the connected platform.\nExpressed in basis points (e.g. 250 = 2.50%)."
+          format: int64
+        connected_platform_wallet_id:
+          type:
+            - 'null'
+            - integer
+          description: The payout ID associated with the connected platform.
+          format: int64
+        disable_billing_plans:
+          type: boolean
+          description: 'When true, billing plans are disabled for this platform/store type combination.'
+        display_disclaimers:
+          type: boolean
+          description: 'When true, legal or compliance disclaimers should be displayed to the end user.'
+        full_external_management:
+          type: boolean
+          description: Whether the management hides some PayNow UI
+      additionalProperties: false
+    PlatformType:
+      enum:
+        - invalid
+        - marketplace
+        - store_platform
+        - other
+      type: string
     ProductDeliverableActionsDto:
       required:
         - grant_giftcard
@@ -1273,6 +1353,59 @@ components:
           description: The display name of the tag.
           example: Packages
       additionalProperties: false
+    PublicPlatformDto:
+      required:
+        - accent_color
+        - business_name
+        - capabilities
+        - country_code
+        - created_at
+        - description
+        - id
+        - logo_url
+        - name
+        - slug
+        - type
+        - updated_at
+        - website_url
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        slug:
+          type: string
+        type:
+          $ref: '#/components/schemas/PlatformType'
+        country_code:
+          type: string
+        business_name:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        website_url:
+          type: string
+        logo_url:
+          type: string
+        accent_color:
+          type: string
+        capabilities:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlatformCapability'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        disabled_at:
+          type:
+            - 'null'
+            - string
+          format: date-time
+      additionalProperties: false
     SaleDiscountType:
       enum:
         - percent
@@ -1301,6 +1434,347 @@ components:
           description: The URL to the user's Steam avatar image.
       additionalProperties: false
       description: Represents a Steam profile for a customer.
+    StoreDto:
+      required:
+        - currency
+        - description
+        - game
+        - id
+        - live_mode
+        - name
+        - owner_id
+        - platform
+        - slug
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        trust:
+          $ref: '#/components/schemas/StoreTrustDto'
+        owner_id:
+          $ref: '#/components/schemas/FlakeId'
+        slug:
+          type: string
+          description: The URL-safe slug used to identify the store (e.g. "my-rust-server").
+        name:
+          type: string
+          description: The display name of the store.
+        platform:
+          type: string
+          description: 'The platform this store is associated with (e.g. "rust", "minecraft").'
+        game:
+          type: string
+          description: Alias for PayNow.Services.HttpGateway.DataTransferObjects.V1.Stores.StoreDto.Platform. Returns the platform identifier as a game name.
+          readOnly: true
+        currency:
+          type: string
+          description: 'The ISO 4217 currency code used by this store for pricing (e.g. "usd", "eur")'
+        description:
+          type: string
+          description: A human-readable description of the store shown to customers and PayNow.
+        website_url:
+          type:
+            - 'null'
+            - string
+          description: The store's public website URL.
+        contact_email:
+          type:
+            - 'null'
+            - string
+          description: General contact email address for the store.
+        support_email:
+          type:
+            - 'null'
+            - string
+          description: Dedicated support email address for customer inquiries.
+        support_url:
+          type:
+            - 'null'
+            - string
+          description: URL to the store's support portal or help page.
+        integration_type:
+          type:
+            - 'null'
+            - string
+          description: The integration type used by the store.
+        live_mode:
+          type: boolean
+          description: 'When set to true, the store is processing real transactions in live mode.'
+        logo_url:
+          type:
+            - 'null'
+            - string
+          description: URL of the store's full-size logo image.
+        logo_square_url:
+          type:
+            - 'null'
+            - string
+          description: URL of the store's square/icon logo image.
+        minecraft_bedrock_username_prefix:
+          type:
+            - 'null'
+            - string
+          description: Username prefix used to identify Minecraft Bedrock players (e.g. ".").
+        created_at:
+          type:
+            - 'null'
+            - string
+          description: The UTC timestamp when the store was created.
+          format: date-time
+        updated_at:
+          type:
+            - 'null'
+            - string
+          description: The UTC timestamp when the store was last updated.
+          format: date-time
+        onboarding_completed_at:
+          type:
+            - 'null'
+            - string
+          description: The UTC timestamp when the store completed onboarding.
+          format: date-time
+        platform_store_type_association:
+          $ref: '#/components/schemas/PlatformStoreTypeAssociationDetailsDto'
+        members:
+          type:
+            - 'null'
+            - array
+          items:
+            $ref: '#/components/schemas/StoreMemberDto'
+          description: The list of members who have access to manage this store.
+      additionalProperties: false
+      description: Represents a PayNow store and its associated configuration.
+    StoreMemberDto:
+      required:
+        - user
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/StoreMemberUserDto'
+        added_at:
+          type:
+            - 'null'
+            - string
+          format: date-time
+        added_by:
+          $ref: '#/components/schemas/ActorDto'
+        role_id:
+          $ref: '#/components/schemas/FlakeId'
+      additionalProperties: false
+    StoreMemberUserDto:
+      required:
+        - email
+        - first_name
+        - id
+        - last_name
+        - type
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PayNowActorType'
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        email:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+      additionalProperties: false
+    StoreRequirementActionParty:
+      enum:
+        - invalid
+        - store
+        - paynow
+        - payment_processor
+        - payout_provider
+        - kyc_provider
+        - external
+      type: string
+      description: Determines the party that needs to perform or requests a verification
+      x-enumDescriptions:
+        store: The associated store
+        paynow: 'We as a platform, RequestedByDetail is the admin actor ID in that case (or null if internal)'
+        payment_processor: 'Payment processor, e.g. Stripe'
+        payout_provider: 'Payout provider, e.g. Trolley, PayPal'
+        kyc_provider: 'KYC provider, e.g. Stripe, Onefootprint'
+        external: 'External party, not fitting in any other category, e.g. government, regulators'
+    StoreRequirementCategory:
+      enum:
+        - invalid
+        - business
+        - kyc
+        - compliance
+        - risk
+        - technical
+        - financial
+        - legal
+        - other
+      type: string
+      description: Represents categories of requirements that must be fulfilled for store setup and compliance in the PayNow platform.
+      x-enumDescriptions:
+        invalid: Invalid or unspecified category. Default value that should not be used in production.
+        business: "Business information and operational requirements.\n            Includes company details, business model, store policies, refund procedures,\n            and operational guidelines for running a store on PayNow."
+        kyc: "Know Your Customer (KYC) identity verification requirements.\n            Includes government-issued ID verification, proof of address, and identity confirmation\n            as per PayNow's KYC Policy and conducted via any third party KYC partners"
+        compliance: "Regulatory compliance requirements including AML checks and content policies.\n            Covers sanctions screening, FATF checks, prohibited customer/product screening,\n            and content compliance as defined in PayNow's policies."
+        risk: "Risk management and fraud prevention requirements.\n            Includes transaction monitoring, unusual activity detection, and ongoing\n            risk assessment procedures to protect against fraudulent activities."
+        technical: "Technical integration and setup requirements.\n            Covers API configuration, webhook setup, platform integration, and any technical\n            prerequisites for store operation."
+        financial: "Financial setup and verification requirements.\n            Includes payment processing configuration, banking information, Tipalti/Trolley payout setup,\n            tax documentation (W-9, W-8, etc.), and payment method verification."
+        legal: "Legal agreement and policy acceptance requirements.\n            Covers acceptance of User Agreement, Terms of Service, Privacy Policy,\n            and any other legal documents required by PayNow for store operation."
+        other: "Other miscellaneous requirements that don't fit into the above categories.\n            Used for special cases or additional requirements specific to certain store types\n            or jurisdictions."
+    StoreRequirementStatus:
+      enum:
+        - invalid
+        - pending
+        - under_review
+        - requires_revision
+        - approved
+        - expired
+        - waived
+        - rejected_final
+      type: string
+      x-enumDescriptions:
+        pending: 'Requirement created, awaiting action'
+        under_review: 'Submitted, under review, or awaiting external verification'
+        requires_revision: 'Rejected, needs store to resubmit with corrections'
+        approved: Requirement successfully fulfilled
+        expired: Requirement expired and needs renewal
+        waived: Requirement waived by PayNow (manual override)
+        rejected_final: Requirement fully rejected - usually terminal state for the entire store
+    StoreRestrictionFlagDto:
+      enum:
+        - none
+        - payments_disabled
+        - payouts_disabled
+      type: string
+    StoreTrustDto:
+      required:
+        - created_at
+        - events
+        - pending_requirements
+        - restrictions
+        - status
+        - store_id
+      type: object
+      properties:
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        status:
+          $ref: '#/components/schemas/StoreTrustStatusDto'
+        status_reason:
+          type:
+            - 'null'
+            - string
+        restrictions:
+          $ref: '#/components/schemas/StoreRestrictionFlagDto'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type:
+            - 'null'
+            - string
+          format: date-time
+        onboarding_steps:
+          $ref: '#/components/schemas/StoreTrustOnboardingStepsDto'
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/StoreTrustEventDto'
+        pending_requirements:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrustStoreRequirementDto'
+      additionalProperties: false
+    StoreTrustEventDto:
+      required:
+        - actor
+        - created_at
+        - id
+        - store_id
+        - type
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        type:
+          $ref: '#/components/schemas/StoreTrustEventTypeDto'
+        description:
+          type:
+            - 'null'
+            - string
+        store_requirement_id:
+          $ref: '#/components/schemas/FlakeId'
+        store_review_id:
+          $ref: '#/components/schemas/FlakeId'
+        actor:
+          $ref: '#/components/schemas/ActorDto'
+        created_at:
+          type: string
+          format: date-time
+      additionalProperties: false
+    StoreTrustEventTypeDto:
+      enum:
+        - invalid
+        - onboarded
+        - escalated_to_review
+        - action_required
+        - restricted
+        - offboarded
+        - reactivated
+        - requirement_added
+        - requirement_submitted
+        - requirement_verified
+        - requirement_rejected
+        - requirement_deadline_missed
+        - requirement_waived
+        - requirement_requires_revision
+        - restriction_added
+        - restriction_lifted
+        - review_scheduled
+        - review_completed
+      type: string
+    StoreTrustOnboardingStepsDto:
+      required:
+        - downloadable_files_added
+        - gameserver_linked
+        - kyc_completed
+        - payout_onboarding_completed
+        - products_created
+        - store_id
+        - store_owner_id
+        - webhooks_active
+      type: object
+      properties:
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        store_owner_id:
+          $ref: '#/components/schemas/FlakeId'
+        payout_onboarding_completed:
+          type: boolean
+        kyc_completed:
+          type: boolean
+        products_created:
+          type: boolean
+        gameserver_linked:
+          type: boolean
+        webhooks_active:
+          type: boolean
+        downloadable_files_added:
+          type: boolean
+      additionalProperties: false
+    StoreTrustStatusDto:
+      enum:
+        - invalid
+        - pending_review
+        - requires_action
+        - under_review
+        - active
+        - restricted
+        - offboarded
+      type: string
     StorefrontCustomVariableDto:
       required:
         - description
@@ -1978,6 +2452,169 @@ components:
           format: date-time
       additionalProperties: false
       description: Represents a tag entity used for categorizing and filtering products within a store.
+    TrustStoreRequirementDto:
+      required:
+        - category
+        - code
+        - created_at
+        - id
+        - metadata
+        - name
+        - requested_by
+        - restricts_capabilities
+        - status
+        - store_id
+        - submissions
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        template_id:
+          type:
+            - 'null'
+            - string
+          description: Template ID if this requirement was created from a template. Null for ad-hoc requirements.
+        originating_flag_id:
+          $ref: '#/components/schemas/FlakeId'
+        category:
+          $ref: '#/components/schemas/StoreRequirementCategory'
+        code:
+          type: string
+          description: Unique code identifying the type of requirement. Copied from template or custom for ad-hoc requirements.
+        name:
+          type: string
+          description: Human-readable name of the requirement. Copied from template or custom for ad-hoc requirements.
+        description:
+          type:
+            - 'null'
+            - string
+          description: Detailed description explaining what the store needs to provide. Copied from template or custom for ad-hoc requirements.
+        schema:
+          type: 'null'
+          description: 'JSON schema defining the form fields, validation rules, and document requirements'
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Additional metadata for this requirement (stored as JSON)
+        status:
+          $ref: '#/components/schemas/StoreRequirementStatus'
+        requested_by:
+          $ref: '#/components/schemas/StoreRequirementActionParty'
+        requested_by_detail:
+          type:
+            - 'null'
+            - string
+          description: "Specifies the specific requester entity (e.g., \"stripe\", \"trolley\", or admin user ID)\nFree-form string for internal records"
+        created_at:
+          type: string
+          description: When this requirement was created
+          format: date-time
+        updated_at:
+          type:
+            - 'null'
+            - string
+          description: When this requirement was last updated
+          format: date-time
+        deadline_at:
+          type:
+            - 'null'
+            - string
+          description: When this requirement must be completed by (optional)
+          format: date-time
+        submitted_at:
+          type:
+            - 'null'
+            - string
+          description: When the store submitted their response to this requirement
+          format: date-time
+        verified_at:
+          type:
+            - 'null'
+            - string
+          description: When this requirement was verified and approved
+          format: date-time
+        rejected_at:
+          type:
+            - 'null'
+            - string
+          description: When this requirement was rejected for not meeting standards
+          format: date-time
+        restricts_capabilities:
+          type: array
+          items:
+            type: string
+          description: Store capabilities that are restricted until this requirement is satisfied
+        submissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrustStoreRequirementSubmissionDto'
+          description: Associated submissions for this requriement.
+      additionalProperties: false
+    TrustStoreRequirementSubmissionDto:
+      required:
+        - id
+        - store_id
+        - store_requirement_field_id
+        - store_requirement_id
+        - submitted_at
+        - submitted_by
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        store_requirement_id:
+          $ref: '#/components/schemas/FlakeId'
+        store_requirement_field_id:
+          type: string
+          description: The identifier of the specific field within the store requirement.
+        text_value:
+          type:
+            - 'null'
+            - string
+          description: 'The text value submitted for this field, if applicable.'
+        file_id:
+          type:
+            - 'null'
+            - string
+          description: 'The identifier of the uploaded file, if a file was submitted.'
+        file_name:
+          type:
+            - 'null'
+            - string
+          description: The original name of the uploaded file.
+        file_content_type:
+          type:
+            - 'null'
+            - string
+          description: The MIME content type of the uploaded file.
+        file_size_bytes:
+          type:
+            - 'null'
+            - integer
+          description: The size of the uploaded file in bytes.
+          format: int64
+        submitted_at:
+          type: string
+          description: The timestamp when this submission was made.
+          format: date-time
+        submitted_by:
+          $ref: '#/components/schemas/ActorDto'
+        submitted_by_ip_address:
+          type:
+            - 'null'
+            - string
+          description: The IP address from which the submission was made.
+        submitted_by_user_agent:
+          type:
+            - 'null'
+            - string
+          description: The user agent string of the client that made the submission.
+      additionalProperties: false
     ValidationError:
       required:
         - code

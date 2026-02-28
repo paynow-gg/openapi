@@ -11006,6 +11006,8 @@
         "required": [
           "enabled",
           "automatic_recommendations_enabled",
+          "automatic_recommendations_discount_type",
+          "automatic_recommendations_discount_amount",
           "recommendation_overrides_enabled",
           "recommendation_overrides",
           "checkout_style"
@@ -11017,6 +11019,13 @@
           },
           "automatic_recommendations_enabled": {
             "type": "boolean"
+          },
+          "automatic_recommendations_discount_type": {
+            "$ref": "#/components/schemas/UpsellDiscountType"
+          },
+          "automatic_recommendations_discount_amount": {
+            "type": "integer",
+            "format": "int64"
           },
           "recommendation_overrides_enabled": {
             "type": "boolean"
@@ -17772,6 +17781,8 @@
       },
       "StoreUpsellSettingsDto": {
         "required": [
+          "automatic_recommendations_discount_amount",
+          "automatic_recommendations_discount_type",
           "automatic_recommendations_enabled",
           "checkout_style",
           "enabled",
@@ -17787,6 +17798,13 @@
           },
           "automatic_recommendations_enabled": {
             "type": "boolean"
+          },
+          "automatic_recommendations_discount_type": {
+            "$ref": "#/components/schemas/UpsellDiscountType"
+          },
+          "automatic_recommendations_discount_amount": {
+            "type": "integer",
+            "format": "int64"
           },
           "recommendation_overrides_enabled": {
             "type": "boolean"
@@ -18666,6 +18684,13 @@
           "automatic_recommendations_enabled": {
             "type": "boolean"
           },
+          "automatic_recommendations_discount_type": {
+            "$ref": "#/components/schemas/UpsellDiscountType"
+          },
+          "automatic_recommendations_discount_amount": {
+            "type": "integer",
+            "format": "int64"
+          },
           "recommendation_overrides_enabled": {
             "type": "boolean"
           },
@@ -18732,6 +18757,15 @@
           }
         },
         "additionalProperties": false
+      },
+      "UpsellDiscountType": {
+        "enum": [
+          "unknown",
+          "none",
+          "fixed",
+          "percentage"
+        ],
+        "type": "string"
       },
       "UpsellDiscountTypeDto": {
         "enum": [

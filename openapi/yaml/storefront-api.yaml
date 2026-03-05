@@ -1195,11 +1195,11 @@ components:
       enum:
         - anonymous
         - user
-        - customer
         - api_key
+        - customer
         - game_server
-        - admin
         - internal
+        - admin
         - platform
         - global_customer
       type: string
@@ -1546,27 +1546,32 @@ components:
       description: Represents a PayNow store and its associated configuration.
     StoreMemberDto:
       required:
+        - id
         - user
+        - user_id
       type: object
       properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        user_id:
+          $ref: '#/components/schemas/FlakeId'
         user:
           $ref: '#/components/schemas/StoreMemberUserDto'
         added_at:
           type:
             - 'null'
             - string
+          description: The UTC timestamp when the member was added to the store.
           format: date-time
         added_by:
           $ref: '#/components/schemas/ActorDto'
         role_id:
           $ref: '#/components/schemas/FlakeId'
       additionalProperties: false
+      description: Represents a member of a PayNow store.
     StoreMemberUserDto:
       required:
-        - email
-        - first_name
         - id
-        - last_name
         - type
       type: object
       properties:
@@ -1575,12 +1580,27 @@ components:
         id:
           $ref: '#/components/schemas/FlakeId'
         email:
-          type: string
+          type:
+            - 'null'
+            - string
+          description: "The email address associated with the user.\nOnly visible if you are the store owner."
         first_name:
-          type: string
+          type:
+            - 'null'
+            - string
+          description: "The first name of the actor.\nHidden if the user has a set nickname, and you are not the store owner."
         last_name:
-          type: string
+          type:
+            - 'null'
+            - string
+          description: "The last name of the actor.\nHidden if the user has a set nickname, and you are not the store owner."
+        nickname:
+          type:
+            - 'null'
+            - string
+          description: The nickname of the user.
       additionalProperties: false
+      description: Represents identity and profile information for a store member.
     StoreRequirementActionParty:
       enum:
         - invalid

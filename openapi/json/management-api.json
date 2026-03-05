@@ -7717,11 +7717,171 @@
         ]
       }
     },
-    "/v1/stores/{storeId}": {
+    "/v1/stores": {
+      "post": {
+        "tags": [
+          "store"
+        ],
+        "summary": "Create a store",
+        "description": "Creates a new store for the authenticated user.",
+        "operationId": "Store_CreateStore",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateStoreDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateStoreDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateStoreDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreDto"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ]
+      },
       "get": {
         "tags": [
           "store"
         ],
+        "summary": "Get stores",
+        "description": "Retrieves all stores accessible to the authenticated user or API key.",
+        "operationId": "Store_GetStores",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StoreDto"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ]
+      }
+    },
+    "/v1/stores/{storeId}": {
+      "patch": {
+        "tags": [
+          "store"
+        ],
+        "summary": "Update a store",
+        "description": "Partially updates a store's configuration using the provided fields.",
+        "operationId": "Store_UpdateStore",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateStoreDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateStoreDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateStoreDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreDto"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "store"
+        ],
+        "summary": "Get a store",
+        "description": "Retrieves a single store by its ID.",
         "operationId": "Store_GetStore",
         "parameters": [
           {
@@ -7735,7 +7895,235 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreDto"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ]
+      }
+    },
+    "/v1/stores/{storeId}/members": {
+      "get": {
+        "tags": [
+          "store"
+        ],
+        "summary": "List store members",
+        "description": "Retrieves all members who have access to the specified store.",
+        "operationId": "Store_GetStoreMembers",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StoreMemberDto"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ]
+      }
+    },
+    "/v1/stores/{storeId}/members/{memberId}/permissions": {
+      "get": {
+        "tags": [
+          "store"
+        ],
+        "summary": "Get store member permissions",
+        "description": "Retrieves the resolved permissions map for a specific member of a store.",
+        "operationId": "Store_GetStoreMemberPermissions",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "memberId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ]
+      }
+    },
+    "/v1/stores/{storeId}/members/{memberId}": {
+      "delete": {
+        "tags": [
+          "store"
+        ],
+        "summary": "Remove a store member",
+        "description": "Removes the specified member from the store, revoking their access.",
+        "operationId": "Store_KickStoreMember",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "memberId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "store"
+        ],
+        "summary": "Update a store member",
+        "description": "Updates the role assigned to a specific member of the store.",
+        "operationId": "Store_UpdateStoreMember",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "memberId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateStoreMemberDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateStoreMemberDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateStoreMemberDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
           },
           "default": {
             "description": "Error response",
@@ -10975,6 +11363,55 @@
           }
         }
       },
+      "CreateStoreDto": {
+        "required": [
+          "slug",
+          "name",
+          "platform",
+          "game",
+          "currency",
+          "description"
+        ],
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "platform": {
+            "type": "string"
+          },
+          "game": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "website_url": {
+            "type": "string"
+          },
+          "contact_email": {
+            "type": "string"
+          },
+          "support_email": {
+            "type": "string"
+          },
+          "support_url": {
+            "type": "string"
+          },
+          "integration_type": {
+            "type": "string"
+          },
+          "minecraft_bedrock_username_prefix": {
+            "type": "string"
+          }
+        }
+      },
       "CreateStorePaymentSettingsDto": {
         "required": [
           "show_all_payment_methods_for_subscriptions",
@@ -13593,11 +14030,11 @@
         "enum": [
           "anonymous",
           "user",
-          "customer",
           "api_key",
+          "customer",
           "game_server",
-          "admin",
           "internal",
+          "admin",
           "platform",
           "global_customer"
         ],
@@ -16849,10 +17286,18 @@
       },
       "StoreMemberDto": {
         "required": [
-          "user"
+          "id",
+          "user",
+          "user_id"
         ],
         "type": "object",
         "properties": {
+          "id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "user_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
           "user": {
             "$ref": "#/components/schemas/StoreMemberUserDto"
           },
@@ -16861,6 +17306,7 @@
               "null",
               "string"
             ],
+            "description": "The UTC timestamp when the member was added to the store.",
             "format": "date-time"
           },
           "added_by": {
@@ -16870,14 +17316,12 @@
             "$ref": "#/components/schemas/FlakeId"
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "description": "Represents a member of a PayNow store."
       },
       "StoreMemberUserDto": {
         "required": [
-          "email",
-          "first_name",
           "id",
-          "last_name",
           "type"
         ],
         "type": "object",
@@ -16889,16 +17333,36 @@
             "$ref": "#/components/schemas/FlakeId"
           },
           "email": {
-            "type": "string"
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The email address associated with the user.\nOnly visible if you are the store owner."
           },
           "first_name": {
-            "type": "string"
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The first name of the actor.\nHidden if the user has a set nickname, and you are not the store owner."
           },
           "last_name": {
-            "type": "string"
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The last name of the actor.\nHidden if the user has a set nickname, and you are not the store owner."
+          },
+          "nickname": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The nickname of the user."
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "description": "Represents identity and profile information for a store member."
       },
       "StorePaymentSettingsDto": {
         "required": [
@@ -18654,6 +19118,59 @@
             "format": "date-time"
           }
         }
+      },
+      "UpdateStoreDto": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "platform": {
+            "type": "string"
+          },
+          "game": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "website_url": {
+            "type": "string"
+          },
+          "contact_email": {
+            "type": "string"
+          },
+          "support_email": {
+            "type": "string"
+          },
+          "support_url": {
+            "type": "string"
+          },
+          "integration_type": {
+            "type": "string"
+          },
+          "live_mode": {
+            "type": "boolean"
+          },
+          "minecraft_bedrock_username_prefix": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateStoreMemberDto": {
+        "required": [
+          "role_id"
+        ],
+        "type": "object",
+        "properties": {
+          "role_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          }
+        },
+        "additionalProperties": false
       },
       "UpdateStorePaymentSettingsDto": {
         "type": "object",

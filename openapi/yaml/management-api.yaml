@@ -4680,6 +4680,7 @@ paths:
                 $ref: '#/components/schemas/PayNowError'
       security:
         - APIKey: [ ]
+      x-gitbook-ignore: true
     get:
       tags:
         - store
@@ -4769,6 +4770,30 @@ paths:
                 $ref: '#/components/schemas/PayNowError'
       security:
         - APIKey: [ ]
+    delete:
+      tags:
+        - store
+      summary: Delete a store
+      description: Deletes a store by its ID
+      operationId: Store_DeleteStore
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+      x-gitbook-ignore: true
   '/v1/stores/{storeId}/members':
     get:
       tags:

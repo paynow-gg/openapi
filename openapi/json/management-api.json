@@ -4300,6 +4300,304 @@
         ]
       }
     },
+    "/v1/stores/{storeId}/gameservers/{gameServerId}/console": {
+      "get": {
+        "tags": [
+          "game-servers"
+        ],
+        "summary": "Get the associated console for a game server.",
+        "operationId": "GameServersConsole_GetGameServerConsole",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "gameServerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameServerConsoleDto"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "game-servers"
+        ],
+        "summary": "Create a console for a game server.",
+        "operationId": "GameServersConsole_CreateGameServerConsole",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "gameServerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateGameServerConsoleDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateGameServerConsoleDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateGameServerConsoleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameServerConsoleDto"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "game-servers"
+        ],
+        "summary": "Update a console for a game server.",
+        "operationId": "GameServersConsole_UpdateGameServerConsole",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "gameServerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateGameServerConsoleDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateGameServerConsoleDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateGameServerConsoleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameServerConsoleDto"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "game-servers"
+        ],
+        "summary": "Delete an associated game server console.",
+        "operationId": "GameServersConsole_DeleteGameServerConsole",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "gameServerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ]
+      }
+    },
+    "/v1/stores/{storeId}/gameservers/{gameServerId}/console/messages": {
+      "get": {
+        "tags": [
+          "game-servers"
+        ],
+        "summary": "Get console messages for a game server.",
+        "operationId": "GameServersConsole_GetGameServerConsoleMessages",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "gameServerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GameServerConsoleMessageDto"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ]
+      }
+    },
     "/v1/stores/{storeId}/gameservers": {
       "get": {
         "tags": [
@@ -11238,6 +11536,37 @@
         },
         "additionalProperties": false
       },
+      "CreateGameServerConsoleDto": {
+        "required": [
+          "type",
+          "enabled",
+          "host",
+          "port",
+          "secure"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/GameServerConsoleTypeDto"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "host": {
+            "type": "string"
+          },
+          "port": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "password": {
+            "type": "string"
+          },
+          "secure": {
+            "type": "boolean"
+          }
+        }
+      },
       "CreateGameServerDto": {
         "required": [
           "name",
@@ -12581,6 +12910,131 @@
         "additionalProperties": false,
         "format": "flake-id",
         "example": "411486491630370816"
+      },
+      "GameServerConsoleConnectionStatusDto": {
+        "enum": [
+          "unknown",
+          "disconnected",
+          "connecting",
+          "connected",
+          "backoff"
+        ],
+        "type": "string"
+      },
+      "GameServerConsoleDto": {
+        "required": [
+          "assigned_runner_id",
+          "connection_status",
+          "created_at",
+          "created_by",
+          "enabled",
+          "game_server_id",
+          "host",
+          "port",
+          "secure",
+          "store_id",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "game_server_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "store_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "type": {
+            "$ref": "#/components/schemas/GameServerConsoleTypeDto"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "assigned_runner_id": {
+            "type": "string"
+          },
+          "connection_status": {
+            "$ref": "#/components/schemas/GameServerConsoleConnectionStatusDto"
+          },
+          "last_heartbeat_at": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "host": {
+            "type": "string"
+          },
+          "port": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "password": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "secure": {
+            "type": "boolean"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "created_by": {
+            "$ref": "#/components/schemas/ActorDto"
+          },
+          "updated_at": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "updated_by": {
+            "$ref": "#/components/schemas/ActorDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GameServerConsoleMessageDto": {
+        "required": [
+          "message",
+          "time",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/GameServerConsoleMessageTypeDto"
+          },
+          "message": {
+            "type": "string"
+          },
+          "time": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GameServerConsoleMessageTypeDto": {
+        "enum": [
+          "unknown",
+          "output",
+          "command",
+          "response",
+          "system"
+        ],
+        "type": "string"
+      },
+      "GameServerConsoleTypeDto": {
+        "enum": [
+          "unknown",
+          "rust"
+        ],
+        "type": "string"
       },
       "GameServerDto": {
         "required": [
@@ -19020,6 +19474,27 @@
               "string"
             ],
             "format": "date-time"
+          }
+        }
+      },
+      "UpdateGameServerConsoleDto": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "host": {
+            "type": "string"
+          },
+          "port": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "password": {
+            "type": "string"
+          },
+          "secure": {
+            "type": "boolean"
           }
         }
       },

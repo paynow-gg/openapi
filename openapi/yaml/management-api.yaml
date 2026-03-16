@@ -12016,6 +12016,7 @@ components:
         - initial_total_amount_str
         - interval_scale
         - interval_value
+        - lines
         - pretty_id
         - price
         - price_str
@@ -12367,6 +12368,12 @@ components:
             - 'null'
             - string
           description: Reason provided for cancellation.
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionLineDto'
+          description: Associated subscription lines.
+          readOnly: true
       additionalProperties: false
       description: Data transfer object representing a store subscription.
     StoreTrustDto:
@@ -12571,6 +12578,266 @@ components:
         updated_by:
           $ref: '#/components/schemas/ActorDto'
       additionalProperties: false
+    SubscriptionLineDto:
+      required:
+        - currency
+        - discount_amount
+        - discount_amount_str
+        - id
+        - initial_discount_amount
+        - initial_discount_amount_str
+        - initial_giftcard_usage_amount
+        - initial_giftcard_usage_amount_str
+        - initial_subtotal_amount
+        - initial_subtotal_amount_str
+        - initial_tax_amount
+        - initial_tax_amount_str
+        - initial_total_amount
+        - initial_total_amount_str
+        - price
+        - product_id
+        - product_name
+        - product_version_id
+        - subscription_id
+        - subtotal_amount
+        - subtotal_amount_str
+        - tax_amount
+        - tax_amount_str
+        - tax_inclusive
+        - total_amount
+        - total_amount_str
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        subscription_id:
+          $ref: '#/components/schemas/FlakeId'
+        checkout_line_id:
+          $ref: '#/components/schemas/FlakeId'
+        initial_order_line_id:
+          $ref: '#/components/schemas/FlakeId'
+        pricing_region_id:
+          type:
+            - 'null'
+            - string
+          description: Identifier for the pricing region associated with this subscription line.
+        gift_to_customer_id:
+          $ref: '#/components/schemas/FlakeId'
+        selected_gameserver_id:
+          $ref: '#/components/schemas/FlakeId'
+        sale_id:
+          $ref: '#/components/schemas/FlakeId'
+        trial_id:
+          $ref: '#/components/schemas/FlakeId'
+        product_id:
+          $ref: '#/components/schemas/FlakeId'
+        product_version_id:
+          $ref: '#/components/schemas/FlakeId'
+        product_name:
+          type: string
+          description: Name of the product associated with this subscription line.
+        product_image_url:
+          type:
+            - 'null'
+            - string
+          description: URL for the product image.
+        tax_inclusive:
+          type: boolean
+          description: Indicates whether tax is included in the base price itself.
+        currency:
+          type: string
+          description: Currency code for this subscription line.
+        price:
+          type: integer
+          description: 'Base price of the subscription line in smallest currency units (e.g., cents).'
+          format: int64
+        discount_amount:
+          type: integer
+          description: Amount of discount applied in smallest currency units.
+          format: int64
+        discount_amount_str:
+          type: string
+          description: Formatted string representation of the discount amount.
+          readOnly: true
+        subtotal_amount:
+          type: integer
+          description: Subtotal amount in smallest currency units.
+          format: int64
+        subtotal_amount_str:
+          type: string
+          description: Formatted string representation of the subtotal amount.
+          readOnly: true
+        tax_amount:
+          type: integer
+          description: Tax amount in smallest currency units.
+          format: int64
+        tax_amount_str:
+          type: string
+          description: Formatted string representation of the tax amount.
+          readOnly: true
+        total_amount:
+          type: integer
+          description: Total amount in smallest currency units.
+          format: int64
+        total_amount_str:
+          type: string
+          description: Formatted string representation of the total amount.
+          readOnly: true
+        initial_discount_amount:
+          type: integer
+          description: Initial discount amount in smallest currency units for the first billing cycle.
+          format: int64
+        initial_discount_amount_str:
+          type: string
+          description: Formatted string representation of the initial discount amount.
+          readOnly: true
+        initial_subtotal_amount:
+          type: integer
+          description: Initial subtotal amount in smallest currency units for the first billing cycle.
+          format: int64
+        initial_subtotal_amount_str:
+          type: string
+          description: Formatted string representation of the initial subtotal amount.
+          readOnly: true
+        initial_giftcard_usage_amount:
+          type: integer
+          description: Initial gift card usage amount in smallest currency units.
+          format: int64
+        initial_giftcard_usage_amount_str:
+          type: string
+          description: Formatted string representation of the initial gift card usage amount.
+          readOnly: true
+        initial_tax_amount:
+          type: integer
+          description: Initial tax amount in smallest currency units for the first billing cycle.
+          format: int64
+        initial_tax_amount_str:
+          type: string
+          description: Formatted string representation of the initial tax amount.
+          readOnly: true
+        initial_total_amount:
+          type: integer
+          description: Initial total amount in smallest currency units for the first billing cycle.
+          format: int64
+        initial_total_amount_str:
+          type: string
+          description: Formatted string representation of the initial total amount.
+          readOnly: true
+        presentment_currency:
+          type:
+            - 'null'
+            - string
+          description: Presentment currency code (currency shown to customer).
+        presentment_subtotal_amount:
+          type:
+            - 'null'
+            - integer
+          description: Presentment subtotal amount in smallest currency units.
+          format: int64
+        presentment_subtotal_amount_str:
+          type:
+            - 'null'
+            - string
+          description: Formatted string representation of the presentment subtotal amount.
+          readOnly: true
+        presentment_discount_amount:
+          type:
+            - 'null'
+            - integer
+          description: Presentment discount amount in smallest currency units.
+          format: int64
+        presentment_discount_amount_str:
+          type:
+            - 'null'
+            - string
+          description: Formatted string representation of the presentment discount amount.
+          readOnly: true
+        presentment_tax_amount:
+          type:
+            - 'null'
+            - integer
+          description: Presentment tax amount in smallest currency units.
+          format: int64
+        presentment_tax_amount_str:
+          type:
+            - 'null'
+            - string
+          description: Formatted string representation of the presentment tax amount.
+          readOnly: true
+        presentment_total_amount:
+          type:
+            - 'null'
+            - integer
+          description: Presentment total amount in smallest currency units.
+          format: int64
+        presentment_total_amount_str:
+          type:
+            - 'null'
+            - string
+          description: Formatted string representation of the presentment total amount.
+          readOnly: true
+        initial_presentment_discount_amount:
+          type:
+            - 'null'
+            - integer
+          description: Initial presentment discount amount in smallest currency units for the first billing cycle.
+          format: int64
+        initial_presentment_discount_amount_str:
+          type:
+            - 'null'
+            - string
+          description: Formatted string representation of the initial presentment discount amount.
+          readOnly: true
+        initial_presentment_subtotal_amount:
+          type:
+            - 'null'
+            - integer
+          description: Initial presentment subtotal amount in smallest currency units for the first billing cycle.
+          format: int64
+        initial_presentment_subtotal_amount_str:
+          type:
+            - 'null'
+            - string
+          description: Formatted string representation of the initial presentment subtotal amount.
+          readOnly: true
+        initial_presentment_giftcard_usage_amount:
+          type:
+            - 'null'
+            - integer
+          description: Initial presentment gift card usage amount in smallest currency units.
+          format: int64
+        initial_presentment_giftcard_usage_amount_str:
+          type:
+            - 'null'
+            - string
+          description: Formatted string representation of the initial presentment gift card usage amount.
+          readOnly: true
+        initial_presentment_tax_amount:
+          type:
+            - 'null'
+            - integer
+          description: Initial presentment tax amount in smallest currency units for the first billing cycle.
+          format: int64
+        initial_presentment_tax_amount_str:
+          type:
+            - 'null'
+            - string
+          description: Formatted string representation of the initial presentment tax amount.
+          readOnly: true
+        initial_presentment_total_amount:
+          type:
+            - 'null'
+            - integer
+          description: Initial presentment total amount in smallest currency units for the first billing cycle.
+          format: int64
+        initial_presentment_total_amount_str:
+          type:
+            - 'null'
+            - string
+          description: Formatted string representation of the initial presentment total amount.
+          readOnly: true
+      additionalProperties: false
+      description: Represents a line item within a subscription.
     SubscriptionStatus:
       enum:
         - created

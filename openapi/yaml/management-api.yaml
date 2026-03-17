@@ -12092,6 +12092,7 @@ components:
         gift:
           type: boolean
           description: Indicates whether this subscription is a gift.
+          deprecated: true
         gift_to_customer:
           $ref: '#/components/schemas/CustomerDto'
         product_id:
@@ -12101,11 +12102,13 @@ components:
         product_name:
           type: string
           description: Name of the product associated with this subscription.
+          deprecated: true
         product_image_url:
           type:
             - 'null'
             - string
           description: URL for the product image.
+          deprecated: true
         interval_value:
           type: integer
           description: Numeric value of the billing interval.
@@ -12118,13 +12121,16 @@ components:
         tax_inclusive:
           type: boolean
           description: Indicates whether tax is included in the base price itself.
+          deprecated: true
         price:
           type: integer
           description: 'Base price of the subscription in smallest currency units (e.g., cents).'
           format: int64
+          deprecated: true
         price_str:
           type: string
           description: Formatted string representation of the price.
+          deprecated: true
         discount_amount:
           type: integer
           description: Amount of discount applied in smallest currency units.
@@ -12311,6 +12317,7 @@ components:
             - 'null'
             - string
           description: Identifier for the pricing region associated with this subscription.
+          deprecated: true
         current_period_start:
           type:
             - 'null'

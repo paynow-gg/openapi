@@ -18142,7 +18142,8 @@
           },
           "gift": {
             "type": "boolean",
-            "description": "Indicates whether this subscription is a gift."
+            "description": "Indicates whether this subscription is a gift.",
+            "deprecated": true
           },
           "gift_to_customer": {
             "$ref": "#/components/schemas/CustomerDto"
@@ -18155,14 +18156,16 @@
           },
           "product_name": {
             "type": "string",
-            "description": "Name of the product associated with this subscription."
+            "description": "Name of the product associated with this subscription.",
+            "deprecated": true
           },
           "product_image_url": {
             "type": [
               "null",
               "string"
             ],
-            "description": "URL for the product image."
+            "description": "URL for the product image.",
+            "deprecated": true
           },
           "interval_value": {
             "type": "integer",
@@ -18178,16 +18181,19 @@
           },
           "tax_inclusive": {
             "type": "boolean",
-            "description": "Indicates whether tax is included in the base price itself."
+            "description": "Indicates whether tax is included in the base price itself.",
+            "deprecated": true
           },
           "price": {
             "type": "integer",
             "description": "Base price of the subscription in smallest currency units (e.g., cents).",
-            "format": "int64"
+            "format": "int64",
+            "deprecated": true
           },
           "price_str": {
             "type": "string",
-            "description": "Formatted string representation of the price."
+            "description": "Formatted string representation of the price.",
+            "deprecated": true
           },
           "discount_amount": {
             "type": "integer",
@@ -18433,7 +18439,8 @@
               "null",
               "string"
             ],
-            "description": "Identifier for the pricing region associated with this subscription."
+            "description": "Identifier for the pricing region associated with this subscription.",
+            "deprecated": true
           },
           "current_period_start": {
             "type": [

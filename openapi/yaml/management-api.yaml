@@ -1381,6 +1381,64 @@ paths:
         - APIKey: [ ]
       x-gitbook-ignore: true
   '/v1/stores/{storeId}/delivery/items':
+    get:
+      tags:
+        - delivery
+      summary: Get all delivery items
+      description: Retrieves all delivery items associated with this store (paginated)
+      operationId: Delivery_GetStoreDeliveryItems
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: limit
+          in: query
+          description: The maximum number of items to return in a single request.
+          schema:
+            maximum: 100
+            minimum: 1
+            type: integer
+            format: int32
+        - name: after
+          in: query
+          description: "Returns items after the specified ID.\nUsed for forward pagination through results."
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+          example: 'null'
+        - name: before
+          in: query
+          description: "Returns items before the specified ID.\nUsed for backward pagination through results."
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+          example: 'null'
+        - name: asc
+          in: query
+          description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
+          schema:
+            type: boolean
+        - name: activeOnly
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeliveryItemDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
     post:
       tags:
         - delivery

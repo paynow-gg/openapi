@@ -502,10 +502,14 @@ components:
       description: An API Key token generated in the Dashboard in the format 'APIKey TOKEN_HERE'.
       name: Authorization
       in: header
+      x-gitbook-prefix: APIKey
+      x-gitbook-token-placeholder: TOKEN_HERE
     Customer:
       type: apiKey
       description: A Customer token generated using an API Key in the format 'Customer TOKEN_HERE'.
       name: Authorization
       in: header
+      x-gitbook-prefix: Customer
+      x-gitbook-token-placeholder: TOKEN_HERE
 tags:
   - name: delivery

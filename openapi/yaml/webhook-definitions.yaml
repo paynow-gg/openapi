@@ -169,6 +169,7 @@ components:
         - customer
         - checkout_id
         - checkout
+        - type
         - currency
         - tax_inclusive
         - tax_amount
@@ -227,6 +228,11 @@ components:
           format: flake-id
           example: '411486491630370816'
           x-discordVariable: coupon_id
+        type:
+          type: string
+          description: The type of the order
+          example: one_time
+          x-discordVariable: type
         currency:
           type: string
           description: The ISO-4217 Currency Code of the order
@@ -323,7 +329,6 @@ components:
     OrderLineDTO:
       required:
         - id
-        - checkout_line_id
         - product_id
         - product_version_id
         - product
@@ -343,7 +348,9 @@ components:
           example: '411486491630370816'
           x-discordVariable: id
         checkout_line_id:
-          type: string
+          type:
+            - 'null'
+            - string
           description: The Flake ID of the Checkout Line associated with this Order Line
           format: flake-id
           example: '411486491630370816'
@@ -380,6 +387,14 @@ components:
           format: flake-id
           example: '411486491630370816'
           x-discordVariable: subscription_id
+        subscription_line_id:
+          type:
+            - 'null'
+            - string
+          description: The Flake ID of the Subscription Line associated with this Order Line
+          format: flake-id
+          example: '411486491630370816'
+          x-discordVariable: subscription_line_id
         subscription_interval_value:
           type:
             - 'null'
@@ -694,6 +709,251 @@ components:
           type: string
           description: The Steam Avatar URL
           x-discordVariable: avatar_url
+    SubscriptionLineDTO:
+      required:
+        - id
+        - subscription_id
+        - product_id
+        - product_version_id
+        - product_name
+        - tax_inclusive
+        - price
+        - discount_amount
+        - subtotal_amount
+        - tax_amount
+        - total_amount
+        - initial_discount_amount
+        - initial_subtotal_amount
+        - initial_giftcard_usage_amount
+        - initial_tax_amount
+        - initial_total_amount
+        - currency
+      type: object
+      properties:
+        id:
+          type: string
+          description: The Flake ID of the Subscription Line
+          format: flake-id
+          example: '411486491630370816'
+          x-discordVariable: id
+        subscription_id:
+          type: string
+          description: The Flake ID of the Subscription associated with this Subscription Line
+          format: flake-id
+          example: '411486491630370816'
+          x-discordVariable: subscription_id
+        checkout_line_id:
+          type:
+            - 'null'
+            - string
+          description: The Flake ID of the Checkout Line associated with this Subscription Line
+          format: flake-id
+          example: '411486491630370816'
+          x-discordVariable: checkout_line_id
+        initial_order_line_id:
+          type:
+            - 'null'
+            - string
+          description: The Flake ID of the initial Order Line associated with this Subscription Line
+          format: flake-id
+          example: '411486491630370816'
+          x-discordVariable: initial_order_line_id
+        gift_to_customer_id:
+          type:
+            - 'null'
+            - string
+          description: The Flake ID of the customer this Subscription Line was gifted to
+          format: flake-id
+          example: '411486491630370816'
+          x-discordVariable: gift_to_customer_id
+        gift_to_customer:
+          oneOf:
+            - $ref: '#/components/schemas/CustomerDTO'
+            - type: 'null'
+          x-discordVariable: gift_to_customer
+        selected_gameserver_id:
+          type:
+            - 'null'
+            - string
+          description: The Flake ID of the selected Game Server for this Subscription Line
+          format: flake-id
+          example: '411486491630370816'
+          x-discordVariable: selected_gameserver_id
+        sale_id:
+          type:
+            - 'null'
+            - string
+          description: The Flake ID of the Sale associated with this Subscription Line
+          format: flake-id
+          example: '411486491630370816'
+          x-discordVariable: sale_id
+        trial_id:
+          type:
+            - 'null'
+            - string
+          description: The Flake ID of the Trial associated with this Subscription Line
+          format: flake-id
+          example: '411486491630370816'
+          x-discordVariable: trial_id
+        product_id:
+          type: string
+          description: The Flake ID of the Product associated with this Subscription Line
+          format: flake-id
+          example: '411486491630370816'
+          x-discordVariable: product_id
+        product_version_id:
+          type: string
+          description: The Flake ID of the Product Version associated with this Subscription Line
+          format: flake-id
+          example: '411486491630370816'
+          x-discordVariable: product_version_id
+        product_name:
+          type: string
+          description: The name of the Product associated with this Subscription Line
+          example: Example Product
+          x-discordVariable: product_name
+        product_image_url:
+          type:
+            - 'null'
+            - string
+          description: The image URL of the Product associated with this Subscription Line
+          example: https://example.com/image.jpg
+          x-discordVariable: product_image_url
+        product:
+          oneOf:
+            - $ref: '#/components/schemas/ProductDTO'
+            - type: 'null'
+          x-discordVariable: product
+        tax_inclusive:
+          type: boolean
+          description: Whether the price of this Subscription Line is tax inclusive
+          example: false
+          x-discordVariable: tax_inclusive
+        price:
+          type: integer
+          description: The price of this Subscription Line represented in cents
+          example: 9999
+          x-discordVariable: price
+        discount_amount:
+          type: integer
+          description: The discount amount applied to this Subscription Line represented in cents
+          example: 1000
+          x-discordVariable: discount_amount
+        subtotal_amount:
+          type: integer
+          description: The subtotal amount of this Subscription Line represented in cents
+          example: 8999
+          x-discordVariable: subtotal_amount
+        tax_amount:
+          type: integer
+          description: The tax amount of this Subscription Line represented in cents
+          example: 1350
+          x-discordVariable: tax_amount
+        total_amount:
+          type: integer
+          description: The total amount of this Subscription Line represented in cents
+          example: 10349
+          x-discordVariable: total_amount
+        initial_discount_amount:
+          type: integer
+          description: The initial discount amount applied to this Subscription Line represented in cents
+          example: 2000
+          x-discordVariable: initial_discount_amount
+        initial_subtotal_amount:
+          type: integer
+          description: The initial subtotal amount of this Subscription Line represented in cents
+          example: 7999
+          x-discordVariable: initial_subtotal_amount
+        initial_giftcard_usage_amount:
+          type: integer
+          description: The initial gift card usage amount applied to this Subscription Line represented in cents
+          example: 0
+          x-discordVariable: initial_giftcard_usage_amount
+        initial_tax_amount:
+          type: integer
+          description: The initial tax amount of this Subscription Line represented in cents
+          example: 1200
+          x-discordVariable: initial_tax_amount
+        initial_total_amount:
+          type: integer
+          description: The initial total amount of this Subscription Line represented in cents
+          example: 9199
+          x-discordVariable: initial_total_amount
+        currency:
+          type: string
+          description: The currency code of this Subscription Line
+          example: USD
+          x-discordVariable: currency
+        presentment_currency:
+          type:
+            - 'null'
+            - string
+          description: The presentment currency code of this Subscription Line
+          example: EUR
+          x-discordVariable: presentment_currency
+        presentment_subtotal_amount:
+          type:
+            - 'null'
+            - integer
+          description: The presentment subtotal amount of this Subscription Line represented in cents
+          example: 8299
+          x-discordVariable: presentment_subtotal_amount
+        presentment_discount_amount:
+          type:
+            - 'null'
+            - integer
+          description: The presentment discount amount of this Subscription Line represented in cents
+          example: 0
+          x-discordVariable: presentment_discount_amount
+        presentment_tax_amount:
+          type:
+            - 'null'
+            - integer
+          description: The presentment tax amount of this Subscription Line represented in cents
+          example: 1245
+          x-discordVariable: presentment_tax_amount
+        presentment_total_amount:
+          type:
+            - 'null'
+            - integer
+          description: The presentment total amount of this Subscription Line represented in cents
+          example: 9544
+          x-discordVariable: presentment_total_amount
+        initial_presentment_discount_amount:
+          type:
+            - 'null'
+            - integer
+          description: The initial presentment discount amount of this Subscription Line represented in cents
+          example: 0
+          x-discordVariable: initial_presentment_discount_amount
+        initial_presentment_subtotal_amount:
+          type:
+            - 'null'
+            - integer
+          description: The initial presentment subtotal amount of this Subscription Line represented in cents
+          example: 7359
+          x-discordVariable: initial_presentment_subtotal_amount
+        initial_presentment_giftcard_usage_amount:
+          type:
+            - 'null'
+            - integer
+          description: The initial presentment gift card usage amount of this Subscription Line represented in cents
+          example: 0
+          x-discordVariable: initial_presentment_giftcard_usage_amount
+        initial_presentment_tax_amount:
+          type:
+            - 'null'
+            - integer
+          description: The initial presentment tax amount of this Subscription Line represented in cents
+          example: 1104
+          x-discordVariable: initial_presentment_tax_amount
+        initial_presentment_total_amount:
+          type:
+            - 'null'
+            - integer
+          description: The initial presentment total amount of this Subscription Line represented in cents
+          example: 8463
+          x-discordVariable: initial_presentment_total_amount
     WebhookEventType:
       enum:
         - ON_ORDER_COMPLETED
@@ -726,249 +986,6 @@ components:
       type: string
       description: The type of webhook event
 webhooks:
-  ON_SUBSCRIPTION_RENEWED:
-    post:
-      tags:
-        - Webhooks
-      summary: Triggered when a subscription is renewed
-      description: Webhook for ON_SUBSCRIPTION_RENEWED
-      requestBody:
-        content:
-          application/json:
-            schema:
-              required:
-                - event_type
-                - event_id
-                - body
-              type: object
-              properties:
-                event_type:
-                  allOf:
-                    - $ref: '#/components/schemas/WebhookEventType'
-                  description: The type of webhook event
-                  example: ON_SUBSCRIPTION_RENEWED
-                event_id:
-                  type: string
-                  description: The ID of the Webhook Event
-                  format: flake-id
-                  example: '411486491630370816'
-                body:
-                  required:
-                    - id
-                    - store_id
-                    - customer_id
-                    - customer
-                    - checkout
-                    - billing_cycle_sequence
-                    - billing_email
-                    - subtotal_amount
-                    - tax_amount
-                    - discount_amount
-                    - total_amount
-                    - currency
-                    - interval_value
-                    - interval_scale
-                    - product_id
-                    - product_version_id
-                    - product_name
-                    - product
-                    - billing_country
-                    - initial_subtotal_amount
-                    - initial_tax_amount
-                    - initial_discount_amount
-                    - initial_giftcard_usage_amount
-                    - initial_total_amount
-                    - customer_ip
-                    - checkout_id
-                    - checkout_line_id
-                    - status
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                      description: The Flake ID of the Subscription
-                      format: flake-id
-                      example: '411486491630370816'
-                      x-discordVariable: id
-                    store_id:
-                      type: string
-                      description: The Flake ID of the Store associated with the Subscription
-                      format: flake-id
-                      example: '411486491630370816'
-                      x-discordVariable: store_id
-                    customer_id:
-                      type: string
-                      description: The Flake ID of the Customer associated with the Subscription
-                      format: flake-id
-                      example: '411486491630370816'
-                      x-discordVariable: customer_id
-                    customer:
-                      $ref: '#/components/schemas/CustomerDTO'
-                    checkout:
-                      $ref: '#/components/schemas/CheckoutDTO'
-                    billing_cycle_sequence:
-                      type: integer
-                      description: The current billing cycle number
-                      example: 2
-                      x-discordVariable: billing_cycle_sequence
-                    billing_email:
-                      type: string
-                      description: The billing email address of the customer associated with the Subscription
-                      example: john@doe.com
-                      x-discordVariable: billing_email
-                    subtotal_amount:
-                      type: integer
-                      description: The subtotal amount of the Subscription represented in cents
-                      example: 8999
-                      x-discordVariable: subtotal_amount
-                    tax_amount:
-                      type: integer
-                      description: The tax amount of the Subscription represented in cents
-                      example: 1350
-                      x-discordVariable: tax_amount
-                    discount_amount:
-                      type: integer
-                      description: The discount amount applied to the Subscription represented in cents
-                      example: 0
-                      x-discordVariable: discount_amount
-                    total_amount:
-                      type: integer
-                      description: The total amount of the Subscription represented in cents
-                      example: 10349
-                      x-discordVariable: total_amount
-                    currency:
-                      type: string
-                      description: The currency code of the Subscription
-                      example: USD
-                      x-discordVariable: currency
-                    interval_value:
-                      type: integer
-                      description: The interval value of the billing cycle
-                      example: 1
-                      x-discordVariable: interval_value
-                    interval_scale:
-                      type: string
-                      description: The interval scale of the billing cycle
-                      example: month
-                      x-discordVariable: interval_scale
-                    product_id:
-                      type: string
-                      description: The Flake ID of the Product associated with the Subscription
-                      format: flake-id
-                      example: '411486491630370816'
-                      x-discordVariable: product_id
-                    product_version_id:
-                      type: string
-                      description: The Flake ID of the Product Version associated with the Subscription
-                      format: flake-id
-                      example: '411486491630370816'
-                      x-discordVariable: product_version_id
-                    product_name:
-                      type: string
-                      description: The name of the Product associated with the Subscription
-                      example: Example Product
-                      x-discordVariable: product_name
-                    product_image_url:
-                      type:
-                        - 'null'
-                        - string
-                      description: The image URL of the Product associated with the Subscription
-                      example: https://example.com/biz.jpg
-                      x-discordVariable: product_image_url
-                    product:
-                      $ref: '#/components/schemas/ProductDTO'
-                    billing_country:
-                      type: string
-                      description: The ISO-3166 country code of customer associated with the Subscription
-                      example: US
-                      x-discordVariable: billing_country
-                    initial_subtotal_amount:
-                      type: integer
-                      description: The initial subtotal amount of the Subscription represented in cents
-                      example: 8999
-                      x-discordVariable: initial_subtotal_amount
-                    initial_tax_amount:
-                      type: integer
-                      description: The initial tax amount of the Subscription represented in cents
-                      example: 1350
-                      x-discordVariable: initial_tax_amount
-                    initial_discount_amount:
-                      type: integer
-                      description: The initial discount amount applied to the Subscription represented in cents
-                      example: 1500
-                      x-discordVariable: initial_discount_amount
-                    initial_giftcard_usage_amount:
-                      type: integer
-                      description: The initial gift card usage amount applied to the Subscription represented in cents
-                      example: 0
-                      x-discordVariable: initial_giftcard_usage_amount
-                    initial_total_amount:
-                      type: integer
-                      description: The initial total amount of the Subscription represented in cents
-                      example: 8849
-                      x-discordVariable: initial_total_amount
-                    customer_ip:
-                      type: string
-                      description: The IP address of the Customer
-                      example: 127.0.0.1/24
-                      x-discordVariable: customer_ip
-                    current_period_start:
-                      type:
-                        - 'null'
-                        - string
-                      description: The start date of the current billing period
-                      format: date-time
-                      example: '2024-03-01T00:00:00Z'
-                      x-discordVariable: current_period_start
-                    current_period_end:
-                      type:
-                        - 'null'
-                        - string
-                      description: The end date of the current billing period
-                      format: date-time
-                      example: '2024-06-01T00:00:00Z'
-                      x-discordVariable: current_period_end
-                    created_at:
-                      type:
-                        - 'null'
-                        - string
-                      description: The date and time when the Subscription was created
-                      format: date-time
-                      example: '2024-03-01T11:00:00Z'
-                      x-discordVariable: created_at
-                    active_at:
-                      type:
-                        - 'null'
-                        - string
-                      description: Indicates when the subscription was active
-                      format: date-time
-                      example: '2024-03-01T11:05:00Z'
-                      x-discordVariable: active_at
-                    checkout_id:
-                      type: string
-                      description: The Flake ID of the Checkout associated with the Subscription
-                      format: flake-id
-                      example: '411486491630370816'
-                      x-discordVariable: checkout_id
-                    checkout_line_id:
-                      type: string
-                      description: The Flake ID of the Checkout Line associated with the Subscription
-                      format: flake-id
-                      example: '411486491630370816'
-                      x-discordVariable: checkout_line_id
-                    status:
-                      type: string
-                      description: 'The current status of the Subscription.  Possible options: created, active, canceled'
-                      example: created
-                      x-discordVariable: status
-        required: true
-      responses:
-        '200':
-          description: Webhook processed successfully
-        '400':
-          description: Bad request
-        '500':
-          description: Internal server error
   ON_CHARGEBACK:
     post:
       tags:
@@ -2451,6 +2468,7 @@ webhooks:
                     - customer
                     - checkout_id
                     - checkout
+                    - type
                     - currency
                     - tax_inclusive
                     - tax_amount
@@ -2509,6 +2527,11 @@ webhooks:
                       format: flake-id
                       example: '411486491630370816'
                       x-discordVariable: coupon_id
+                    type:
+                      type: string
+                      description: The type of the order
+                      example: one_time
+                      x-discordVariable: type
                     currency:
                       type: string
                       description: The ISO-4217 Currency Code of the order
@@ -2830,6 +2853,7 @@ webhooks:
                     - checkout_id
                     - checkout_line_id
                     - status
+                    - lines
                   type: object
                   properties:
                     id:
@@ -2927,7 +2951,7 @@ webhooks:
                       $ref: '#/components/schemas/ProductDTO'
                     billing_country:
                       type: string
-                      description: The ISO-3166 Country Code of customer associated with the Subscription
+                      description: The ISO-3166 Country Code of the customer associated with the Subscription
                       example: US
                       x-discordVariable: billing_country
                     initial_subtotal_amount:
@@ -3006,9 +3030,15 @@ webhooks:
                       x-discordVariable: checkout_line_id
                     status:
                       type: string
-                      description: 'The current status of the Subscription.  Possible options: created, active, canceled'
+                      description: 'The current status of the Subscription. Possible options: created, active, canceled'
                       example: created
                       x-discordVariable: status
+                    lines:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/SubscriptionLineDTO'
+                      description: The lines of the Subscription
+                      x-discordVariable: lines
         required: true
       responses:
         '200':
@@ -3073,6 +3103,272 @@ webhooks:
                     - checkout_id
                     - checkout_line_id
                     - status
+                    - lines
+                  type: object
+                  properties:
+                    canceled_at:
+                      type:
+                        - 'null'
+                        - string
+                      description: Indicates when the subscription was canceled
+                      format: date-time
+                      example: '2024-05-15T14:20:00Z'
+                      x-discordVariable: canceled_at
+                    cancel_reason:
+                      type:
+                        - 'null'
+                        - string
+                      description: The reason for the subscription cancellation
+                      example: customer_request
+                      x-discordVariable: cancel_reason
+                    id:
+                      type: string
+                      description: The Flake ID of the Subscription
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: id
+                    store_id:
+                      type: string
+                      description: The Flake ID of the Store associated with the Subscription
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: store_id
+                    customer_id:
+                      type: string
+                      description: The Flake ID of the Customer associated with the Subscription
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: customer_id
+                    customer:
+                      $ref: '#/components/schemas/CustomerDTO'
+                    checkout:
+                      $ref: '#/components/schemas/CheckoutDTO'
+                    billing_cycle_sequence:
+                      type: integer
+                      description: The current billing cycle number
+                      example: 1
+                      x-discordVariable: billing_cycle_sequence
+                    billing_email:
+                      type: string
+                      description: The billing email address of the customer associated with the Subscription
+                      example: john@doe.com
+                      x-discordVariable: billing_email
+                    subtotal_amount:
+                      type: integer
+                      description: The subtotal amount of the Subscription represented in cents
+                      example: 9999
+                      x-discordVariable: subtotal_amount
+                    tax_amount:
+                      type: integer
+                      description: The tax amount of the Subscription represented in cents
+                      example: 1500
+                      x-discordVariable: tax_amount
+                    discount_amount:
+                      type: integer
+                      description: The discount amount applied to the Subscription represented in cents
+                      example: 1000
+                      x-discordVariable: discount_amount
+                    total_amount:
+                      type: integer
+                      description: The total amount of the Subscription represented in cents
+                      example: 10499
+                      x-discordVariable: total_amount
+                    currency:
+                      type: string
+                      description: The currency code of the Subscription
+                      example: USD
+                      x-discordVariable: currency
+                    interval_value:
+                      type: integer
+                      description: The interval value of the billing cycle
+                      example: 1
+                      x-discordVariable: interval_value
+                    interval_scale:
+                      type: string
+                      description: The interval scale of the billing cycle
+                      example: month
+                      x-discordVariable: interval_scale
+                    product_id:
+                      type: string
+                      description: The Flake ID of the Product associated with the Subscription
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: product_id
+                    product_version_id:
+                      type: string
+                      description: The Flake ID of the Product Version associated with the Subscription
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: product_version_id
+                    product_name:
+                      type: string
+                      description: The name of the Product associated with the Subscription
+                      example: Example Product
+                      x-discordVariable: product_name
+                    product_image_url:
+                      type:
+                        - 'null'
+                        - string
+                      description: The image URL of the Product associated with the Subscription
+                      example: https://example.com/image.jpg
+                      x-discordVariable: product_image_url
+                    product:
+                      $ref: '#/components/schemas/ProductDTO'
+                    billing_country:
+                      type: string
+                      description: The ISO-3166 Country Code of the customer associated with the Subscription
+                      example: US
+                      x-discordVariable: billing_country
+                    initial_subtotal_amount:
+                      type: integer
+                      description: The initial subtotal amount of the Subscription represented in cents
+                      example: 9999
+                      x-discordVariable: initial_subtotal_amount
+                    initial_tax_amount:
+                      type: integer
+                      description: The initial tax amount of the Subscription represented in cents
+                      example: 1500
+                      x-discordVariable: initial_tax_amount
+                    initial_discount_amount:
+                      type: integer
+                      description: The initial discount amount applied to the Subscription represented in cents
+                      example: 2000
+                      x-discordVariable: initial_discount_amount
+                    initial_giftcard_usage_amount:
+                      type: integer
+                      description: The initial gift card usage amount applied to the Subscription represented in cents
+                      example: 0
+                      x-discordVariable: initial_giftcard_usage_amount
+                    initial_total_amount:
+                      type: integer
+                      description: The initial total amount of the Subscription represented in cents
+                      example: 9499
+                      x-discordVariable: initial_total_amount
+                    customer_ip:
+                      type: string
+                      description: The IP address of the Customer
+                      example: 127.0.0.1/24
+                      x-discordVariable: customer_ip
+                    current_period_start:
+                      type:
+                        - 'null'
+                        - string
+                      description: The start date of the current billing period
+                      format: date-time
+                      example: '2024-02-01T00:00:00Z'
+                      x-discordVariable: current_period_start
+                    current_period_end:
+                      type:
+                        - 'null'
+                        - string
+                      description: The end date of the current billing period
+                      format: date-time
+                      example: '2024-03-01T00:00:00Z'
+                      x-discordVariable: current_period_end
+                    created_at:
+                      type:
+                        - 'null'
+                        - string
+                      description: The date and time when the Subscription was created
+                      format: date-time
+                      example: '2024-02-01T10:15:00Z'
+                      x-discordVariable: created_at
+                    active_at:
+                      type:
+                        - 'null'
+                        - string
+                      description: Indicates when the subscription was active
+                      format: date-time
+                      example: '2024-02-01T10:20:00Z'
+                      x-discordVariable: active_at
+                    checkout_id:
+                      type: string
+                      description: The Flake ID of the Checkout associated with the Subscription
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: checkout_id
+                    checkout_line_id:
+                      type: string
+                      description: The Flake ID of the Checkout Line associated with the Subscription
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: checkout_line_id
+                    status:
+                      type: string
+                      description: 'The current status of the Subscription. Possible options: created, active, canceled'
+                      example: created
+                      x-discordVariable: status
+                    lines:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/SubscriptionLineDTO'
+                      description: The lines of the Subscription
+                      x-discordVariable: lines
+        required: true
+      responses:
+        '200':
+          description: Webhook processed successfully
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+  ON_SUBSCRIPTION_RENEWED:
+    post:
+      tags:
+        - Webhooks
+      summary: Triggered when a subscription is renewed
+      description: Webhook for ON_SUBSCRIPTION_RENEWED
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - event_type
+                - event_id
+                - body
+              type: object
+              properties:
+                event_type:
+                  allOf:
+                    - $ref: '#/components/schemas/WebhookEventType'
+                  description: The type of webhook event
+                  example: ON_SUBSCRIPTION_RENEWED
+                event_id:
+                  type: string
+                  description: The ID of the Webhook Event
+                  format: flake-id
+                  example: '411486491630370816'
+                body:
+                  required:
+                    - id
+                    - store_id
+                    - customer_id
+                    - customer
+                    - checkout
+                    - billing_cycle_sequence
+                    - billing_email
+                    - subtotal_amount
+                    - tax_amount
+                    - discount_amount
+                    - total_amount
+                    - currency
+                    - interval_value
+                    - interval_scale
+                    - product_id
+                    - product_version_id
+                    - product_name
+                    - product
+                    - billing_country
+                    - initial_subtotal_amount
+                    - initial_tax_amount
+                    - initial_discount_amount
+                    - initial_giftcard_usage_amount
+                    - initial_total_amount
+                    - customer_ip
+                    - checkout_id
+                    - checkout_line_id
+                    - status
+                    - lines
                   type: object
                   properties:
                     id:
@@ -3105,27 +3401,27 @@ webhooks:
                     billing_email:
                       type: string
                       description: The billing email address of the customer associated with the Subscription
-                      example: cancel@example.com
+                      example: john@doe.com
                       x-discordVariable: billing_email
                     subtotal_amount:
                       type: integer
                       description: The subtotal amount of the Subscription represented in cents
-                      example: 4999
+                      example: 9999
                       x-discordVariable: subtotal_amount
                     tax_amount:
                       type: integer
                       description: The tax amount of the Subscription represented in cents
-                      example: 750
+                      example: 1500
                       x-discordVariable: tax_amount
                     discount_amount:
                       type: integer
                       description: The discount amount applied to the Subscription represented in cents
-                      example: 0
+                      example: 1000
                       x-discordVariable: discount_amount
                     total_amount:
                       type: integer
                       description: The total amount of the Subscription represented in cents
-                      example: 5749
+                      example: 10499
                       x-discordVariable: total_amount
                     currency:
                       type: string
@@ -3140,7 +3436,7 @@ webhooks:
                     interval_scale:
                       type: string
                       description: The interval scale of the billing cycle
-                      example: annually
+                      example: month
                       x-discordVariable: interval_scale
                     product_id:
                       type: string
@@ -3157,36 +3453,36 @@ webhooks:
                     product_name:
                       type: string
                       description: The name of the Product associated with the Subscription
-                      example: Starter Plan
+                      example: Example Product
                       x-discordVariable: product_name
                     product_image_url:
                       type:
                         - 'null'
                         - string
                       description: The image URL of the Product associated with the Subscription
-                      example: https://example.com/starter.jpg
+                      example: https://example.com/image.jpg
                       x-discordVariable: product_image_url
                     product:
                       $ref: '#/components/schemas/ProductDTO'
                     billing_country:
                       type: string
-                      description: The ISO-3166 country code of customer associated with the Subscription
+                      description: The ISO-3166 Country Code of the customer associated with the Subscription
                       example: US
                       x-discordVariable: billing_country
                     initial_subtotal_amount:
                       type: integer
                       description: The initial subtotal amount of the Subscription represented in cents
-                      example: 4999
+                      example: 9999
                       x-discordVariable: initial_subtotal_amount
                     initial_tax_amount:
                       type: integer
                       description: The initial tax amount of the Subscription represented in cents
-                      example: 750
+                      example: 1500
                       x-discordVariable: initial_tax_amount
                     initial_discount_amount:
                       type: integer
                       description: The initial discount amount applied to the Subscription represented in cents
-                      example: 500
+                      example: 2000
                       x-discordVariable: initial_discount_amount
                     initial_giftcard_usage_amount:
                       type: integer
@@ -3196,7 +3492,7 @@ webhooks:
                     initial_total_amount:
                       type: integer
                       description: The initial total amount of the Subscription represented in cents
-                      example: 5249
+                      example: 9499
                       x-discordVariable: initial_total_amount
                     customer_ip:
                       type: string
@@ -3209,7 +3505,7 @@ webhooks:
                         - string
                       description: The start date of the current billing period
                       format: date-time
-                      example: '2024-04-01T00:00:00Z'
+                      example: '2024-02-01T00:00:00Z'
                       x-discordVariable: current_period_start
                     current_period_end:
                       type:
@@ -3217,7 +3513,7 @@ webhooks:
                         - string
                       description: The end date of the current billing period
                       format: date-time
-                      example: '2025-04-01T00:00:00Z'
+                      example: '2024-03-01T00:00:00Z'
                       x-discordVariable: current_period_end
                     created_at:
                       type:
@@ -3225,7 +3521,7 @@ webhooks:
                         - string
                       description: The date and time when the Subscription was created
                       format: date-time
-                      example: '2024-04-01T09:30:00Z'
+                      example: '2024-02-01T10:15:00Z'
                       x-discordVariable: created_at
                     active_at:
                       type:
@@ -3233,23 +3529,8 @@ webhooks:
                         - string
                       description: Indicates when the subscription was active
                       format: date-time
-                      example: '2024-04-01T09:35:00Z'
+                      example: '2024-02-01T10:20:00Z'
                       x-discordVariable: active_at
-                    canceled_at:
-                      type:
-                        - 'null'
-                        - string
-                      description: Indicates when the subscription was canceled
-                      format: date-time
-                      example: '2024-05-15T14:20:00Z'
-                      x-discordVariable: canceled_at
-                    cancel_reason:
-                      type:
-                        - 'null'
-                        - string
-                      description: The reason for the subscription cancellation
-                      example: customer_request
-                      x-discordVariable: cancel_reason
                     checkout_id:
                       type: string
                       description: The Flake ID of the Checkout associated with the Subscription
@@ -3264,9 +3545,15 @@ webhooks:
                       x-discordVariable: checkout_line_id
                     status:
                       type: string
-                      description: 'The current status of the Subscription.  Possible options: created, active, canceled'
+                      description: 'The current status of the Subscription. Possible options: created, active, canceled'
                       example: created
                       x-discordVariable: status
+                    lines:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/SubscriptionLineDTO'
+                      description: The lines of the Subscription
+                      x-discordVariable: lines
         required: true
       responses:
         '200':

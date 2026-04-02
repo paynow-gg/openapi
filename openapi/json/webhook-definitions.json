@@ -209,6 +209,25 @@
           }
         }
       },
+      "OrderCouponUsageDTO": {
+        "required": [
+          "coupon_id",
+          "usage_amount"
+        ],
+        "type": "object",
+        "properties": {
+          "coupon_id": {
+            "type": "string",
+            "description": "",
+            "format": "flake-id",
+            "example": "411486491630370816"
+          },
+          "usage_amount": {
+            "type": "integer",
+            "description": ""
+          }
+        }
+      },
       "OrderDTO": {
         "required": [
           "id",
@@ -216,6 +235,9 @@
           "customer",
           "checkout_id",
           "checkout",
+          "applied_coupons",
+          "applied_giftcards",
+          "coupon_id",
           "type",
           "currency",
           "tax_inclusive",
@@ -275,11 +297,24 @@
             "example": "411486491630370816",
             "x-discordVariable": "subscription_id"
           },
+          "applied_coupons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderCouponUsageDTO"
+            },
+            "description": "Applied coupons to this order",
+            "x-discordVariable": "applied_coupons"
+          },
+          "applied_giftcards": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderGiftCardUsageDTO"
+            },
+            "description": "Applied gift cards to this order",
+            "x-discordVariable": "applied_giftcards"
+          },
           "coupon_id": {
-            "type": [
-              "null",
-              "string"
-            ],
+            "type": "string",
             "description": "The Flake ID of the Coupon associated with the order",
             "format": "flake-id",
             "example": "411486491630370816",
@@ -402,6 +437,25 @@
             "description": "The status of the Order.  Possbile options: created, completed, canceled",
             "example": "created",
             "x-discordVariable": "status"
+          }
+        }
+      },
+      "OrderGiftCardUsageDTO": {
+        "required": [
+          "giftcard_id",
+          "usage_amount"
+        ],
+        "type": "object",
+        "properties": {
+          "giftcard_id": {
+            "type": "string",
+            "description": "",
+            "format": "flake-id",
+            "example": "411486491630370816"
+          },
+          "usage_amount": {
+            "type": "integer",
+            "description": ""
           }
         }
       },
@@ -3216,6 +3270,9 @@
                       "customer",
                       "checkout_id",
                       "checkout",
+                      "applied_coupons",
+                      "applied_giftcards",
+                      "coupon_id",
                       "type",
                       "currency",
                       "tax_inclusive",
@@ -3275,11 +3332,24 @@
                         "example": "411486491630370816",
                         "x-discordVariable": "subscription_id"
                       },
+                      "applied_coupons": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/OrderCouponUsageDTO"
+                        },
+                        "description": "Applied coupons to this order",
+                        "x-discordVariable": "applied_coupons"
+                      },
+                      "applied_giftcards": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/OrderGiftCardUsageDTO"
+                        },
+                        "description": "Applied gift cards to this order",
+                        "x-discordVariable": "applied_giftcards"
+                      },
                       "coupon_id": {
-                        "type": [
-                          "null",
-                          "string"
-                        ],
+                        "type": "string",
                         "description": "The Flake ID of the Coupon associated with the order",
                         "format": "flake-id",
                         "example": "411486491630370816",

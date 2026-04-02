@@ -12056,6 +12056,7 @@
           "show_all_payment_methods_for_subscriptions",
           "store_tax_inclusive_pricing",
           "block_prepaid_cards",
+          "promo_code_stacking_behavior",
           "adaptive_currency_enabled",
           "show_adaptive_currency_on_storefront"
         ],
@@ -12069,6 +12070,9 @@
           },
           "block_prepaid_cards": {
             "$ref": "#/components/schemas/PrepaidCardsBlockingTypeDto"
+          },
+          "promo_code_stacking_behavior": {
+            "$ref": "#/components/schemas/StorePromoCodeStackingBehaviorDto"
           },
           "adaptive_currency_enabled": {
             "type": "boolean"
@@ -14122,8 +14126,27 @@
         },
         "additionalProperties": false
       },
+      "OrderCouponUsageDto": {
+        "required": [
+          "coupon_id",
+          "usage_amount"
+        ],
+        "type": "object",
+        "properties": {
+          "coupon_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "usage_amount": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
       "OrderDto": {
         "required": [
+          "applied_coupons",
+          "applied_giftcards",
           "billing_country",
           "billing_cycle_sequence",
           "billing_email",
@@ -14208,8 +14231,22 @@
           "coupon_id": {
             "$ref": "#/components/schemas/FlakeId"
           },
+          "applied_coupons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderCouponUsageDto"
+            },
+            "description": "Applied coupons to this order"
+          },
           "giftcard_id": {
             "$ref": "#/components/schemas/FlakeId"
+          },
+          "applied_giftcards": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderGiftCardUsageDto"
+            },
+            "description": "Applied gift cards to this order"
           },
           "affiliate_id": {
             "$ref": "#/components/schemas/FlakeId"
@@ -14405,6 +14442,23 @@
         },
         "additionalProperties": false,
         "description": "Represents a customer order"
+      },
+      "OrderGiftCardUsageDto": {
+        "required": [
+          "giftcard_id",
+          "usage_amount"
+        ],
+        "type": "object",
+        "properties": {
+          "giftcard_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "usage_amount": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
       },
       "OrderLineDto": {
         "required": [
@@ -18166,6 +18220,7 @@
           "chargeback_coverage",
           "force_3d_secure",
           "max_checkout_amount",
+          "promo_code_stacking_behavior",
           "show_adaptive_currency_on_storefront",
           "show_all_payment_methods_for_subscriptions",
           "store_tax_inclusive_pricing"
@@ -18182,6 +18237,9 @@
           },
           "block_prepaid_cards": {
             "$ref": "#/components/schemas/PrepaidCardsBlockingTypeDto"
+          },
+          "promo_code_stacking_behavior": {
+            "$ref": "#/components/schemas/StorePromoCodeStackingBehaviorDto"
           },
           "adaptive_currency_enabled": {
             "type": "boolean",
@@ -18245,6 +18303,22 @@
           }
         },
         "additionalProperties": false
+      },
+      "StorePromoCodeStackingBehaviorDto": {
+        "enum": [
+          "invalid",
+          "disabled",
+          "enabled",
+          "gift_cards_only"
+        ],
+        "type": "string",
+        "description": "Defines the behavior of promo code stacking.",
+        "x-enumDescriptions": {
+          "invalid": "Invalid state.",
+          "disabled": "Promo code stacking is disabled.",
+          "enabled": "Promo code stacking is enabled.",
+          "gift_cards_only": "Promo code stacking is enabled only for gift cards."
+        }
       },
       "StoreRequirementActionParty": {
         "enum": [
@@ -19058,6 +19132,7 @@
       },
       "SubscriptionDto": {
         "required": [
+          "coupon_ids",
           "created_at",
           "currency",
           "customer",
@@ -19132,13 +19207,21 @@
           "coupon_id": {
             "$ref": "#/components/schemas/FlakeId"
           },
+          "coupon_ids": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FlakeId"
+            },
+            "description": "Identifiers of coupons applied to this subscription."
+          },
           "coupon_repeating_ends_at": {
             "type": [
               "null",
               "string"
             ],
             "description": "Date when a repeating coupon ends for this subscription.",
-            "format": "date-time"
+            "format": "date-time",
+            "deprecated": true
           },
           "affiliate_id": {
             "$ref": "#/components/schemas/FlakeId"
@@ -20851,6 +20934,9 @@
           },
           "block_prepaid_cards": {
             "$ref": "#/components/schemas/PrepaidCardsBlockingTypeDto"
+          },
+          "promo_code_stacking_behavior": {
+            "$ref": "#/components/schemas/StorePromoCodeStackingBehaviorDto"
           },
           "adaptive_currency_enabled": {
             "type": "boolean"

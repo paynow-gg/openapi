@@ -3412,6 +3412,7 @@ components:
         canceled: The change was canceled and will not be applied.
     SubscriptionDto:
       required:
+        - coupon_ids
         - created_at
         - currency
         - customer
@@ -3473,12 +3474,18 @@ components:
           $ref: '#/components/schemas/SubscriptionStatus'
         coupon_id:
           $ref: '#/components/schemas/FlakeId'
+        coupon_ids:
+          type: array
+          items:
+            $ref: '#/components/schemas/FlakeId'
+          description: Identifiers of coupons applied to this subscription.
         coupon_repeating_ends_at:
           type:
             - 'null'
             - string
           description: Date when a repeating coupon ends for this subscription.
           format: date-time
+          deprecated: true
         affiliate_id:
           $ref: '#/components/schemas/FlakeId'
         checkout_id:

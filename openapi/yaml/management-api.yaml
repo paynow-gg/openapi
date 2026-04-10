@@ -5671,6 +5671,173 @@ paths:
                 $ref: '#/components/schemas/PayNowError'
       security:
         - APIKey: [ ]
+  '/v1/stores/{storeId}/tier-groups':
+    get:
+      tags:
+        - tier-groups
+      summary: List all tier groups for a store
+      operationId: TierGroups_ListTierGroups
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TierGroupDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    post:
+      tags:
+        - tier-groups
+      summary: Create a new tier group
+      operationId: TierGroups_CreateTierGroup
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTierGroupRequestDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CreateTierGroupRequestDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/CreateTierGroupRequestDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TierGroupDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/tier-groups/{tierGroupId}':
+    get:
+      tags:
+        - tier-groups
+      summary: Get a tier group by ID
+      operationId: TierGroups_GetTierGroup
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: tierGroupId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TierGroupDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    patch:
+      tags:
+        - tier-groups
+      summary: Update a tier group by ID
+      operationId: TierGroups_UpdateTierGroup
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: tierGroupId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTierGroupRequestDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTierGroupRequestDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UpdateTierGroupRequestDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TierGroupDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    delete:
+      tags:
+        - tier-groups
+      summary: Delete a tier group by ID
+      operationId: TierGroups_DeleteTierGroup
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: tierGroupId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
   '/v1/stores/{storeId}/trials':
     get:
       tags:
@@ -6749,7 +6916,6 @@ components:
       additionalProperties: false
     CheckoutPaymentInfoDto:
       required:
-        - decline_code
         - declined
         - status
       type: object
@@ -6760,13 +6926,16 @@ components:
         declined:
           type: boolean
           description: Indicates whether the payment was declined.
-        decline_code:
-          $ref: '#/components/schemas/PaymentDeclineCode'
-        payment_token:
+        decline_message:
           type:
             - 'null'
             - string
-          description: Client-side payment token for completing 3DS or other redirect-based flows.
+          description: 'The customer readable decline reason, if the payment was declined.'
+        checkout_url:
+          type:
+            - 'null'
+            - string
+          description: Checkout URL to redirect to for on-session payments.
       additionalProperties: false
       description: Payment outcome information returned after a subscription change triggers an immediate charge.
     CommandAttemptDto:
@@ -7520,6 +7689,15 @@ components:
             $ref: '#/components/schemas/StoreUpsellRecommendationDto'
         checkout_style:
           $ref: '#/components/schemas/StoreUpsellCheckoutStyleDto'
+    CreateTierGroupRequestDto:
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the tier group.
+      additionalProperties: false
     CreateTrialEligibilityOverrideDto:
       required:
         - product_id
@@ -8841,6 +9019,8 @@ components:
             - 'null'
             - boolean
           description: Indicates if applying affiliate links should be disabled on the product.
+        tier_group_id:
+          $ref: '#/components/schemas/FlakeId'
       additionalProperties: false
       description: "Optional inline product definition for dynamic products.\nRequires special approval, use `product_id` instead."
     KlarnaDetailsDto:
@@ -10810,6 +10990,8 @@ components:
             - 'null'
             - boolean
           description: Indicates if applying affiliate links should be disabled on the product.
+        tier_group_id:
+          $ref: '#/components/schemas/FlakeId'
       additionalProperties: false
     ProductGameServerDto:
       required:
@@ -12790,6 +12972,7 @@ components:
         - pending_renewal
         - applied
         - canceled
+        - pending_verification
       type: string
       description: Represents the status of a subscription change.
       x-enumDescriptions:
@@ -12797,6 +12980,7 @@ components:
         pending_renewal: The change will be applied at the next renewal.
         applied: The change has been applied to the subscription.
         canceled: The change was canceled and will not be applied.
+        pending_verification: The change requires a verification code sent to the customer's e-mail.
     SubscriptionDto:
       required:
         - coupon_ids
@@ -13239,6 +13423,7 @@ components:
         - product_id
         - product_name
         - product_version_id
+        - store_id
         - subscription_id
         - subtotal_amount
         - subtotal_amount_str
@@ -13250,6 +13435,8 @@ components:
       type: object
       properties:
         id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
           $ref: '#/components/schemas/FlakeId'
         subscription_id:
           $ref: '#/components/schemas/FlakeId'
@@ -13538,6 +13725,37 @@ components:
             - 'null'
             - string
           description: When the tag was last updated.
+          format: date-time
+        updated_by:
+          $ref: '#/components/schemas/ActorDto'
+      additionalProperties: false
+    TierGroupDto:
+      required:
+        - created_at
+        - created_by
+        - id
+        - name
+        - store_id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        name:
+          type: string
+          description: The name of the tier group.
+        created_at:
+          type: string
+          description: When the tier group was created.
+          format: date-time
+        created_by:
+          $ref: '#/components/schemas/ActorDto'
+        updated_at:
+          type:
+            - 'null'
+            - string
+          description: When was the tier group last updated.
           format: date-time
         updated_by:
           $ref: '#/components/schemas/ActorDto'
@@ -14205,6 +14423,15 @@ components:
           $ref: '#/components/schemas/CheckoutPaymentInfoDto'
       additionalProperties: false
       description: Response returned after a subscription change is initiated.
+    UpdateTierGroupRequestDto:
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the tier group.
+      additionalProperties: false
     UpdateTrialEligibilityOverrideDto:
       type: object
       properties:
@@ -14549,6 +14776,8 @@ components:
             - 'null'
             - boolean
           description: Indicates if applying affiliate links should be disabled on the product.
+        tier_group_id:
+          $ref: '#/components/schemas/FlakeId'
       additionalProperties: false
     UpsertProductTrialConfigurationDto:
       type: object
@@ -14833,6 +15062,7 @@ tags:
   - name: store
   - name: subscriptions
   - name: tags
+  - name: tier-groups
   - name: trials
   - name: trust
   - name: upsell-settings

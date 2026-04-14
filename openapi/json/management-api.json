@@ -15609,7 +15609,8 @@
           "steamskins",
           "nuvei",
           "pagseguro",
-          "tazapay"
+          "tazapay",
+          "paysafecard"
         ],
         "type": "string"
       },
@@ -15654,6 +15655,9 @@
           },
           "pix": {
             "$ref": "#/components/schemas/PixDetailsDto"
+          },
+          "paysafecard": {
+            "$ref": "#/components/schemas/PaysafeCardDetailsDto"
           }
         },
         "additionalProperties": false,
@@ -16047,6 +16051,62 @@
           "refund_failed": "Refund processing failed",
           "refund_processing": "Refund is currently processing"
         }
+      },
+      "PaysafeCardCardDto": {
+        "required": [
+          "amount",
+          "country",
+          "currency",
+          "serial",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "serial": {
+            "type": "string",
+            "description": "The card serial number",
+            "example": "1234567890123456"
+          },
+          "currency": {
+            "type": "string",
+            "description": "The currency code",
+            "example": "eur"
+          },
+          "amount": {
+            "type": "integer",
+            "description": "The amount in minor units",
+            "format": "int64",
+            "example": 1000
+          },
+          "type": {
+            "type": "string",
+            "description": "The card type"
+          },
+          "country": {
+            "type": "string",
+            "description": "The country code",
+            "example": "DE"
+          }
+        },
+        "additionalProperties": false,
+        "description": "A single paysafecard card"
+      },
+      "PaysafeCardDetailsDto": {
+        "type": "object",
+        "properties": {
+          "cards": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/components/schemas/PaysafeCardCardDto"
+            },
+            "description": "The paysafecard cards used for payment"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Paysafecard payment method details"
       },
       "Period": {
         "type": "string",

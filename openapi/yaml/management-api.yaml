@@ -10123,6 +10123,7 @@ components:
         - nuvei
         - pagseguro
         - tazapay
+        - paysafecard
       type: string
     PaymentMethodDetailsDto:
       type: object
@@ -10153,6 +10154,8 @@ components:
           $ref: '#/components/schemas/PayByBankDetailsDto'
         pix:
           $ref: '#/components/schemas/PixDetailsDto'
+        paysafecard:
+          $ref: '#/components/schemas/PaysafeCardDetailsDto'
       additionalProperties: false
       description: "Contains detailed information about a payment method.\nDISCLAIMER: These fields are not guaranteed to be backwards compatible and may change or be removed without notice."
     PaymentMethodDto:
@@ -10451,6 +10454,49 @@ components:
         chargeback: Payment has been charged back
         refund_failed: Refund processing failed
         refund_processing: Refund is currently processing
+    PaysafeCardCardDto:
+      required:
+        - amount
+        - country
+        - currency
+        - serial
+        - type
+      type: object
+      properties:
+        serial:
+          type: string
+          description: The card serial number
+          example: '1234567890123456'
+        currency:
+          type: string
+          description: The currency code
+          example: eur
+        amount:
+          type: integer
+          description: The amount in minor units
+          format: int64
+          example: 1000
+        type:
+          type: string
+          description: The card type
+        country:
+          type: string
+          description: The country code
+          example: DE
+      additionalProperties: false
+      description: A single paysafecard card
+    PaysafeCardDetailsDto:
+      type: object
+      properties:
+        cards:
+          type:
+            - 'null'
+            - array
+          items:
+            $ref: '#/components/schemas/PaysafeCardCardDto'
+          description: The paysafecard cards used for payment
+      additionalProperties: false
+      description: Paysafecard payment method details
     Period:
       type: string
       additionalProperties: false

@@ -7945,8 +7945,6 @@ components:
           $ref: '#/components/schemas/FlakeId'
         store_id:
           $ref: '#/components/schemas/FlakeId'
-        store:
-          $ref: '#/components/schemas/StoreDto'
         profile:
           $ref: '#/components/schemas/GenericProfileDto'
         steam_id:
@@ -10123,7 +10121,7 @@ components:
         - nuvei
         - pagseguro
         - tazapay
-        - paysafecard
+        - paysafe
       type: string
     PaymentMethodDetailsDto:
       type: object
@@ -10454,47 +10452,25 @@ components:
         chargeback: Payment has been charged back
         refund_failed: Refund processing failed
         refund_processing: Refund is currently processing
-    PaysafeCardCardDto:
-      required:
-        - amount
-        - country
-        - currency
-        - serial
-        - type
-      type: object
-      properties:
-        serial:
-          type: string
-          description: The card serial number
-          example: '1234567890123456'
-        currency:
-          type: string
-          description: The currency code
-          example: eur
-        amount:
-          type: integer
-          description: The amount in minor units
-          format: int64
-          example: 1000
-        type:
-          type: string
-          description: The card type
-        country:
-          type: string
-          description: The country code
-          example: DE
-      additionalProperties: false
-      description: A single paysafecard card
     PaysafeCardDetailsDto:
       type: object
       properties:
-        cards:
+        first_name:
           type:
             - 'null'
-            - array
-          items:
-            $ref: '#/components/schemas/PaysafeCardCardDto'
-          description: The paysafecard cards used for payment
+            - string
+        last_name:
+          type:
+            - 'null'
+            - string
+        psc_id:
+          type:
+            - 'null'
+            - string
+        association_id:
+          type:
+            - 'null'
+            - string
       additionalProperties: false
       description: Paysafecard payment method details
     Period:
@@ -12172,8 +12148,6 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/FlakeId'
-        trust:
-          $ref: '#/components/schemas/StoreTrustDto'
         owner_id:
           $ref: '#/components/schemas/FlakeId'
         slug:
@@ -12258,13 +12232,6 @@ components:
           format: date-time
         platform_store_type_association:
           $ref: '#/components/schemas/PlatformStoreTypeAssociationDetailsDto'
-        members:
-          type:
-            - 'null'
-            - array
-          items:
-            $ref: '#/components/schemas/StoreMemberDto'
-          description: The list of members who have access to manage this store.
       additionalProperties: false
       description: Represents a PayNow store and its associated configuration.
     StoreMemberDto:
@@ -13073,8 +13040,6 @@ components:
           description: Human-readable identifier for the subscription.
         store_id:
           $ref: '#/components/schemas/FlakeId'
-        store:
-          $ref: '#/components/schemas/StorefrontStoreDto'
         customer:
           $ref: '#/components/schemas/CustomerDto'
         payment_method_id:
@@ -13497,8 +13462,6 @@ components:
           description: Identifier for the pricing region associated with this subscription line.
         gift_to_customer_id:
           $ref: '#/components/schemas/FlakeId'
-        gift_to_customer:
-          $ref: '#/components/schemas/CustomerDto'
         selected_gameserver_id:
           $ref: '#/components/schemas/FlakeId'
         sale_id:

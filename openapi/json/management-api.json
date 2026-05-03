@@ -17115,7 +17115,11 @@
           "saas",
           "downloaded_software",
           "digital_goods_subscription_gaming",
-          "digital_goods_permanent_gaming"
+          "digital_goods_permanent_gaming",
+          "iaas",
+          "paas",
+          "saas_security",
+          "saas_storage"
         ],
         "type": "string",
         "description": "Determines the category of the product for taxation purposes.\nContact support for help with setting the correct tax code.",
@@ -17126,7 +17130,11 @@
           "saas": "SaaS: Pre-written software, delivered electronically.\n            You provide customers access to a hosted software application, described as computer programs designed to permit the user to perform a group of coordinated functions, tasks, or activities.\n            You are typically responsible for all aspects of making the software service available.",
           "downloaded_software": "Pre-written, non-custom computer software that is delivered electronically for download onto customers' devices/servers. No tangible personal property (e.g. CD-ROM, etc.) is delivered or used in conjunction with the download.",
           "digital_goods_subscription_gaming": "Cloud based or downloaded access to digital gaming services (used by default for game servers).",
-          "digital_goods_permanent_gaming": "Permanent digital goods for gaming (not recommended)."
+          "digital_goods_permanent_gaming": "Permanent digital goods for gaming (not recommended).",
+          "iaas": "Infrastructure as a Service: Providing users remote access to data center equipment and computing power.",
+          "paas": "Platform as a Service: A cloud computing service bundle that includes both the infrastructure (servers, storage, and networking)\n            and the middleware (development tools, business intelligence services, database management systems) that provides the customer\n            a complete development and deployment environment in the cloud.",
+          "saas_security": "Cloud-based SaaS, designed to secure customer data.\n            Pre-written software, delivered electronically, designed specifically to provide protection of computer systems, software,\n            or data against unauthorized access or intrusion.\n            This includes separately charged maintenance and updates delivered electronically, whether included in the cost of the software\n            or charged as a separate line item.",
+          "saas_storage": "Cloud-based SaaS, designed to backup customer data.\n            Pre-written software, delivered electronically, designed purely as storage for a customer's data.\n            You provide customers access to a software product solely to facilitate the storage of digital products, digital codes,\n            computer software or master copies of software.\n            This includes separately charged maintenance and updates delivered electronically, whether included in the cost of the software\n            or charged as a separate line item."
         }
       },
       "ProductTrialConfigurationDto": {

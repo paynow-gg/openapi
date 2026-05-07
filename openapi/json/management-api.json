@@ -12472,6 +12472,9 @@
               "null",
               "string"
             ]
+          },
+          "discord_format": {
+            "$ref": "#/components/schemas/WebhookDiscordFormatDto"
           }
         },
         "additionalProperties": false
@@ -21472,6 +21475,9 @@
               "null",
               "string"
             ]
+          },
+          "discord_format": {
+            "$ref": "#/components/schemas/WebhookDiscordFormatDto"
           }
         },
         "additionalProperties": false
@@ -22109,6 +22115,14 @@
         "additionalProperties": false,
         "description": "A validation error."
       },
+      "WebhookDiscordFormatDto": {
+        "enum": [
+          "Invalid",
+          "Embed",
+          "Text"
+        ],
+        "type": "string"
+      },
       "WebhookEventType": {
         "enum": [
           "OnIgnore",
@@ -22211,6 +22225,9 @@
               "null",
               "string"
             ]
+          },
+          "discord_format": {
+            "$ref": "#/components/schemas/WebhookDiscordFormatDto"
           }
         },
         "additionalProperties": false

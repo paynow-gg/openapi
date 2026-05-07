@@ -7736,6 +7736,8 @@ components:
           type:
             - 'null'
             - string
+        discord_format:
+          $ref: '#/components/schemas/WebhookDiscordFormatDto'
       additionalProperties: false
     CryptoDetailsDto:
       required:
@@ -14484,6 +14486,8 @@ components:
           type:
             - 'null'
             - string
+        discord_format:
+          $ref: '#/components/schemas/WebhookDiscordFormatDto'
       additionalProperties: false
     UpsellDiscountType:
       enum:
@@ -14937,6 +14941,12 @@ components:
           description: Type of the validation that failed.
       additionalProperties: false
       description: A validation error.
+    WebhookDiscordFormatDto:
+      enum:
+        - Invalid
+        - Embed
+        - Text
+      type: string
     WebhookEventType:
       enum:
         - OnIgnore
@@ -15018,6 +15028,8 @@ components:
           type:
             - 'null'
             - string
+        discord_format:
+          $ref: '#/components/schemas/WebhookDiscordFormatDto'
       additionalProperties: false
     WebhookType:
       enum:

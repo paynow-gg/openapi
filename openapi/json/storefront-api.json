@@ -1980,12 +1980,22 @@
           "coupon_id": {
             "$ref": "#/components/schemas/FlakeId"
           },
+          "promo_codes": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "type": "string"
+            },
+            "description": "Optional array of promo codes (coupons, gift cards, affiliates) to apply.\nAn invalid promo code will cause an error."
+          },
           "affiliate_code": {
             "type": [
               "null",
               "string"
             ],
-            "description": "Optional affiliate code to track referrals"
+            "description": "Optional affiliate code to track referrals.\nAn invalid affiliate code will NOT cause an error."
           },
           "return_url": {
             "type": [
@@ -2077,23 +2087,25 @@
             },
             "description": "The line items to include in the checkout."
           },
-          "subscription": {
-            "type": [
-              "null",
-              "boolean"
-            ],
-            "description": "Whether this checkout creates a subscription.\nDEPRECATED: Use 'subscription' field in 'lines' array objects instead.",
-            "deprecated": true
-          },
           "coupon_id": {
             "$ref": "#/components/schemas/FlakeId"
+          },
+          "promo_codes": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "type": "string"
+            },
+            "description": "Optional array of promo codes (coupons, gift cards, affiliates) to apply.\nAn invalid promo code will cause an error."
           },
           "affiliate_code": {
             "type": [
               "null",
               "string"
             ],
-            "description": "Optional affiliate code to track referrals"
+            "description": "Optional affiliate code to track referrals.\nAn invalid affiliate code will NOT cause an error."
           },
           "return_url": {
             "type": [

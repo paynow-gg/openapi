@@ -885,6 +885,14 @@
             "schema": {
               "$ref": "#/components/schemas/CouponFilterTypeEnum"
             }
+          },
+          {
+            "name": "usable_by_customer_id",
+            "in": "query",
+            "description": "Filter by ID of the customer this coupon is assigned to.",
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
           }
         ],
         "responses": {

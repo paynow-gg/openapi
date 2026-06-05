@@ -22160,7 +22160,9 @@
           "OnPurchaseFollowUpAttemptSucceeded",
           "OnAbandonedCheckoutRecoveryAttemptEmailSent",
           "OnAbandonedCheckoutRecoveryAttemptSucceeded",
-          "OnChargebackClosed"
+          "OnChargebackClosed",
+          "OnDeliveryItemExpired",
+          "OnDeliveryItemRenewed"
         ],
         "type": "string"
       },

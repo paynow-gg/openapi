@@ -4344,6 +4344,18 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/FlakeId'
+        - name: product_id
+          in: query
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/FlakeId'
+        - name: slug
+          in: query
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/FlakeId'
       responses:
         '200':
           description: OK

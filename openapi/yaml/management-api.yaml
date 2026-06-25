@@ -5222,7 +5222,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/components/schemas/SubscriptionStatus'
+              $ref: '#/components/schemas/SubscriptionStatusDto'
         - name: limit
           in: query
           description: The maximum number of items to return in a single request.
@@ -7695,7 +7695,7 @@ components:
         automatic_recommendations_enabled:
           type: boolean
         automatic_recommendations_discount_type:
-          $ref: '#/components/schemas/UpsellDiscountType'
+          $ref: '#/components/schemas/UpsellDiscountTypeDto'
         automatic_recommendations_discount_amount:
           type: integer
           format: int64
@@ -7966,11 +7966,11 @@ components:
         store_id:
           $ref: '#/components/schemas/FlakeId'
         profile:
-          $ref: '#/components/schemas/GenericProfileDto'
+          $ref: '#/components/schemas/CustomerGenericProfileDto'
         steam_id:
           $ref: '#/components/schemas/SteamId'
         steam:
-          $ref: '#/components/schemas/SteamProfileDto'
+          $ref: '#/components/schemas/CustomerSteamProfileDto'
         minecraft_uuid:
           type:
             - 'null'
@@ -7978,7 +7978,7 @@ components:
           description: "The customer's Minecraft UUID, if they have linked their Minecraft account.\nNot set for offline Minecraft stores. If the platform type is Minecraft - Geyser,\nand the profile is a bedrock account, this will be a UUID generated from the Xbox XUID."
           example: f84c6a79-0a4e-45e0-879b-cd49ebd4c4e2
         minecraft:
-          $ref: '#/components/schemas/MinecraftProfileDto'
+          $ref: '#/components/schemas/CustomerMinecraftProfileDto'
         xbox_xuid:
           type:
             - 'null'
@@ -8009,12 +8009,56 @@ components:
           description: Additional custom data associated with the customer.
       additionalProperties: false
       description: Represents a customer in the PayNow system with their associated profiles and metadata.
+    CustomerGenericProfileDto:
+      required:
+        - id
+        - name
+        - platform
+      type: object
+      properties:
+        id:
+          type: string
+          description: The platform-specific identifier for the profile.
+        platform:
+          type: string
+          description: The name of the platform this profile belongs to.
+          example: steam
+        name:
+          type: string
+          description: The display name of the user on this platform.
+        avatar_url:
+          type:
+            - 'null'
+            - string
+          description: The URL to the user's avatar image on this platform.
+      additionalProperties: false
+      description: Represents a generic platform profile for a customer.
     CustomerMinecraftPlatform:
       enum:
         - unknown
         - java
         - bedrock
       type: string
+    CustomerMinecraftProfileDto:
+      required:
+        - avatar_url
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          type: string
+          description: "The UUID of the Minecraft player.\nIf the platform is Minecraft Offline, this will be the name itself.\nIf the platform is Minecraft Geyser, and this is a Bedrock account, this ID will be an Xbox XUID."
+          example: f84c6a79-0a4e-45e0-879b-cd49ebd4c4e2
+        name:
+          type: string
+          description: The username of the Minecraft player.
+          example: notch
+        avatar_url:
+          type: string
+          description: The URL to the player's Minecraft skin rendered as an avatar.
+      additionalProperties: false
+      description: Represents a Minecraft profile for a customer.
     CustomerPlatformAccountDto:
       required:
         - id
@@ -8050,6 +8094,23 @@ components:
         minecraft_bedrock_name: Minecraft Bedrock Profile Platform - the ID param must be a Bedrock minecraft nick.
         xbox_xuid: Minecraft Xbox XUID Profile Platform - the ID param must be an xbox xuid
         minecraft_uuid: Minecraft profile platform - the ID param must be a Minecraft UUID.
+    CustomerSteamProfileDto:
+      required:
+        - avatar_url
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/SteamId'
+        name:
+          type: string
+          description: The display name of the user on Steam.
+        avatar_url:
+          type: string
+          description: The URL to the user's Steam avatar image.
+      additionalProperties: false
+      description: Represents a Steam profile for a customer.
     CustomerTokenResponseDto:
       required:
         - token
@@ -8673,30 +8734,6 @@ components:
             - 'null'
             - string
       additionalProperties: false
-    GenericProfileDto:
-      required:
-        - id
-        - name
-        - platform
-      type: object
-      properties:
-        id:
-          type: string
-          description: The platform-specific identifier for the profile.
-        platform:
-          type: string
-          description: The name of the platform this profile belongs to.
-          example: steam
-        name:
-          type: string
-          description: The display name of the user on this platform.
-        avatar_url:
-          type:
-            - 'null'
-            - string
-          description: The URL to the user's avatar image on this platform.
-      additionalProperties: false
-      description: Represents a generic platform profile for a customer.
     GetTagImageUploadUrlResponseDto:
       required:
         - id
@@ -9149,26 +9186,6 @@ components:
           $ref: '#/components/schemas/Period'
       additionalProperties: false
       description: Represents the configuration settings for a coupon applied to marketing features.
-    MinecraftProfileDto:
-      required:
-        - avatar_url
-        - id
-        - name
-      type: object
-      properties:
-        id:
-          type: string
-          description: "The UUID of the Minecraft player.\nIf the platform is Minecraft Offline, this will be the name itself.\nIf the platform is Minecraft Geyser, and this is a Bedrock account, this ID will be an Xbox XUID."
-          example: f84c6a79-0a4e-45e0-879b-cd49ebd4c4e2
-        name:
-          type: string
-          description: The username of the Minecraft player.
-          example: notch
-        avatar_url:
-          type: string
-          description: The URL to the player's Minecraft skin rendered as an avatar.
-      additionalProperties: false
-      description: Represents a Minecraft profile for a customer.
     NavLinkDto:
       required:
         - name
@@ -9244,6 +9261,7 @@ components:
         - subtotal_amount_str
         - tax_amount
         - tax_amount_str
+        - tax_jurisdictions
         - total_amount
         - total_amount_str
         - type
@@ -9438,9 +9456,7 @@ components:
             $ref: '#/components/schemas/OrderLineDto'
           description: The line items in this order
         tax_jurisdictions:
-          type:
-            - 'null'
-            - array
+          type: array
           items:
             $ref: '#/components/schemas/SalesTaxJurisdictionDto'
           description: A list of all tax jurisdictions that were involved in the taxation of this order.
@@ -10556,11 +10572,7 @@ components:
           description: "The fee percentage charged by the connected platform.\nExpressed in basis points (e.g. 250 = 2.50%)."
           format: int64
         connected_platform_wallet_id:
-          type:
-            - 'null'
-            - integer
-          description: The payout ID associated with the connected platform.
-          format: int64
+          $ref: '#/components/schemas/FlakeId'
         disable_billing_plans:
           type: boolean
           description: 'When true, billing plans are disabled for this platform/store type combination.'
@@ -10827,15 +10839,18 @@ components:
         - allow_one_time_purchase
         - allow_subscription
         - commands
+        - custom_variable_ids
         - customer_stock_limit
         - description
         - gameservers
         - id
         - name
+        - payout_splits
         - price
         - remove_after_enabled
         - remove_after_time_scale
         - remove_after_time_value
+        - required_product_ids
         - single_game_server_only
         - slug
         - sort_order
@@ -10963,9 +10978,7 @@ components:
             type: string
           description: Additional metadata for the product.
         payout_splits:
-          type:
-            - 'null'
-            - array
+          type: array
           items:
             $ref: '#/components/schemas/ProductPayoutSplitDto'
           description: The payout splits for revenue distribution.
@@ -10999,9 +11012,7 @@ components:
           description: The date and time until which the product remains enabled.
           format: date-time
         required_product_ids:
-          type:
-            - 'null'
-            - array
+          type: array
           items:
             $ref: '#/components/schemas/FlakeId'
           description: The IDs of products required for purchasing this product.
@@ -11011,9 +11022,7 @@ components:
             - boolean
           description: Indicates whether all required products are needed.
         custom_variable_ids:
-          type:
-            - 'null'
-            - array
+          type: array
           items:
             $ref: '#/components/schemas/FlakeId'
           description: The IDs of associated custom variables.
@@ -11398,7 +11407,6 @@ components:
         - name
         - slug
         - type
-        - updated_at
         - website_url
       type: object
       properties:
@@ -11430,7 +11438,9 @@ components:
           type: string
           format: date-time
         updated_at:
-          type: string
+          type:
+            - 'null'
+            - string
           format: date-time
         disabled_at:
           type:
@@ -12106,23 +12116,6 @@ components:
       description: A 64-bit Steam account identifier. Accepts string or numeric format.
       format: steam-id
       example: '76561197960287930'
-    SteamProfileDto:
-      required:
-        - avatar_url
-        - id
-        - name
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/SteamId'
-        name:
-          type: string
-          description: The display name of the user on Steam.
-        avatar_url:
-          type: string
-          description: The URL to the user's Steam avatar image.
-      additionalProperties: false
-      description: Represents a Steam profile for a customer.
     SteamSkinsDetailsDto:
       required:
         - items
@@ -12649,7 +12642,7 @@ components:
         automatic_recommendations_enabled:
           type: boolean
         automatic_recommendations_discount_type:
-          $ref: '#/components/schemas/UpsellDiscountType'
+          $ref: '#/components/schemas/UpsellDiscountTypeDto'
         automatic_recommendations_discount_amount:
           type: integer
           format: int64
@@ -13081,7 +13074,7 @@ components:
         next_billing_presentment_amount:
           $ref: '#/components/schemas/SubscriptionBillingAmountDto'
         status:
-          $ref: '#/components/schemas/SubscriptionStatus'
+          $ref: '#/components/schemas/SubscriptionStatusDto'
         coupon_id:
           $ref: '#/components/schemas/FlakeId'
         coupon_ids:
@@ -13705,7 +13698,7 @@ components:
           readOnly: true
       additionalProperties: false
       description: Represents a line item within a subscription.
-    SubscriptionStatus:
+    SubscriptionStatusDto:
       enum:
         - invalid
         - created
@@ -14406,7 +14399,7 @@ components:
         automatic_recommendations_enabled:
           type: boolean
         automatic_recommendations_discount_type:
-          $ref: '#/components/schemas/UpsellDiscountType'
+          $ref: '#/components/schemas/UpsellDiscountTypeDto'
         automatic_recommendations_discount_amount:
           type: integer
           format: int64
@@ -14507,13 +14500,6 @@ components:
         discord_format:
           $ref: '#/components/schemas/WebhookDiscordFormatDto'
       additionalProperties: false
-    UpsellDiscountType:
-      enum:
-        - unknown
-        - none
-        - fixed
-        - percentage
-      type: string
     UpsellDiscountTypeDto:
       enum:
         - unknown
@@ -14528,6 +14514,11 @@ components:
         - alternative
         - increase_quantity
       type: string
+      x-enumDescriptions:
+        unknown: Unknown upsell type.
+        additional: An additional product offered alongside the current item.
+        alternative: An alternative product offered in place of the current item.
+        increase_quantity: An offer to increase the quantity of the current item.
     UpsertBanRequestDto:
       type: object
       properties:

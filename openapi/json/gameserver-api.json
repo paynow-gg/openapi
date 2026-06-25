@@ -458,11 +458,11 @@
       "LinkGameServerResponseDto": {
         "required": [
           "gameserver",
-          "update_avaliable"
+          "update_available"
         ],
         "type": "object",
         "properties": {
-          "update_avaliable": {
+          "update_available": {
             "type": "boolean"
           },
           "latest_version": {
@@ -475,7 +475,7 @@
             "$ref": "#/components/schemas/PreviousGameServerLinkDto"
           },
           "gameserver": {
-            "$ref": "#/components/schemas/MinimalGameServerDto"
+            "$ref": "#/components/schemas/StorefrontGameServerDto"
           }
         },
         "additionalProperties": false
@@ -491,33 +491,6 @@
           }
         },
         "additionalProperties": false
-      },
-      "MinimalGameServerDto": {
-        "required": [
-          "enabled",
-          "id",
-          "name",
-          "store_id"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "store_id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "name": {
-            "type": "string",
-            "description": "The display name of the game server."
-          },
-          "enabled": {
-            "type": "boolean",
-            "description": "Indicates whether the game server is currently enabled."
-          }
-        },
-        "additionalProperties": false,
-        "description": "A minimal representation of a Game Server"
       },
       "PayNowError": {
         "required": [
@@ -691,6 +664,29 @@
         "description": "A 64-bit Steam account identifier. Accepts string or numeric format.",
         "format": "steam-id",
         "example": "76561197960287930"
+      },
+      "StorefrontGameServerDto": {
+        "required": [
+          "enabled",
+          "id",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "name": {
+            "type": "string",
+            "description": "The display name of the game server."
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Indicates whether the game server is currently enabled."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents a simplified view of a game server for storefront display purposes."
       },
       "ValidationError": {
         "required": [

@@ -8667,7 +8667,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/components/schemas/SubscriptionStatus"
+                "$ref": "#/components/schemas/SubscriptionStatusDto"
               }
             }
           },
@@ -12416,7 +12416,7 @@
             "type": "boolean"
           },
           "automatic_recommendations_discount_type": {
-            "$ref": "#/components/schemas/UpsellDiscountType"
+            "$ref": "#/components/schemas/UpsellDiscountTypeDto"
           },
           "automatic_recommendations_discount_amount": {
             "type": "integer",
@@ -12782,13 +12782,13 @@
             "$ref": "#/components/schemas/FlakeId"
           },
           "profile": {
-            "$ref": "#/components/schemas/GenericProfileDto"
+            "$ref": "#/components/schemas/CustomerGenericProfileDto"
           },
           "steam_id": {
             "$ref": "#/components/schemas/SteamId"
           },
           "steam": {
-            "$ref": "#/components/schemas/SteamProfileDto"
+            "$ref": "#/components/schemas/CustomerSteamProfileDto"
           },
           "minecraft_uuid": {
             "type": [
@@ -12799,7 +12799,7 @@
             "example": "f84c6a79-0a4e-45e0-879b-cd49ebd4c4e2"
           },
           "minecraft": {
-            "$ref": "#/components/schemas/MinecraftProfileDto"
+            "$ref": "#/components/schemas/CustomerMinecraftProfileDto"
           },
           "xbox_xuid": {
             "type": [
@@ -12843,6 +12843,38 @@
         "additionalProperties": false,
         "description": "Represents a customer in the PayNow system with their associated profiles and metadata."
       },
+      "CustomerGenericProfileDto": {
+        "required": [
+          "id",
+          "name",
+          "platform"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The platform-specific identifier for the profile."
+          },
+          "platform": {
+            "type": "string",
+            "description": "The name of the platform this profile belongs to.",
+            "example": "steam"
+          },
+          "name": {
+            "type": "string",
+            "description": "The display name of the user on this platform."
+          },
+          "avatar_url": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The URL to the user's avatar image on this platform."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents a generic platform profile for a customer."
+      },
       "CustomerMinecraftPlatform": {
         "enum": [
           "unknown",
@@ -12850,6 +12882,32 @@
           "bedrock"
         ],
         "type": "string"
+      },
+      "CustomerMinecraftProfileDto": {
+        "required": [
+          "avatar_url",
+          "id",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The UUID of the Minecraft player.\nIf the platform is Minecraft Offline, this will be the name itself.\nIf the platform is Minecraft Geyser, and this is a Bedrock account, this ID will be an Xbox XUID.",
+            "example": "f84c6a79-0a4e-45e0-879b-cd49ebd4c4e2"
+          },
+          "name": {
+            "type": "string",
+            "description": "The username of the Minecraft player.",
+            "example": "notch"
+          },
+          "avatar_url": {
+            "type": "string",
+            "description": "The URL to the player's Minecraft skin rendered as an avatar."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents a Minecraft profile for a customer."
       },
       "CustomerPlatformAccountDto": {
         "required": [
@@ -12893,6 +12951,29 @@
           "xbox_xuid": "Minecraft Xbox XUID Profile Platform - the ID param must be an xbox xuid",
           "minecraft_uuid": "Minecraft profile platform - the ID param must be a Minecraft UUID."
         }
+      },
+      "CustomerSteamProfileDto": {
+        "required": [
+          "avatar_url",
+          "id",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/SteamId"
+          },
+          "name": {
+            "type": "string",
+            "description": "The display name of the user on Steam."
+          },
+          "avatar_url": {
+            "type": "string",
+            "description": "The URL to the user's Steam avatar image."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents a Steam profile for a customer."
       },
       "CustomerTokenResponseDto": {
         "required": [
@@ -13748,38 +13829,6 @@
         },
         "additionalProperties": false
       },
-      "GenericProfileDto": {
-        "required": [
-          "id",
-          "name",
-          "platform"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "The platform-specific identifier for the profile."
-          },
-          "platform": {
-            "type": "string",
-            "description": "The name of the platform this profile belongs to.",
-            "example": "steam"
-          },
-          "name": {
-            "type": "string",
-            "description": "The display name of the user on this platform."
-          },
-          "avatar_url": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The URL to the user's avatar image on this platform."
-          }
-        },
-        "additionalProperties": false,
-        "description": "Represents a generic platform profile for a customer."
-      },
       "GetTagImageUploadUrlResponseDto": {
         "required": [
           "id",
@@ -14394,32 +14443,6 @@
         "additionalProperties": false,
         "description": "Represents the configuration settings for a coupon applied to marketing features."
       },
-      "MinecraftProfileDto": {
-        "required": [
-          "avatar_url",
-          "id",
-          "name"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "The UUID of the Minecraft player.\nIf the platform is Minecraft Offline, this will be the name itself.\nIf the platform is Minecraft Geyser, and this is a Bedrock account, this ID will be an Xbox XUID.",
-            "example": "f84c6a79-0a4e-45e0-879b-cd49ebd4c4e2"
-          },
-          "name": {
-            "type": "string",
-            "description": "The username of the Minecraft player.",
-            "example": "notch"
-          },
-          "avatar_url": {
-            "type": "string",
-            "description": "The URL to the player's Minecraft skin rendered as an avatar."
-          }
-        },
-        "additionalProperties": false,
-        "description": "Represents a Minecraft profile for a customer."
-      },
       "NavLinkDto": {
         "required": [
           "name",
@@ -14511,6 +14534,7 @@
           "subtotal_amount_str",
           "tax_amount",
           "tax_amount_str",
+          "tax_jurisdictions",
           "total_amount",
           "total_amount_str",
           "type"
@@ -14758,10 +14782,7 @@
             "description": "The line items in this order"
           },
           "tax_jurisdictions": {
-            "type": [
-              "null",
-              "array"
-            ],
+            "type": "array",
             "items": {
               "$ref": "#/components/schemas/SalesTaxJurisdictionDto"
             },
@@ -16195,12 +16216,7 @@
             "format": "int64"
           },
           "connected_platform_wallet_id": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "description": "The payout ID associated with the connected platform.",
-            "format": "int64"
+            "$ref": "#/components/schemas/FlakeId"
           },
           "disable_billing_plans": {
             "type": "boolean",
@@ -16564,15 +16580,18 @@
           "allow_one_time_purchase",
           "allow_subscription",
           "commands",
+          "custom_variable_ids",
           "customer_stock_limit",
           "description",
           "gameservers",
           "id",
           "name",
+          "payout_splits",
           "price",
           "remove_after_enabled",
           "remove_after_time_scale",
           "remove_after_time_value",
+          "required_product_ids",
           "single_game_server_only",
           "slug",
           "sort_order",
@@ -16744,10 +16763,7 @@
             "description": "Additional metadata for the product."
           },
           "payout_splits": {
-            "type": [
-              "null",
-              "array"
-            ],
+            "type": "array",
             "items": {
               "$ref": "#/components/schemas/ProductPayoutSplitDto"
             },
@@ -16794,10 +16810,7 @@
             "format": "date-time"
           },
           "required_product_ids": {
-            "type": [
-              "null",
-              "array"
-            ],
+            "type": "array",
             "items": {
               "$ref": "#/components/schemas/FlakeId"
             },
@@ -16811,10 +16824,7 @@
             "description": "Indicates whether all required products are needed."
           },
           "custom_variable_ids": {
-            "type": [
-              "null",
-              "array"
-            ],
+            "type": "array",
             "items": {
               "$ref": "#/components/schemas/FlakeId"
             },
@@ -17328,7 +17338,6 @@
           "name",
           "slug",
           "type",
-          "updated_at",
           "website_url"
         ],
         "type": "object",
@@ -17374,7 +17383,10 @@
             "format": "date-time"
           },
           "updated_at": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "format": "date-time"
           },
           "disabled_at": {
@@ -18288,29 +18300,6 @@
         "format": "steam-id",
         "example": "76561197960287930"
       },
-      "SteamProfileDto": {
-        "required": [
-          "avatar_url",
-          "id",
-          "name"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/SteamId"
-          },
-          "name": {
-            "type": "string",
-            "description": "The display name of the user on Steam."
-          },
-          "avatar_url": {
-            "type": "string",
-            "description": "The URL to the user's Steam avatar image."
-          }
-        },
-        "additionalProperties": false,
-        "description": "Represents a Steam profile for a customer."
-      },
       "SteamSkinsDetailsDto": {
         "required": [
           "items"
@@ -19005,7 +18994,7 @@
             "type": "boolean"
           },
           "automatic_recommendations_discount_type": {
-            "$ref": "#/components/schemas/UpsellDiscountType"
+            "$ref": "#/components/schemas/UpsellDiscountTypeDto"
           },
           "automatic_recommendations_discount_amount": {
             "type": "integer",
@@ -19565,7 +19554,7 @@
             "$ref": "#/components/schemas/SubscriptionBillingAmountDto"
           },
           "status": {
-            "$ref": "#/components/schemas/SubscriptionStatus"
+            "$ref": "#/components/schemas/SubscriptionStatusDto"
           },
           "coupon_id": {
             "$ref": "#/components/schemas/FlakeId"
@@ -20385,7 +20374,7 @@
         "additionalProperties": false,
         "description": "Represents a line item within a subscription."
       },
-      "SubscriptionStatus": {
+      "SubscriptionStatusDto": {
         "enum": [
           "invalid",
           "created",
@@ -21362,7 +21351,7 @@
             "type": "boolean"
           },
           "automatic_recommendations_discount_type": {
-            "$ref": "#/components/schemas/UpsellDiscountType"
+            "$ref": "#/components/schemas/UpsellDiscountTypeDto"
           },
           "automatic_recommendations_discount_amount": {
             "type": "integer",
@@ -21512,15 +21501,6 @@
         },
         "additionalProperties": false
       },
-      "UpsellDiscountType": {
-        "enum": [
-          "unknown",
-          "none",
-          "fixed",
-          "percentage"
-        ],
-        "type": "string"
-      },
       "UpsellDiscountTypeDto": {
         "enum": [
           "unknown",
@@ -21537,7 +21517,13 @@
           "alternative",
           "increase_quantity"
         ],
-        "type": "string"
+        "type": "string",
+        "x-enumDescriptions": {
+          "unknown": "Unknown upsell type.",
+          "additional": "An additional product offered alongside the current item.",
+          "alternative": "An alternative product offered in place of the current item.",
+          "increase_quantity": "An offer to increase the quantity of the current item."
+        }
       },
       "UpsertBanRequestDto": {
         "type": "object",

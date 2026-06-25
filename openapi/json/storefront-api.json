@@ -854,6 +854,132 @@
         ]
       }
     },
+    "/v1/store/customer/orders": {
+      "get": {
+        "tags": [
+          "orders"
+        ],
+        "summary": "Get orders",
+        "description": "Retrieves all orders for the specified customer token.\n{% hint style=\"warning\" %}\nThis endpoint is only available for stores that use Steam based authentication.\n{% endhint %}",
+        "operationId": "StorefrontOrders_GetOrders",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "The maximum number of items to return in a single request.",
+            "schema": {
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "description": "Returns items after the specified ID.\nUsed for forward pagination through results.",
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            },
+            "example": "null"
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "description": "Returns items before the specified ID.\nUsed for backward pagination through results.",
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            },
+            "example": "null"
+          },
+          {
+            "name": "asc",
+            "in": "query",
+            "description": "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order.",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StorefrontOrderDto"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Customer": [ ]
+          }
+        ]
+      }
+    },
+    "/v1/store/customer/orders/{orderId}": {
+      "get": {
+        "tags": [
+          "orders"
+        ],
+        "summary": "Get order by ID",
+        "description": "Retrieves an order by its ID for the specified customer token.\n{% hint style=\"warning\" %}\nThis endpoint is only available for stores that use Steam based authentication.\n{% endhint %}",
+        "operationId": "StorefrontOrders_GetOrderById",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StorefrontOrderDto"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Customer": [ ]
+          }
+        ]
+      }
+    },
     "/v1/store/products": {
       "get": {
         "tags": [
@@ -952,7 +1078,7 @@
         ],
         "summary": "Get product by ID or slug",
         "description": "Retrieves a product by an ID or a slug. To make sure all VAT rates are properly displayed, pass in the IP headers as instructed.",
-        "operationId": "StorefrontProducts_GetStorefrontProductByIdOrSlug",
+        "operationId": "StorefrontProducts_GetStorefrontProduct",
         "parameters": [
           {
             "name": "idOrSlug",
@@ -1106,7 +1232,7 @@
         ],
         "summary": "Get subscriptions",
         "description": "Retrieves all subscriptions for the specified customer token.\n{% hint style=\"warning\" %}\nThis endpoint is only available for stores that use Steam based authentication.\n{% endhint %}",
-        "operationId": "StorefrontCustomerSubscriptions_GetSubscriptions",
+        "operationId": "StorefrontSubscriptions_GetSubscriptions",
         "parameters": [
           {
             "name": "customer_id",
@@ -1156,7 +1282,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/components/schemas/SubscriptionStatus"
+                "$ref": "#/components/schemas/SubscriptionStatusDto"
               }
             }
           },
@@ -1206,7 +1332,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/SubscriptionDto"
+                    "$ref": "#/components/schemas/StorefrontSubscriptionDto"
                   }
                 }
               }
@@ -1237,7 +1363,7 @@
         ],
         "summary": "Get subscription by ID",
         "description": "Retrieves a subscription for the specified store by the supplied customer token.\n{% hint style=\"warning\" %}\nThis endpoint is only available for stores that use Steam based authentication.\n{% endhint %}",
-        "operationId": "StorefrontCustomerSubscriptions_GetSubscriptionById",
+        "operationId": "StorefrontSubscriptions_GetSubscriptionById",
         "parameters": [
           {
             "name": "subscriptionId",
@@ -1254,7 +1380,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SubscriptionDto"
+                  "$ref": "#/components/schemas/StorefrontSubscriptionDto"
                 }
               }
             }
@@ -1282,7 +1408,7 @@
         ],
         "summary": "Cancel subscription by ID",
         "description": "Cancels a subscription for the specified store by the supplied customer token.\n{% hint style=\"warning\" %}\nThis endpoint is only available for stores that use Steam based authentication.\n{% endhint %}",
-        "operationId": "StorefrontCustomerSubscriptions_CancelSubscription",
+        "operationId": "StorefrontSubscriptions_CancelSubscription",
         "parameters": [
           {
             "name": "subscriptionId",
@@ -1560,29 +1686,6 @@
         },
         "additionalProperties": false
       },
-      "AlipayDetailsDto": {
-        "type": "object",
-        "properties": {
-          "buyer_id": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The Alipay buyer identifier",
-            "example": "buyer_abc123"
-          },
-          "fingerprint": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "A unique fingerprint for this Alipay account",
-            "example": "fingerprint_xyz789"
-          }
-        },
-        "additionalProperties": false,
-        "description": "Alipay payment method details"
-      },
       "AuthenticateStorefrontCustomerRequestDto": {
         "required": [
           "id",
@@ -1613,148 +1716,6 @@
           }
         },
         "additionalProperties": false
-      },
-      "BancontactDetailsDto": {
-        "type": "object",
-        "properties": {
-          "bank": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The bank identifier",
-            "example": "bnp_paribas"
-          },
-          "bank_name": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The bank name",
-            "example": "BNP Paribas"
-          },
-          "bic": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The Bank Identifier Code",
-            "example": "GEBABEBB"
-          },
-          "iban_last4": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The last 4 digits of the IBAN",
-            "example": 3456
-          },
-          "payer_name": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The payer name",
-            "example": "Jean Dupont"
-          }
-        },
-        "additionalProperties": false,
-        "description": "Bancontact payment method details"
-      },
-      "CardDetailsDto": {
-        "required": [
-          "brand",
-          "country",
-          "exp_month",
-          "exp_year",
-          "fingerprint",
-          "funding",
-          "last4"
-        ],
-        "type": "object",
-        "properties": {
-          "brand": {
-            "type": "string",
-            "description": "The card brand",
-            "example": "visa"
-          },
-          "country": {
-            "type": "string",
-            "description": "The country code where the card was issued",
-            "example": "US"
-          },
-          "exp_month": {
-            "type": "integer",
-            "description": "The card expiration month",
-            "format": "int32",
-            "example": 12
-          },
-          "exp_year": {
-            "type": "integer",
-            "description": "The card expiration year",
-            "format": "int32",
-            "example": 2028
-          },
-          "fingerprint": {
-            "type": "string",
-            "description": "A unique fingerprint for this card",
-            "example": "abc123def456"
-          },
-          "funding": {
-            "type": "string",
-            "description": "The card funding type",
-            "example": "credit"
-          },
-          "last4": {
-            "type": "string",
-            "description": "The last 4 digits of the card number",
-            "example": "4242"
-          },
-          "bin": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The Bank Identification Number (first 6/8 digits of card).\nOnly available internally.",
-            "example": 424242
-          },
-          "issuer": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The card issuer/bank name.\nOnly available internally.",
-            "example": "Chase Bank"
-          },
-          "description": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The card description.\nOnly available internally.",
-            "example": "Visa Signature"
-          },
-          "wallet": {
-            "$ref": "#/components/schemas/CardWalletDto"
-          }
-        },
-        "additionalProperties": false,
-        "description": "Card payment method details"
-      },
-      "CardWalletDto": {
-        "required": [
-          "type"
-        ],
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "description": "The type of digital wallet",
-            "example": "apple_pay"
-          }
-        },
-        "additionalProperties": false,
-        "description": "Digital wallet details for a card"
       },
       "CartDto": {
         "required": [
@@ -1901,7 +1862,7 @@
             "$ref": "#/components/schemas/StorefrontGameServerDto"
           },
           "pricing": {
-            "$ref": "#/components/schemas/StorefrontProductPricingDetailsDto"
+            "$ref": "#/components/schemas/StorefrontProductPricingDto"
           },
           "custom_variables": {
             "type": "array",
@@ -1911,7 +1872,7 @@
             "description": "Selected custom variables for this cart line."
           },
           "gift_to_customer": {
-            "$ref": "#/components/schemas/CustomerDto"
+            "$ref": "#/components/schemas/StorefrontCustomerDto"
           },
           "gift_to_customer_id": {
             "$ref": "#/components/schemas/FlakeId"
@@ -1919,27 +1880,6 @@
         },
         "additionalProperties": false,
         "description": "Represents a line item in a cart"
-      },
-      "CashAppDetailsDto": {
-        "required": [
-          "buyer_id",
-          "cashtag"
-        ],
-        "type": "object",
-        "properties": {
-          "buyer_id": {
-            "type": "string",
-            "description": "The Cash App buyer identifier",
-            "example": "buyer_abc123"
-          },
-          "cashtag": {
-            "type": "string",
-            "description": "The Cash App cashtag",
-            "example": "$johndoe"
-          }
-        },
-        "additionalProperties": false,
-        "description": "Cash App payment method details"
       },
       "CheckoutPaymentInfoDto": {
         "required": [
@@ -2155,40 +2095,6 @@
         "additionalProperties": false,
         "description": "Response after creating a checkout session"
       },
-      "CryptoDetailsDto": {
-        "required": [
-          "confirmations",
-          "crypto_amount",
-          "crypto_currency",
-          "total_paid"
-        ],
-        "type": "object",
-        "properties": {
-          "crypto_currency": {
-            "type": "string",
-            "description": "The cryptocurrency used",
-            "example": "BTC"
-          },
-          "crypto_amount": {
-            "type": "string",
-            "description": "The amount in cryptocurrency",
-            "example": "0.00150000"
-          },
-          "total_paid": {
-            "type": "string",
-            "description": "The total amount paid in cryptocurrency",
-            "example": "0.00150000"
-          },
-          "confirmations": {
-            "type": "integer",
-            "description": "The number of blockchain confirmations",
-            "format": "int32",
-            "example": 6
-          }
-        },
-        "additionalProperties": false,
-        "description": "Cryptocurrency payment method details"
-      },
       "CustomVariableLineItemDto": {
         "required": [
           "description",
@@ -2257,13 +2163,13 @@
             "$ref": "#/components/schemas/FlakeId"
           },
           "profile": {
-            "$ref": "#/components/schemas/GenericProfileDto"
+            "$ref": "#/components/schemas/CustomerGenericProfileDto"
           },
           "steam_id": {
             "$ref": "#/components/schemas/SteamId"
           },
           "steam": {
-            "$ref": "#/components/schemas/SteamProfileDto"
+            "$ref": "#/components/schemas/CustomerSteamProfileDto"
           },
           "minecraft_uuid": {
             "type": [
@@ -2274,7 +2180,7 @@
             "example": "f84c6a79-0a4e-45e0-879b-cd49ebd4c4e2"
           },
           "minecraft": {
-            "$ref": "#/components/schemas/MinecraftProfileDto"
+            "$ref": "#/components/schemas/CustomerMinecraftProfileDto"
           },
           "xbox_xuid": {
             "type": [
@@ -2318,6 +2224,38 @@
         "additionalProperties": false,
         "description": "Represents a customer in the PayNow system with their associated profiles and metadata."
       },
+      "CustomerGenericProfileDto": {
+        "required": [
+          "id",
+          "name",
+          "platform"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The platform-specific identifier for the profile."
+          },
+          "platform": {
+            "type": "string",
+            "description": "The name of the platform this profile belongs to.",
+            "example": "steam"
+          },
+          "name": {
+            "type": "string",
+            "description": "The display name of the user on this platform."
+          },
+          "avatar_url": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The URL to the user's avatar image on this platform."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents a generic platform profile for a customer."
+      },
       "CustomerMinecraftPlatform": {
         "enum": [
           "unknown",
@@ -2325,6 +2263,32 @@
           "bedrock"
         ],
         "type": "string"
+      },
+      "CustomerMinecraftProfileDto": {
+        "required": [
+          "avatar_url",
+          "id",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The UUID of the Minecraft player.\nIf the platform is Minecraft Offline, this will be the name itself.\nIf the platform is Minecraft Geyser, and this is a Bedrock account, this ID will be an Xbox XUID.",
+            "example": "f84c6a79-0a4e-45e0-879b-cd49ebd4c4e2"
+          },
+          "name": {
+            "type": "string",
+            "description": "The username of the Minecraft player.",
+            "example": "notch"
+          },
+          "avatar_url": {
+            "type": "string",
+            "description": "The URL to the player's Minecraft skin rendered as an avatar."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents a Minecraft profile for a customer."
       },
       "CustomerPlatformAccountDto": {
         "required": [
@@ -2368,6 +2332,29 @@
           "xbox_xuid": "Minecraft Xbox XUID Profile Platform - the ID param must be an xbox xuid",
           "minecraft_uuid": "Minecraft profile platform - the ID param must be a Minecraft UUID."
         }
+      },
+      "CustomerSteamProfileDto": {
+        "required": [
+          "avatar_url",
+          "id",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/SteamId"
+          },
+          "name": {
+            "type": "string",
+            "description": "The display name of the user on Steam."
+          },
+          "avatar_url": {
+            "type": "string",
+            "description": "The URL to the user's Steam avatar image."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents a Steam profile for a customer."
       },
       "CustomerTierGroupDto": {
         "required": [
@@ -2463,200 +2450,33 @@
         "format": "flake-id",
         "example": "411486491630370816"
       },
-      "GenericProfileDto": {
-        "required": [
-          "id",
-          "name",
-          "platform"
+      "OrderStatus": {
+        "enum": [
+          "created",
+          "completed",
+          "canceled",
+          "refunded",
+          "chargeback"
         ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "The platform-specific identifier for the profile."
-          },
-          "platform": {
-            "type": "string",
-            "description": "The name of the platform this profile belongs to.",
-            "example": "steam"
-          },
-          "name": {
-            "type": "string",
-            "description": "The display name of the user on this platform."
-          },
-          "avatar_url": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The URL to the user's avatar image on this platform."
-          }
-        },
-        "additionalProperties": false,
-        "description": "Represents a generic platform profile for a customer."
+        "type": "string"
       },
-      "IdealDetailsDto": {
-        "required": [
-          "bank",
-          "bic"
+      "OrderType": {
+        "enum": [
+          "one_time",
+          "subscription_initial",
+          "subscription_renewal",
+          "subscription_proration",
+          "mixed"
         ],
-        "type": "object",
-        "properties": {
-          "bank": {
-            "type": "string",
-            "description": "The bank identifier",
-            "example": "abn_amro"
-          },
-          "bic": {
-            "type": "string",
-            "description": "The Bank Identifier Code",
-            "example": "ABNANL2A"
-          },
-          "iban_last4": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The last 4 digits of the IBAN",
-            "example": 1234
-          },
-          "payer_name": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The payer name",
-            "example": "John Doe"
-          }
-        },
-        "additionalProperties": false,
-        "description": "iDEAL payment method details"
-      },
-      "KlarnaDetailsDto": {
-        "type": "object",
-        "properties": {
-          "country": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The country code",
-            "example": "SE"
-          },
-          "method_category": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The Klarna payment method category",
-            "example": "pay_later"
-          }
-        },
-        "additionalProperties": false,
-        "description": "Klarna payment method details"
-      },
-      "LinkDetailsDto": {
-        "required": [
-          "email"
-        ],
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "description": "The email associated with the Link account",
-            "example": "john.doe@example.com"
-          }
-        },
-        "additionalProperties": false,
-        "description": "Link payment method details"
-      },
-      "MinecraftProfileDto": {
-        "required": [
-          "avatar_url",
-          "id",
-          "name"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "The UUID of the Minecraft player.\nIf the platform is Minecraft Offline, this will be the name itself.\nIf the platform is Minecraft Geyser, and this is a Bedrock account, this ID will be an Xbox XUID.",
-            "example": "f84c6a79-0a4e-45e0-879b-cd49ebd4c4e2"
-          },
-          "name": {
-            "type": "string",
-            "description": "The username of the Minecraft player.",
-            "example": "notch"
-          },
-          "avatar_url": {
-            "type": "string",
-            "description": "The URL to the player's Minecraft skin rendered as an avatar."
-          }
-        },
-        "additionalProperties": false,
-        "description": "Represents a Minecraft profile for a customer."
-      },
-      "P24DetailsDto": {
-        "required": [
-          "bank"
-        ],
-        "type": "object",
-        "properties": {
-          "bank": {
-            "type": "string",
-            "description": "The bank identifier",
-            "example": "ing"
-          },
-          "payer_name": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The payer name",
-            "example": "Jan Kowalski"
-          }
-        },
-        "additionalProperties": false,
-        "description": "Przelewy24 payment method details"
-      },
-      "PayByBankDetailsDto": {
-        "type": "object",
-        "properties": {
-          "bank_name": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The bank name",
-            "example": "Chase Bank"
-          },
-          "bic": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The Bank Identifier Code",
-            "example": "CHASUS33"
-          },
-          "country": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The country code",
-            "example": "US"
-          },
-          "payer_name": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The payer name",
-            "example": "John Smith"
-          }
-        },
-        "additionalProperties": false,
-        "description": "Pay by Bank payment method details"
+        "type": "string",
+        "description": "Defines the type of items contained in an order",
+        "x-enumDescriptions": {
+          "one_time": "Order contains only one-time purchase items",
+          "subscription_initial": "Order is the initial charge for a subscription",
+          "subscription_renewal": "Order is a recurring renewal charge for a subscription",
+          "subscription_proration": "Order is a proration charge for a subscription",
+          "mixed": "Order contains both one-time purchase and subscription items"
+        }
       },
       "PayNowActorType": {
         "enum": [
@@ -2718,241 +2538,6 @@
         "additionalProperties": false,
         "description": "Represents a PayNow error"
       },
-      "PayPalDetailsDto": {
-        "required": [
-          "country",
-          "payer_email",
-          "payer_id",
-          "payer_name",
-          "vault"
-        ],
-        "type": "object",
-        "properties": {
-          "payer_id": {
-            "type": "string",
-            "description": "The PayPal payer identifier",
-            "example": "PAYERID123"
-          },
-          "payer_email": {
-            "type": "string",
-            "description": "The PayPal account email",
-            "example": "john.doe@example.com"
-          },
-          "payer_name": {
-            "type": "string",
-            "description": "The PayPal account holder name",
-            "example": "John Doe"
-          },
-          "country": {
-            "type": "string",
-            "description": "The country code of the PayPal account",
-            "example": "US"
-          },
-          "vault": {
-            "type": "boolean",
-            "description": "Indicates if this PayPal account is vaulted",
-            "example": true
-          },
-          "pending_vault_approval": {
-            "type": [
-              "null",
-              "boolean"
-            ],
-            "description": "Indicates if vault approval is pending",
-            "example": false
-          },
-          "standalone_setup": {
-            "type": [
-              "null",
-              "boolean"
-            ],
-            "description": "Indicates if this is a standalone setup",
-            "example": false
-          }
-        },
-        "additionalProperties": false,
-        "description": "PayPal payment method details"
-      },
-      "PaymentMethodDetailsDto": {
-        "type": "object",
-        "properties": {
-          "card": {
-            "$ref": "#/components/schemas/CardDetailsDto"
-          },
-          "cashapp": {
-            "$ref": "#/components/schemas/CashAppDetailsDto"
-          },
-          "paypal": {
-            "$ref": "#/components/schemas/PayPalDetailsDto"
-          },
-          "link": {
-            "$ref": "#/components/schemas/LinkDetailsDto"
-          },
-          "crypto": {
-            "$ref": "#/components/schemas/CryptoDetailsDto"
-          },
-          "steamskins": {
-            "$ref": "#/components/schemas/SteamSkinsDetailsDto"
-          },
-          "ideal": {
-            "$ref": "#/components/schemas/IdealDetailsDto"
-          },
-          "p24": {
-            "$ref": "#/components/schemas/P24DetailsDto"
-          },
-          "bancontact": {
-            "$ref": "#/components/schemas/BancontactDetailsDto"
-          },
-          "klarna": {
-            "$ref": "#/components/schemas/KlarnaDetailsDto"
-          },
-          "alipay": {
-            "$ref": "#/components/schemas/AlipayDetailsDto"
-          },
-          "pay_by_bank": {
-            "$ref": "#/components/schemas/PayByBankDetailsDto"
-          },
-          "pix": {
-            "$ref": "#/components/schemas/PixDetailsDto"
-          },
-          "paysafecard": {
-            "$ref": "#/components/schemas/PaysafeCardDetailsDto"
-          }
-        },
-        "additionalProperties": false,
-        "description": "Contains detailed information about a payment method.\nDISCLAIMER: These fields are not guaranteed to be backwards compatible and may change or be removed without notice."
-      },
-      "PaymentMethodDto": {
-        "required": [
-          "created_at",
-          "customer_id",
-          "gateway",
-          "gateway_customer_id",
-          "gateway_entity_identifier",
-          "gateway_id",
-          "gateway_type",
-          "id",
-          "method_details",
-          "method_type"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "customer_id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "gateway": {
-            "type": "string",
-            "description": "The payment gateway provider"
-          },
-          "gateway_id": {
-            "type": "string",
-            "description": "The gateway's identifier for this payment method"
-          },
-          "gateway_customer_id": {
-            "type": "string",
-            "description": "The gateway's customer identifier"
-          },
-          "gateway_type": {
-            "type": "string",
-            "description": "The gateway-specific type identifier",
-            "example": "card"
-          },
-          "method_type": {
-            "type": "string",
-            "description": "The payment method type",
-            "example": "card"
-          },
-          "method_details": {
-            "$ref": "#/components/schemas/PaymentMethodDetailsDto"
-          },
-          "created_at": {
-            "type": "string",
-            "description": "The date and time when this payment method was created",
-            "format": "date-time",
-            "example": "2025-03-15T10:20:30Z"
-          },
-          "gateway_entity_identifier": {
-            "type": "string",
-            "description": "The gateway entity identifier"
-          },
-          "updated_at": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The date and time when this payment method was last updated",
-            "format": "date-time",
-            "example": "2025-03-20T14:30:00Z"
-          }
-        },
-        "additionalProperties": false,
-        "description": "Represents a stored payment method"
-      },
-      "PaysafeCardDetailsDto": {
-        "type": "object",
-        "properties": {
-          "first_name": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "last_name": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "psc_id": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "association_id": {
-            "type": [
-              "null",
-              "string"
-            ]
-          }
-        },
-        "additionalProperties": false,
-        "description": "Paysafecard payment method details"
-      },
-      "PixDetailsDto": {
-        "type": "object",
-        "properties": {
-          "bank_name": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The bank name",
-            "example": "Banco do Brasil"
-          },
-          "bank_account_number": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The bank account number",
-            "example": "12345-6"
-          },
-          "payer_name": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The payer name",
-            "example": "João Silva"
-          }
-        },
-        "additionalProperties": false,
-        "description": "Pix payment method details"
-      },
       "PlatformCapability": {
         "enum": [
           "invalid",
@@ -2997,12 +2582,7 @@
             "format": "int64"
           },
           "connected_platform_wallet_id": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "description": "The payout ID associated with the connected platform.",
-            "format": "int64"
+            "$ref": "#/components/schemas/FlakeId"
           },
           "disable_billing_plans": {
             "type": "boolean",
@@ -3037,29 +2617,6 @@
           "grant_giftcard": {
             "type": "boolean",
             "description": "Value indicating whether to grant a giftcard with the product with the subtotal amount."
-          }
-        },
-        "additionalProperties": false
-      },
-      "ProductGameServerDto": {
-        "required": [
-          "enabled",
-          "id",
-          "name"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "name": {
-            "type": "string",
-            "description": "The name of the game server.",
-            "example": "US 2x TRIO"
-          },
-          "enabled": {
-            "type": "boolean",
-            "description": "Indicates whether this game server is enabled."
           }
         },
         "additionalProperties": false
@@ -3135,7 +2692,6 @@
           "name",
           "slug",
           "type",
-          "updated_at",
           "website_url"
         ],
         "type": "object",
@@ -3181,7 +2737,10 @@
             "format": "date-time"
           },
           "updated_at": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "format": "date-time"
           },
           "disabled_at": {
@@ -3200,6 +2759,68 @@
           "amount"
         ],
         "type": "string"
+      },
+      "SalesTaxEstimateDto": {
+        "required": [
+          "country_code",
+          "country_name",
+          "currency",
+          "eservice_rate",
+          "eu_member_state",
+          "percentage",
+          "vat_abbreviation",
+          "vat_local_name"
+        ],
+        "type": "object",
+        "properties": {
+          "country_code": {
+            "type": "string",
+            "description": "The ISO country code.",
+            "example": "CZ"
+          },
+          "country_name": {
+            "type": "string",
+            "description": "The full name of the country.",
+            "example": "Czech Republic"
+          },
+          "currency": {
+            "type": "string",
+            "description": "The local currency used in the country.",
+            "example": "CZK"
+          },
+          "vat_abbreviation": {
+            "type": "string",
+            "description": "The abbreviation of the tax term in the local language.",
+            "readOnly": true,
+            "example": "DPH"
+          },
+          "vat_local_name": {
+            "type": "string",
+            "description": "The full name of the tax term in the local language.",
+            "readOnly": true,
+            "example": "Daň z přidané hodnoty"
+          },
+          "eu_member_state": {
+            "type": "boolean",
+            "description": "Indicates whether the country is a member of the European Union.",
+            "example": true
+          },
+          "eservice_rate": {
+            "type": "number",
+            "description": "The tax rate applicable for electronic services, as a percentage.",
+            "format": "double",
+            "example": 21
+          },
+          "percentage": {
+            "type": "number",
+            "description": "The VAT rate (synonym for EServiceRate).",
+            "format": "double",
+            "readOnly": true,
+            "example": 21
+          }
+        },
+        "additionalProperties": false,
+        "description": "The Sales Tax estimation for the passed in customer country / IP.\nInclude the tax percentage + abbreviation in your product view to inform your customers about the tax."
       },
       "SalesTaxJurisdictionDto": {
         "required": [
@@ -3266,79 +2887,6 @@
         "description": "A 64-bit Steam account identifier. Accepts string or numeric format.",
         "format": "steam-id",
         "example": "76561197960287930"
-      },
-      "SteamProfileDto": {
-        "required": [
-          "avatar_url",
-          "id",
-          "name"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/SteamId"
-          },
-          "name": {
-            "type": "string",
-            "description": "The display name of the user on Steam."
-          },
-          "avatar_url": {
-            "type": "string",
-            "description": "The URL to the user's Steam avatar image."
-          }
-        },
-        "additionalProperties": false,
-        "description": "Represents a Steam profile for a customer."
-      },
-      "SteamSkinsDetailsDto": {
-        "required": [
-          "items"
-        ],
-        "type": "object",
-        "properties": {
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/SteamSkinsInventoryItemDetailsDto"
-            },
-            "description": "The list of Steam inventory items used for payment"
-          }
-        },
-        "additionalProperties": false,
-        "description": "Steam Skins payment method details"
-      },
-      "SteamSkinsInventoryItemDetailsDto": {
-        "required": [
-          "app_id",
-          "id",
-          "name",
-          "price"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "The unique identifier of the Steam item"
-          },
-          "app_id": {
-            "type": "integer",
-            "description": "The Steam app ID",
-            "format": "int32",
-            "example": 730
-          },
-          "name": {
-            "type": "string",
-            "description": "The name of the item",
-            "example": "AK-47 | Redline"
-          },
-          "price": {
-            "type": "integer",
-            "description": "The price of the item in the smallest currency unit",
-            "format": "int32",
-            "example": 2500
-          }
-        },
-        "additionalProperties": false
       },
       "StoreDto": {
         "required": [
@@ -3881,6 +3429,110 @@
         },
         "additionalProperties": false
       },
+      "StorefrontCustomerDto": {
+        "required": [
+          "id",
+          "store_id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "store_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "profile": {
+            "$ref": "#/components/schemas/CustomerGenericProfileDto"
+          },
+          "steam_id": {
+            "$ref": "#/components/schemas/SteamId"
+          },
+          "steam": {
+            "$ref": "#/components/schemas/StorefrontCustomerSteamProfileDto"
+          },
+          "minecraft_uuid": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The customer's Minecraft UUID, if they have linked their Minecraft account.\nNot set for offline Minecraft stores. If the platform type is Minecraft - Geyser,\nand the profile is a bedrock account, this will be a UUID generated from the Xbox XUID.",
+            "example": "f84c6a79-0a4e-45e0-879b-cd49ebd4c4e2"
+          },
+          "minecraft": {
+            "$ref": "#/components/schemas/StorefrontCustomerMinecraftProfileDto"
+          },
+          "minecraft_platform": {
+            "$ref": "#/components/schemas/CustomerMinecraftPlatform"
+          },
+          "xbox_xuid": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The customer's Xbox XUID, if available."
+          },
+          "name": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The display name for the customer.",
+            "example": "m0uka"
+          }
+        },
+        "additionalProperties": false,
+        "description": "A storefront representation of a customer in the PayNow system with their associated profiles and metadata."
+      },
+      "StorefrontCustomerMinecraftProfileDto": {
+        "required": [
+          "avatar_url",
+          "id",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The UUID of the Minecraft player.\nIf the platform is Minecraft Offline, this will be the name itself.\nIf the platform is Minecraft Geyser, and this is a Bedrock account, this ID will be an Xbox XUID.",
+            "example": "f84c6a79-0a4e-45e0-879b-cd49ebd4c4e2"
+          },
+          "name": {
+            "type": "string",
+            "description": "The username of the Minecraft player.",
+            "example": "notch"
+          },
+          "avatar_url": {
+            "type": "string",
+            "description": "The URL to the player's Minecraft skin rendered as an avatar."
+          }
+        },
+        "additionalProperties": false,
+        "description": "A storefront representation of a customers Minecraft profile."
+      },
+      "StorefrontCustomerSteamProfileDto": {
+        "required": [
+          "avatar_url",
+          "id",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/SteamId"
+          },
+          "name": {
+            "type": "string",
+            "description": "The display name of the user on Steam."
+          },
+          "avatar_url": {
+            "type": "string",
+            "description": "The URL to the user's Steam avatar image."
+          }
+        },
+        "additionalProperties": false,
+        "description": "A storefront representation of a customers Steam profile."
+      },
       "StorefrontDeliveryItemDto": {
         "required": [
           "added_at",
@@ -3997,15 +3649,11 @@
         "required": [
           "enabled",
           "id",
-          "name",
-          "store_id"
+          "name"
         ],
         "type": "object",
         "properties": {
           "id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "store_id": {
             "$ref": "#/components/schemas/FlakeId"
           },
           "name": {
@@ -4112,6 +3760,491 @@
         "additionalProperties": false,
         "description": "Represents a navigation link in the storefront's hierarchical navigation structure."
       },
+      "StorefrontOrderDto": {
+        "required": [
+          "currency",
+          "customer",
+          "customer_id",
+          "discount_amount",
+          "discount_amount_str",
+          "giftcard_usage_amount",
+          "giftcard_usage_amount_str",
+          "id",
+          "is_subscription",
+          "lines",
+          "presentment_currency",
+          "presentment_discount_amount",
+          "presentment_discount_amount_str",
+          "presentment_giftcard_usage_amount",
+          "presentment_giftcard_usage_amount_str",
+          "presentment_subtotal_amount",
+          "presentment_subtotal_amount_str",
+          "presentment_tax_amount",
+          "presentment_tax_amount_str",
+          "presentment_total_amount",
+          "presentment_total_amount_str",
+          "pretty_id",
+          "status",
+          "store_id",
+          "subtotal_amount",
+          "subtotal_amount_str",
+          "tax_amount",
+          "tax_amount_str",
+          "total_amount",
+          "total_amount_str",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "pretty_id": {
+            "type": "string",
+            "description": "Human-readable identifier for the order.",
+            "readOnly": true
+          },
+          "store_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "customer_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "customer": {
+            "$ref": "#/components/schemas/StorefrontCustomerDto"
+          },
+          "status": {
+            "$ref": "#/components/schemas/OrderStatus"
+          },
+          "type": {
+            "$ref": "#/components/schemas/OrderType"
+          },
+          "checkout_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "subscription_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "is_subscription": {
+            "type": "boolean",
+            "description": "Indicates whether this order is a subscription order."
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency code used for this order."
+          },
+          "discount_amount": {
+            "type": "integer",
+            "description": "The total discount amount applied to this order in smallest currency unit",
+            "format": "int32",
+            "example": 500
+          },
+          "discount_amount_str": {
+            "type": "string",
+            "description": "The discount amount formatted as a string",
+            "example": "$5.00"
+          },
+          "subtotal_amount": {
+            "type": "integer",
+            "description": "The subtotal amount for this order in smallest currency unit",
+            "format": "int32",
+            "example": 9995
+          },
+          "subtotal_amount_str": {
+            "type": "string",
+            "description": "The subtotal amount formatted as a string",
+            "example": "$99.95"
+          },
+          "tax_amount": {
+            "type": "integer",
+            "description": "The tax amount for this order in smallest currency unit",
+            "format": "int32",
+            "example": 999
+          },
+          "tax_amount_str": {
+            "type": "string",
+            "description": "The tax amount formatted as a string",
+            "example": "$9.99"
+          },
+          "total_amount": {
+            "type": "integer",
+            "description": "The total amount for this order in smallest currency unit",
+            "format": "int32",
+            "example": 10494
+          },
+          "total_amount_str": {
+            "type": "string",
+            "description": "The total amount formatted as a string",
+            "example": "$104.94"
+          },
+          "giftcard_usage_amount": {
+            "type": "integer",
+            "description": "The amount of gift card value used for this order in smallest currency unit",
+            "format": "int32",
+            "example": 0
+          },
+          "giftcard_usage_amount_str": {
+            "type": "string",
+            "description": "The gift card usage amount formatted as a string",
+            "example": "$0.00"
+          },
+          "presentment_currency": {
+            "type": "string",
+            "description": "The presentment currency code used for this order (currency shown to customer)",
+            "example": "eur"
+          },
+          "presentment_subtotal_amount": {
+            "type": "integer",
+            "description": "The presentment subtotal amount in smallest currency unit",
+            "format": "int32",
+            "example": 9995
+          },
+          "presentment_subtotal_amount_str": {
+            "type": "string",
+            "description": "The presentment subtotal amount formatted as a string",
+            "readOnly": true,
+            "example": "€99.95"
+          },
+          "presentment_discount_amount": {
+            "type": "integer",
+            "description": "The presentment discount amount in smallest currency unit",
+            "format": "int32",
+            "example": 500
+          },
+          "presentment_discount_amount_str": {
+            "type": "string",
+            "description": "The presentment discount amount formatted as a string",
+            "readOnly": true,
+            "example": "€5.00"
+          },
+          "presentment_giftcard_usage_amount": {
+            "type": "integer",
+            "description": "The presentment gift card usage amount in the smallest currency unit",
+            "format": "int32",
+            "example": 0
+          },
+          "presentment_giftcard_usage_amount_str": {
+            "type": "string",
+            "description": "The presentment gift card usage amount formatted as a string",
+            "readOnly": true,
+            "example": "€0.00"
+          },
+          "presentment_tax_amount": {
+            "type": "integer",
+            "description": "The presentment tax amount in smallest currency unit",
+            "format": "int32",
+            "example": 999
+          },
+          "presentment_tax_amount_str": {
+            "type": "string",
+            "description": "The presentment tax amount formatted as a string",
+            "readOnly": true,
+            "example": "€9.99"
+          },
+          "presentment_total_amount": {
+            "type": "integer",
+            "description": "The presentment total amount in the smallest currency unit",
+            "format": "int32",
+            "example": 10494
+          },
+          "presentment_total_amount_str": {
+            "type": "string",
+            "description": "The presentment total amount formatted as a string",
+            "readOnly": true,
+            "example": "€104.94"
+          },
+          "billing_cycle_sequence": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "description": "Sequence number of the billing cycle, if this order is associated with a subscription.",
+            "format": "int32"
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StorefrontOrderLineDto"
+            },
+            "description": "Line items associated with this order."
+          },
+          "created_at": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Date and time when the order was created.",
+            "format": "date-time"
+          },
+          "completed_at": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Date and time when the order was completed.",
+            "format": "date-time"
+          },
+          "canceled_at": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Date and time when the order was canceled.",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Data transfer object representing a store order."
+      },
+      "StorefrontOrderLineDto": {
+        "required": [
+          "checkout_line_id",
+          "discount_amount",
+          "discount_amount_str",
+          "gift",
+          "giftcard_usage_amount",
+          "giftcard_usage_amount_str",
+          "id",
+          "presentment_discount_amount",
+          "presentment_discount_amount_str",
+          "presentment_giftcard_usage_amount",
+          "presentment_giftcard_usage_amount_str",
+          "presentment_subtotal_amount",
+          "presentment_subtotal_amount_str",
+          "presentment_tax_amount",
+          "presentment_tax_amount_str",
+          "presentment_total_amount",
+          "presentment_total_amount_str",
+          "price",
+          "price_str",
+          "product_id",
+          "product_image_url",
+          "product_name",
+          "product_version_id",
+          "quantity",
+          "subtotal_amount",
+          "subtotal_amount_str",
+          "tax_amount",
+          "tax_amount_str",
+          "tax_inclusive",
+          "total_amount",
+          "total_amount_str"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "checkout_line_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "subscription_line_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "trial_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "product_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "product_version_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "product_name": {
+            "type": "string",
+            "description": "Name of the product associated with this order line."
+          },
+          "product_image_url": {
+            "type": "string",
+            "description": "URL for the product image."
+          },
+          "subscription_interval_value": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "description": "Numeric value of the subscription billing interval, if this line is a subscription.",
+            "format": "int32"
+          },
+          "subscription_interval_scale": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Scale of the subscription billing interval (e.g., \"day\", \"month\", \"year\"), if applicable."
+          },
+          "gift": {
+            "type": "boolean",
+            "description": "Indicates whether this order line is a gift to another customer."
+          },
+          "gift_to_customer_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "gift_to_customer": {
+            "$ref": "#/components/schemas/StorefrontCustomerDto"
+          },
+          "price": {
+            "type": "integer",
+            "description": "The unit price of the product in the smallest currency unit (e.g., cents)",
+            "format": "int32",
+            "example": 1999
+          },
+          "price_str": {
+            "type": "string",
+            "description": "The unit price of the product formatted as a string",
+            "example": "$19.99"
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "The quantity of the product in this order line",
+            "format": "int32",
+            "example": 1
+          },
+          "discount_amount": {
+            "type": "integer",
+            "description": "The discount amount (from sales, coupons, and affiliate links) applied to this order line",
+            "format": "int32",
+            "example": 0
+          },
+          "discount_amount_str": {
+            "type": "string",
+            "description": "The discount amount formatted as a string",
+            "example": "$0.00"
+          },
+          "giftcard_usage_amount": {
+            "type": "integer",
+            "description": "The amount of gift card used for this order line",
+            "format": "int32",
+            "example": 0
+          },
+          "giftcard_usage_amount_str": {
+            "type": "string",
+            "description": "The gift card usage amount formatted as a string",
+            "example": "$0.00"
+          },
+          "subtotal_amount": {
+            "type": "integer",
+            "description": "The subtotal amount for this order line",
+            "format": "int32",
+            "example": 1999
+          },
+          "subtotal_amount_str": {
+            "type": "string",
+            "description": "The subtotal amount formatted as a string",
+            "example": "$19.99"
+          },
+          "tax_amount": {
+            "type": "integer",
+            "description": "The tax amount for this order line",
+            "format": "int32",
+            "example": 200
+          },
+          "tax_amount_str": {
+            "type": "string",
+            "description": "The tax amount formatted as a string",
+            "example": "$2.00"
+          },
+          "total_amount": {
+            "type": "integer",
+            "description": "The total amount for this order line",
+            "format": "int32",
+            "example": 2199
+          },
+          "total_amount_str": {
+            "type": "string",
+            "description": "The total amount formatted as a string",
+            "example": "$21.99"
+          },
+          "presentment_subtotal_amount": {
+            "type": "integer",
+            "description": "The presentment subtotal amount for this order line",
+            "format": "int32",
+            "example": 1999
+          },
+          "presentment_subtotal_amount_str": {
+            "type": "string",
+            "description": "The presentment subtotal amount formatted as a string",
+            "readOnly": true,
+            "example": "€19.99"
+          },
+          "presentment_discount_amount": {
+            "type": "integer",
+            "description": "The presentment discount amount for this order line",
+            "format": "int32",
+            "example": 0
+          },
+          "presentment_discount_amount_str": {
+            "type": "string",
+            "description": "The presentment discount amount formatted as a string",
+            "readOnly": true,
+            "example": "€0.00"
+          },
+          "presentment_tax_amount": {
+            "type": "integer",
+            "description": "The presentment tax amount for this order line",
+            "format": "int32",
+            "example": 200
+          },
+          "presentment_tax_amount_str": {
+            "type": "string",
+            "description": "The presentment tax amount formatted as a string",
+            "readOnly": true,
+            "example": "€2.00"
+          },
+          "presentment_giftcard_usage_amount": {
+            "type": "integer",
+            "description": "The presentment gift card usage amount for this order line",
+            "format": "int32",
+            "example": 0
+          },
+          "presentment_giftcard_usage_amount_str": {
+            "type": "string",
+            "description": "The presentment gift card usage amount formatted as a string",
+            "readOnly": true,
+            "example": "€0.00"
+          },
+          "presentment_total_amount": {
+            "type": "integer",
+            "description": "The presentment total amount for this order line",
+            "format": "int32",
+            "example": 2199
+          },
+          "presentment_total_amount_str": {
+            "type": "string",
+            "description": "The presentment total amount formatted as a string",
+            "readOnly": true,
+            "example": "€21.99"
+          },
+          "selected_gameserver_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "tax_inclusive": {
+            "type": "boolean",
+            "description": "Indicates whether tax is included in the base price, or added on top",
+            "example": false
+          },
+          "pricing_region_id": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The regional pricing region ID for this order line, null if no regional pricing set",
+            "example": "eu"
+          },
+          "custom_variables": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "additionalProperties": {
+              "$ref": "#/components/schemas/CustomVariableLineItemDto"
+            },
+            "description": "Key-value pair of selected custom variables for this order."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents a line item within an order."
+      },
       "StorefrontProductDto": {
         "required": [
           "allow_one_time_purchase",
@@ -4120,6 +4253,7 @@
           "custom_variables",
           "description",
           "gameservers",
+          "hidden",
           "id",
           "is_affiliate_links_disabled",
           "is_coupons_disabled",
@@ -4198,6 +4332,10 @@
             "description": "The display label for the product.",
             "example": "Premium Items"
           },
+          "hidden": {
+            "type": "boolean",
+            "description": "Indicates if the product is hidden."
+          },
           "sort_order": {
             "type": "integer",
             "description": "The sort order for displaying the product.",
@@ -4267,10 +4405,10 @@
             "$ref": "#/components/schemas/ProductRemoveAfterIntervalScale"
           },
           "pricing": {
-            "$ref": "#/components/schemas/StorefrontProductPricingDetailsDto"
+            "$ref": "#/components/schemas/StorefrontProductPricingDto"
           },
           "stock": {
-            "$ref": "#/components/schemas/StorefrontProductStockStatusDto"
+            "$ref": "#/components/schemas/StorefrontProductStockDto"
           },
           "trial": {
             "$ref": "#/components/schemas/StorefrontProductTrialDto"
@@ -4285,7 +4423,7 @@
           "gameservers": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ProductGameServerDto"
+              "$ref": "#/components/schemas/StorefrontGameServerDto"
             },
             "description": "The game servers associated with the product."
           },
@@ -4334,11 +4472,10 @@
         },
         "additionalProperties": false
       },
-      "StorefrontProductPricingDetailsDto": {
+      "StorefrontProductPricingDto": {
         "required": [
           "price_final",
-          "price_original",
-          "upsell_discount_amount"
+          "price_original"
         ],
         "type": "object",
         "properties": {
@@ -4354,18 +4491,11 @@
             "format": "int64",
             "example": 500
           },
-          "upsell_offer_id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "upsell_discount_amount": {
-            "type": "integer",
-            "format": "int64"
-          },
           "vat_rate": {
-            "$ref": "#/components/schemas/VatRateDto"
+            "$ref": "#/components/schemas/SalesTaxEstimateDto"
           },
           "regional_pricing": {
-            "$ref": "#/components/schemas/StorefrontProductPricingDetailsRegionalPricingDto"
+            "$ref": "#/components/schemas/StorefrontProductRegionalPricingDto"
           },
           "price_original": {
             "type": "integer",
@@ -4383,7 +4513,7 @@
         "additionalProperties": false,
         "description": "The pricing details for the product in the storefront."
       },
-      "StorefrontProductPricingDetailsRegionalPricingDto": {
+      "StorefrontProductRegionalPricingDto": {
         "required": [
           "base_price",
           "currency",
@@ -4417,7 +4547,7 @@
         "additionalProperties": false,
         "description": "Regional pricing information for this product.\nOnly present if there is a regional pricing configured."
       },
-      "StorefrontProductStockStatusDto": {
+      "StorefrontProductStockDto": {
         "required": [
           "available_to_purchase",
           "customer_available"
@@ -4638,6 +4768,774 @@
         },
         "additionalProperties": false,
         "description": "Represents a store entity within the storefront system."
+      },
+      "StorefrontSubscriptionDto": {
+        "required": [
+          "coupon_ids",
+          "created_at",
+          "currency",
+          "customer",
+          "discount_amount",
+          "discount_amount_str",
+          "id",
+          "initial_discount_amount",
+          "initial_discount_amount_str",
+          "initial_giftcard_usage_amount",
+          "initial_giftcard_usage_amount_str",
+          "initial_subtotal_amount",
+          "initial_subtotal_amount_str",
+          "initial_tax_amount",
+          "initial_tax_amount_str",
+          "initial_total_amount",
+          "initial_total_amount_str",
+          "interval_scale",
+          "interval_value",
+          "lines",
+          "next_billing_amount",
+          "next_billing_presentment_amount",
+          "pretty_id",
+          "status",
+          "store_id",
+          "subtotal_amount",
+          "subtotal_amount_str",
+          "tax_amount",
+          "tax_amount_str",
+          "tax_jurisdictions",
+          "total_amount",
+          "total_amount_str"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "pretty_id": {
+            "type": "string",
+            "description": "Human-readable identifier for the subscription.",
+            "readOnly": true
+          },
+          "store_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "customer": {
+            "$ref": "#/components/schemas/StorefrontCustomerDto"
+          },
+          "pending_change": {
+            "$ref": "#/components/schemas/SubscriptionChangeDto"
+          },
+          "next_billing_amount": {
+            "$ref": "#/components/schemas/SubscriptionBillingAmountDto"
+          },
+          "next_billing_presentment_amount": {
+            "$ref": "#/components/schemas/SubscriptionBillingAmountDto"
+          },
+          "status": {
+            "$ref": "#/components/schemas/SubscriptionStatusDto"
+          },
+          "coupon_ids": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FlakeId"
+            },
+            "description": "Identifiers of coupons applied to this subscription."
+          },
+          "checkout_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "tax_jurisdictions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SalesTaxJurisdictionDto"
+            },
+            "description": "List of tax jurisdictions applicable to this subscription."
+          },
+          "interval_value": {
+            "type": "integer",
+            "description": "Numeric value of the billing interval.",
+            "format": "int32"
+          },
+          "interval_scale": {
+            "$ref": "#/components/schemas/ProductSubscriptionIntervalScale"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency code used for billing this subscription."
+          },
+          "discount_amount": {
+            "type": "integer",
+            "description": "Amount of discount applied in smallest currency units.",
+            "format": "int64"
+          },
+          "discount_amount_str": {
+            "type": "string",
+            "description": "Formatted string representation of the discount amount.",
+            "readOnly": true
+          },
+          "subtotal_amount": {
+            "type": "integer",
+            "description": "Subtotal amount in smallest currency units.",
+            "format": "int64"
+          },
+          "subtotal_amount_str": {
+            "type": "string",
+            "description": "Formatted string representation of the subtotal amount.",
+            "readOnly": true
+          },
+          "tax_amount": {
+            "type": "integer",
+            "description": "Tax amount in the smallest currency units.",
+            "format": "int64"
+          },
+          "tax_amount_str": {
+            "type": "string",
+            "description": "Formatted string representation of the tax amount.",
+            "readOnly": true
+          },
+          "total_amount": {
+            "type": "integer",
+            "description": "Total amount in the smallest currency units.",
+            "format": "int64"
+          },
+          "total_amount_str": {
+            "type": "string",
+            "description": "Formatted string representation of the total amount.",
+            "readOnly": true
+          },
+          "initial_discount_amount": {
+            "type": "integer",
+            "description": "Initial discount amount in the smallest currency units for the first billing cycle.",
+            "format": "int64"
+          },
+          "initial_discount_amount_str": {
+            "type": "string",
+            "description": "Formatted string representation of the initial discount amount.",
+            "readOnly": true
+          },
+          "initial_subtotal_amount": {
+            "type": "integer",
+            "description": "Initial subtotal amount in smallest currency units for the first billing cycle.",
+            "format": "int64"
+          },
+          "initial_subtotal_amount_str": {
+            "type": "string",
+            "description": "Formatted string representation of the initial subtotal amount.",
+            "readOnly": true
+          },
+          "initial_giftcard_usage_amount": {
+            "type": "integer",
+            "description": "Initial gift card usage amount in smallest currency units.",
+            "format": "int64"
+          },
+          "initial_giftcard_usage_amount_str": {
+            "type": "string",
+            "description": "Formatted string representation of the initial gift card usage amount.",
+            "readOnly": true
+          },
+          "initial_tax_amount": {
+            "type": "integer",
+            "description": "Initial tax amount in smallest currency units for the first billing cycle.",
+            "format": "int64"
+          },
+          "initial_tax_amount_str": {
+            "type": "string",
+            "description": "Formatted string representation of the initial tax amount.",
+            "readOnly": true
+          },
+          "initial_total_amount": {
+            "type": "integer",
+            "description": "Initial total amount in smallest currency units for the first billing cycle.",
+            "format": "int64"
+          },
+          "initial_total_amount_str": {
+            "type": "string",
+            "description": "Formatted string representation of the initial total amount.",
+            "readOnly": true
+          },
+          "presentment_currency": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Presentment currency code (currency shown to customer)."
+          },
+          "presentment_subtotal_amount": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "description": "Presentment subtotal amount in smallest currency units.",
+            "format": "int64"
+          },
+          "presentment_subtotal_amount_str": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Formatted string representation of the presentment subtotal amount.",
+            "readOnly": true
+          },
+          "presentment_discount_amount": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "description": "Presentment discount amount in smallest currency units.",
+            "format": "int64"
+          },
+          "presentment_discount_amount_str": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Formatted string representation of the presentment discount amount.",
+            "readOnly": true
+          },
+          "presentment_tax_amount": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "description": "Presentment tax amount in smallest currency units.",
+            "format": "int64"
+          },
+          "presentment_tax_amount_str": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Formatted string representation of the presentment tax amount.",
+            "readOnly": true
+          },
+          "presentment_total_amount": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "description": "Presentment total amount in smallest currency units.",
+            "format": "int64"
+          },
+          "presentment_total_amount_str": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Formatted string representation of the presentment total amount.",
+            "readOnly": true
+          },
+          "initial_presentment_discount_amount": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "description": "Initial presentment discount amount in smallest currency units for the first billing cycle.",
+            "format": "int64"
+          },
+          "initial_presentment_discount_amount_str": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Formatted string representation of the initial presentment discount amount.",
+            "readOnly": true
+          },
+          "initial_presentment_subtotal_amount": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "description": "Initial presentment subtotal amount in smallest currency units for the first billing cycle.",
+            "format": "int64"
+          },
+          "initial_presentment_subtotal_amount_str": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Formatted string representation of the initial presentment subtotal amount.",
+            "readOnly": true
+          },
+          "initial_presentment_giftcard_usage_amount": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "description": "Initial presentment gift card usage amount in smallest currency units.",
+            "format": "int64"
+          },
+          "initial_presentment_giftcard_usage_amount_str": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Formatted string representation of the initial presentment gift card usage amount.",
+            "readOnly": true
+          },
+          "initial_presentment_tax_amount": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "description": "Initial presentment tax amount in smallest currency units for the first billing cycle.",
+            "format": "int64"
+          },
+          "initial_presentment_tax_amount_str": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Formatted string representation of the initial presentment tax amount.",
+            "readOnly": true
+          },
+          "initial_presentment_total_amount": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "description": "Initial presentment total amount in smallest currency units for the first billing cycle.",
+            "format": "int64"
+          },
+          "initial_presentment_total_amount_str": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Formatted string representation of the initial presentment total amount.",
+            "readOnly": true
+          },
+          "fx_rate": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The foreign exchange rate applied (if presentment currency differs from settlement currency)."
+          },
+          "current_period_start": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Start date of the current billing period.",
+            "format": "date-time"
+          },
+          "current_period_end": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "End date of the current billing period.",
+            "format": "date-time"
+          },
+          "billing_cycle_sequence": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "description": "Sequence number of the current billing cycle.",
+            "format": "int32"
+          },
+          "next_attempt_at": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Date and time when the next payment attempt will occur.",
+            "format": "date-time"
+          },
+          "attempt_count": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "description": "Number of payment attempts made for the current billing cycle.",
+            "format": "int32"
+          },
+          "created_at": {
+            "type": "string",
+            "description": "Date and time when the subscription was created.",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Date and time when the subscription was last updated.",
+            "format": "date-time"
+          },
+          "active_at": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Date and time when the subscription became active.",
+            "format": "date-time"
+          },
+          "canceled_at": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Date and time when the subscription was canceled.",
+            "format": "date-time"
+          },
+          "cancel_reason": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Reason provided for cancellation."
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StorefrontSubscriptionLineDto"
+            },
+            "description": "Line items associated with this subscription."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Data transfer object representing a store subscription."
+      },
+      "StorefrontSubscriptionLineDto": {
+        "required": [
+          "currency",
+          "discount_amount",
+          "discount_amount_str",
+          "id",
+          "initial_discount_amount",
+          "initial_discount_amount_str",
+          "initial_giftcard_usage_amount",
+          "initial_giftcard_usage_amount_str",
+          "initial_subtotal_amount",
+          "initial_subtotal_amount_str",
+          "initial_tax_amount",
+          "initial_tax_amount_str",
+          "initial_total_amount",
+          "initial_total_amount_str",
+          "price",
+          "product_id",
+          "product_name",
+          "product_version_id",
+          "store_id",
+          "subscription_id",
+          "subtotal_amount",
+          "subtotal_amount_str",
+          "tax_amount",
+          "tax_amount_str",
+          "tax_inclusive",
+          "total_amount",
+          "total_amount_str"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "store_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "subscription_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "checkout_line_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "initial_order_line_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "pricing_region_id": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Identifier for the pricing region associated with this subscription line."
+          },
+          "gift_to_customer_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "selected_gameserver_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "sale_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "trial_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "product_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "product_version_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "product_name": {
+            "type": "string",
+            "description": "Name of the product associated with this subscription line."
+          },
+          "product_image_url": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "URL for the product image."
+          },
+          "tax_inclusive": {
+            "type": "boolean",
+            "description": "Indicates whether tax is included in the base price itself."
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency code for this subscription line."
+          },
+          "price": {
+            "type": "integer",
+            "description": "Base price of the subscription line in smallest currency units (e.g., cents).",
+            "format": "int64"
+          },
+          "discount_amount": {
+            "type": "integer",
+            "description": "Amount of discount applied in smallest currency units.",
+            "format": "int64"
+          },
+          "discount_amount_str": {
+            "type": "string",
+            "description": "Formatted string representation of the discount amount.",
+            "readOnly": true
+          },
+          "subtotal_amount": {
+            "type": "integer",
+            "description": "Subtotal amount in smallest currency units.",
+            "format": "int64"
+          },
+          "subtotal_amount_str": {
+            "type": "string",
+            "description": "Formatted string representation of the subtotal amount.",
+            "readOnly": true
+          },
+          "tax_amount": {
+            "type": "integer",
+            "description": "Tax amount in smallest currency units.",
+            "format": "int64"
+          },
+          "tax_amount_str": {
+            "type": "string",
+            "description": "Formatted string representation of the tax amount.",
+            "readOnly": true
+          },
+          "total_amount": {
+            "type": "integer",
+            "description": "Total amount in smallest currency units.",
+            "format": "int64"
+          },
+          "total_amount_str": {
+            "type": "string",
+            "description": "Formatted string representation of the total amount.",
+            "readOnly": true
+          },
+          "initial_discount_amount": {
+            "type": "integer",
+            "description": "Initial discount amount in smallest currency units for the first billing cycle.",
+            "format": "int64"
+          },
+          "initial_discount_amount_str": {
+            "type": "string",
+            "description": "Formatted string representation of the initial discount amount.",
+            "readOnly": true
+          },
+          "initial_subtotal_amount": {
+            "type": "integer",
+            "description": "Initial subtotal amount in smallest currency units for the first billing cycle.",
+            "format": "int64"
+          },
+          "initial_subtotal_amount_str": {
+            "type": "string",
+            "description": "Formatted string representation of the initial subtotal amount.",
+            "readOnly": true
+          },
+          "initial_giftcard_usage_amount": {
+            "type": "integer",
+            "description": "Initial gift card usage amount in smallest currency units.",
+            "format": "int64"
+          },
+          "initial_giftcard_usage_amount_str": {
+            "type": "string",
+            "description": "Formatted string representation of the initial gift card usage amount.",
+            "readOnly": true
+          },
+          "initial_tax_amount": {
+            "type": "integer",
+            "description": "Initial tax amount in smallest currency units for the first billing cycle.",
+            "format": "int64"
+          },
+          "initial_tax_amount_str": {
+            "type": "string",
+            "description": "Formatted string representation of the initial tax amount.",
+            "readOnly": true
+          },
+          "initial_total_amount": {
+            "type": "integer",
+            "description": "Initial total amount in smallest currency units for the first billing cycle.",
+            "format": "int64"
+          },
+          "initial_total_amount_str": {
+            "type": "string",
+            "description": "Formatted string representation of the initial total amount.",
+            "readOnly": true
+          },
+          "presentment_currency": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Presentment currency code (currency shown to customer)."
+          },
+          "presentment_subtotal_amount": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "description": "Presentment subtotal amount in smallest currency units.",
+            "format": "int64"
+          },
+          "presentment_subtotal_amount_str": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Formatted string representation of the presentment subtotal amount.",
+            "readOnly": true
+          },
+          "presentment_discount_amount": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "description": "Presentment discount amount in smallest currency units.",
+            "format": "int64"
+          },
+          "presentment_discount_amount_str": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Formatted string representation of the presentment discount amount.",
+            "readOnly": true
+          },
+          "presentment_tax_amount": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "description": "Presentment tax amount in smallest currency units.",
+            "format": "int64"
+          },
+          "presentment_tax_amount_str": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Formatted string representation of the presentment tax amount.",
+            "readOnly": true
+          },
+          "presentment_total_amount": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "description": "Presentment total amount in smallest currency units.",
+            "format": "int64"
+          },
+          "presentment_total_amount_str": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Formatted string representation of the presentment total amount.",
+            "readOnly": true
+          },
+          "initial_presentment_discount_amount": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "description": "Initial presentment discount amount in smallest currency units for the first billing cycle.",
+            "format": "int64"
+          },
+          "initial_presentment_discount_amount_str": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Formatted string representation of the initial presentment discount amount.",
+            "readOnly": true
+          },
+          "initial_presentment_subtotal_amount": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "description": "Initial presentment subtotal amount in smallest currency units for the first billing cycle.",
+            "format": "int64"
+          },
+          "initial_presentment_subtotal_amount_str": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Formatted string representation of the initial presentment subtotal amount.",
+            "readOnly": true
+          },
+          "initial_presentment_giftcard_usage_amount": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "description": "Initial presentment gift card usage amount in smallest currency units.",
+            "format": "int64"
+          },
+          "initial_presentment_giftcard_usage_amount_str": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Formatted string representation of the initial presentment gift card usage amount.",
+            "readOnly": true
+          },
+          "initial_presentment_tax_amount": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "description": "Initial presentment tax amount in smallest currency units for the first billing cycle.",
+            "format": "int64"
+          },
+          "initial_presentment_tax_amount_str": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Formatted string representation of the initial presentment tax amount.",
+            "readOnly": true
+          },
+          "initial_presentment_total_amount": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "description": "Initial presentment total amount in smallest currency units for the first billing cycle.",
+            "format": "int64"
+          },
+          "initial_presentment_total_amount_str": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Formatted string representation of the initial presentment total amount.",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents a line item within a subscription."
       },
       "StorefrontTagDto": {
         "required": [
@@ -5043,896 +5941,7 @@
           "pending_verification": "The change requires a verification code sent to the customer's e-mail."
         }
       },
-      "SubscriptionDto": {
-        "required": [
-          "coupon_ids",
-          "created_at",
-          "currency",
-          "customer",
-          "discount_amount",
-          "discount_amount_str",
-          "gift",
-          "id",
-          "initial_discount_amount",
-          "initial_discount_amount_str",
-          "initial_giftcard_usage_amount",
-          "initial_giftcard_usage_amount_str",
-          "initial_subtotal_amount",
-          "initial_subtotal_amount_str",
-          "initial_tax_amount",
-          "initial_tax_amount_str",
-          "initial_total_amount",
-          "initial_total_amount_str",
-          "interval_scale",
-          "interval_value",
-          "lines",
-          "next_billing_amount",
-          "next_billing_presentment_amount",
-          "pretty_id",
-          "price",
-          "status",
-          "store_id",
-          "subtotal_amount",
-          "subtotal_amount_str",
-          "tax_amount",
-          "tax_amount_str",
-          "tax_inclusive",
-          "tax_jurisdictions",
-          "total_amount",
-          "total_amount_str"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "pretty_id": {
-            "type": "string",
-            "description": "Human-readable identifier for the subscription."
-          },
-          "store_id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "customer": {
-            "$ref": "#/components/schemas/CustomerDto"
-          },
-          "payment_method_id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "payment_method": {
-            "$ref": "#/components/schemas/PaymentMethodDto"
-          },
-          "pending_change": {
-            "$ref": "#/components/schemas/SubscriptionChangeDto"
-          },
-          "next_billing_amount": {
-            "$ref": "#/components/schemas/SubscriptionBillingAmountDto"
-          },
-          "next_billing_presentment_amount": {
-            "$ref": "#/components/schemas/SubscriptionBillingAmountDto"
-          },
-          "status": {
-            "$ref": "#/components/schemas/SubscriptionStatus"
-          },
-          "coupon_id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "coupon_ids": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FlakeId"
-            },
-            "description": "Identifiers of coupons applied to this subscription."
-          },
-          "coupon_repeating_ends_at": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Date when a repeating coupon ends for this subscription.",
-            "format": "date-time",
-            "deprecated": true
-          },
-          "affiliate_id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "checkout_id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "checkout_line_id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "billing_name": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Name used for billing purposes."
-          },
-          "billing_email": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Email used for billing purposes."
-          },
-          "billing_country": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Country code used for billing purposes."
-          },
-          "tax_jurisdictions": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/SalesTaxJurisdictionDto"
-            },
-            "description": "List of tax jurisdictions applicable to this subscription."
-          },
-          "customer_ip": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "IP address of the customer at the time of subscription."
-          },
-          "gift": {
-            "type": "boolean",
-            "description": "Indicates whether this subscription is a gift.",
-            "readOnly": true,
-            "deprecated": true
-          },
-          "gift_to_customer_id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "gift_to_customer": {
-            "$ref": "#/components/schemas/CustomerDto"
-          },
-          "product_id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "product_version_id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "product_name": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Name of the product associated with this subscription.",
-            "readOnly": true,
-            "deprecated": true
-          },
-          "product_image_url": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "URL for the product image.",
-            "readOnly": true,
-            "deprecated": true
-          },
-          "interval_value": {
-            "type": "integer",
-            "description": "Numeric value of the billing interval.",
-            "format": "int32"
-          },
-          "interval_scale": {
-            "$ref": "#/components/schemas/ProductSubscriptionIntervalScale"
-          },
-          "currency": {
-            "type": "string",
-            "description": "Currency code used for billing this subscription."
-          },
-          "tax_inclusive": {
-            "type": "boolean",
-            "description": "Indicates whether tax is included in the base price itself.",
-            "readOnly": true,
-            "deprecated": true
-          },
-          "price": {
-            "type": "integer",
-            "description": "Base price of the subscription in smallest currency units (e.g., cents).",
-            "format": "int64",
-            "readOnly": true,
-            "deprecated": true
-          },
-          "price_str": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Formatted string representation of the price.",
-            "readOnly": true,
-            "deprecated": true
-          },
-          "discount_amount": {
-            "type": "integer",
-            "description": "Amount of discount applied in smallest currency units.",
-            "format": "int64"
-          },
-          "discount_amount_str": {
-            "type": "string",
-            "description": "Formatted string representation of the discount amount.",
-            "readOnly": true
-          },
-          "subtotal_amount": {
-            "type": "integer",
-            "description": "Subtotal amount in smallest currency units.",
-            "format": "int64"
-          },
-          "subtotal_amount_str": {
-            "type": "string",
-            "description": "Formatted string representation of the subtotal amount.",
-            "readOnly": true
-          },
-          "tax_amount": {
-            "type": "integer",
-            "description": "Tax amount in smallest currency units.",
-            "format": "int64"
-          },
-          "tax_amount_str": {
-            "type": "string",
-            "description": "Formatted string representation of the tax amount.",
-            "readOnly": true
-          },
-          "total_amount": {
-            "type": "integer",
-            "description": "Total amount in smallest currency units.",
-            "format": "int64"
-          },
-          "total_amount_str": {
-            "type": "string",
-            "description": "Formatted string representation of the total amount.",
-            "readOnly": true
-          },
-          "initial_discount_amount": {
-            "type": "integer",
-            "description": "Initial discount amount in smallest currency units for the first billing cycle.",
-            "format": "int64"
-          },
-          "initial_discount_amount_str": {
-            "type": "string",
-            "description": "Formatted string representation of the initial discount amount.",
-            "readOnly": true
-          },
-          "initial_subtotal_amount": {
-            "type": "integer",
-            "description": "Initial subtotal amount in smallest currency units for the first billing cycle.",
-            "format": "int64"
-          },
-          "initial_subtotal_amount_str": {
-            "type": "string",
-            "description": "Formatted string representation of the initial subtotal amount.",
-            "readOnly": true
-          },
-          "initial_giftcard_usage_amount": {
-            "type": "integer",
-            "description": "Initial gift card usage amount in smallest currency units.",
-            "format": "int64"
-          },
-          "initial_giftcard_usage_amount_str": {
-            "type": "string",
-            "description": "Formatted string representation of the initial gift card usage amount.",
-            "readOnly": true
-          },
-          "initial_tax_amount": {
-            "type": "integer",
-            "description": "Initial tax amount in smallest currency units for the first billing cycle.",
-            "format": "int64"
-          },
-          "initial_tax_amount_str": {
-            "type": "string",
-            "description": "Formatted string representation of the initial tax amount.",
-            "readOnly": true
-          },
-          "initial_total_amount": {
-            "type": "integer",
-            "description": "Initial total amount in smallest currency units for the first billing cycle.",
-            "format": "int64"
-          },
-          "initial_total_amount_str": {
-            "type": "string",
-            "description": "Formatted string representation of the initial total amount.",
-            "readOnly": true
-          },
-          "presentment_currency": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Presentment currency code (currency shown to customer)."
-          },
-          "presentment_subtotal_amount": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "description": "Presentment subtotal amount in smallest currency units.",
-            "format": "int64"
-          },
-          "presentment_subtotal_amount_str": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Formatted string representation of the presentment subtotal amount.",
-            "readOnly": true
-          },
-          "presentment_discount_amount": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "description": "Presentment discount amount in smallest currency units.",
-            "format": "int64"
-          },
-          "presentment_discount_amount_str": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Formatted string representation of the presentment discount amount.",
-            "readOnly": true
-          },
-          "presentment_tax_amount": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "description": "Presentment tax amount in smallest currency units.",
-            "format": "int64"
-          },
-          "presentment_tax_amount_str": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Formatted string representation of the presentment tax amount.",
-            "readOnly": true
-          },
-          "presentment_total_amount": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "description": "Presentment total amount in smallest currency units.",
-            "format": "int64"
-          },
-          "presentment_total_amount_str": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Formatted string representation of the presentment total amount.",
-            "readOnly": true
-          },
-          "initial_presentment_discount_amount": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "description": "Initial presentment discount amount in smallest currency units for the first billing cycle.",
-            "format": "int64"
-          },
-          "initial_presentment_discount_amount_str": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Formatted string representation of the initial presentment discount amount.",
-            "readOnly": true
-          },
-          "initial_presentment_subtotal_amount": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "description": "Initial presentment subtotal amount in smallest currency units for the first billing cycle.",
-            "format": "int64"
-          },
-          "initial_presentment_subtotal_amount_str": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Formatted string representation of the initial presentment subtotal amount.",
-            "readOnly": true
-          },
-          "initial_presentment_giftcard_usage_amount": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "description": "Initial presentment gift card usage amount in smallest currency units.",
-            "format": "int64"
-          },
-          "initial_presentment_giftcard_usage_amount_str": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Formatted string representation of the initial presentment gift card usage amount.",
-            "readOnly": true
-          },
-          "initial_presentment_tax_amount": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "description": "Initial presentment tax amount in smallest currency units for the first billing cycle.",
-            "format": "int64"
-          },
-          "initial_presentment_tax_amount_str": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Formatted string representation of the initial presentment tax amount.",
-            "readOnly": true
-          },
-          "initial_presentment_total_amount": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "description": "Initial presentment total amount in smallest currency units for the first billing cycle.",
-            "format": "int64"
-          },
-          "initial_presentment_total_amount_str": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Formatted string representation of the initial presentment total amount.",
-            "readOnly": true
-          },
-          "fx_rate": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The foreign exchange rate applied (if presentment currency differs from settlement currency)."
-          },
-          "pricing_region_id": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Identifier for the pricing region associated with this subscription.",
-            "readOnly": true,
-            "deprecated": true
-          },
-          "current_period_start": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Start date of the current billing period.",
-            "format": "date-time"
-          },
-          "current_period_end": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "End date of the current billing period.",
-            "format": "date-time"
-          },
-          "billing_cycle_sequence": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "description": "Sequence number of the current billing cycle.",
-            "format": "int32"
-          },
-          "next_attempt_at": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Date and time when the next payment attempt will occur.",
-            "format": "date-time"
-          },
-          "attempt_count": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "description": "Number of payment attempts made for the current billing cycle.",
-            "format": "int32"
-          },
-          "created_at": {
-            "type": "string",
-            "description": "Date and time when the subscription was created.",
-            "format": "date-time"
-          },
-          "updated_at": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Date and time when the subscription was last updated.",
-            "format": "date-time"
-          },
-          "active_at": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Date and time when the subscription became active.",
-            "format": "date-time"
-          },
-          "canceled_at": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Date and time when the subscription was canceled.",
-            "format": "date-time"
-          },
-          "cancel_reason": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Reason provided for cancellation."
-          },
-          "lines": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/SubscriptionLineDto"
-            },
-            "description": "Line items associated with this subscription."
-          }
-        },
-        "additionalProperties": false,
-        "description": "Data transfer object representing a store subscription."
-      },
-      "SubscriptionLineDto": {
-        "required": [
-          "currency",
-          "discount_amount",
-          "discount_amount_str",
-          "id",
-          "initial_discount_amount",
-          "initial_discount_amount_str",
-          "initial_giftcard_usage_amount",
-          "initial_giftcard_usage_amount_str",
-          "initial_subtotal_amount",
-          "initial_subtotal_amount_str",
-          "initial_tax_amount",
-          "initial_tax_amount_str",
-          "initial_total_amount",
-          "initial_total_amount_str",
-          "price",
-          "product_id",
-          "product_name",
-          "product_version_id",
-          "store_id",
-          "subscription_id",
-          "subtotal_amount",
-          "subtotal_amount_str",
-          "tax_amount",
-          "tax_amount_str",
-          "tax_inclusive",
-          "total_amount",
-          "total_amount_str"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "store_id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "subscription_id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "checkout_line_id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "initial_order_line_id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "pricing_region_id": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Identifier for the pricing region associated with this subscription line."
-          },
-          "gift_to_customer_id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "selected_gameserver_id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "sale_id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "trial_id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "product_id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "product_version_id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "product_name": {
-            "type": "string",
-            "description": "Name of the product associated with this subscription line."
-          },
-          "product_image_url": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "URL for the product image."
-          },
-          "tax_inclusive": {
-            "type": "boolean",
-            "description": "Indicates whether tax is included in the base price itself."
-          },
-          "currency": {
-            "type": "string",
-            "description": "Currency code for this subscription line."
-          },
-          "price": {
-            "type": "integer",
-            "description": "Base price of the subscription line in smallest currency units (e.g., cents).",
-            "format": "int64"
-          },
-          "discount_amount": {
-            "type": "integer",
-            "description": "Amount of discount applied in smallest currency units.",
-            "format": "int64"
-          },
-          "discount_amount_str": {
-            "type": "string",
-            "description": "Formatted string representation of the discount amount.",
-            "readOnly": true
-          },
-          "subtotal_amount": {
-            "type": "integer",
-            "description": "Subtotal amount in smallest currency units.",
-            "format": "int64"
-          },
-          "subtotal_amount_str": {
-            "type": "string",
-            "description": "Formatted string representation of the subtotal amount.",
-            "readOnly": true
-          },
-          "tax_amount": {
-            "type": "integer",
-            "description": "Tax amount in smallest currency units.",
-            "format": "int64"
-          },
-          "tax_amount_str": {
-            "type": "string",
-            "description": "Formatted string representation of the tax amount.",
-            "readOnly": true
-          },
-          "total_amount": {
-            "type": "integer",
-            "description": "Total amount in smallest currency units.",
-            "format": "int64"
-          },
-          "total_amount_str": {
-            "type": "string",
-            "description": "Formatted string representation of the total amount.",
-            "readOnly": true
-          },
-          "initial_discount_amount": {
-            "type": "integer",
-            "description": "Initial discount amount in smallest currency units for the first billing cycle.",
-            "format": "int64"
-          },
-          "initial_discount_amount_str": {
-            "type": "string",
-            "description": "Formatted string representation of the initial discount amount.",
-            "readOnly": true
-          },
-          "initial_subtotal_amount": {
-            "type": "integer",
-            "description": "Initial subtotal amount in smallest currency units for the first billing cycle.",
-            "format": "int64"
-          },
-          "initial_subtotal_amount_str": {
-            "type": "string",
-            "description": "Formatted string representation of the initial subtotal amount.",
-            "readOnly": true
-          },
-          "initial_giftcard_usage_amount": {
-            "type": "integer",
-            "description": "Initial gift card usage amount in smallest currency units.",
-            "format": "int64"
-          },
-          "initial_giftcard_usage_amount_str": {
-            "type": "string",
-            "description": "Formatted string representation of the initial gift card usage amount.",
-            "readOnly": true
-          },
-          "initial_tax_amount": {
-            "type": "integer",
-            "description": "Initial tax amount in smallest currency units for the first billing cycle.",
-            "format": "int64"
-          },
-          "initial_tax_amount_str": {
-            "type": "string",
-            "description": "Formatted string representation of the initial tax amount.",
-            "readOnly": true
-          },
-          "initial_total_amount": {
-            "type": "integer",
-            "description": "Initial total amount in smallest currency units for the first billing cycle.",
-            "format": "int64"
-          },
-          "initial_total_amount_str": {
-            "type": "string",
-            "description": "Formatted string representation of the initial total amount.",
-            "readOnly": true
-          },
-          "presentment_currency": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Presentment currency code (currency shown to customer)."
-          },
-          "presentment_subtotal_amount": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "description": "Presentment subtotal amount in smallest currency units.",
-            "format": "int64"
-          },
-          "presentment_subtotal_amount_str": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Formatted string representation of the presentment subtotal amount.",
-            "readOnly": true
-          },
-          "presentment_discount_amount": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "description": "Presentment discount amount in smallest currency units.",
-            "format": "int64"
-          },
-          "presentment_discount_amount_str": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Formatted string representation of the presentment discount amount.",
-            "readOnly": true
-          },
-          "presentment_tax_amount": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "description": "Presentment tax amount in smallest currency units.",
-            "format": "int64"
-          },
-          "presentment_tax_amount_str": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Formatted string representation of the presentment tax amount.",
-            "readOnly": true
-          },
-          "presentment_total_amount": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "description": "Presentment total amount in smallest currency units.",
-            "format": "int64"
-          },
-          "presentment_total_amount_str": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Formatted string representation of the presentment total amount.",
-            "readOnly": true
-          },
-          "initial_presentment_discount_amount": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "description": "Initial presentment discount amount in smallest currency units for the first billing cycle.",
-            "format": "int64"
-          },
-          "initial_presentment_discount_amount_str": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Formatted string representation of the initial presentment discount amount.",
-            "readOnly": true
-          },
-          "initial_presentment_subtotal_amount": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "description": "Initial presentment subtotal amount in smallest currency units for the first billing cycle.",
-            "format": "int64"
-          },
-          "initial_presentment_subtotal_amount_str": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Formatted string representation of the initial presentment subtotal amount.",
-            "readOnly": true
-          },
-          "initial_presentment_giftcard_usage_amount": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "description": "Initial presentment gift card usage amount in smallest currency units.",
-            "format": "int64"
-          },
-          "initial_presentment_giftcard_usage_amount_str": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Formatted string representation of the initial presentment gift card usage amount.",
-            "readOnly": true
-          },
-          "initial_presentment_tax_amount": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "description": "Initial presentment tax amount in smallest currency units for the first billing cycle.",
-            "format": "int64"
-          },
-          "initial_presentment_tax_amount_str": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Formatted string representation of the initial presentment tax amount.",
-            "readOnly": true
-          },
-          "initial_presentment_total_amount": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "description": "Initial presentment total amount in smallest currency units for the first billing cycle.",
-            "format": "int64"
-          },
-          "initial_presentment_total_amount_str": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Formatted string representation of the initial presentment total amount.",
-            "readOnly": true
-          }
-        },
-        "additionalProperties": false,
-        "description": "Represents a line item within a subscription."
-      },
-      "SubscriptionStatus": {
+      "SubscriptionStatusDto": {
         "enum": [
           "invalid",
           "created",
@@ -6231,66 +6240,6 @@
         },
         "additionalProperties": false,
         "description": "A validation error."
-      },
-      "VatRateDto": {
-        "required": [
-          "country_code",
-          "country_name",
-          "currency",
-          "eservice_rate",
-          "eu_member_state",
-          "percentage",
-          "vat_abbreviation",
-          "vat_local_name"
-        ],
-        "type": "object",
-        "properties": {
-          "country_code": {
-            "type": "string",
-            "description": "The ISO country code.",
-            "example": "CZ"
-          },
-          "country_name": {
-            "type": "string",
-            "description": "The full name of the country.",
-            "example": "Czech Republic"
-          },
-          "currency": {
-            "type": "string",
-            "description": "The local currency used in the country.",
-            "example": "CZK"
-          },
-          "vat_abbreviation": {
-            "type": "string",
-            "description": "The abbreviation of the VAT term in the local language.",
-            "example": "DPH"
-          },
-          "vat_local_name": {
-            "type": "string",
-            "description": "The full name of the VAT term in the local language.",
-            "example": "Daň z přidané hodnoty"
-          },
-          "eu_member_state": {
-            "type": "boolean",
-            "description": "Indicates whether the country is a member of the European Union.",
-            "example": true
-          },
-          "eservice_rate": {
-            "type": "number",
-            "description": "The VAT rate applicable for electronic services, as a percentage.",
-            "format": "double",
-            "example": 21
-          },
-          "percentage": {
-            "type": "number",
-            "description": "The VAT rate (synonym for EServiceRate).",
-            "format": "double",
-            "readOnly": true,
-            "example": 21
-          }
-        },
-        "additionalProperties": false,
-        "description": "The VAT rate estimation for the passed in customer country / IP.\nInclude the VAT percentage + abbreviation in your product view to inform your customers about the tax."
       }
     },
     "securitySchemes": {
@@ -6330,6 +6279,9 @@
     },
     {
       "name": "navlinks"
+    },
+    {
+      "name": "orders"
     },
     {
       "name": "products"

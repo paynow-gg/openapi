@@ -6636,6 +6636,54 @@
         ]
       }
     },
+    "/v1/stores/{storeId}/payment-method-types/{paymentMethodTypeId}/request-approval": {
+      "post": {
+        "tags": [
+          "payment-method-types"
+        ],
+        "summary": "Request approval for a store payment method type",
+        "description": "Requests approval to use a payment method type that requires manual review",
+        "operationId": "StorePaymentMethodTypes_RequestStorePaymentMethodTypeApproval",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "paymentMethodTypeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ]
+      }
+    },
     "/v1/stores/{storeId}/payment-settings": {
       "get": {
         "tags": [
@@ -15783,6 +15831,15 @@
         "additionalProperties": false,
         "description": "Represents a stored payment method"
       },
+      "PaymentMethodTypeApprovalStatusDto": {
+        "enum": [
+          "invalid",
+          "pending",
+          "approved",
+          "rejected"
+        ],
+        "type": "string"
+      },
       "PaymentMethodTypeCountryCurrencyMappingDto": {
         "required": [
           "country",
@@ -15804,6 +15861,9 @@
       },
       "PaymentMethodTypeDto": {
         "required": [
+          "approval_required",
+          "b2b_supported",
+          "b2c_supported",
           "category",
           "confirmation",
           "country_currency_mapping",
@@ -15923,6 +15983,52 @@
               "null",
               "string"
             ]
+          },
+          "min_transaction_amount": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int64"
+          },
+          "max_transaction_amount": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int64"
+          },
+          "b2c_supported": {
+            "type": "boolean"
+          },
+          "b2b_supported": {
+            "type": "boolean"
+          },
+          "approval_required": {
+            "type": "boolean"
+          },
+          "approval_status": {
+            "$ref": "#/components/schemas/PaymentMethodTypeApprovalStatusDto"
+          },
+          "approval_decline_reason": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "approval_requested_at": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "approval_decided_at": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
           }
         },
         "additionalProperties": false

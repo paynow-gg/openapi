@@ -2753,7 +2753,7 @@
         },
         "additionalProperties": false
       },
-      "SaleDiscountType": {
+      "SaleDiscountTypeDto": {
         "enum": [
           "percent",
           "amount"
@@ -4604,11 +4604,15 @@
           "discount_type",
           "id",
           "minimum_order_value",
-          "name"
+          "name",
+          "version_id"
         ],
         "type": "object",
         "properties": {
           "id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "version_id": {
             "$ref": "#/components/schemas/FlakeId"
           },
           "name": {
@@ -4617,7 +4621,7 @@
             "example": "Summer Sale"
           },
           "discount_type": {
-            "$ref": "#/components/schemas/SaleDiscountType"
+            "$ref": "#/components/schemas/SaleDiscountTypeDto"
           },
           "discount_amount": {
             "type": "integer",
@@ -5257,6 +5261,9 @@
             "$ref": "#/components/schemas/FlakeId"
           },
           "sale_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "sale_version_id": {
             "$ref": "#/components/schemas/FlakeId"
           },
           "trial_id": {

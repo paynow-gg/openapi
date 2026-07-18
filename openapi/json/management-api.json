@@ -875,7 +875,7 @@
             "in": "query",
             "description": "Filter by status",
             "schema": {
-              "$ref": "#/components/schemas/CouponFilterStatusEnum"
+              "$ref": "#/components/schemas/CouponFilterStatusDto"
             }
           },
           {
@@ -883,7 +883,7 @@
             "in": "query",
             "description": "Filter by creation type of coupons.",
             "schema": {
-              "$ref": "#/components/schemas/CouponFilterTypeEnum"
+              "$ref": "#/components/schemas/CouponFilterTypeDto"
             }
           },
           {
@@ -11529,7 +11529,7 @@
         },
         "additionalProperties": false
       },
-      "CouponDiscountTypeEnum": {
+      "CouponDiscountTypeDto": {
         "enum": [
           "unspecified",
           "percent",
@@ -11568,6 +11568,9 @@
           "id": {
             "$ref": "#/components/schemas/FlakeId"
           },
+          "version_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
           "store_id": {
             "$ref": "#/components/schemas/FlakeId"
           },
@@ -11587,18 +11590,27 @@
             "description": "A note or internal description of the coupon."
           },
           "duration": {
-            "$ref": "#/components/schemas/CouponDurationEnum"
+            "$ref": "#/components/schemas/CouponDurationDto"
           },
           "duration_in_months": {
             "type": [
               "null",
               "integer"
             ],
-            "description": "The number of months the coupon is valid, used if the duration is repeating.",
+            "description": "The number of months the coupon is valid for, used if the duration is repeating.",
+            "format": "int32",
+            "deprecated": true
+          },
+          "duration_in_intervals": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "description": "The number of subscription renewals the coupon is valid for, used if the duration is repeating.",
             "format": "int32"
           },
           "discount_type": {
-            "$ref": "#/components/schemas/CouponDiscountTypeEnum"
+            "$ref": "#/components/schemas/CouponDiscountTypeDto"
           },
           "discount_amount": {
             "type": "integer",
@@ -11706,7 +11718,7 @@
         "additionalProperties": false,
         "description": "Represents a detailed view of a coupon, including configuration and audit information."
       },
-      "CouponDurationEnum": {
+      "CouponDurationDto": {
         "enum": [
           "once",
           "forever",
@@ -11720,7 +11732,7 @@
           "repeating": "The coupon is valid for a repeating period, typically specified in months."
         }
       },
-      "CouponFilterStatusEnum": {
+      "CouponFilterStatusDto": {
         "enum": [
           "all",
           "active",
@@ -11734,7 +11746,7 @@
           "inactive": "Coupon's that are inactive."
         }
       },
-      "CouponFilterTypeEnum": {
+      "CouponFilterTypeDto": {
         "enum": [
           "all",
           "manual",
@@ -12080,7 +12092,7 @@
             "type": "string"
           },
           "duration": {
-            "$ref": "#/components/schemas/CouponDurationEnum"
+            "$ref": "#/components/schemas/CouponDurationDto"
           },
           "duration_in_months": {
             "type": [
@@ -12089,8 +12101,15 @@
             ],
             "format": "int32"
           },
+          "duration_in_intervals": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
           "discount_type": {
-            "$ref": "#/components/schemas/CouponDiscountTypeEnum"
+            "$ref": "#/components/schemas/CouponDiscountTypeDto"
           },
           "discount_amount": {
             "type": "integer",
@@ -12316,6 +12335,8 @@
           "name",
           "discount_type",
           "discount_amount",
+          "duration",
+          "duration_in_intervals",
           "apply_to_product_ids",
           "apply_to_tag_ids",
           "minimum_order_value",
@@ -12330,9 +12351,16 @@
             "type": "string"
           },
           "discount_type": {
-            "$ref": "#/components/schemas/SaleDiscountType"
+            "$ref": "#/components/schemas/SaleDiscountTypeDto"
           },
           "discount_amount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "duration": {
+            "$ref": "#/components/schemas/SaleDurationDto"
+          },
+          "duration_in_intervals": {
             "type": "integer",
             "format": "int32"
           },
@@ -14422,18 +14450,18 @@
         "type": "object",
         "properties": {
           "duration": {
-            "$ref": "#/components/schemas/CouponDurationEnum"
+            "$ref": "#/components/schemas/CouponDurationDto"
           },
-          "duration_in_months": {
+          "duration_in_intervals": {
             "type": [
               "null",
               "integer"
             ],
-            "description": "Gets or sets the duration of the coupon in months, applicable only for repeating coupons.",
+            "description": "Gets or sets the duration of the coupon in intervals, applicable only for repeating coupons.",
             "format": "int32"
           },
           "discount_type": {
-            "$ref": "#/components/schemas/CouponDiscountTypeEnum"
+            "$ref": "#/components/schemas/CouponDiscountTypeDto"
           },
           "discount_amount": {
             "type": "integer",
@@ -14531,11 +14559,15 @@
       "OrderCouponUsageDto": {
         "required": [
           "coupon_id",
+          "coupon_version_id",
           "usage_amount"
         ],
         "type": "object",
         "properties": {
           "coupon_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "coupon_version_id": {
             "$ref": "#/components/schemas/FlakeId"
           },
           "usage_amount": {
@@ -14969,6 +15001,9 @@
             "$ref": "#/components/schemas/CustomerDto"
           },
           "sale_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "sale_version_id": {
             "$ref": "#/components/schemas/FlakeId"
           },
           "price": {
@@ -15709,7 +15744,8 @@
           "nuvei",
           "pagseguro",
           "tazapay",
-          "paysafe"
+          "paysafe",
+          "checkoutcom"
         ],
         "type": "string"
       },
@@ -18158,7 +18194,7 @@
         },
         "additionalProperties": false
       },
-      "SaleDiscountType": {
+      "SaleDiscountTypeDto": {
         "enum": [
           "percent",
           "amount"
@@ -18174,15 +18210,21 @@
           "created_by",
           "discount_amount",
           "discount_type",
+          "duration",
+          "duration_in_intervals",
           "enabled",
           "id",
           "minimum_order_value",
           "name",
-          "store_id"
+          "store_id",
+          "version_id"
         ],
         "type": "object",
         "properties": {
           "id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "version_id": {
             "$ref": "#/components/schemas/FlakeId"
           },
           "store_id": {
@@ -18197,11 +18239,19 @@
             "description": "The name of the sale."
           },
           "discount_type": {
-            "$ref": "#/components/schemas/SaleDiscountType"
+            "$ref": "#/components/schemas/SaleDiscountTypeDto"
           },
           "discount_amount": {
             "type": "integer",
             "description": "The discount value. For percent discounts, this represents the percentage \nmultiplied by 10 (e.g., 250 = 25%). For amount discounts, this represents \nthe value in the smallest currency unit (e.g., cents).",
+            "format": "int32"
+          },
+          "duration": {
+            "$ref": "#/components/schemas/SaleDurationDto"
+          },
+          "duration_in_intervals": {
+            "type": "integer",
+            "description": "The number of subscription intervals the coupon is valid for, used if the duration is repeating.",
             "format": "int32"
           },
           "apply_to_product_ids": {
@@ -18258,6 +18308,15 @@
         },
         "additionalProperties": false,
         "description": "Represents a detailed view of a Sale, including configuration and audit information."
+      },
+      "SaleDurationDto": {
+        "enum": [
+          "unspecified",
+          "once",
+          "forever",
+          "repeating"
+        ],
+        "type": "string"
       },
       "SalesTaxJurisdictionDto": {
         "required": [
@@ -20202,6 +20261,9 @@
           "sale_id": {
             "$ref": "#/components/schemas/FlakeId"
           },
+          "sale_version_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
           "trial_id": {
             "$ref": "#/components/schemas/FlakeId"
           },
@@ -21137,7 +21199,7 @@
             "type": "string"
           },
           "duration": {
-            "$ref": "#/components/schemas/CouponDurationEnum"
+            "$ref": "#/components/schemas/CouponDurationDto"
           },
           "duration_in_months": {
             "type": [
@@ -21146,8 +21208,15 @@
             ],
             "format": "int32"
           },
+          "duration_in_intervals": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
           "discount_type": {
-            "$ref": "#/components/schemas/CouponDiscountTypeEnum"
+            "$ref": "#/components/schemas/CouponDiscountTypeDto"
           },
           "discount_amount": {
             "type": "integer",
@@ -21336,9 +21405,16 @@
             "type": "string"
           },
           "discount_type": {
-            "$ref": "#/components/schemas/SaleDiscountType"
+            "$ref": "#/components/schemas/SaleDiscountTypeDto"
           },
           "discount_amount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "duration": {
+            "$ref": "#/components/schemas/SaleDurationDto"
+          },
+          "duration_in_intervals": {
             "type": "integer",
             "format": "int32"
           },

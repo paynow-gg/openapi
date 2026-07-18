@@ -1845,7 +1845,7 @@ components:
             - string
           format: date-time
       additionalProperties: false
-    SaleDiscountType:
+    SaleDiscountTypeDto:
       enum:
         - percent
         - amount
@@ -3277,16 +3277,19 @@ components:
         - id
         - minimum_order_value
         - name
+        - version_id
       type: object
       properties:
         id:
+          $ref: '#/components/schemas/FlakeId'
+        version_id:
           $ref: '#/components/schemas/FlakeId'
         name:
           type: string
           description: The name of the sale.
           example: Summer Sale
         discount_type:
-          $ref: '#/components/schemas/SaleDiscountType'
+          $ref: '#/components/schemas/SaleDiscountTypeDto'
         discount_amount:
           type: integer
           description: 'The amount of the discount, either as a percentage in permille or as an absolute value in cents.'
@@ -3781,6 +3784,8 @@ components:
         selected_gameserver_id:
           $ref: '#/components/schemas/FlakeId'
         sale_id:
+          $ref: '#/components/schemas/FlakeId'
+        sale_version_id:
           $ref: '#/components/schemas/FlakeId'
         trial_id:
           $ref: '#/components/schemas/FlakeId'

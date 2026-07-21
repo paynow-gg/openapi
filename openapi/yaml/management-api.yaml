@@ -6648,23 +6648,50 @@ components:
         id:
           $ref: '#/components/schemas/FlakeId'
       additionalProperties: false
-    AffiliateLinkCommissionType:
+    AffiliateLinkCommissionAmountStepDto:
+      required:
+        - billing_cycle_sequence
+        - commission_amount
+      type: object
+      properties:
+        billing_cycle_sequence:
+          type: integer
+          description: The billing cycle number this commission step applies to. Starts at 1 for the initial purchase.
+          format: int32
+        commission_amount:
+          type: integer
+          description: 'The commission percentage for this cycle, in tenths of a percent (e.g., 125 = 12.5%).'
+          format: int64
+      additionalProperties: false
+      description: "Represents the commission for a specific subscription renewal billing cycle.\nA step applies to its exact cycle - see the affiliate link's 'last_commission_amount_step_repeats' for what happens past the last step."
+    AffiliateLinkCommissionTypeDto:
       enum:
         - none
         - fixed
         - percentage
       type: string
-    AffiliateLinkDiscountType:
+      description: Specifies the type of commission an affiliate earns from referred purchases.
+      x-enumDescriptions:
+        none: No commission is earned.
+        fixed: 'A fixed amount commission (e.g., $5 per purchase). Not yet supported by the affiliate service.'
+        percentage: 'A percentage-based commission (e.g., 10% of the purchase).'
+    AffiliateLinkDiscountTypeDto:
       enum:
         - none
         - fixed
         - percentage
       type: string
+      description: Specifies the type of discount offered to customers referred through an affiliate link.
+      x-enumDescriptions:
+        none: No discount is offered.
+        fixed: 'A fixed amount discount (e.g., $5 off).'
+        percentage: 'A percentage-based discount (e.g., 10% off).'
     AffiliateLinkDto:
       required:
         - apply_for_subscriptions
         - code
         - commission_amount
+        - commission_amount_steps
         - commission_type
         - created_at
         - created_by
@@ -6672,6 +6699,7 @@ components:
         - discount_type
         - enabled
         - id
+        - last_commission_amount_step_repeats
         - referer_type
         - store_id
         - tracking_length_days
@@ -6684,31 +6712,47 @@ components:
           $ref: '#/components/schemas/FlakeId'
         wallet_id:
           type: string
+          description: The identifier of the wallet that receives the affiliate commission payouts.
         enabled:
           type: boolean
+          description: Indicates whether the affiliate link is enabled.
         code:
           type: string
+          description: The unique code associated with the affiliate link.
         referer_type:
-          $ref: '#/components/schemas/AffiliateLinkRefererType'
+          $ref: '#/components/schemas/AffiliateLinkRefererTypeDto'
         tracking_length_days:
           type: integer
+          description: The number of days a customer's referral is tracked after following the affiliate link.
           format: int32
         apply_for_subscriptions:
           type: boolean
+          description: "Whether the affiliate earns commission on subscription renewals.\nMust be enabled for 'commission_amount_steps' past the first cycle to apply - when disabled, only the initial purchase earns commission."
         discount_type:
-          $ref: '#/components/schemas/AffiliateLinkDiscountType'
+          $ref: '#/components/schemas/AffiliateLinkDiscountTypeDto'
         discount_amount:
           type: integer
+          description: 'The discount amount, in the smallest currency unit (e.g., cents) for fixed discounts, or tenths of a percent (e.g., 125 = 12.5%) for percentage discounts.'
           format: int64
         commission_type:
-          $ref: '#/components/schemas/AffiliateLinkCommissionType'
+          $ref: '#/components/schemas/AffiliateLinkCommissionTypeDto'
         commission_amount:
           type: integer
+          description: 'The commission amount, in tenths of a percent (e.g., 125 = 12.5%) for percentage commissions.'
           format: int64
+        commission_amount_steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/AffiliateLinkCommissionAmountStepDto'
+          description: "Per-cycle commission overrides. Requires 'apply_for_subscriptions' to be enabled for billing cycles past 1.\nWhen empty, the base commission amount applies to every renewal. When steps are defined, each renewal cycle pays its matching steps amount.\nCycles without a matching step earn no commission, except cycles past the last step when 'last_commission_amount_step_repeats' is true."
+        last_commission_amount_step_repeats:
+          type: boolean
+          description: "Whether the last commission amount steps rate continues to apply to all billing cycles past the last step.\nWhen false, cycles past the last step earn no commission."
         created_by:
           $ref: '#/components/schemas/ActorDto'
         created_at:
           type: string
+          description: The date and time when the affiliate link was created.
           format: date-time
         updated_by:
           $ref: '#/components/schemas/ActorDto'
@@ -6716,14 +6760,21 @@ components:
           type:
             - 'null'
             - string
+          description: The date and time when the affiliate link was last updated.
           format: date-time
       additionalProperties: false
-    AffiliateLinkRefererType:
+      description: 'Represents a detailed view of an affiliate link, including configuration and audit information.'
+    AffiliateLinkRefererTypeDto:
       enum:
         - invalid
         - first_referer
         - last_referer
       type: string
+      description: Specifies which affiliate link is credited when a customer follows multiple links before purchasing.
+      x-enumDescriptions:
+        invalid: No referer type specified. This value is typically used as a default or uninitialized state.
+        first_referer: The first affiliate link the customer followed is credited.
+        last_referer: The most recent affiliate link the customer followed is credited.
     AlipayDetailsDto:
       type: object
       properties:
@@ -7073,6 +7124,7 @@ components:
         - store_id
         - usable_on_one_time_purchase
         - usable_on_subscription
+        - version_id
       type: object
       properties:
         id:
@@ -7222,16 +7274,18 @@ components:
         generated: 'Coupon''s that were created by the system (basket recover, etc.).'
     CreateAffiliateLinkDto:
       required:
-        - apply_for_subscriptions
-        - code
-        - commission_amount
-        - commission_type
-        - discount_amount
-        - discount_type
+        - wallet_id
         - enabled
+        - code
         - referer_type
         - tracking_length_days
-        - wallet_id
+        - apply_for_subscriptions
+        - discount_type
+        - discount_amount
+        - commission_type
+        - commission_amount
+        - commission_amount_steps
+        - last_commission_amount_step_repeats
       type: object
       properties:
         wallet_id:
@@ -7241,23 +7295,28 @@ components:
         code:
           type: string
         referer_type:
-          $ref: '#/components/schemas/AffiliateLinkRefererType'
+          $ref: '#/components/schemas/AffiliateLinkRefererTypeDto'
         tracking_length_days:
           type: integer
           format: int32
         apply_for_subscriptions:
           type: boolean
         discount_type:
-          $ref: '#/components/schemas/AffiliateLinkDiscountType'
+          $ref: '#/components/schemas/AffiliateLinkDiscountTypeDto'
         discount_amount:
           type: integer
           format: int64
         commission_type:
-          $ref: '#/components/schemas/AffiliateLinkCommissionType'
+          $ref: '#/components/schemas/AffiliateLinkCommissionTypeDto'
         commission_amount:
           type: integer
           format: int64
-      additionalProperties: false
+        commission_amount_steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/AffiliateLinkCommissionAmountStepDto'
+        last_commission_amount_step_repeats:
+          type: boolean
     CreateCheckoutSessionLineDto:
       required:
         - product_id
@@ -12298,7 +12357,7 @@ components:
           description: 'The platform this store is associated with (e.g. "rust", "minecraft").'
         game:
           type: string
-          description: Alias for PayNow.Services.HttpGateway.DataTransferObjects.V1.Stores.StoreDto.Platform. Returns the platform identifier as a game name.
+          description: Alias for 'platform'. Returns the platform identifier as a game name.
           readOnly: true
         currency:
           type: string
@@ -14256,40 +14315,35 @@ components:
     UpdateAffiliateLinkDto:
       type: object
       properties:
+        wallet_id:
+          type: string
         enabled:
-          type:
-            - 'null'
-            - boolean
+          type: boolean
         code:
-          type:
-            - 'null'
-            - string
+          type: string
         referer_type:
-          $ref: '#/components/schemas/AffiliateLinkRefererType'
+          $ref: '#/components/schemas/AffiliateLinkRefererTypeDto'
         tracking_length_days:
-          type:
-            - 'null'
-            - integer
+          type: integer
           format: int32
         apply_for_subscriptions:
-          type:
-            - 'null'
-            - boolean
+          type: boolean
         discount_type:
-          $ref: '#/components/schemas/AffiliateLinkDiscountType'
+          $ref: '#/components/schemas/AffiliateLinkDiscountTypeDto'
         discount_amount:
-          type:
-            - 'null'
-            - integer
+          type: integer
           format: int64
         commission_type:
-          $ref: '#/components/schemas/AffiliateLinkCommissionType'
+          $ref: '#/components/schemas/AffiliateLinkCommissionTypeDto'
         commission_amount:
-          type:
-            - 'null'
-            - integer
+          type: integer
           format: int64
-      additionalProperties: false
+        commission_amount_steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/AffiliateLinkCommissionAmountStepDto'
+        last_commission_amount_step_repeats:
+          type: boolean
     UpdateCouponDto:
       type: object
       properties:

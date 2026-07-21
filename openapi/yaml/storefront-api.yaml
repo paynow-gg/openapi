@@ -1979,7 +1979,7 @@ components:
           description: 'The platform this store is associated with (e.g. "rust", "minecraft").'
         game:
           type: string
-          description: Alias for PayNow.Services.HttpGateway.DataTransferObjects.V1.Stores.StoreDto.Platform. Returns the platform identifier as a game name.
+          description: Alias for 'platform'. Returns the platform identifier as a game name.
           readOnly: true
         currency:
           type: string

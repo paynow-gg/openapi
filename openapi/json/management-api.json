@@ -14774,6 +14774,13 @@
             "description": "The billing country for this order",
             "example": "US"
           },
+          "billing_tax_id": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The tax identification number used for this order (for B2B transactions)"
+          },
           "billing_cycle_sequence": {
             "type": "integer",
             "description": "The billing cycle sequence (current renewal count) if this is a subscription order",
@@ -19842,6 +19849,13 @@
               "string"
             ],
             "description": "Country code used for billing purposes."
+          },
+          "billing_tax_id": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The tax identification number used for this order (for B2B transactions)"
           },
           "tax_jurisdictions": {
             "type": "array",

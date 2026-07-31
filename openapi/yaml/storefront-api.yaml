@@ -1884,6 +1884,16 @@ components:
           description: The full name of the tax term in the local language.
           readOnly: true
           example: Daň z přidané hodnoty
+        tax_number_abbreviation:
+          type:
+            - 'null'
+            - string
+          description: The abbreviation of the local tax identification number.
+        tax_number_local_name:
+          type:
+            - 'null'
+            - string
+          description: The name of the local tax identification number.
         eu_member_state:
           type: boolean
           description: Indicates whether the country is a member of the European Union.

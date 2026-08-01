@@ -8183,6 +8183,3780 @@
         ]
       }
     },
+    "/v1/stores/{storeId}/customers/{customerId}/stats": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "description": "**Deprecated:** Use the v2 stats routes.",
+        "operationId": "CustomerStats_GetCustomerStats",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "customerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerStatsDto"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v1/stores/{storeId}/stats/dashboard": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "description": "**Deprecated:** Use the v2 stats routes.",
+        "operationId": "Stats_GetDashboardStats",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dpt",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardStatsDto"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v1/stores/{storeId}/stats/range-orders": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "description": "**Deprecated:** Use the v2 stats routes.",
+        "operationId": "Stats_GetOrderTimeSeries",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "dpt",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_start",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_end",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DayOrderStatsDto"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v1/stores/{storeId}/stats/range-products": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "description": "**Deprecated:** Use the v2 stats routes.",
+        "operationId": "Stats_GetProductStatsForTimePeriod",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_start",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_end",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IntervalProductStatsDto"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v1/stores/{storeId}/stats/detailed/range-gameservers": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "description": "**Deprecated:** Use the v2 stats routes.",
+        "operationId": "Stats_GetGameServerStatsForTimePeriod",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_start",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_end",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IntervalGameServerStatsDto"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v1/stores/{storeId}/stats/detailed/range-tags": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "description": "**Deprecated:** Use the v2 stats routes.",
+        "operationId": "Stats_GetTagStatsForTimePeriod",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_start",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_end",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IntervalTagStatsDto"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v1/stores/{storeId}/stats/detailed/countries/distribution": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "description": "**Deprecated:** Use the v2 stats routes.",
+        "operationId": "Stats_GetOrderCountryDistribution",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_start",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_end",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrderCountryDistributionDto"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v1/stores/{storeId}/stats/detailed/payment_methods/distribution": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "description": "**Deprecated:** Use the v2 stats routes.",
+        "operationId": "Stats_GetPaymentMethodDistribution",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_start",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_end",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PaymentMethodDistributionDto"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v1/stores/{storeId}/stats/detailed/payment-acceptance": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "description": "**Deprecated:** Use the v2 stats routes.",
+        "operationId": "Stats_GetPaymentAcceptanceDistribution",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_start",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_end",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PaymentAcceptanceDistributionDto"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v1/stores/{storeId}/stats/detailed/times_of_day": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "description": "**Deprecated:** Use the v2 stats routes.",
+        "operationId": "Stats_GetPaymentPopularTimesOfDay",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_start",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_end",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PaymentPopularTimesOfDayDto"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v1/stores/{storeId}/stats/detailed/customers": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "description": "**Deprecated:** Use the v2 stats routes.",
+        "operationId": "Stats_GetSortedCustomersStats",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "sort_field",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort_dir",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomerStatsDto"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v1/stores/{storeId}/stats/detailed/customers/range": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "description": "**Deprecated:** Use the v2 stats routes.",
+        "operationId": "Stats_GetSortedCustomersStatsTimeRange",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "sort_field",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_start",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_end",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort_dir",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomerSpendTimeRangeDto"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v1/stores/{storeId}/stats/detailed/timeseries/gross_volume": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "description": "**Deprecated:** Use the v2 stats routes.",
+        "operationId": "Stats_GetPaymentGrossVolumeTimeSeries",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "unit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeSeriesChartDto"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v1/stores/{storeId}/stats/detailed/timeseries/net_volume": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "description": "**Deprecated:** Use the v2 stats routes.",
+        "operationId": "Stats_GetPaymentNetVolumeTimeSeries",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "unit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeSeriesChartDto"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v1/stores/{storeId}/stats/detailed/timeseries/product_order_volume": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "description": "**Deprecated:** Use the v2 stats routes.",
+        "operationId": "Stats_GetProductOrderVolumeTimeSeries",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "unit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeSeriesChartDto"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v1/stores/{storeId}/stats/detailed/timeseries/gameserver_order_volume": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "description": "**Deprecated:** Use the v2 stats routes.",
+        "operationId": "Stats_GetGameServerOrderVolumeTimeSeries",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "unit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeSeriesChartDto"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v1/stores/{storeId}/stats/detailed/timeseries/tag_order_volume": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "description": "**Deprecated:** Use the v2 stats routes.",
+        "operationId": "Stats_GetTagOrderVolumeTimeSeries",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "unit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeSeriesChartDto"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v1/stores/{storeId}/stats/detailed/timeseries/marketing_volume/coupon": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "description": "**Deprecated:** Use the v2 stats routes.",
+        "operationId": "Stats_GetMarketingCouponVolumeTimeSeries",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "unit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeSeriesChartDto"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v1/stores/{storeId}/stats/detailed/timeseries/marketing_volume/giftcard": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "description": "**Deprecated:** Use the v2 stats routes.",
+        "operationId": "Stats_GetMarketingGiftcardVolumeTimeSeries",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "unit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeSeriesChartDto"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v1/stores/{storeId}/stats/detailed/timeseries/new_customer/coupon": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "description": "**Deprecated:** Use the v2 stats routes.",
+        "operationId": "Stats_GetNewCustomerByCouponTimeSeries",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "unit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeSeriesChartDto"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v1/stores/{storeId}/stats/detailed/timeseries/new_customer/giftcard": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "description": "**Deprecated:** Use the v2 stats routes.",
+        "operationId": "Stats_GetNewCustomerByGiftcardTimeSeries",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "unit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeSeriesChartDto"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v1/stores/{storeId}/stats/detailed/timeseries/affiliate_links/volume": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "description": "**Deprecated:** Use the v2 stats routes.",
+        "operationId": "Stats_GetAffiliateLinkOrderVolumeTimeSeries",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "unit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TimeSeriesChartDto"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v1/stores/{storeId}/stats/detailed/timeseries/subscriptions": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "description": "**Deprecated:** Use the v2 stats routes.",
+        "operationId": "Stats_GetSubscriptionStatsTimeSeries",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "unit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TimeSeriesChartDto"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v1/stores/{storeId}/stats/detailed/timeseries/trials": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "description": "**Deprecated:** Use the v2 stats routes.",
+        "operationId": "Stats_GetTrialsStatsTimeSeries",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "unit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TimeSeriesChartDto"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v1/stores/{storeId}/stats/detailed/timeseries/subscriptions_product": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "description": "**Deprecated:** Use the v2 stats routes.",
+        "operationId": "Stats_GetSubscriptionProductStatsTimeSeries",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "unit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TimeSeriesChartDto"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v1/stores/{storeId}/stats/detailed/timeseries/abandoned_checkouts": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "description": "**Deprecated:** Use the v2 stats routes.",
+        "operationId": "Stats_GetAbandonedCheckoutTimeSeries",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "unit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TimeSeriesChartDto"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v1/stores/{storeId}/stats/detailed/timeseries/purchase_followups": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "description": "**Deprecated:** Use the v2 stats routes.",
+        "operationId": "Stats_GetPurchaseFollowUpTimeSeries",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "unit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TimeSeriesChartDto"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v1/stores/{storeId}/stats/detailed/timeseries/upsells": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "description": "**Deprecated:** Use the v2 stats routes.",
+        "operationId": "Stats_GetUpsellsTimeSeries",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "unit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TimeSeriesChartDto"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v2/stores/{storeId}/stats/timeseries": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "operationId": "StatsControllerV_GetTimeSeriesChart",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_start",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_end",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "revenue_basis",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/RevenueBasisDto_V2"
+            }
+          },
+          {
+            "name": "metric_type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/TimeSeriesChartMetricTypeDto_V2"
+            }
+          },
+          {
+            "name": "dimension_type",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/StatsDimensionTypeDto_V2"
+            }
+          },
+          {
+            "name": "unit",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/TimeSeriesUnitDto_V2"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeSeriesChartDto_V2"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v2/stores/{storeId}/stats/distribution": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "operationId": "StatsControllerV_GetDistribution",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "distribution_type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/StatsDistributionTypeDto_V2"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_start",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "comparison_end",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDistributionResponseDto_V2"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v2/stores/{storeId}/stats/dimension": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "operationId": "StatsControllerV_GetDimensionStats",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "dimension_type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/StatsDimensionTypeDto_V2"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "revenue_basis",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/RevenueBasisDto_V2"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDimensionStatsResponseDto_V2"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v2/stores/{storeId}/stats/orders/summary": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "operationId": "StatsControllerV_GetOrdersSummary",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "revenue_basis",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/RevenueBasisDto_V2"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrdersSummaryDto_V2"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v2/stores/{storeId}/stats/orders/summary/range": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "operationId": "StatsControllerV_GetOrdersSummaryForRange",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "revenue_basis",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/RevenueBasisDto_V2"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrdersSummaryForRangeDto_V2"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v2/stores/{storeId}/stats/subscriptions/summary": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "operationId": "StatsControllerV_GetSubscriptionsSummary",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "revenue_basis",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/RevenueBasisDto_V2"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubscriptionsSummaryDto_V2"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v2/stores/{storeId}/stats/subscriptions/summary/range": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "operationId": "StatsControllerV_GetSubscriptionsSummaryForRange",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "revenue_basis",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/RevenueBasisDto_V2"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubscriptionsSummaryForRangeDto_V2"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v2/stores/{storeId}/stats/trials/summary": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "operationId": "StatsControllerV_GetTrialsSummary",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrialsSummaryDto_V2"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v2/stores/{storeId}/stats/trials/summary/range": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "operationId": "StatsControllerV_GetTrialsSummaryForRange",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrialsSummaryForRangeDto_V2"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v2/stores/{storeId}/stats/popular-times-of-day": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "operationId": "StatsControllerV_GetPopularTimesOfDay",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PopularTimeOfDayDto_V2"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v2/stores/{storeId}/stats/chargeback-rate": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "operationId": "StatsControllerV_GetPaymentMethodTypesChargebackRates",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PaymentMethodChargebackRateDto_V2"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v2/stores/{storeId}/stats/customers": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "operationId": "StatsControllerV_GetCustomersStats",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "sort_field",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/CustomerSortFieldDto_V2"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "The maximum number of items to return in a single request.",
+            "schema": {
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "description": "Returns items after the specified ID.\nUsed for forward pagination through results.",
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            },
+            "example": "null"
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "description": "Returns items before the specified ID.\nUsed for backward pagination through results.",
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            },
+            "example": "null"
+          },
+          {
+            "name": "asc",
+            "in": "query",
+            "description": "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order.",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomerStatsDto_V2"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v2/stores/{storeId}/stats/customers/range": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "operationId": "StatsControllerV_GetCustomersStatsForRange",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "sort_field",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/CustomerSortFieldDto_V2"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "The maximum number of items to return in a single request.",
+            "schema": {
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "description": "Returns items after the specified ID.\nUsed for forward pagination through results.",
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            },
+            "example": "null"
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "description": "Returns items before the specified ID.\nUsed for backward pagination through results.",
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            },
+            "example": "null"
+          },
+          {
+            "name": "asc",
+            "in": "query",
+            "description": "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order.",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomerStatsDto_V2"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v2/stores/{storeId}/stats/customers/{customerId}": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "operationId": "StatsControllerV_GetCustomerStats",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "customerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerStatsDto_V2"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-gitbook-ignore": true
+      }
+    },
     "/v1/stores": {
       "post": {
         "tags": [
@@ -13101,6 +16875,177 @@
           "minecraft_uuid": "Minecraft profile platform - the ID param must be a Minecraft UUID."
         }
       },
+      "CustomerSortFieldDto_V2": {
+        "enum": [
+          "unspecified",
+          "total_spend_gross",
+          "total_spend_net",
+          "average_spend_gross",
+          "average_spend_net",
+          "total_active_subscriptions",
+          "total_monthly_recurring_revenue",
+          "total_payments",
+          "total_chargebacks",
+          "total_refunds"
+        ],
+        "type": "string"
+      },
+      "CustomerSpendTimeRangeDto": {
+        "required": [
+          "average_spend_amount_gross",
+          "average_spend_amount_net",
+          "customer_id",
+          "from",
+          "to",
+          "total_payments",
+          "total_spend_amount_gross",
+          "total_spend_amount_net"
+        ],
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "from": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "to": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "total_spend_amount_gross": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "total_spend_amount_net": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "average_spend_amount_gross": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "average_spend_amount_net": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "total_payments": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomerStatsDto": {
+        "required": [
+          "average_spend_amount_gross",
+          "average_spend_amount_net",
+          "customer_id",
+          "total_active_subscriptions",
+          "total_chargebacks",
+          "total_monthly_recurring_revenue",
+          "total_payments",
+          "total_refunds",
+          "total_spend_amount_gross",
+          "total_spend_amount_net"
+        ],
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "total_spend_amount_gross": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "total_spend_amount_net": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "average_spend_amount_gross": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "average_spend_amount_net": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "total_active_subscriptions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "total_monthly_recurring_revenue": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "total_payments": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "total_chargebacks": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "total_refunds": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomerStatsDto_V2": {
+        "required": [
+          "average_spend_gross",
+          "average_spend_net",
+          "customer_id",
+          "total_active_subscriptions",
+          "total_chargebacks",
+          "total_monthly_recurring_revenue",
+          "total_payments",
+          "total_refunds",
+          "total_spend_gross",
+          "total_spend_net"
+        ],
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "total_spend_gross": {
+            "$ref": "#/components/schemas/MoneyDto_V2"
+          },
+          "total_spend_net": {
+            "$ref": "#/components/schemas/MoneyDto_V2"
+          },
+          "average_spend_gross": {
+            "$ref": "#/components/schemas/MoneyDto_V2"
+          },
+          "average_spend_net": {
+            "$ref": "#/components/schemas/MoneyDto_V2"
+          },
+          "total_active_subscriptions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "total_monthly_recurring_revenue": {
+            "$ref": "#/components/schemas/MoneyDto_V2"
+          },
+          "total_payments": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "total_chargebacks": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "total_refunds": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "CustomerSteamProfileDto": {
         "required": [
           "avatar_url",
@@ -13133,6 +17078,58 @@
           "token": {
             "type": "string",
             "description": "The generated Customer token."
+          }
+        },
+        "additionalProperties": false
+      },
+      "DashboardStatsDto": {
+        "required": [
+          "average_spend_amount",
+          "average_spend_amount_prev",
+          "lifetime_sales",
+          "lifetime_sales_count",
+          "month_sales",
+          "month_sales_prev",
+          "sales_today",
+          "sales_yesterday",
+          "store_id"
+        ],
+        "type": "object",
+        "properties": {
+          "store_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "sales_today": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "sales_yesterday": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "month_sales": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "month_sales_prev": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "average_spend_amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "average_spend_amount_prev": {
+            "type": "number",
+            "format": "double"
+          },
+          "lifetime_sales": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "lifetime_sales_count": {
+            "type": "integer",
+            "format": "int64"
           }
         },
         "additionalProperties": false
@@ -13206,6 +17203,42 @@
           },
           "started_by": {
             "$ref": "#/components/schemas/ActorDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DayOfWeekDto": {
+        "enum": [
+          "unspecified",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday",
+          "sunday"
+        ],
+        "type": "string"
+      },
+      "DayOrderStatsDto": {
+        "required": [
+          "day",
+          "total",
+          "total_orders"
+        ],
+        "type": "object",
+        "properties": {
+          "day": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "total": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "total_orders": {
+            "type": "integer",
+            "format": "int64"
           }
         },
         "additionalProperties": false
@@ -13508,6 +17541,31 @@
         ],
         "type": "string"
       },
+      "DimensionStatsEntryDto_V2": {
+        "required": [
+          "dimension_id",
+          "line_count",
+          "quantity"
+        ],
+        "type": "object",
+        "properties": {
+          "dimension_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "line_count": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "earnings": {
+            "$ref": "#/components/schemas/MoneyDto_V2"
+          }
+        },
+        "additionalProperties": false
+      },
       "DiscordActionDto": {
         "required": [
           "action_type",
@@ -13685,6 +17743,41 @@
           },
           "name": {
             "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DistributionEntryDto_V2": {
+        "required": [
+          "current",
+          "key"
+        ],
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "current": {
+            "$ref": "#/components/schemas/DistributionTotalsDto_V2"
+          },
+          "comparison": {
+            "$ref": "#/components/schemas/DistributionTotalsDto_V2"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DistributionTotalsDto_V2": {
+        "required": [
+          "order_count"
+        ],
+        "type": "object",
+        "properties": {
+          "order_count": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "gross_volume": {
+            "$ref": "#/components/schemas/MoneyDto_V2"
           }
         },
         "additionalProperties": false
@@ -13974,6 +18067,48 @@
               "null",
               "string"
             ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetDimensionStatsResponseDto_V2": {
+        "required": [
+          "dimension_type",
+          "entries",
+          "revenue_basis"
+        ],
+        "type": "object",
+        "properties": {
+          "dimension_type": {
+            "$ref": "#/components/schemas/StatsDimensionTypeDto_V2"
+          },
+          "revenue_basis": {
+            "$ref": "#/components/schemas/RevenueBasisDto_V2"
+          },
+          "entries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DimensionStatsEntryDto_V2"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetDistributionResponseDto_V2": {
+        "required": [
+          "distribution_type",
+          "entries"
+        ],
+        "type": "object",
+        "properties": {
+          "distribution_type": {
+            "$ref": "#/components/schemas/StatsDistributionTypeDto_V2"
+          },
+          "entries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DistributionEntryDto_V2"
+            }
           }
         },
         "additionalProperties": false
@@ -14449,6 +18584,99 @@
         "additionalProperties": false,
         "description": "Optional inline product definition for dynamic products.\nRequires special approval, use `product_id` instead."
       },
+      "IntervalGameServerStatsDto": {
+        "required": [
+          "gameserver_id",
+          "store_id",
+          "sum_quantity",
+          "total_earnings",
+          "total_lines"
+        ],
+        "type": "object",
+        "properties": {
+          "store_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "gameserver_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "total_lines": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "sum_quantity": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "total_earnings": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
+      "IntervalProductStatsDto": {
+        "required": [
+          "product_id",
+          "store_id",
+          "sum_quantity",
+          "total_earnings",
+          "total_lines"
+        ],
+        "type": "object",
+        "properties": {
+          "store_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "product_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "total_lines": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "sum_quantity": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "total_earnings": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
+      "IntervalTagStatsDto": {
+        "required": [
+          "store_id",
+          "sum_quantity",
+          "tag_id",
+          "total_earnings",
+          "total_lines"
+        ],
+        "type": "object",
+        "properties": {
+          "store_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "tag_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "total_lines": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "sum_quantity": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "total_earnings": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
       "KlarnaDetailsDto": {
         "type": "object",
         "properties": {
@@ -14592,6 +18820,25 @@
         "additionalProperties": false,
         "description": "Represents the configuration settings for a coupon applied to marketing features."
       },
+      "MoneyDto_V2": {
+        "required": [
+          "amount_minor_units",
+          "iso_currency"
+        ],
+        "type": "object",
+        "properties": {
+          "iso_currency": {
+            "type": "string",
+            "description": "The ISO 4217 currency code, e.g. \"USD\", \"GBP\"."
+          },
+          "amount_minor_units": {
+            "type": "integer",
+            "description": "The amount in the smallest unit of the currency, e.g. cents for USD.\nFor example, 1000 = $10.00 USD.",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
       "NavLinkDto": {
         "required": [
           "name",
@@ -14625,6 +18872,43 @@
               "integer"
             ],
             "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrderCountryDistributionDataDto": {
+        "required": [
+          "gross_volume",
+          "total_orders"
+        ],
+        "type": "object",
+        "properties": {
+          "total_orders": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "gross_volume": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrderCountryDistributionDto": {
+        "required": [
+          "country_code",
+          "current"
+        ],
+        "type": "object",
+        "properties": {
+          "country_code": {
+            "type": "string"
+          },
+          "current": {
+            "$ref": "#/components/schemas/OrderCountryDistributionDataDto"
+          },
+          "comparison": {
+            "$ref": "#/components/schemas/OrderCountryDistributionDataDto"
           }
         },
         "additionalProperties": false
@@ -15313,6 +19597,84 @@
           "mixed": "Order contains both one-time purchase and subscription items"
         }
       },
+      "OrdersSummaryDto_V2": {
+        "required": [
+          "lifetime_order_count",
+          "month_to_date_order_count",
+          "previous_month_order_count",
+          "revenue_basis",
+          "today_order_count",
+          "yesterday_order_count"
+        ],
+        "type": "object",
+        "properties": {
+          "revenue_basis": {
+            "$ref": "#/components/schemas/RevenueBasisDto_V2"
+          },
+          "today_revenue": {
+            "$ref": "#/components/schemas/MoneyDto_V2"
+          },
+          "today_order_count": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "yesterday_revenue": {
+            "$ref": "#/components/schemas/MoneyDto_V2"
+          },
+          "yesterday_order_count": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "month_to_date_revenue": {
+            "$ref": "#/components/schemas/MoneyDto_V2"
+          },
+          "month_to_date_order_count": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "previous_month_revenue": {
+            "$ref": "#/components/schemas/MoneyDto_V2"
+          },
+          "previous_month_order_count": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "lifetime_revenue": {
+            "$ref": "#/components/schemas/MoneyDto_V2"
+          },
+          "lifetime_order_count": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "lifetime_average_order_value": {
+            "$ref": "#/components/schemas/MoneyDto_V2"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrdersSummaryForRangeDto_V2": {
+        "required": [
+          "order_count",
+          "revenue_basis"
+        ],
+        "type": "object",
+        "properties": {
+          "revenue_basis": {
+            "$ref": "#/components/schemas/RevenueBasisDto_V2"
+          },
+          "revenue": {
+            "$ref": "#/components/schemas/MoneyDto_V2"
+          },
+          "average_order_value": {
+            "$ref": "#/components/schemas/MoneyDto_V2"
+          },
+          "order_count": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
       "P24DetailsDto": {
         "required": [
           "bank"
@@ -15489,6 +19851,43 @@
         },
         "additionalProperties": false,
         "description": "PayPal payment method details"
+      },
+      "PaymentAcceptanceDistributionDataDto": {
+        "required": [
+          "gross_volume",
+          "total_orders"
+        ],
+        "type": "object",
+        "properties": {
+          "total_orders": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "gross_volume": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PaymentAcceptanceDistributionDto": {
+        "required": [
+          "current",
+          "payment_status"
+        ],
+        "type": "object",
+        "properties": {
+          "payment_status": {
+            "type": "string"
+          },
+          "current": {
+            "$ref": "#/components/schemas/PaymentAcceptanceDistributionDataDto"
+          },
+          "comparison": {
+            "$ref": "#/components/schemas/PaymentAcceptanceDistributionDataDto"
+          }
+        },
+        "additionalProperties": false
       },
       "PaymentChargebackStatusDto": {
         "enum": [
@@ -15829,6 +20228,23 @@
         ],
         "type": "string"
       },
+      "PaymentMethodChargebackRateDto_V2": {
+        "required": [
+          "chargeback_rate",
+          "method_type"
+        ],
+        "type": "object",
+        "properties": {
+          "method_type": {
+            "type": "string"
+          },
+          "chargeback_rate": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "additionalProperties": false
+      },
       "PaymentMethodDetailsDto": {
         "type": "object",
         "properties": {
@@ -15877,6 +20293,38 @@
         },
         "additionalProperties": false,
         "description": "Contains detailed information about a payment method.\nDISCLAIMER: These fields are not guaranteed to be backwards compatible and may change or be removed without notice."
+      },
+      "PaymentMethodDistributionDataDto": {
+        "required": [
+          "gross_volume"
+        ],
+        "type": "object",
+        "properties": {
+          "gross_volume": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PaymentMethodDistributionDto": {
+        "required": [
+          "current",
+          "method_type"
+        ],
+        "type": "object",
+        "properties": {
+          "method_type": {
+            "type": "string"
+          },
+          "current": {
+            "$ref": "#/components/schemas/PaymentMethodDistributionDataDto"
+          },
+          "comparison": {
+            "$ref": "#/components/schemas/PaymentMethodDistributionDataDto"
+          }
+        },
+        "additionalProperties": false
       },
       "PaymentMethodDto": {
         "required": [
@@ -16297,6 +20745,27 @@
         "additionalProperties": false,
         "description": "Represents a single split configuration within a payout split rule"
       },
+      "PaymentPopularTimesOfDayDto": {
+        "required": [
+          "hour",
+          "total",
+          "weekday"
+        ],
+        "type": "object",
+        "properties": {
+          "weekday": {
+            "type": "string"
+          },
+          "hour": {
+            "type": "string"
+          },
+          "total": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
       "PaymentStatusDto": {
         "enum": [
           "unknown",
@@ -16463,6 +20932,28 @@
           "other"
         ],
         "type": "string"
+      },
+      "PopularTimeOfDayDto_V2": {
+        "required": [
+          "day_of_week",
+          "hour",
+          "payment_count"
+        ],
+        "type": "object",
+        "properties": {
+          "day_of_week": {
+            "$ref": "#/components/schemas/DayOfWeekDto"
+          },
+          "hour": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payment_count": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
       },
       "PrepaidCardsBlockingTypeDto": {
         "enum": [
@@ -18274,6 +22765,15 @@
         },
         "additionalProperties": false
       },
+      "RevenueBasisDto_V2": {
+        "enum": [
+          "unspecified",
+          "gross",
+          "gross_excluding_taxes",
+          "net"
+        ],
+        "type": "string"
+      },
       "SaleDiscountTypeDto": {
         "enum": [
           "percent",
@@ -18537,6 +23037,28 @@
           }
         },
         "additionalProperties": false
+      },
+      "StatsDimensionTypeDto_V2": {
+        "enum": [
+          "unspecified",
+          "product",
+          "gameserver",
+          "tag",
+          "affiliate_link",
+          "coupon",
+          "giftcard",
+          "payout_id"
+        ],
+        "type": "string"
+      },
+      "StatsDistributionTypeDto_V2": {
+        "enum": [
+          "unspecified",
+          "order_country",
+          "payment_method",
+          "payment_acceptance"
+        ],
+        "type": "string"
       },
       "SteamId": {
         "type": "string",
@@ -20644,6 +25166,54 @@
           "canceled": "The subscription has been canceled and will no longer renew."
         }
       },
+      "SubscriptionsSummaryDto_V2": {
+        "required": [
+          "active_subscription_count",
+          "revenue_basis"
+        ],
+        "type": "object",
+        "properties": {
+          "revenue_basis": {
+            "$ref": "#/components/schemas/RevenueBasisDto_V2"
+          },
+          "monthly_recurring_revenue": {
+            "$ref": "#/components/schemas/MoneyDto_V2"
+          },
+          "average_subscription_value": {
+            "$ref": "#/components/schemas/MoneyDto_V2"
+          },
+          "active_subscription_count": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SubscriptionsSummaryForRangeDto_V2": {
+        "required": [
+          "churned_subscription_count",
+          "new_subscription_count",
+          "revenue_basis"
+        ],
+        "type": "object",
+        "properties": {
+          "revenue_basis": {
+            "$ref": "#/components/schemas/RevenueBasisDto_V2"
+          },
+          "new_subscription_count": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "churned_revenue": {
+            "$ref": "#/components/schemas/MoneyDto_V2"
+          },
+          "churned_subscription_count": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
       "TagDto": {
         "required": [
           "created_at",
@@ -20751,6 +25321,217 @@
           }
         },
         "additionalProperties": false
+      },
+      "TimeSeriesChartDto": {
+        "required": [
+          "chart",
+          "primary_value",
+          "primary_value_comparison",
+          "series",
+          "unit"
+        ],
+        "type": "object",
+        "properties": {
+          "chart": {
+            "type": "string"
+          },
+          "currency": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "primary_value": {
+            "type": "number",
+            "format": "double"
+          },
+          "primary_value_comparison": {
+            "type": "number",
+            "format": "double"
+          },
+          "unit": {
+            "$ref": "#/components/schemas/TimeSeriesUnitDto"
+          },
+          "series": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TimeSeriesChartSeriesDto"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "TimeSeriesChartDto_V2": {
+        "required": [
+          "metric_type",
+          "primary_value",
+          "primary_value_comparison",
+          "series",
+          "unit"
+        ],
+        "type": "object",
+        "properties": {
+          "metric_type": {
+            "$ref": "#/components/schemas/TimeSeriesChartMetricTypeDto_V2"
+          },
+          "dimension_type": {
+            "$ref": "#/components/schemas/StatsDimensionTypeDto_V2"
+          },
+          "dimension_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "revenue_basis": {
+            "$ref": "#/components/schemas/RevenueBasisDto_V2"
+          },
+          "currency": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "primary_value": {
+            "type": "number",
+            "format": "double"
+          },
+          "primary_value_comparison": {
+            "type": "number",
+            "format": "double"
+          },
+          "unit": {
+            "$ref": "#/components/schemas/TimeSeriesUnitDto_V2"
+          },
+          "series": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TimeSeriesChartSeriesDto_V2"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "TimeSeriesChartMetricTypeDto_V2": {
+        "enum": [
+          "unspecified",
+          "payment_volume",
+          "payment_count",
+          "order_volume",
+          "order_count",
+          "new_customer_count",
+          "subscription_count",
+          "trial_count",
+          "abandoned_checkout_count",
+          "purchase_followup_count",
+          "upsell_count",
+          "player_count",
+          "mrr"
+        ],
+        "type": "string"
+      },
+      "TimeSeriesChartSeriesDto": {
+        "required": [
+          "data",
+          "label"
+        ],
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TimeSeriesChartSeriesEntryDto"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "TimeSeriesChartSeriesDto_V2": {
+        "required": [
+          "entries",
+          "label"
+        ],
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "entries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TimeSeriesChartSeriesEntryDto_V2"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "TimeSeriesChartSeriesEntryDto": {
+        "required": [
+          "interval_end",
+          "interval_start",
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "interval_start": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "interval_end": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "value": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TimeSeriesChartSeriesEntryDto_V2": {
+        "required": [
+          "interval_end",
+          "interval_start",
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "interval_start": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "interval_end": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "value": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TimeSeriesUnitDto": {
+        "enum": [
+          "hour",
+          "day",
+          "week",
+          "month",
+          "quarter",
+          "year"
+        ],
+        "type": "string"
+      },
+      "TimeSeriesUnitDto_V2": {
+        "enum": [
+          "hour",
+          "day",
+          "week",
+          "month",
+          "quarter",
+          "year"
+        ],
+        "type": "string"
       },
       "ToggleStorePaymentMethodTypeRequestDto": {
         "required": [
@@ -20969,6 +25750,42 @@
           "canceled": "The trial has been canceled.",
           "completed": "The trial has been completed."
         }
+      },
+      "TrialsSummaryDto_V2": {
+        "required": [
+          "active_trial_count"
+        ],
+        "type": "object",
+        "properties": {
+          "active_trial_count": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TrialsSummaryForRangeDto_V2": {
+        "required": [
+          "canceled_trial_count",
+          "converted_trial_count",
+          "started_trial_count"
+        ],
+        "type": "object",
+        "properties": {
+          "started_trial_count": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "canceled_trial_count": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "converted_trial_count": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
       },
       "TrustStoreRequirementDto": {
         "required": [
@@ -22627,6 +27444,9 @@
     },
     {
       "name": "sales"
+    },
+    {
+      "name": "stats"
     },
     {
       "name": "store"

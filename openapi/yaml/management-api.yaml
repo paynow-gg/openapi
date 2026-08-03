@@ -7674,6 +7674,49 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        description: Cancellation details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CancelSubscriptionRequestDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CancelSubscriptionRequestDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/CancelSubscriptionRequestDto'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/subscriptions/{subscriptionId}/stop-pending-cancellation':
+    post:
+      tags:
+        - subscriptions
+      summary: Stop pending subscription cancellation
+      description: Stops a pending subscription cancellation for the specified store by the supplied ID.
+      operationId: Subscriptions_StopPendingSubscriptionCancellation
+      parameters:
+        - name: storeId
+          in: path
+          description: The ID of the store to uncancel the subscription for.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: subscriptionId
+          in: path
+          description: The ID of the subscription.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
       responses:
         '204':
           description: No Content
@@ -9213,6 +9256,15 @@ components:
           example: Jean Dupont
       additionalProperties: false
       description: Bancontact payment method details
+    CancelSubscriptionRequestDto:
+      type: object
+      properties:
+        cancel_at_period_end:
+          type:
+            - 'null'
+            - boolean
+          description: Should the subscription be cancelled immediately (false) or on the next billing period (true)?
+      additionalProperties: false
     CardDetailsDto:
       required:
         - brand
@@ -16080,6 +16132,7 @@ components:
         pending_verification: The change requires a verification code sent to the customer's e-mail.
     SubscriptionDto:
       required:
+        - cancel_at_period_end
         - coupon_ids
         - created_at
         - currency
@@ -16496,6 +16549,16 @@ components:
             - 'null'
             - string
           description: Reason provided for cancellation.
+        cancellation_requested_at:
+          type:
+            - 'null'
+            - string
+          description: Date and time when a subscription cancellation (cancel_at_period_end) was requested.
+          format: date-time
+        cancel_at_period_end:
+          type: boolean
+          description: Whether the subscription will be canceled at the end of the billing period.
+          readOnly: true
         lines:
           type: array
           items:
@@ -18277,6 +18340,7 @@ components:
         - OnChargebackClosed
         - OnDeliveryItemExpired
         - OnDeliveryItemRenewed
+        - OnConnectedUserTrustStatusChanged
       type: string
     WebhookHistoryDto:
       required:

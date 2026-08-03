@@ -16437,7 +16437,8 @@
           "confirmations",
           "crypto_amount",
           "crypto_currency",
-          "total_paid"
+          "total_paid",
+          "transaction_hashes"
         ],
         "type": "object",
         "properties": {
@@ -16461,6 +16462,13 @@
             "description": "The number of blockchain confirmations",
             "format": "int32",
             "example": 6
+          },
+          "transaction_hashes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "A list of blockchain transactions involving this payment"
           }
         },
         "additionalProperties": false,

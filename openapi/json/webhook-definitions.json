@@ -1260,20 +1260,24 @@
           "ON_ORDER_COMPLETED",
           "ON_REFUND",
           "ON_CHARGEBACK",
+          "ON_CHARGEBACK_CLOSED",
           "ON_DELIVERY_ITEM_ADDED",
           "ON_DELIVERY_ITEM_ACTIVATED",
           "ON_DELIVERY_ITEM_USED",
           "ON_DELIVERY_ITEM_REVOKED",
+          "ON_DELIVERY_ITEM_EXPIRED",
+          "ON_DELIVERY_ITEM_RENEWED",
           "ON_SUBSCRIPTION_ACTIVATED",
           "ON_SUBSCRIPTION_RENEWED",
           "ON_SUBSCRIPTION_CANCELED",
           "ON_DISCORD_ACCOUNT_LINKED_TO_CHECKOUT",
           "ON_CONNECTED_USER_REGISTERED",
           "ON_CONNECTED_USER_BECAME_PAYABLE",
+          "ON_CONNECTED_USER_BECAME_UNPAYABLE",
           "ON_CONNECTED_USER_PAYOUT_CREATED",
           "ON_CONNECTED_USER_PAYOUT_COMPLETED",
           "ON_CONNECTED_USER_TRANSACTION_INSERTED",
-          "ON_CONNECTED_USER_BECAME_UNPAYABLE",
+          "ON_CONNECTED_USER_TRUST_STATUS_CHANGED",
           "ON_TRIAL_ACTIVATED",
           "ON_TRIAL_COMPLETED",
           "ON_TRIAL_CANCELED",
@@ -1281,9 +1285,8 @@
           "ON_PURCHASE_FOLLOW_UP_ATTEMPT_SUCCEEDED",
           "ON_ABANDONED_CHECKOUT_RECOVERY_ATTEMPT_EMAIL_SENT",
           "ON_ABANDONED_CHECKOUT_RECOVERY_ATTEMPT_SUCCEEDED",
-          "ON_CHARGEBACK_CLOSED",
-          "ON_DELIVERY_ITEM_EXPIRED",
-          "ON_DELIVERY_ITEM_RENEWED"
+          "ON_PAYMENT_COMPLETED",
+          "ON_PAYMENT_FAILED"
         ],
         "type": "string",
         "description": "The type of webhook event"
@@ -3472,6 +3475,388 @@
                         "description": "The status of the Order.  Possbile options: created, completed, canceled",
                         "example": "created",
                         "x-discordVariable": "status"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook processed successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "ON_PAYMENT_COMPLETED": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Triggered when a payment is completed",
+        "description": "Webhook for ON_PAYMENT_COMPLETED",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "event_type",
+                  "event_id",
+                  "body"
+                ],
+                "type": "object",
+                "properties": {
+                  "event_type": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/WebhookEventType"
+                      }
+                    ],
+                    "description": "The type of webhook event",
+                    "example": "ON_PAYMENT_COMPLETED"
+                  },
+                  "event_id": {
+                    "type": "string",
+                    "description": "The ID of the Webhook Event",
+                    "format": "flake-id",
+                    "example": "411486491630370816"
+                  },
+                  "body": {
+                    "required": [
+                      "id",
+                      "store_id",
+                      "order_id",
+                      "gateway",
+                      "currency",
+                      "tax_inclusive",
+                      "amount",
+                      "gateway_fee_amount",
+                      "tax_amount",
+                      "platform_fee_amount",
+                      "store_net_amount",
+                      "status",
+                      "created_at",
+                      "completed_at"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Payment",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "id"
+                      },
+                      "store_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Store associated with the Payment",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "store_id"
+                      },
+                      "order_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Order associated with the Payment",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "order_id"
+                      },
+                      "customer": {
+                        "oneOf": [
+                          {
+                            "$ref": "#/components/schemas/CustomerDTO"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ],
+                        "x-discordVariable": "customer"
+                      },
+                      "gateway": {
+                        "type": "string",
+                        "description": "The Payment Gateway of the Payment",
+                        "example": "stripe",
+                        "x-discordVariable": "gateway"
+                      },
+                      "currency": {
+                        "type": "string",
+                        "description": "The ISO-4217 Currency Code of the Payment",
+                        "example": "USD",
+                        "x-discordVariable": "currency"
+                      },
+                      "tax_inclusive": {
+                        "type": "boolean",
+                        "description": "Indicates if the payment was Tax Inclusive",
+                        "example": true,
+                        "x-discordVariable": "tax_inclusive"
+                      },
+                      "amount": {
+                        "type": "integer",
+                        "description": "The payment amount, represented in cents",
+                        "example": 7500,
+                        "x-discordVariable": "amount"
+                      },
+                      "gateway_fee_amount": {
+                        "type": "integer",
+                        "description": "The gateway fee amount, represented in cents",
+                        "example": 200,
+                        "x-discordVariable": "gateway_fee_amount"
+                      },
+                      "tax_amount": {
+                        "type": "integer",
+                        "description": "The tax amount, represented in cents",
+                        "example": 1200,
+                        "x-discordVariable": "tax_amount"
+                      },
+                      "platform_fee_amount": {
+                        "type": "integer",
+                        "description": "The platform fee amount, represented in cents",
+                        "example": 375,
+                        "x-discordVariable": "platform_fee_amount"
+                      },
+                      "store_net_amount": {
+                        "type": "integer",
+                        "description": "The net amount recieved by the associated store, represented in cents",
+                        "example": 5925,
+                        "x-discordVariable": "store_net_amount"
+                      },
+                      "status": {
+                        "type": "string",
+                        "description": "The status of the payment",
+                        "example": "completed",
+                        "x-discordVariable": "status"
+                      },
+                      "billing_country": {
+                        "type": [
+                          "null",
+                          "string"
+                        ],
+                        "description": "The ISO-3166 country code the payment was billed to",
+                        "example": "US",
+                        "x-discordVariable": "billing_country"
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "description": "Indicates when the payment was created",
+                        "format": "date-time",
+                        "example": "2024-01-20T12:00:00Z",
+                        "x-discordVariable": "created_at"
+                      },
+                      "pending_at": {
+                        "type": [
+                          "null",
+                          "string"
+                        ],
+                        "description": "Indicates when the payment became pending",
+                        "format": "date-time",
+                        "example": "2024-01-20T12:15:00Z",
+                        "x-discordVariable": "pending_at"
+                      },
+                      "completed_at": {
+                        "type": "string",
+                        "description": "Indicates when the payment was completed",
+                        "format": "date-time",
+                        "example": "2024-01-20T13:00:00Z",
+                        "x-discordVariable": "completed_at"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook processed successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "ON_PAYMENT_FAILED": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Triggered when a payment fails",
+        "description": "Webhook for ON_PAYMENT_FAILED",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "event_type",
+                  "event_id",
+                  "body"
+                ],
+                "type": "object",
+                "properties": {
+                  "event_type": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/WebhookEventType"
+                      }
+                    ],
+                    "description": "The type of webhook event",
+                    "example": "ON_PAYMENT_FAILED"
+                  },
+                  "event_id": {
+                    "type": "string",
+                    "description": "The ID of the Webhook Event",
+                    "format": "flake-id",
+                    "example": "411486491630370816"
+                  },
+                  "body": {
+                    "required": [
+                      "id",
+                      "store_id",
+                      "order_id",
+                      "gateway",
+                      "currency",
+                      "tax_inclusive",
+                      "amount",
+                      "gateway_fee_amount",
+                      "tax_amount",
+                      "platform_fee_amount",
+                      "store_net_amount",
+                      "status",
+                      "failure_code",
+                      "created_at",
+                      "failed_at"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Payment",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "id"
+                      },
+                      "store_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Store associated with the Payment",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "store_id"
+                      },
+                      "order_id": {
+                        "type": "string",
+                        "description": "The Flake ID of the Order associated with the Payment",
+                        "format": "flake-id",
+                        "example": "411486491630370816",
+                        "x-discordVariable": "order_id"
+                      },
+                      "customer": {
+                        "oneOf": [
+                          {
+                            "$ref": "#/components/schemas/CustomerDTO"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ],
+                        "x-discordVariable": "customer"
+                      },
+                      "gateway": {
+                        "type": "string",
+                        "description": "The Payment Gateway of the Payment",
+                        "example": "stripe",
+                        "x-discordVariable": "gateway"
+                      },
+                      "currency": {
+                        "type": "string",
+                        "description": "The ISO-4217 Currency Code of the Payment",
+                        "example": "USD",
+                        "x-discordVariable": "currency"
+                      },
+                      "tax_inclusive": {
+                        "type": "boolean",
+                        "description": "Indicates if the payment was Tax Inclusive",
+                        "example": true,
+                        "x-discordVariable": "tax_inclusive"
+                      },
+                      "amount": {
+                        "type": "integer",
+                        "description": "The payment amount, represented in cents",
+                        "example": 7500,
+                        "x-discordVariable": "amount"
+                      },
+                      "gateway_fee_amount": {
+                        "type": "integer",
+                        "description": "The gateway fee amount, represented in cents",
+                        "example": 200,
+                        "x-discordVariable": "gateway_fee_amount"
+                      },
+                      "tax_amount": {
+                        "type": "integer",
+                        "description": "The tax amount, represented in cents",
+                        "example": 1200,
+                        "x-discordVariable": "tax_amount"
+                      },
+                      "platform_fee_amount": {
+                        "type": "integer",
+                        "description": "The platform fee amount, represented in cents",
+                        "example": 375,
+                        "x-discordVariable": "platform_fee_amount"
+                      },
+                      "store_net_amount": {
+                        "type": "integer",
+                        "description": "The net amount that would have been recieved by the associated store, represented in cents",
+                        "example": 5925,
+                        "x-discordVariable": "store_net_amount"
+                      },
+                      "status": {
+                        "type": "string",
+                        "description": "The status of the payment",
+                        "example": "failed",
+                        "x-discordVariable": "status"
+                      },
+                      "failure_code": {
+                        "type": "string",
+                        "description": "The reason the payment was declined",
+                        "example": "insufficient_funds",
+                        "x-discordVariable": "failure_code"
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "description": "Indicates when the payment was created",
+                        "format": "date-time",
+                        "example": "2024-01-20T12:00:00Z",
+                        "x-discordVariable": "created_at"
+                      },
+                      "pending_at": {
+                        "type": [
+                          "null",
+                          "string"
+                        ],
+                        "description": "Indicates when the payment became pending",
+                        "format": "date-time",
+                        "example": "2024-01-20T12:15:00Z",
+                        "x-discordVariable": "pending_at"
+                      },
+                      "failed_at": {
+                        "type": "string",
+                        "description": "Indicates when the payment failed",
+                        "format": "date-time",
+                        "example": "2024-01-20T12:30:00Z",
+                        "x-discordVariable": "failed_at"
                       }
                     }
                   }

@@ -3387,6 +3387,117 @@ paths:
                 $ref: '#/components/schemas/PayNowError'
       security:
         - APIKey: [ ]
+  '/v1/stores/{storeId}/invoices':
+    get:
+      tags:
+        - invoices
+      summary: Get invoices
+      description: Retrieves all invoices for the specified store.
+      operationId: StoreInvoices_ListInvoices
+      parameters:
+        - name: storeId
+          in: path
+          description: The ID of the store to retrieve invoices for.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: type
+          in: query
+          schema:
+            $ref: '#/components/schemas/InvoiceTypeDto'
+        - name: customer_id
+          in: query
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: order_id
+          in: query
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: reference
+          in: query
+          schema:
+            type: string
+        - name: billing_email
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: The maximum number of items to return in a single request.
+          schema:
+            maximum: 100
+            minimum: 1
+            type: integer
+            format: int32
+        - name: after
+          in: query
+          description: "Returns items after the specified ID.\nUsed for forward pagination through results."
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+          example: 'null'
+        - name: before
+          in: query
+          description: "Returns items before the specified ID.\nUsed for backward pagination through results."
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+          example: 'null'
+        - name: asc
+          in: query
+          description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InvoiceDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/invoices/{invoiceId}/download':
+    get:
+      tags:
+        - invoices
+      summary: Download invoice
+      description: Retrieves a temporary download URL for the invoice PDF.
+      operationId: StoreInvoices_DownloadInvoice
+      parameters:
+        - name: storeId
+          in: path
+          description: The ID of the store the invoice belongs to.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: invoiceId
+          in: path
+          description: The ID of the invoice to download.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceDownloadUrlResponseDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
   '/v1/stores/{storeId}/marketing/abandoned-checkouts/configuration':
     get:
       tags:
@@ -11910,6 +12021,114 @@ components:
           type: integer
           format: int64
       additionalProperties: false
+    InvoiceDownloadUrlResponseDto:
+      required:
+        - download_url
+      type: object
+      properties:
+        download_url:
+          type: string
+          description: Temporary URL the invoice document can be downloaded from
+      additionalProperties: false
+    InvoiceDto:
+      required:
+        - created_at
+        - currency
+        - customer_id
+        - discount_amount
+        - giftcard_usage_amount
+        - id
+        - issued_at
+        - number
+        - order_id
+        - reference
+        - status
+        - store_id
+        - subtotal_amount
+        - tax_amount
+        - total_amount
+        - type
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        number:
+          type: integer
+          description: Sequential number of the invoice within its store
+          format: int64
+        reference:
+          type: string
+          description: Human readable reference of the invoice
+        type:
+          $ref: '#/components/schemas/InvoiceTypeDto'
+        status:
+          $ref: '#/components/schemas/InvoiceStatusDto'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        customer_id:
+          $ref: '#/components/schemas/FlakeId'
+        order_id:
+          $ref: '#/components/schemas/FlakeId'
+        refund_id:
+          $ref: '#/components/schemas/FlakeId'
+        parent_invoice_id:
+          $ref: '#/components/schemas/FlakeId'
+        currency:
+          type: string
+          description: Three-letter currency code of the invoice
+        discount_amount:
+          type: integer
+          description: 'Total discount in smallest currency unit (e.g., cents)'
+          format: int64
+        subtotal_amount:
+          type: integer
+          description: Total before tax in smallest currency unit
+          format: int64
+        tax_amount:
+          type: integer
+          description: Total tax in smallest currency unit
+          format: int64
+        giftcard_usage_amount:
+          type: integer
+          description: Amount paid using gift cards in smallest currency unit
+          format: int64
+        total_amount:
+          type: integer
+          description: Total of the invoice in smallest currency unit
+          format: int64
+        file_key:
+          type:
+            - 'null'
+            - string
+          description: Optional storage key of the generated invoice document
+        file_size:
+          type:
+            - 'null'
+            - integer
+          description: Optional size of the generated invoice document in bytes
+          format: int64
+        created_at:
+          type: string
+          description: Date and time when the invoice was created
+          format: date-time
+        issued_at:
+          type: string
+          description: Date and time when the invoice was issued
+          format: date-time
+      additionalProperties: false
+    InvoiceStatusDto:
+      enum:
+        - invalid
+        - pending
+        - generated
+        - failed
+      type: string
+    InvoiceTypeDto:
+      enum:
+        - invalid
+        - invoice
+        - credit_note
+      type: string
     KlarnaDetailsDto:
       type: object
       properties:
@@ -16156,6 +16375,7 @@ components:
         - lines
         - next_billing_amount
         - next_billing_presentment_amount
+        - past_due
         - pretty_id
         - price
         - status
@@ -16559,6 +16779,9 @@ components:
           type: boolean
           description: Whether the subscription will be canceled at the end of the billing period.
           readOnly: true
+        past_due:
+          type: boolean
+          description: 'Whether the subscription is past due, and is in a dunning (retrying) state.'
         lines:
           type: array
           items:
@@ -18341,6 +18564,8 @@ components:
         - OnDeliveryItemExpired
         - OnDeliveryItemRenewed
         - OnConnectedUserTrustStatusChanged
+        - OnPaymentCompleted
+        - OnPaymentFailed
       type: string
     WebhookHistoryDto:
       required:
@@ -18444,6 +18669,7 @@ tags:
   - name: game-servers
   - name: giftcards
   - name: global-commands
+  - name: invoices
   - name: marketing
   - name: navlinks
   - name: orders

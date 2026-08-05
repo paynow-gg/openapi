@@ -1440,6 +1440,23 @@
             }
           },
           {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "customer_id",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/FlakeId"
+              }
+            }
+          },
+          {
             "name": "limit",
             "in": "query",
             "description": "The maximum number of items to return in a single request.",
@@ -1474,13 +1491,6 @@
             "description": "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order.",
             "schema": {
               "type": "boolean"
-            }
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "schema": {
-              "type": "string"
             }
           }
         ],
@@ -25854,7 +25864,10 @@
           "purchase_followup_count",
           "upsell_count",
           "player_count",
-          "mrr"
+          "mrr",
+          "tax_volume",
+          "gateway_fee_volume",
+          "platform_fee_volume"
         ],
         "type": "string"
       },

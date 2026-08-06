@@ -7453,7 +7453,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/components/schemas/FlakeId"
+                "type": "string"
               }
             }
           }
@@ -15028,6 +15028,55 @@
         },
         "additionalProperties": false
       },
+      "AddressDto": {
+        "type": "object",
+        "properties": {
+          "country": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The country of the address"
+          },
+          "state": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The state or province of the address"
+          },
+          "city": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The city of the address"
+          },
+          "postal_code": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The postal code or zip code of the address"
+          },
+          "line_1": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The first line of the street address"
+          },
+          "line_2": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The second line of the street address, if any (apartment, suite, etc.)"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents a physical or billing address"
+      },
       "AffiliateLinkCommissionAmountStepDto": {
         "required": [
           "billing_cycle_sequence",
@@ -15520,6 +15569,37 @@
           }
         },
         "additionalProperties": false
+      },
+      "CheckoutCustomerDetailsDto": {
+        "type": "object",
+        "properties": {
+          "billing_name": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The name the checkout is billed to."
+          },
+          "billing_email": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The email address the checkout is billed to."
+          },
+          "billing_address": {
+            "$ref": "#/components/schemas/AddressDto"
+          },
+          "billing_tax_id": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The tax identifier of the customer, such as a VAT number."
+          }
+        },
+        "additionalProperties": false,
+        "description": "The billing details of the customer the checkout belongs to."
       },
       "CheckoutPaymentInfoDto": {
         "required": [
@@ -16155,6 +16235,9 @@
               "type": "string"
             },
             "description": "Optional metadata to associate with the checkout session.\nDo not store any sensitive information here."
+          },
+          "customer_details": {
+            "$ref": "#/components/schemas/CheckoutCustomerDetailsDto"
           }
         },
         "additionalProperties": false,

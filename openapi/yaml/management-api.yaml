@@ -3504,6 +3504,607 @@ paths:
                 $ref: '#/components/schemas/PayNowError'
       security:
         - APIKey: [ ]
+  '/v1/stores/{storeId}/marketing/email/templates':
+    get:
+      tags:
+        - marketing
+      operationId: Email_GetEmailTemplates
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: limit
+          in: query
+          description: The maximum number of items to return in a single request.
+          schema:
+            maximum: 100
+            minimum: 1
+            type: integer
+            format: int32
+        - name: after
+          in: query
+          description: "Returns items after the specified ID.\nUsed for forward pagination through results."
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+          example: 'null'
+        - name: before
+          in: query
+          description: "Returns items before the specified ID.\nUsed for backward pagination through results."
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+          example: 'null'
+        - name: asc
+          in: query
+          description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EmailTemplateDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    post:
+      tags:
+        - marketing
+      operationId: Email_CreateEmailTemplate
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEmailTemplateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CreateEmailTemplateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/CreateEmailTemplateDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailTemplateDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/marketing/email/templates/{templateId}':
+    get:
+      tags:
+        - marketing
+      operationId: Email_GetEmailTemplate
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailTemplateDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    patch:
+      tags:
+        - marketing
+      operationId: Email_UpdateEmailTemplate
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateEmailTemplateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UpdateEmailTemplateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UpdateEmailTemplateDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailTemplateDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    delete:
+      tags:
+        - marketing
+      operationId: Email_DeleteEmailTemplate
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/marketing/email/templates/{templateId}/activate':
+    post:
+      tags:
+        - marketing
+      operationId: Email_ActivateEmailTemplate
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/marketing/email/templates/{templateId}/deactivate':
+    post:
+      tags:
+        - marketing
+      operationId: Email_DeactivateEmailTemplate
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/marketing/email/templates/deactivate':
+    post:
+      tags:
+        - marketing
+      operationId: Email_DeactivateEmailTemplateByType
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeactivateEmailTemplateRequestDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DeactivateEmailTemplateRequestDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DeactivateEmailTemplateRequestDto'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/marketing/email/templates/{templateId}/test-email':
+    post:
+      tags:
+        - marketing
+      operationId: Email_SendEmailTemplateTestEmail
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/marketing/email/templates/test-email':
+    post:
+      tags:
+        - marketing
+      operationId: Email_SendEmailTemplateTestEmailByType
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendEmailTemplateTestEmailRequestDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SendEmailTemplateTestEmailRequestDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/SendEmailTemplateTestEmailRequestDto'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/marketing/email/template-definitions':
+    get:
+      tags:
+        - marketing
+      operationId: Email_GetEmailTemplateDefinitions
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '204':
+          description: No Content
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EmailTemplateDefinitionDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/marketing/email/branding':
+    get:
+      tags:
+        - marketing
+      operationId: Email_GetEmailBranding
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailBrandingDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    patch:
+      tags:
+        - marketing
+      operationId: Email_UpdateEmailBranding
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateEmailBrandingDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UpdateEmailBrandingDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UpdateEmailBrandingDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailBrandingDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/marketing/email/branding/image-upload-url':
+    get:
+      tags:
+        - marketing
+      operationId: Email_GetEmailBrandingImageUploadUrl
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: dark_mode
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetEmailBrandingImageUploadUrlResponseDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/marketing/email/branding/image-upload-finish':
+    post:
+      tags:
+        - marketing
+      operationId: Email_FinishEmailBrandingImageUpload
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FinishEmailBrandingImageUploadRequestDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/FinishEmailBrandingImageUploadRequestDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/FinishEmailBrandingImageUploadRequestDto'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/marketing/email/deliveries':
+    get:
+      tags:
+        - marketing
+      operationId: Email_GetEmailDeliveries
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: limit
+          in: query
+          description: The maximum number of items to return in a single request.
+          schema:
+            maximum: 100
+            minimum: 1
+            type: integer
+            format: int32
+        - name: after
+          in: query
+          description: "Returns items after the specified ID.\nUsed for forward pagination through results."
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+          example: 'null'
+        - name: before
+          in: query
+          description: "Returns items before the specified ID.\nUsed for backward pagination through results."
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+          example: 'null'
+        - name: asc
+          in: query
+          description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
+          schema:
+            type: boolean
+        - name: store_id
+          in: query
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: email_delivery_id
+          in: query
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: receiver_email
+          in: query
+          schema:
+            type: string
+        - name: subject
+          in: query
+          schema:
+            type: string
+        - name: email_template_type
+          in: query
+          schema:
+            $ref: '#/components/schemas/EmailTemplateTypeDto'
+        - name: status
+          in: query
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/EmailDeliveryStatusDto'
+        - name: message_id
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EmailDeliveryDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/marketing/email/deliveries/{emailDeliveryId}':
+    get:
+      tags:
+        - marketing
+      operationId: Email_GetEmailDelivery
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: emailDeliveryId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailDeliveryDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
   '/v1/stores/{storeId}/marketing/abandoned-checkouts/configuration':
     get:
       tags:
@@ -10140,6 +10741,30 @@ components:
         download_signed_url:
           type: string
       additionalProperties: false
+    CreateEmailBrandingDto:
+      required:
+        - color
+      type: object
+      properties:
+        color:
+          type: string
+        header_image_light_url:
+          type: string
+        header_image_dark_url:
+          type: string
+    CreateEmailTemplateDto:
+      required:
+        - email_template_type
+        - name
+        - content
+      type: object
+      properties:
+        email_template_type:
+          $ref: '#/components/schemas/EmailTemplateTypeDto'
+        name:
+          type: string
+        content:
+          type: string
     CreateGameServerConsoleDto:
       required:
         - type
@@ -11043,6 +11668,14 @@ components:
           type: integer
           format: int64
       additionalProperties: false
+    DeactivateEmailTemplateRequestDto:
+      required:
+        - email_template_type
+      type: object
+      properties:
+        email_template_type:
+          $ref: '#/components/schemas/EmailTemplateTypeDto'
+      additionalProperties: false
     DeliveryItemAssignmentBulkDto:
       required:
         - customer_id
@@ -11432,6 +12065,195 @@ components:
         gross_volume:
           $ref: '#/components/schemas/MoneyDto_V2'
       additionalProperties: false
+    EmailBrandingDto:
+      required:
+        - color
+        - store_id
+      type: object
+      properties:
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        color:
+          type: string
+        header_image_light_url:
+          type:
+            - 'null'
+            - string
+        header_image_dark_url:
+          type:
+            - 'null'
+            - string
+      additionalProperties: false
+    EmailDeliveryDto:
+      required:
+        - created_at
+        - email_template_type
+        - id
+        - receiver_email
+        - status
+        - subject
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        receiver_email:
+          type: string
+        subject:
+          type: string
+        email_template_type:
+          $ref: '#/components/schemas/EmailTemplateTypeDto'
+        status:
+          $ref: '#/components/schemas/EmailDeliveryStatusDto'
+        message_id:
+          type:
+            - 'null'
+            - string
+        error_message:
+          type:
+            - 'null'
+            - string
+        created_at:
+          type: string
+          format: date-time
+        sent_at:
+          type:
+            - 'null'
+            - string
+          format: date-time
+        opened_at:
+          type:
+            - 'null'
+            - string
+          format: date-time
+      additionalProperties: false
+    EmailDeliveryStatusDto:
+      enum:
+        - unspecified
+        - pending
+        - sent
+        - delivered
+        - deferred
+        - bounced
+        - dropped
+        - failed
+      type: string
+    EmailTemplateComponentDto:
+      required:
+        - content
+        - tag
+      type: object
+      properties:
+        tag:
+          type: string
+        content:
+          type: string
+      additionalProperties: false
+    EmailTemplateDefinitionDto:
+      required:
+        - components
+        - default_content
+        - display_name
+        - email_template_type
+        - example_variables
+      type: object
+      properties:
+        email_template_type:
+          $ref: '#/components/schemas/EmailTemplateTypeDto'
+        display_name:
+          type: string
+        components:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmailTemplateComponentDto'
+        example_variables:
+          type: 'null'
+        default_content:
+          type: string
+      additionalProperties: false
+    EmailTemplateDto:
+      required:
+        - content
+        - created_at
+        - created_by
+        - email_template_state
+        - email_template_state_note
+        - email_template_type
+        - id
+        - name
+        - store_id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        email_template_type:
+          $ref: '#/components/schemas/EmailTemplateTypeDto'
+        name:
+          type: string
+        content:
+          type: string
+        email_template_state:
+          $ref: '#/components/schemas/EmailTemplateStateDto'
+        email_template_state_note:
+          type: string
+        created_by:
+          $ref: '#/components/schemas/ActorDto'
+        created_at:
+          type: string
+          format: date-time
+        updated_by:
+          $ref: '#/components/schemas/ActorDto'
+        updated_at:
+          type:
+            - 'null'
+            - string
+          format: date-time
+      additionalProperties: false
+    EmailTemplateStateDto:
+      enum:
+        - unspecified
+        - inactive
+        - activating
+        - active
+      type: string
+    EmailTemplateTypeDto:
+      enum:
+        - unspecified
+        - layout
+        - password_reset
+        - email_verification
+        - email_change
+        - email_changed_notification
+        - forgot_password
+        - logged_in_new_location
+        - welcome_login
+        - order_completed
+        - refund_initiated
+        - subscription_canceled
+        - subscription_renewal_failed
+        - subscription_price_changed
+        - subscription_change_verification_code
+        - subscription_renewal_upcoming
+        - subscription_manage_login
+        - subscription_manage_no_history
+        - payout_created
+        - payout_completed
+        - store_invite
+        - store_lock_changed
+        - abandoned_checkout_recovery_attempt
+        - purchase_follow_up_attempt
+        - downloadable_file_granted
+        - discord_invite_link
+        - gift_card_created
+        - trial_ending_soon
+        - invoice_generated
+        - payment_method_type_approval
+        - store_trust_event
+        - data_subject_request_export_completed
+      type: string
     ExecutedWebhookDto:
       required:
         - id
@@ -11456,6 +12278,17 @@ components:
           type:
             - 'null'
             - string
+      additionalProperties: false
+    FinishEmailBrandingImageUploadRequestDto:
+      required:
+        - dark_mode
+        - image_id
+      type: object
+      properties:
+        image_id:
+          type: string
+        dark_mode:
+          type: boolean
       additionalProperties: false
     FinishTagImageUploadUrlRequestDto:
       required:
@@ -11672,6 +12505,17 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DistributionEntryDto_V2'
+      additionalProperties: false
+    GetEmailBrandingImageUploadUrlResponseDto:
+      required:
+        - image_id
+        - upload_url
+      type: object
+      properties:
+        upload_url:
+          type: string
+        image_id:
+          type: string
       additionalProperties: false
     GetTagImageUploadUrlResponseDto:
       required:
@@ -15435,6 +16279,14 @@ components:
           description: 'The rate at which the tax is applied, formatted as a string.'
       additionalProperties: false
       description: Object representing a specific tax within a sales tax jurisdiction.
+    SendEmailTemplateTestEmailRequestDto:
+      required:
+        - email_template_type
+      type: object
+      properties:
+        email_template_type:
+          $ref: '#/components/schemas/EmailTemplateTypeDto'
+      additionalProperties: false
     SetDiscordActionDto:
       required:
         - action_type
@@ -17874,6 +18726,22 @@ components:
             - 'null'
             - string
           format: date-time
+    UpdateEmailBrandingDto:
+      type: object
+      properties:
+        color:
+          type: string
+        header_image_light_url:
+          type: string
+        header_image_dark_url:
+          type: string
+    UpdateEmailTemplateDto:
+      type: object
+      properties:
+        name:
+          type: string
+        content:
+          type: string
     UpdateGameServerConsoleDto:
       type: object
       properties:

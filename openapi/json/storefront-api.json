@@ -4789,6 +4789,7 @@
       },
       "StorefrontSubscriptionDto": {
         "required": [
+          "cancel_at_period_end",
           "coupon_ids",
           "created_at",
           "currency",
@@ -4811,6 +4812,7 @@
           "lines",
           "next_billing_amount",
           "next_billing_presentment_amount",
+          "past_due",
           "pretty_id",
           "status",
           "store_id",
@@ -5202,6 +5204,23 @@
               "string"
             ],
             "description": "Reason provided for cancellation."
+          },
+          "cancellation_requested_at": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Date and time when a subscription cancellation (cancel_at_period_end) was requested.",
+            "format": "date-time"
+          },
+          "cancel_at_period_end": {
+            "type": "boolean",
+            "description": "Whether the subscription will be canceled at the end of the billing period.",
+            "readOnly": true
+          },
+          "past_due": {
+            "type": "boolean",
+            "description": "Whether the subscription is past due, and is in a dunning (retrying) state."
           },
           "lines": {
             "type": "array",

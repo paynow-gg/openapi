@@ -82,3 +82,19 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git commit -m "chore: update OpenAPI specifications [skip ci]"
           git push
+      
+      - name: Trigger docs site deploy
+        if: steps.check_changes.outputs.has_changes == 'true'
+        env:
+          HOOK: ${{ secrets.DOCS_DEPLOY_HOOK }}
+        run: |
+          # The docs site (paynow-gg/docs, branch openapi-site) pulls these
+          # specs at build time; ping its Cloudflare deploy hook so spec
+          # changes go live without waiting for a docs push. Fails loudly
+          # when the secret is missing so the site cannot go stale silently.
+          if [ -z "$HOOK" ]; then
+            echo "::error::DOCS_DEPLOY_HOOK secret is not set - docs site will not rebuild with these spec changes."
+            exit 1
+          fi
+          curl -fsS -X POST "$HOOK" > /dev/null
+          echo "Docs deploy hook pinged."

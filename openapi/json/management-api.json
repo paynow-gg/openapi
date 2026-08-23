@@ -6271,109 +6271,6 @@
         ]
       }
     },
-    "/v1/stores/{storeId}/marketing/email/templates/{templateId}/test-email": {
-      "post": {
-        "tags": [
-          "marketing"
-        ],
-        "operationId": "Email_SendEmailTemplateTestEmail",
-        "parameters": [
-          {
-            "name": "storeId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/FlakeId"
-            }
-          },
-          {
-            "name": "templateId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/FlakeId"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "default": {
-            "description": "Error response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PayNowError"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "APIKey": [ ]
-          }
-        ]
-      }
-    },
-    "/v1/stores/{storeId}/marketing/email/templates/test-email": {
-      "post": {
-        "tags": [
-          "marketing"
-        ],
-        "operationId": "Email_SendEmailTemplateTestEmailByType",
-        "parameters": [
-          {
-            "name": "storeId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/FlakeId"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SendEmailTemplateTestEmailRequestDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SendEmailTemplateTestEmailRequestDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/SendEmailTemplateTestEmailRequestDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "default": {
-            "description": "Error response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PayNowError"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "APIKey": [ ]
-          }
-        ]
-      }
-    },
     "/v1/stores/{storeId}/marketing/email/template-definitions": {
       "get": {
         "tags": [
@@ -24812,18 +24709,6 @@
         },
         "additionalProperties": false,
         "description": "Object representing a specific tax within a sales tax jurisdiction."
-      },
-      "SendEmailTemplateTestEmailRequestDto": {
-        "required": [
-          "email_template_type"
-        ],
-        "type": "object",
-        "properties": {
-          "email_template_type": {
-            "$ref": "#/components/schemas/EmailTemplateTypeDto"
-          }
-        },
-        "additionalProperties": false
       },
       "SetDiscordActionDto": {
         "required": [

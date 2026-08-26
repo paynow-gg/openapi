@@ -14319,6 +14319,7 @@ components:
         - pending
         - approved
         - rejected
+        - submitted
       type: string
     PaymentMethodTypeCountryCurrencyMappingDto:
       required:
@@ -14357,6 +14358,8 @@ components:
       properties:
         id:
           type: string
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
         name:
           type: string
         logo_url:

@@ -22153,7 +22153,8 @@
           "invalid",
           "pending",
           "approved",
-          "rejected"
+          "rejected",
+          "submitted"
         ],
         "type": "string"
       },
@@ -22201,6 +22202,9 @@
         "properties": {
           "id": {
             "type": "string"
+          },
+          "store_id": {
+            "$ref": "#/components/schemas/FlakeId"
           },
           "name": {
             "type": "string"

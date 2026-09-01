@@ -854,6 +854,53 @@ paths:
                 $ref: '#/components/schemas/PayNowError'
       security:
         - APIKey: [ ]
+  '/v1/stores/{storeId}/customers/{customerId}/portal-sessions':
+    post:
+      tags:
+        - customer_portal_sessions
+      summary: Create a customer portal session
+      description: "Creates a customer portal session from a secure server using an API Key.\nThe returned session contains the token and URL to hand to the customer."
+      operationId: CustomersPortalSessions_CreateCustomerPortalSession
+      parameters:
+        - name: storeId
+          in: path
+          description: The ID of the store to create the portal session for.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: customerId
+          in: path
+          description: The ID of the customer to create the portal session for.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        description: The portal session data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCustomerPortalSessionRequestDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CreateCustomerPortalSessionRequestDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/CreateCustomerPortalSessionRequestDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerPortalSessionDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
   '/v1/stores/{storeId}/customers':
     get:
       tags:
@@ -10673,6 +10720,26 @@ components:
             - 'null'
             - string
           format: date-time
+    CreateCustomerPortalSessionRequestDto:
+      required:
+        - flow
+      type: object
+      properties:
+        flow:
+          $ref: '#/components/schemas/CustomerPortalSessionFlowDto'
+        expires_in_seconds:
+          type:
+            - 'null'
+            - integer
+          description: 'How long the portal session stays valid, in seconds. When unset, a default expiry is used.'
+          format: int64
+        return_url:
+          type:
+            - 'null'
+            - string
+          description: URL to redirect the customer back to after completing the portal flow
+      additionalProperties: false
+      description: Request to create a new customer portal session from your back-end server using the management API
     CreateDownloadableFileDownloadUrlResponseDto:
       required:
         - download_signed_url
@@ -11306,6 +11373,57 @@ components:
           example: '76561198152492642'
       additionalProperties: false
       description: 'Represents a customer platform association, used for gifting'
+    CustomerPortalSessionDto:
+      required:
+        - created_at
+        - customer_id
+        - expires_at
+        - id
+        - store_id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        customer_id:
+          $ref: '#/components/schemas/FlakeId'
+        flow:
+          $ref: '#/components/schemas/CustomerPortalSessionFlowDto'
+        token:
+          type:
+            - 'null'
+            - string
+          description: The token used to access the portal session
+        url:
+          type:
+            - 'null'
+            - string
+          description: The URL to redirect the customer to for this portal session
+        return_url:
+          type:
+            - 'null'
+            - string
+          description: URL to redirect the customer back to after completing the portal flow
+        created_at:
+          type: string
+          description: Date and time when the portal session was created
+          format: date-time
+        expires_at:
+          type: string
+          description: Date and time when the portal session expires
+          format: date-time
+      additionalProperties: false
+      description: Represents a customer portal session
+    CustomerPortalSessionFlowDto:
+      type: object
+      properties:
+        subscription_cancel:
+          $ref: '#/components/schemas/SubscriptionCancelFlowDto'
+        subscription_payment_method_update:
+          $ref: '#/components/schemas/SubscriptionPaymentMethodUpdateFlowDto'
+      additionalProperties: false
+      description: The flow a customer portal session is scoped to. At most one of the flows is set.
     CustomerProfilePlatform:
       enum:
         - invalid
@@ -16967,6 +17085,15 @@ components:
           format: int64
       additionalProperties: false
       description: Represents a billing amount breakdown for a subscription.
+    SubscriptionCancelFlowDto:
+      required:
+        - subscription_id
+      type: object
+      properties:
+        subscription_id:
+          $ref: '#/components/schemas/FlakeId'
+      additionalProperties: false
+      description: Portal flow for cancelling a specific subscription
     SubscriptionChangeAmountDto:
       required:
         - currency
@@ -17906,6 +18033,15 @@ components:
           readOnly: true
       additionalProperties: false
       description: Represents a line item within a subscription.
+    SubscriptionPaymentMethodUpdateFlowDto:
+      required:
+        - subscription_id
+      type: object
+      properties:
+        subscription_id:
+          $ref: '#/components/schemas/FlakeId'
+      additionalProperties: false
+      description: Portal flow for updating the payment method of a specific subscription
     SubscriptionStatusDto:
       enum:
         - invalid
@@ -19532,6 +19668,7 @@ tags:
   - name: checkout
   - name: coupons
   - name: custom-variables
+  - name: customer_portal_sessions
   - name: customers
   - name: data-migrations
   - name: delivery

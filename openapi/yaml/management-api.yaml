@@ -10064,6 +10064,12 @@ components:
             - string
           description: "The card description.\nOnly available internally."
           example: Visa Signature
+        brand_product:
+          type:
+            - 'null'
+            - string
+          description: "The card product code.\nOnly available internally."
+          example: F
         wallet:
           $ref: '#/components/schemas/CardWalletDto'
       additionalProperties: false

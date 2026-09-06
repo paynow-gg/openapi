@@ -18254,6 +18254,7 @@ components:
         - tax_volume
         - gateway_fee_volume
         - platform_fee_volume
+        - refund_volume
       type: string
     TimeSeriesChartSeriesDto:
       required:

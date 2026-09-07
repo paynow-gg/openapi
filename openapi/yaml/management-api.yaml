@@ -1262,6 +1262,100 @@ paths:
                 $ref: '#/components/schemas/PayNowError'
       security:
         - APIKey: [ ]
+  '/v1/stores/{storeId}/dashboard/search':
+    get:
+      tags:
+        - dashboard
+      operationId: Dashboard_SearchDashboard
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: query
+          in: query
+          schema:
+            type: string
+        - name: search_hints
+          in: query
+          style: deepObject
+          schema:
+            type: object
+            additionalProperties:
+              type: string
+        - name: search_result_type
+          in: query
+          schema:
+            $ref: '#/components/schemas/DashboardSearchResultTypeDto'
+        - name: limit
+          in: query
+          description: The maximum number of items to return in a single request.
+          schema:
+            maximum: 100
+            minimum: 1
+            type: integer
+            format: int32
+        - name: after
+          in: query
+          description: "Returns items after the specified ID.\nUsed for forward pagination through results."
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+          example: 'null'
+        - name: before
+          in: query
+          description: "Returns items before the specified ID.\nUsed for backward pagination through results."
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+          example: 'null'
+        - name: asc
+          in: query
+          description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchDashboardResponseDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/dashboard/search-hints':
+    get:
+      tags:
+        - dashboard
+      operationId: Dashboard_GetDashboardSearchHints
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DashboardSearchHintDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
   '/v1/stores/{storeId}/data-migrations':
     get:
       tags:
@@ -9883,6 +9977,18 @@ components:
         invalid: No referer type specified. This value is typically used as a default or uninitialized state.
         first_referer: The first affiliate link the customer followed is credited.
         last_referer: The most recent affiliate link the customer followed is credited.
+    AffiliateLinkResult:
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        affiliate_link:
+          $ref: '#/components/schemas/AffiliateLinkDto'
+      additionalProperties: false
     AlipayDetailsDto:
       type: object
       properties:
@@ -9951,6 +10057,18 @@ components:
           $ref: '#/components/schemas/BanType'
         ban_type_value:
           type: string
+      additionalProperties: false
+    BanResult:
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        ban:
+          $ref: '#/components/schemas/BanDto'
       additionalProperties: false
     BanType:
       enum:
@@ -10417,6 +10535,18 @@ components:
         all: List all coupons.
         manual: Coupon's that were created by a user.
         generated: 'Coupon''s that were created by the system (basket recover, etc.).'
+    CouponResult:
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        coupon:
+          $ref: '#/components/schemas/CouponDto'
+      additionalProperties: false
     CreateAffiliateLinkDto:
       required:
         - wallet_id
@@ -11451,6 +11581,19 @@ components:
         minecraft_bedrock_name: Minecraft Bedrock Profile Platform - the ID param must be a Bedrock minecraft nick.
         xbox_xuid: Minecraft Xbox XUID Profile Platform - the ID param must be an xbox xuid
         minecraft_uuid: Minecraft profile platform - the ID param must be a Minecraft UUID.
+    CustomerResult:
+      required:
+        - customer
+        - id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        customer:
+          $ref: '#/components/schemas/CustomerDto'
+      additionalProperties: false
     CustomerSortFieldDto_V2:
       enum:
         - unspecified
@@ -11609,6 +11752,40 @@ components:
           type: string
           description: The generated Customer token.
       additionalProperties: false
+    DashboardSearchHintDto:
+      required:
+        - description
+        - example
+        - prefix
+      type: object
+      properties:
+        prefix:
+          type: string
+        example:
+          type: string
+        description:
+          type: string
+      additionalProperties: false
+    DashboardSearchResultTypeDto:
+      enum:
+        - unknown
+        - orders
+        - trials
+        - subscriptions
+        - customers
+        - coupons
+        - gameservers
+        - products
+        - sales
+        - api_keys
+        - bans
+        - affiliate_links
+        - tags
+        - giftcards
+        - stores
+        - users
+        - tickets
+      type: string
     DashboardStatsDto:
       required:
         - average_spend_amount
@@ -12541,6 +12718,18 @@ components:
             - 'null'
             - string
       additionalProperties: false
+    GameserverResult:
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        gameserver:
+          $ref: '#/components/schemas/GameServerDto'
+      additionalProperties: false
     GetDimensionStatsResponseDto_V2:
       required:
         - dimension_type
@@ -12667,6 +12856,18 @@ components:
           $ref: '#/components/schemas/ActorDto'
       additionalProperties: false
       description: Represents a gift card in the PayNow system.
+    GiftcardResult:
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        giftcard:
+          $ref: '#/components/schemas/GiftCardDto'
+      additionalProperties: false
     GlobalCommandDto:
       required:
         - content
@@ -13795,6 +13996,18 @@ components:
           format: int64
       additionalProperties: false
       description: Represents an order line-level payout split.
+    OrderResult:
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        order:
+          $ref: '#/components/schemas/OrderDto'
+      additionalProperties: false
     OrderStatus:
       enum:
         - created
@@ -14586,6 +14799,12 @@ components:
       additionalProperties: false
     PaymentMethodTypeFeeOverrideDto:
       required:
+        - begins_at
+        - card_brands
+        - card_funding_types
+        - card_networks
+        - card_product_categories
+        - card_regulated_statuses
         - countries
         - fee_cents
         - fee_percentage
@@ -14601,6 +14820,36 @@ components:
           type: array
           items:
             type: string
+        card_brands:
+          type: array
+          items:
+            type: string
+        card_networks:
+          type: array
+          items:
+            type: string
+        card_funding_types:
+          type: array
+          items:
+            type: string
+        card_regulated_statuses:
+          type: array
+          items:
+            type: string
+        card_product_categories:
+          type: array
+          items:
+            type: string
+        fee_schedule_id:
+          $ref: '#/components/schemas/FlakeId'
+        begins_at:
+          type: string
+          format: date-time
+        ends_at:
+          type:
+            - 'null'
+            - string
+          format: date-time
       additionalProperties: false
     PaymentPayoutSplitResultDto:
       required:
@@ -15449,6 +15698,22 @@ components:
         - week
         - month
       type: string
+    ProductResult:
+      required:
+        - id
+        - total
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        total:
+          type: integer
+          format: int64
+        product:
+          $ref: '#/components/schemas/ProductDto'
+      additionalProperties: false
     ProductStockAvailableDto:
       required:
         - customer_available
@@ -16302,6 +16567,18 @@ components:
         - forever
         - repeating
       type: string
+    SaleResult:
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        sale:
+          $ref: '#/components/schemas/SaleDto'
+      additionalProperties: false
     SalesTaxJurisdictionDto:
       required:
         - name
@@ -16346,6 +16623,132 @@ components:
           description: 'The rate at which the tax is applied, formatted as a string.'
       additionalProperties: false
       description: Object representing a specific tax within a sales tax jurisdiction.
+    SearchDashboardResponseDto:
+      required:
+        - affiliate_links
+        - bans
+        - coupons
+        - customers
+        - facets
+        - gameservers
+        - giftcards
+        - orders
+        - products
+        - sales
+        - stores
+        - subscriptions
+        - tags
+        - trials
+      type: object
+      properties:
+        stores:
+          type: array
+          items:
+            $ref: '#/components/schemas/StoreResult'
+        customers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerResult'
+        orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderResult'
+        gameservers:
+          type: array
+          items:
+            $ref: '#/components/schemas/GameserverResult'
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductResult'
+        coupons:
+          type: array
+          items:
+            $ref: '#/components/schemas/CouponResult'
+        sales:
+          type: array
+          items:
+            $ref: '#/components/schemas/SaleResult'
+        giftcards:
+          type: array
+          items:
+            $ref: '#/components/schemas/GiftcardResult'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagsResult'
+        affiliate_links:
+          type: array
+          items:
+            $ref: '#/components/schemas/AffiliateLinkResult'
+        trials:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrialResult'
+        subscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionResult'
+        bans:
+          type: array
+          items:
+            $ref: '#/components/schemas/BanResult'
+        facets:
+          type: object
+          properties:
+            unknown:
+              type: integer
+              format: int64
+            orders:
+              type: integer
+              format: int64
+            trials:
+              type: integer
+              format: int64
+            subscriptions:
+              type: integer
+              format: int64
+            customers:
+              type: integer
+              format: int64
+            coupons:
+              type: integer
+              format: int64
+            gameservers:
+              type: integer
+              format: int64
+            products:
+              type: integer
+              format: int64
+            sales:
+              type: integer
+              format: int64
+            api_keys:
+              type: integer
+              format: int64
+            bans:
+              type: integer
+              format: int64
+            affiliate_links:
+              type: integer
+              format: int64
+            tags:
+              type: integer
+              format: int64
+            giftcards:
+              type: integer
+              format: int64
+            stores:
+              type: integer
+              format: int64
+            users:
+              type: integer
+              format: int64
+            tickets:
+              type: integer
+              format: int64
+          additionalProperties: false
+      additionalProperties: false
     SetDiscordActionDto:
       required:
         - action_type
@@ -16768,6 +17171,19 @@ components:
         - payments_disabled
         - payouts_disabled
       type: string
+    StoreResult:
+      required:
+        - id
+        - store
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        store:
+          $ref: '#/components/schemas/StoreDto'
+      additionalProperties: false
     StoreTrustDto:
       required:
         - created_at
@@ -18048,6 +18464,18 @@ components:
           $ref: '#/components/schemas/FlakeId'
       additionalProperties: false
       description: Portal flow for updating the payment method of a specific subscription
+    SubscriptionResult:
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        subscription:
+          $ref: '#/components/schemas/SubscriptionDto'
+      additionalProperties: false
     SubscriptionStatusDto:
       enum:
         - invalid
@@ -18142,6 +18570,18 @@ components:
           format: date-time
         updated_by:
           $ref: '#/components/schemas/ActorDto'
+      additionalProperties: false
+    TagsResult:
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        tag:
+          $ref: '#/components/schemas/TagDto'
       additionalProperties: false
     TierGroupDto:
       required:
@@ -18484,6 +18924,18 @@ components:
           format: date-time
         deleted_by:
           $ref: '#/components/schemas/ActorDto'
+      additionalProperties: false
+    TrialResult:
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        trial:
+          $ref: '#/components/schemas/TrialDto'
       additionalProperties: false
     TrialStatusDto:
       enum:
@@ -19677,6 +20129,7 @@ tags:
   - name: custom-variables
   - name: customer_portal_sessions
   - name: customers
+  - name: dashboard
   - name: data-migrations
   - name: delivery
   - name: discord

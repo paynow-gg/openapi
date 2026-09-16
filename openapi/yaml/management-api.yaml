@@ -446,6 +446,159 @@ paths:
                 $ref: '#/components/schemas/PayNowError'
       security:
         - APIKey: [ ]
+  '/v1/stores/{storeId}/checkout-style':
+    get:
+      tags:
+        - checkout-style
+      summary: Get store checkout style
+      description: Retrieves the checkout styling for the store.
+      operationId: StoreCheckoutStyle_GetStoreCheckoutStyle
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutStyleDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    patch:
+      tags:
+        - checkout-style
+      summary: Update store checkout style
+      description: Updates the stores checkout style.
+      operationId: StoreCheckoutStyle_UpdateStoreCheckoutStyle
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCheckoutStyleDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCheckoutStyleDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UpdateCheckoutStyleDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutStyleDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/checkout-style/background-image/upload_url':
+    get:
+      tags:
+        - checkout-style
+      summary: Get upload URL for checkout background image
+      description: Gets a pre-signed upload URL for uploading the hosted checkout background image.
+      operationId: StoreCheckoutStyle_GetStoreCheckoutStyleBackgroundImageUploadUrl
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCheckoutStyleBackgroundImageUploadUrlResponseDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/checkout-style/background-image/upload_finish':
+    post:
+      tags:
+        - checkout-style
+      summary: Finish checkout background image upload
+      description: Finishes an upload of the hosted checkout background image.
+      operationId: StoreCheckoutStyle_FinishStoreCheckoutStyleBackgroundImageUpload
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FinishCheckoutStyleBackgroundImageUploadRequestDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/FinishCheckoutStyleBackgroundImageUploadRequestDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/FinishCheckoutStyleBackgroundImageUploadRequestDto'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/checkout-style/background-image':
+    delete:
+      tags:
+        - checkout-style
+      summary: Delete checkout background image
+      description: Removes the hosted checkout background image for the store.
+      operationId: StoreCheckoutStyle_DeleteStoreCheckoutStyleBackgroundImage
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
   '/v1/stores/{storeId}/coupons':
     post:
       tags:
@@ -3534,6 +3687,135 @@ paths:
                 $ref: '#/components/schemas/PayNowError'
       security:
         - APIKey: [ ]
+  '/v1/stores/{storeId}/invites':
+    get:
+      tags:
+        - invites
+      summary: Get invites
+      description: Retrieves all store member invites for the specified store.
+      operationId: Invites_GetInvites
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InviteDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    post:
+      tags:
+        - invites
+      summary: Create an invite
+      description: Invites a user to join the store with the specified role.
+      operationId: Invites_CreateInvite
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateInviteDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CreateInviteDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/CreateInviteDto'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InviteDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/invites/{inviteId}':
+    get:
+      tags:
+        - invites
+      summary: Get an invite
+      description: Retrieves a single store member invite.
+      operationId: Invites_GetInvite
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: inviteId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InviteDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    delete:
+      tags:
+        - invites
+      summary: Cancel an invite
+      description: Cancels a pending store member invite.
+      operationId: Invites_CancelInvite
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: inviteId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
   '/v1/stores/{storeId}/invoices':
     get:
       tags:
@@ -5390,6 +5672,108 @@ paths:
                 $ref: '#/components/schemas/PayNowError'
       security:
         - APIKey: [ ]
+  '/v1/stores/{storeId}/products/{productId}/image-upload-url':
+    get:
+      tags:
+        - products
+      summary: Get upload URL for product image
+      description: Gets a pre-signed upload URL for uploading an image to a product.
+      operationId: Products_GetProductImageUploadUrl
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: productId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetProductImageUploadUrlResponseDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/products/{productId}/image-upload-finish':
+    post:
+      tags:
+        - products
+      summary: Finish product image upload
+      description: 'Finishes an image upload for a product, attaching the uploaded image to the product.'
+      operationId: Products_FinishProductImageUpload
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: productId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FinishProductImageUploadRequestDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/FinishProductImageUploadRequestDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/FinishProductImageUploadRequestDto'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/products/{productId}/image':
+    delete:
+      tags:
+        - products
+      summary: Delete product image
+      description: Deletes the image for a product.
+      operationId: Products_DeleteProductImage
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: productId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
   '/v1/stores/{storeId}/products/{productId}/pricing/regions':
     get:
       tags:
@@ -5552,6 +5936,196 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ProductPricingRegionGroupDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/roles':
+    get:
+      tags:
+        - roles
+      operationId: Roles_GetRoles
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoleDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    post:
+      tags:
+        - roles
+      operationId: Roles_CreateRole
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRoleDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CreateRoleDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/CreateRoleDto'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/roles/permissions':
+    get:
+      tags:
+        - roles
+      operationId: Roles_GetAvailablePermissions
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AvailablePermissionDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/roles/{roleId}':
+    get:
+      tags:
+        - roles
+      operationId: Roles_GetRole
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: roleId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    patch:
+      tags:
+        - roles
+      operationId: Roles_UpdateRole
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: roleId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRoleDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRoleDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UpdateRoleDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    delete:
+      tags:
+        - roles
+      operationId: Roles_DeleteRole
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: roleId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '204':
+          description: No Content
         default:
           description: Error response
           content:
@@ -8332,6 +8906,98 @@ paths:
                 $ref: '#/components/schemas/PayNowError'
       security:
         - APIKey: [ ]
+  '/v1/stores/{storeId}/logo-upload-url':
+    get:
+      tags:
+        - store
+      summary: Get upload URL for store logo
+      description: Gets a pre-signed upload URL for uploading a logo to a store.
+      operationId: Store_GetStoreLogoUploadUrl
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetStoreLogoUploadUrlResponseDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/logo-upload-finish':
+    post:
+      tags:
+        - store
+      summary: Finish store logo upload
+      description: 'Finishes a logo upload for a store, attaching the uploaded image to the store.'
+      operationId: Store_FinishStoreLogoUpload
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FinishStoreLogoUploadRequestDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/FinishStoreLogoUploadRequestDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/FinishStoreLogoUploadRequestDto'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/logo':
+    delete:
+      tags:
+        - store
+      summary: Delete store logo
+      description: Deletes a logo for a store.
+      operationId: Store_DeleteStoreLogo
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: type
+          in: query
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
   '/v1/stores/{storeId}/subscriptions':
     get:
       tags:
@@ -10006,6 +10672,20 @@ components:
           example: fingerprint_xyz789
       additionalProperties: false
       description: Alipay payment method details
+    AvailablePermissionDto:
+      required:
+        - description
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+      additionalProperties: false
     BanDto:
       required:
         - created_at
@@ -10298,6 +10978,51 @@ components:
           description: Checkout URL to redirect to for on-session payments.
       additionalProperties: false
       description: Payment outcome information returned after a subscription change triggers an immediate charge.
+    CheckoutStyleDto:
+      required:
+        - store_id
+      type: object
+      properties:
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        font_family:
+          type:
+            - 'null'
+            - string
+        border_radius:
+          type:
+            - 'null'
+            - integer
+          format: int32
+        color_primary:
+          type:
+            - 'null'
+            - string
+        color_elements:
+          type:
+            - 'null'
+            - string
+        color_input:
+          type:
+            - 'null'
+            - string
+        color_background:
+          type:
+            - 'null'
+            - string
+        color_text:
+          type:
+            - 'null'
+            - string
+        color_outline:
+          type:
+            - 'null'
+            - string
+        url_background:
+          type:
+            - 'null'
+            - string
+      additionalProperties: false
     CommandAttemptDto:
       required:
         - command
@@ -10774,6 +11499,28 @@ components:
           description: The URL to redirect the customer to complete checkout
       additionalProperties: false
       description: Response after creating a checkout session
+    CreateCheckoutStyleDto:
+      type: object
+      properties:
+        font_family:
+          type: string
+        border_radius:
+          type:
+            - 'null'
+            - integer
+          format: int32
+        color_primary:
+          type: string
+        color_elements:
+          type: string
+        color_input:
+          type: string
+        color_background:
+          type: string
+        color_text:
+          type: string
+        color_outline:
+          type: string
     CreateCouponDto:
       required:
         - enabled
@@ -10863,12 +11610,8 @@ components:
       properties:
         flow:
           $ref: '#/components/schemas/CustomerPortalSessionFlowDto'
-        expires_in_seconds:
-          type:
-            - 'null'
-            - integer
-          description: 'How long the portal session stays valid, in seconds. When unset, a default expiry is used.'
-          format: int64
+        expires_in:
+          $ref: '#/components/schemas/Period'
         return_url:
           type:
             - 'null'
@@ -10965,6 +11708,16 @@ components:
             - 'null'
             - string
           format: date-time
+    CreateInviteDto:
+      required:
+        - role_id
+        - user_email
+      type: object
+      properties:
+        role_id:
+          $ref: '#/components/schemas/FlakeId'
+        user_email:
+          type: string
     CreateNavLinkDto:
       required:
         - tag_id
@@ -11006,6 +11759,20 @@ components:
             - boolean
           description: "Determines if the refund should be taken from the connected user's balance.\nOnly relevant for connected platforms."
       additionalProperties: false
+    CreateRoleDto:
+      required:
+        - name
+        - description
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        permissions:
+          type: object
+          additionalProperties:
+            type: boolean
     CreateSaleDto:
       required:
         - enabled
@@ -12520,6 +13287,14 @@ components:
             - 'null'
             - string
       additionalProperties: false
+    FinishCheckoutStyleBackgroundImageUploadRequestDto:
+      required:
+        - image_id
+      type: object
+      properties:
+        image_id:
+          type: string
+      additionalProperties: false
     FinishEmailBrandingImageUploadRequestDto:
       required:
         - dark_mode
@@ -12530,6 +13305,29 @@ components:
           type: string
         dark_mode:
           type: boolean
+      additionalProperties: false
+    FinishProductImageUploadRequestDto:
+      required:
+        - image_id
+      type: object
+      properties:
+        image_id:
+          type: string
+          description: The ID of the uploaded image returned by the server.
+      additionalProperties: false
+    FinishStoreLogoUploadRequestDto:
+      required:
+        - image_id
+        - logo_type
+      type: object
+      properties:
+        image_id:
+          type: string
+          description: The ID of the uploaded image returned by the server.
+        logo_type:
+          type: integer
+          description: 'Which logo the upload replaces. 1 is the default logo, 2 the square logo.'
+          format: int32
       additionalProperties: false
     FinishTagImageUploadUrlRequestDto:
       required:
@@ -12730,6 +13528,17 @@ components:
         gameserver:
           $ref: '#/components/schemas/GameServerDto'
       additionalProperties: false
+    GetCheckoutStyleBackgroundImageUploadUrlResponseDto:
+      required:
+        - id
+        - upload_url
+      type: object
+      properties:
+        id:
+          type: string
+        upload_url:
+          type: string
+      additionalProperties: false
     GetDimensionStatsResponseDto_V2:
       required:
         - dimension_type
@@ -12769,6 +13578,32 @@ components:
           type: string
         image_id:
           type: string
+      additionalProperties: false
+    GetProductImageUploadUrlResponseDto:
+      required:
+        - id
+        - upload_url
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the direct image upload URL.
+        upload_url:
+          type: string
+          description: The URL to upload the image to.
+      additionalProperties: false
+    GetStoreLogoUploadUrlResponseDto:
+      required:
+        - id
+        - upload_url
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the direct image upload URL.
+        upload_url:
+          type: string
+          description: The URL to upload the logo to.
       additionalProperties: false
     GetTagImageUploadUrlResponseDto:
       required:
@@ -13194,6 +14029,52 @@ components:
         total_earnings:
           type: integer
           format: int64
+      additionalProperties: false
+    InviteDto:
+      required:
+        - created_at
+        - created_by
+        - id
+        - role_id
+        - store_id
+        - token
+        - user_email
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        token:
+          type: string
+          description: The token the invited user redeems to accept the invite.
+        role_id:
+          $ref: '#/components/schemas/FlakeId'
+        user_email:
+          type: string
+          description: The email address the invite was sent to.
+        created_by:
+          $ref: '#/components/schemas/ActorDto'
+        created_at:
+          type: string
+          description: When the invite was created.
+          format: date-time
+        updated_by:
+          $ref: '#/components/schemas/ActorDto'
+        updated_at:
+          type:
+            - 'null'
+            - string
+          description: When the invite was last updated.
+          format: date-time
+        accepted_at:
+          type:
+            - 'null'
+            - string
+          description: When the invite was accepted. Unset while the invite is still pending.
+          format: date-time
+        accepted_by_user:
+          $ref: '#/components/schemas/ActorDto'
       additionalProperties: false
     InvoiceDownloadUrlResponseDto:
       required:
@@ -16472,6 +17353,43 @@ components:
         - gross_excluding_taxes
         - net
       type: string
+    RoleDto:
+      required:
+        - created_at
+        - created_by
+        - description
+        - id
+        - name
+        - store_id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        name:
+          type: string
+        description:
+          type: string
+        permissions:
+          type:
+            - 'null'
+            - object
+          additionalProperties:
+            type: boolean
+        created_by:
+          $ref: '#/components/schemas/ActorDto'
+        created_at:
+          type: string
+          format: date-time
+        updated_by:
+          $ref: '#/components/schemas/ActorDto'
+        updated_at:
+          type:
+            - 'null'
+            - string
+          format: date-time
+      additionalProperties: false
     SaleDiscountTypeDto:
       enum:
         - percent
@@ -19189,6 +20107,28 @@ components:
             $ref: '#/components/schemas/AffiliateLinkCommissionAmountStepDto'
         last_commission_amount_step_repeats:
           type: boolean
+    UpdateCheckoutStyleDto:
+      type: object
+      properties:
+        font_family:
+          type: string
+        border_radius:
+          type:
+            - 'null'
+            - integer
+          format: int32
+        color_primary:
+          type: string
+        color_elements:
+          type: string
+        color_input:
+          type: string
+        color_background:
+          type: string
+        color_text:
+          type: string
+        color_outline:
+          type: string
     UpdateCouponDto:
       type: object
       properties:
@@ -19313,6 +20253,13 @@ components:
             - 'null'
             - string
           format: date-time
+    UpdateInviteDto:
+      type: object
+      properties:
+        role_id:
+          $ref: '#/components/schemas/FlakeId'
+        user_email:
+          type: string
     UpdateNavLinkDto:
       type: object
       properties:
@@ -19348,6 +20295,17 @@ components:
             $ref: '#/components/schemas/FlakeId'
           description: An array of product IDs in the order that they should be sorted.
       additionalProperties: false
+    UpdateRoleDto:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        permissions:
+          type: object
+          additionalProperties:
+            type: boolean
     UpdateSaleDto:
       type: object
       properties:
@@ -20125,6 +21083,7 @@ tags:
   - name: affiliate-links
   - name: bans
   - name: checkout
+  - name: checkout-style
   - name: coupons
   - name: custom-variables
   - name: customer_portal_sessions
@@ -20137,6 +21096,7 @@ tags:
   - name: game-servers
   - name: giftcards
   - name: global-commands
+  - name: invites
   - name: invoices
   - name: marketing
   - name: navlinks
@@ -20147,6 +21107,7 @@ tags:
   - name: product-dependent-migrations
   - name: products
   - name: regional-pricing
+  - name: roles
   - name: sales
   - name: stats
   - name: store

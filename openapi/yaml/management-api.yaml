@@ -407,6 +407,316 @@ paths:
                 $ref: '#/components/schemas/PayNowError'
       security:
         - APIKey: [ ]
+  '/v1/stores/{storeId}/billing/plans':
+    get:
+      tags:
+        - billing
+      summary: Get available plans
+      description: Retrieves the plans a store can subscribe to.
+      operationId: StoreBilling_GetPublicPlans
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlanPreviewDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/billing/plans/change':
+    post:
+      tags:
+        - billing
+      summary: Change subscription plan
+      description: "Moves the store onto a different plan. When the change needs paying for, the response\ncarries a 'session_url' the store owner must complete."
+      operationId: StoreBilling_ChangeSubscriptionPlan
+      parameters:
+        - name: storeId
+          in: path
+          description: The ID of the store to change the plan for.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        description: The plan to move onto and how often it should renew.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeSubscriptionPlanDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ChangeSubscriptionPlanDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ChangeSubscriptionPlanDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutSessionDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/billing/plans/continue':
+    post:
+      tags:
+        - billing
+      summary: Continue current subscription
+      description: 'Cancels a pending downgrade or cancellation, keeping the store on its current plan.'
+      operationId: StoreBilling_ContinueCurrentSubscription
+      parameters:
+        - name: storeId
+          in: path
+          description: The ID of the store to keep on its current plan.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/billing/payment-method/change':
+    post:
+      tags:
+        - billing
+      summary: Change subscription payment method
+      description: Starts a session for the store owner to replace the card the subscription is billed to.
+      operationId: StoreBilling_ChangeSubscriptionPaymentMethod
+      parameters:
+        - name: storeId
+          in: path
+          description: The ID of the store to change the payment method for.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutSessionDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/billing/details':
+    get:
+      tags:
+        - billing
+      summary: Get billing details
+      description: Retrieves the billing address and tax details the store is invoiced under.
+      operationId: StoreBilling_GetStoreBillingDetails
+      parameters:
+        - name: storeId
+          in: path
+          description: The ID of the store to retrieve billing details for.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoreBillingDetailsDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    put:
+      tags:
+        - billing
+      summary: Update billing details
+      description: Replaces the billing address and tax details the store is invoiced under.
+      operationId: StoreBilling_UpdateStoreBillingDetails
+      parameters:
+        - name: storeId
+          in: path
+          description: The ID of the store to update billing details for.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        description: The billing address and tax details to store.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreBillingDetailsDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/StoreBillingDetailsDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/StoreBillingDetailsDto'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/billing/invoices':
+    get:
+      tags:
+        - billing
+      summary: Get subscription invoices
+      description: Retrieves the invoices raised against the store's own subscription.
+      operationId: StoreBilling_GetStoreInvoices
+      parameters:
+        - name: storeId
+          in: path
+          description: The ID of the store to retrieve invoices for.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: limit
+          in: query
+          description: The maximum number of items to return in a single request.
+          schema:
+            maximum: 100
+            minimum: 1
+            type: integer
+            format: int32
+        - name: after
+          in: query
+          description: "Returns items after the specified ID.\nUsed for forward pagination through results."
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+          example: 'null'
+        - name: before
+          in: query
+          description: "Returns items before the specified ID.\nUsed for backward pagination through results."
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+          example: 'null'
+        - name: asc
+          in: query
+          description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StoreInvoiceDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/billing/invoices/{invoiceId}/url':
+    get:
+      tags:
+        - billing
+      summary: Get invoice URL
+      description: "Issues a fresh link to the hosted invoice. Prefer this over the 'invoice_url' carried by\nthe invoice list, which is recorded once and may have expired."
+      operationId: StoreBilling_GetStoreInvoiceUrl
+      parameters:
+        - name: storeId
+          in: path
+          description: The ID of the store the invoice belongs to.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: invoiceId
+          in: path
+          description: The ID of the invoice to link to.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceUrlDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/billing/status':
+    get:
+      tags:
+        - billing
+      summary: Get billing status
+      description: 'Retrieves the store''s plan, limits, feature flags and subscription state.'
+      operationId: StoreBilling_GetStoreBillingStatus
+      parameters:
+        - name: storeId
+          in: path
+          description: The ID of the store to retrieve billing status for.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoreBillingStatusDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
   '/v1/stores/{storeId}/checkouts':
     post:
       tags:
@@ -10323,6 +10633,1125 @@ paths:
                 $ref: '#/components/schemas/PayNowError'
       security:
         - APIKey: [ ]
+  '/v1/webstores/{storeId}/modules':
+    get:
+      tags:
+        - webstore
+      operationId: WebstoreModules_GetWebstoreModules
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WebstoreModuleDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    put:
+      tags:
+        - webstore
+      operationId: WebstoreModules_CreateWebstoreModule
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWebstoreModuleDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CreateWebstoreModuleDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/CreateWebstoreModuleDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebstoreModuleDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/webstores/{storeId}/modules/{moduleId}':
+    put:
+      tags:
+        - webstore
+      operationId: WebstoreModules_UpdateWebstoreModule
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: moduleId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWebstoreModuleDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CreateWebstoreModuleDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/CreateWebstoreModuleDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebstoreModuleDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    delete:
+      tags:
+        - webstore
+      operationId: WebstoreModules_DeleteWebstoreModule
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: moduleId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/webstores/{storeId}':
+    get:
+      tags:
+        - webstore
+      operationId: Webstores_GetWebstore
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebstoreDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/webstores/{storeId}/set-default-template':
+    post:
+      tags:
+        - webstore
+      operationId: Webstores_SetWebstoreDefaultTemplate
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetWebstoreDefaultTemplateRequestDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SetWebstoreDefaultTemplateRequestDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/SetWebstoreDefaultTemplateRequestDto'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/webstores/{storeId}/set-slug':
+    post:
+      tags:
+        - webstore
+      operationId: Webstores_SetWebstoreSlug
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetWebstoreSlugRequestDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SetWebstoreSlugRequestDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/SetWebstoreSlugRequestDto'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/webstores/{storeId}/custom-domain':
+    get:
+      tags:
+        - webstore
+      operationId: Webstores_GetWebstoreCustomDomain
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebstoreCustomDomainDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    post:
+      tags:
+        - webstore
+      operationId: Webstores_SetWebstoreCustomDomain
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetWebstoreCustomDomainRequestDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SetWebstoreCustomDomainRequestDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/SetWebstoreCustomDomainRequestDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebstoreCustomDomainDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    delete:
+      tags:
+        - webstore
+      operationId: Webstores_DeleteWebstoreCustomDomain
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/webstores/{storeId}/custom-domain/verify':
+    post:
+      tags:
+        - webstore
+      operationId: Webstores_VerifyWebstoreCustomDomain
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/webstores/{storeId}/templates/{templateId}/files':
+    get:
+      tags:
+        - webstore
+      operationId: WebstoreTemplateFiles_GetWebstoreTemplateFiles
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WebstoreTemplateFileDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    put:
+      tags:
+        - webstore
+      operationId: WebstoreTemplateFiles_CreateWebstoreTemplateFile
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWebstoreTemplateFileDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CreateWebstoreTemplateFileDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/CreateWebstoreTemplateFileDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebstoreTemplateFileDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/webstores/{storeId}/templates/{templateId}/files/{templateFileId}':
+    get:
+      tags:
+        - webstore
+      operationId: WebstoreTemplateFiles_GetWebstoreTemplateFile
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateFileId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebstoreTemplateFileDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    put:
+      tags:
+        - webstore
+      operationId: WebstoreTemplateFiles_UpdateWebstoreTemplateFile
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateFileId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateWebstoreTemplateFileRequestDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UpdateWebstoreTemplateFileRequestDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UpdateWebstoreTemplateFileRequestDto'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    delete:
+      tags:
+        - webstore
+      operationId: WebstoreTemplateFiles_DeleteWebstoreTemplateFile
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateFileId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/webstores/{storeId}/templates':
+    get:
+      tags:
+        - webstore
+      operationId: WebstoreTemplates_GetWebstoreTemplates
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WebstoreTemplateDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    put:
+      tags:
+        - webstore
+      operationId: WebstoreTemplates_CreateWebstoreTemplate
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWebstoreTemplateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CreateWebstoreTemplateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/CreateWebstoreTemplateDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebstoreTemplateDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/webstores/{storeId}/templates/{templateId}':
+    get:
+      tags:
+        - webstore
+      operationId: WebstoreTemplates_GetWebstoreTemplate
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: include
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebstoreTemplateDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    put:
+      tags:
+        - webstore
+      operationId: WebstoreTemplates_UpdateWebstoreTemplate
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWebstoreTemplateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CreateWebstoreTemplateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/CreateWebstoreTemplateDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebstoreTemplateDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    delete:
+      tags:
+        - webstore
+      operationId: WebstoreTemplates_DeleteWebstoreTemplate
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/webstores/{storeId}/templates/{templateId}/update':
+    get:
+      tags:
+        - webstore
+      operationId: WebstoreTemplates_GetWebstoreTemplateLatestVersion
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebstoreTemplateLatestVersionDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    post:
+      tags:
+        - webstore
+      operationId: WebstoreTemplates_DownloadWebstoreTemplateUpdate
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/webstores/{storeId}/templates/{templateId}/schema':
+    get:
+      tags:
+        - webstore
+      operationId: WebstoreTemplates_GetWebstoreTemplateSchema
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebstoreTemplateSchemaDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/webstores/{storeId}/templates/{templateId}/schema/variables':
+    put:
+      tags:
+        - webstore
+      operationId: WebstoreTemplates_UpdateWebstoreTemplateSchemaVariables
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: { }
+          text/json:
+            schema:
+              type: object
+              additionalProperties: { }
+          application/*+json:
+            schema:
+              type: object
+              additionalProperties: { }
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/webstores/{storeId}/templates/{templateId}/duplicate':
+    post:
+      tags:
+        - webstore
+      operationId: WebstoreTemplates_DuplicateWebstoreTemplate
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebstoreTemplateDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/webstores/{storeId}/templates/{templateId}/archive':
+    get:
+      tags:
+        - webstore
+      operationId: WebstoreTemplates_GetWebstoreTemplateArchive
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetWebstoreTemplateArchiveResponseDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/webstores/{storeId}/templates/{templateId}/upload_url':
+    get:
+      tags:
+        - webstore
+      operationId: WebstoreTemplates_GetWebstoreTemplateUploadUrl
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: content_length
+          in: query
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetWebstoreTemplateUploadUrlResponseDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/webstores/{storeId}/templates/{templateId}/upload_finish':
+    post:
+      tags:
+        - webstore
+      operationId: WebstoreTemplates_FinishWebstoreTemplateUpload
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinishWebstoreTemplateUploadResponseDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/webstores/{storeId}/templates/{templateId}/preview':
+    get:
+      tags:
+        - webstore
+      operationId: WebstoreTemplates_PreviewWebstoreTemplate
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebstoreTemplatePreviewResponseDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/webstores/{storeId}/templates/{templateId}/variables':
+    get:
+      tags:
+        - webstore
+      operationId: WebstoreTemplateVariables_GetWebstoreTemplateVariables
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WebstoreTemplateVariableDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    put:
+      tags:
+        - webstore
+      operationId: WebstoreTemplateVariables_CreateWebstoreTemplateVariable
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWebstoreTemplateVariableDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CreateWebstoreTemplateVariableDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/CreateWebstoreTemplateVariableDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebstoreTemplateVariableDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/webstores/{storeId}/templates/{templateId}/variables/{templateVariableId}':
+    put:
+      tags:
+        - webstore
+      operationId: WebstoreTemplateVariables_UpdateWebstoreTemplateVariable
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateVariableId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWebstoreTemplateVariableDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CreateWebstoreTemplateVariableDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/CreateWebstoreTemplateVariableDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebstoreTemplateVariableDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    delete:
+      tags:
+        - webstore
+      operationId: WebstoreTemplateVariables_DeleteWebstoreTemplateVariable
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: templateVariableId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
 components:
   schemas:
     AbandonedCheckoutStoreConfigurationCommandDto:
@@ -10899,6 +12328,20 @@ components:
           example: $johndoe
       additionalProperties: false
       description: Cash App payment method details
+    ChangeSubscriptionPlanDto:
+      required:
+        - plan_id
+        - renewal_period
+      type: object
+      properties:
+        plan_id:
+          minLength: 1
+          type: string
+          description: The identifier of the plan to move the store onto.
+        renewal_period:
+          $ref: '#/components/schemas/SubscriptionRenewalPeriodDto'
+      additionalProperties: false
+      description: Represents a request to move a store onto a different plan.
     ChargebackCoverageTypeDto:
       enum:
         - unspecified
@@ -10978,6 +12421,21 @@ components:
           description: Checkout URL to redirect to for on-session payments.
       additionalProperties: false
       description: Payment outcome information returned after a subscription change triggers an immediate charge.
+    CheckoutSessionDto:
+      required:
+        - requires_payment
+      type: object
+      properties:
+        session_url:
+          type:
+            - 'null'
+            - string
+          description: "The URL the store owner is sent to in order to complete payment. Null when\n'requires_payment' is false."
+        requires_payment:
+          type: boolean
+          description: Whether the change needs a payment before it takes effect.
+      additionalProperties: false
+      description: Represents the outcome of a subscription change that may require the store owner to pay.
     CheckoutStyleDto:
       required:
         - store_id
@@ -11954,6 +13412,66 @@ components:
         discord_format:
           $ref: '#/components/schemas/WebhookDiscordFormatDto'
       additionalProperties: false
+    CreateWebstoreModuleDto:
+      required:
+        - enabled
+        - type
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        type:
+          type: string
+        settings:
+          type: 'null'
+        starts_at:
+          type:
+            - 'null'
+            - string
+          format: date-time
+        ends_at:
+          type:
+            - 'null'
+            - string
+          format: date-time
+    CreateWebstoreTemplateDto:
+      required:
+        - name
+        - compatibility_mode
+      type: object
+      properties:
+        name:
+          type: string
+        compatibility_mode:
+          $ref: '#/components/schemas/WebstoreTemplateCompatibilityModeDto'
+    CreateWebstoreTemplateFileDto:
+      required:
+        - file_name
+        - content_type
+      type: object
+      properties:
+        file_name:
+          type: string
+        content_type:
+          type: string
+        content:
+          type: string
+    CreateWebstoreTemplateVariableDto:
+      required:
+        - name
+        - variable
+        - type
+        - value
+      type: object
+      properties:
+        name:
+          type: string
+        variable:
+          type: string
+        type:
+          $ref: '#/components/schemas/WebstoreTemplateVariableTypeDto'
+        value:
+          type: string
     CryptoDetailsDto:
       required:
         - confirmations
@@ -13338,6 +14856,16 @@ components:
           type: string
           description: The ID of the uploaded image returned by the server.
       additionalProperties: false
+    FinishWebstoreTemplateUploadResponseDto:
+      required:
+        - failed_files
+      type: object
+      properties:
+        failed_files:
+          type: array
+          items:
+            type: string
+      additionalProperties: false
     FlakeId:
       type: string
       additionalProperties: false
@@ -13617,6 +15145,22 @@ components:
         upload_url:
           type: string
           description: The URL to upload the image to.
+      additionalProperties: false
+    GetWebstoreTemplateArchiveResponseDto:
+      required:
+        - download_url
+      type: object
+      properties:
+        download_url:
+          type: string
+      additionalProperties: false
+    GetWebstoreTemplateUploadUrlResponseDto:
+      required:
+        - upload_url
+      type: object
+      properties:
+        upload_url:
+          type: string
       additionalProperties: false
     GiftCardDto:
       required:
@@ -14184,6 +15728,16 @@ components:
         - invoice
         - credit_note
       type: string
+    InvoiceUrlDto:
+      required:
+        - url
+      type: object
+      properties:
+        url:
+          type: string
+          description: The hosted invoice URL.
+      additionalProperties: false
+      description: Represents a freshly issued link to a hosted invoice.
     KlarnaDetailsDto:
       type: object
       properties:
@@ -15919,6 +17473,101 @@ components:
           example: João Silva
       additionalProperties: false
       description: Pix payment method details
+    PlanDto:
+      required:
+        - id
+        - is_custom
+        - name
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type:
+            - 'null'
+            - string
+        is_custom:
+          type: boolean
+      additionalProperties: false
+    PlanPreviewDto:
+      required:
+        - id
+        - is_custom
+        - name
+        - platform_fee_rate
+        - subscription_price_monthly
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the plan.
+        name:
+          type: string
+          description: The display name of the plan.
+        description:
+          type:
+            - 'null'
+            - string
+          description: The description of the plan.
+        is_custom:
+          type: boolean
+          description: Whether the plan is negotiated for a specific store rather than publicly offered.
+        inherits_from_plan_id:
+          type:
+            - 'null'
+            - string
+          description: 'The identifier of the plan this one inherits its limits and feature flags from, if any.'
+        platform_fee_rate:
+          type: integer
+          description: 'The platform fee charged on the store''s revenue, in basis points.'
+          format: int64
+        subscription_price_monthly:
+          type: integer
+          description: 'The monthly subscription price, in the smallest currency unit.'
+          format: int64
+        subscription_price_annually:
+          type:
+            - 'null'
+            - integer
+          description: 'The annual subscription price, in the smallest currency unit, when the plan is billed annually.'
+          format: int64
+      additionalProperties: false
+      description: Represents a publicly listed plan a store can subscribe to.
+    PlanPricingDto:
+      required:
+        - begins_at
+        - id
+        - plan_id
+        - platform_fee_rate
+        - subscription_price_monthly
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        plan_id:
+          type: string
+        platform_fee_rate:
+          type: integer
+          format: int64
+        subscription_price_monthly:
+          type: integer
+          format: int64
+        subscription_price_annually:
+          type:
+            - 'null'
+            - integer
+          format: int64
+        begins_at:
+          type: string
+          format: date-time
+        ends_at:
+          type:
+            - 'null'
+            - string
+          format: date-time
+      additionalProperties: false
     PlatformCapability:
       enum:
         - invalid
@@ -17695,6 +19344,33 @@ components:
             - 'null'
             - string
       additionalProperties: false
+    SetWebstoreCustomDomainRequestDto:
+      required:
+        - domain
+        - verification_type
+      type: object
+      properties:
+        domain:
+          type: string
+        verification_type:
+          $ref: '#/components/schemas/WebstoreCustomDomainVerificationTypeDto'
+      additionalProperties: false
+    SetWebstoreDefaultTemplateRequestDto:
+      required:
+        - template_id
+      type: object
+      properties:
+        template_id:
+          $ref: '#/components/schemas/FlakeId'
+      additionalProperties: false
+    SetWebstoreSlugRequestDto:
+      required:
+        - slug
+      type: object
+      properties:
+        slug:
+          type: string
+      additionalProperties: false
     StartDataMigrationFromTebexRequestDto:
       required:
         - headless_token
@@ -17784,6 +19460,184 @@ components:
           description: The price of the item in the smallest currency unit
           format: int32
           example: 2500
+      additionalProperties: false
+    StoreAlertDto:
+      required:
+        - admin_visible
+        - created_at
+        - id
+        - metadata
+        - status
+        - store_id
+        - store_visible
+        - type
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        entity_id:
+          $ref: '#/components/schemas/FlakeId'
+        status:
+          $ref: '#/components/schemas/StoreAlertStatus'
+        type:
+          $ref: '#/components/schemas/StoreAlertType'
+        custom_title:
+          type:
+            - 'null'
+            - string
+        custom_message:
+          type:
+            - 'null'
+            - string
+        action_required_at:
+          type:
+            - 'null'
+            - string
+          format: date-time
+        action_link:
+          type:
+            - 'null'
+            - string
+        store_visible:
+          type: boolean
+        admin_visible:
+          type: boolean
+        resolved_by:
+          $ref: '#/components/schemas/FlakeId'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type:
+            - 'null'
+            - string
+          format: date-time
+        expires_at:
+          type:
+            - 'null'
+            - string
+          format: date-time
+        resolved_at:
+          type:
+            - 'null'
+            - string
+          format: date-time
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+      additionalProperties: false
+    StoreAlertStatus:
+      enum:
+        - info
+        - warning
+        - action_required
+        - resolved
+      type: string
+    StoreAlertType:
+      enum:
+        - other
+        - excessive_chargeback_rate
+        - kyc_required
+        - business_details_required
+        - increased_fraud_rate
+        - unsupported_product
+        - product_compliance_check
+        - integration_issue
+        - storefront_compliance
+        - support_inquiry
+        - feature_eligibility
+        - feature_enrolled
+      type: string
+    StoreBillingDetailsDto:
+      type: object
+      properties:
+        country:
+          type:
+            - 'null'
+            - string
+          description: The country of the billing address.
+        state:
+          type:
+            - 'null'
+            - string
+          description: The state or province of the billing address.
+        city:
+          type:
+            - 'null'
+            - string
+          description: The city of the billing address.
+        postal_code:
+          type:
+            - 'null'
+            - string
+          description: The postal code or zip code of the billing address.
+        line_1:
+          type:
+            - 'null'
+            - string
+          description: The first line of the billing street address.
+        line_2:
+          type:
+            - 'null'
+            - string
+          description: 'The second line of the billing street address, if any (apartment, suite, etc.).'
+        tax_id:
+          type:
+            - 'null'
+            - string
+          description: 'The tax identifier the store is invoiced under, if any.'
+      additionalProperties: false
+      description: Represents the billing address and tax details a store is invoiced under.
+    StoreBillingStatusDto:
+      required:
+        - alerts
+        - feature_flags
+        - is_locked
+        - no_billing_details
+        - plan
+        - plan_limits
+        - plan_pricing
+        - revenue_usage
+        - store_id
+      type: object
+      properties:
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        is_locked:
+          type: boolean
+        lock_reason:
+          type:
+            - 'null'
+            - string
+        no_billing_details:
+          type: boolean
+        revenue_usage:
+          type: integer
+          format: int64
+        plan_limits:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int64
+        feature_flags:
+          type: array
+          items:
+            type: string
+        plan:
+          $ref: '#/components/schemas/PlanDto'
+        plan_pricing:
+          $ref: '#/components/schemas/PlanPricingDto'
+        subscription:
+          $ref: '#/components/schemas/StoreSubscriptionDto'
+        alerts:
+          type: array
+          items:
+            $ref: '#/components/schemas/StoreAlertDto'
+        payment_method:
+          $ref: '#/components/schemas/SubscriptionPaymentMethodDto'
       additionalProperties: false
     StoreDto:
       required:
@@ -17886,6 +19740,61 @@ components:
           $ref: '#/components/schemas/PlatformStoreTypeAssociationDetailsDto'
       additionalProperties: false
       description: Represents a PayNow store and its associated configuration.
+    StoreInvoiceDto:
+      required:
+        - created_at
+        - currency
+        - description
+        - gateway
+        - gateway_invoice_id
+        - id
+        - invoice_url
+        - is_paid
+        - plan_pricing_id
+        - subscription_id
+        - total
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        subscription_id:
+          $ref: '#/components/schemas/FlakeId'
+        plan_pricing_id:
+          $ref: '#/components/schemas/FlakeId'
+        gateway:
+          type: string
+          description: The payment gateway that issued the invoice.
+        gateway_invoice_id:
+          type: string
+          description: The identifier of the invoice within the payment gateway.
+        invoice_url:
+          type: string
+          description: "The hosted invoice URL recorded when the invoice was raised. May expire; request\n'invoices/{invoice_id}/url' for a freshly issued link."
+        description:
+          type: string
+          description: The description of what was billed.
+        currency:
+          type: string
+          description: The currency the invoice was issued in.
+        total:
+          type: integer
+          description: 'The invoiced total, in the smallest currency unit.'
+          format: int64
+        is_paid:
+          type: boolean
+          description: Whether the invoice has been paid.
+        created_at:
+          type: string
+          description: When the invoice was raised.
+          format: date-time
+        updated_at:
+          type:
+            - 'null'
+            - string
+          description: When the invoice was last updated.
+          format: date-time
+      additionalProperties: false
+      description: Represents an invoice raised against a store's own subscription.
     StoreMemberDto:
       required:
         - id
@@ -18102,6 +20011,80 @@ components:
         store:
           $ref: '#/components/schemas/StoreDto'
       additionalProperties: false
+    StoreSubscriptionDto:
+      required:
+        - cancel_at_period_end
+        - created_at
+        - currency
+        - current_period_end
+        - current_period_start
+        - gateway
+        - gateway_checkout_id
+        - gateway_payment_method_id
+        - gateway_subscription_id
+        - id
+        - plan_id
+        - status
+        - store_id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        plan_id:
+          type: string
+        gateway:
+          type: string
+        gateway_subscription_id:
+          type: string
+        gateway_checkout_id:
+          type: string
+        gateway_payment_method_id:
+          type: string
+        currency:
+          type: string
+        status:
+          $ref: '#/components/schemas/StoreSubscriptionStatus'
+        downgrade_period_end_plan_id:
+          type:
+            - 'null'
+            - string
+        cancel_at_period_end:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type:
+            - 'null'
+            - string
+          format: date-time
+        ended_at:
+          type:
+            - 'null'
+            - string
+          format: date-time
+        cancel_at:
+          type:
+            - 'null'
+            - string
+          format: date-time
+        current_period_start:
+          type: string
+          format: date-time
+        current_period_end:
+          type: string
+          format: date-time
+      additionalProperties: false
+    StoreSubscriptionStatus:
+      enum:
+        - incomplete
+        - trialing
+        - active
+        - requires_action
+        - canceled
+      type: string
     StoreTrustDto:
       required:
         - created_at
@@ -19373,6 +21356,42 @@ components:
           readOnly: true
       additionalProperties: false
       description: Represents a line item within a subscription.
+    SubscriptionPaymentMethodDto:
+      required:
+        - id
+        - type
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier of the payment method within the payment gateway.
+        type:
+          type: string
+          description: 'The kind of payment method, such as a card.'
+        card_brand:
+          type:
+            - 'null'
+            - string
+          description: 'The card network, when the payment method is a card.'
+        card_exp_month:
+          type:
+            - 'null'
+            - integer
+          description: 'The month the card expires, when the payment method is a card.'
+          format: int64
+        card_exp_year:
+          type:
+            - 'null'
+            - integer
+          description: 'The year the card expires, when the payment method is a card.'
+          format: int64
+        card_last4:
+          type:
+            - 'null'
+            - string
+          description: 'The last four digits of the card, when the payment method is a card.'
+      additionalProperties: false
+      description: Represents the payment method a store's subscription is billed to.
     SubscriptionPaymentMethodUpdateFlowDto:
       required:
         - subscription_id
@@ -19382,6 +21401,15 @@ components:
           $ref: '#/components/schemas/FlakeId'
       additionalProperties: false
       description: Portal flow for updating the payment method of a specific subscription
+    SubscriptionRenewalPeriodDto:
+      enum:
+        - monthly
+        - annually
+      type: string
+      description: Specifies how often a subscription renews.
+      x-enumDescriptions:
+        monthly: The subscription renews every month.
+        annually: The subscription renews every year.
     SubscriptionResult:
       required:
         - id
@@ -20501,6 +22529,60 @@ components:
         discord_format:
           $ref: '#/components/schemas/WebhookDiscordFormatDto'
       additionalProperties: false
+    UpdateWebstoreModuleDto:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        type:
+          type: string
+        settings:
+          type: 'null'
+        starts_at:
+          type:
+            - 'null'
+            - string
+          format: date-time
+        ends_at:
+          type:
+            - 'null'
+            - string
+          format: date-time
+    UpdateWebstoreTemplateDto:
+      type: object
+      properties:
+        name:
+          type: string
+        compatibility_mode:
+          $ref: '#/components/schemas/WebstoreTemplateCompatibilityModeDto'
+    UpdateWebstoreTemplateFileDto:
+      type: object
+      properties:
+        file_name:
+          type: string
+        content_type:
+          type: string
+        content:
+          type: string
+    UpdateWebstoreTemplateFileRequestDto:
+      required:
+        - content
+      type: object
+      properties:
+        content:
+          type: string
+      additionalProperties: false
+    UpdateWebstoreTemplateVariableDto:
+      type: object
+      properties:
+        name:
+          type: string
+        variable:
+          type: string
+        type:
+          $ref: '#/components/schemas/WebstoreTemplateVariableTypeDto'
+        value:
+          type: string
     UpsellDiscountTypeDto:
       enum:
         - unknown
@@ -21064,6 +23146,486 @@ components:
           items:
             type: string
       additionalProperties: false
+    WebstoreCustomDomainDto:
+      required:
+        - hostname
+        - id
+        - status
+        - verification_errors
+      type: object
+      properties:
+        id:
+          type: string
+        hostname:
+          type: string
+        status:
+          type: string
+        ssl:
+          $ref: '#/components/schemas/WebstoreCustomDomainSslDto'
+        ownership_verification:
+          $ref: '#/components/schemas/WebstoreCustomDomainOwnershipVerificationDto'
+        ownership_verification_http:
+          $ref: '#/components/schemas/WebstoreCustomDomainOwnershipVerificationHttpDto'
+        verification_errors:
+          type: array
+          items:
+            type: string
+        created_at:
+          type:
+            - 'null'
+            - string
+          format: date-time
+      additionalProperties: false
+    WebstoreCustomDomainOwnershipVerificationDto:
+      required:
+        - name
+        - type
+        - value
+      type: object
+      properties:
+        type:
+          type: string
+        name:
+          type: string
+        value:
+          type: string
+      additionalProperties: false
+    WebstoreCustomDomainOwnershipVerificationHttpDto:
+      required:
+        - http_body
+        - http_url
+      type: object
+      properties:
+        http_url:
+          type: string
+        http_body:
+          type: string
+      additionalProperties: false
+    WebstoreCustomDomainSslDto:
+      required:
+        - id
+        - method
+        - status
+        - validation_errors
+        - validation_records
+      type: object
+      properties:
+        id:
+          type: string
+        method:
+          type: string
+        status:
+          type: string
+        certificate_authority:
+          type:
+            - 'null'
+            - string
+        validation_records:
+          type: array
+          items:
+            $ref: '#/components/schemas/WebstoreCustomDomainSslValidationRecordDto'
+        validation_errors:
+          type: array
+          items:
+            type: string
+      additionalProperties: false
+    WebstoreCustomDomainSslValidationRecordDto:
+      required:
+        - emails
+      type: object
+      properties:
+        txt_name:
+          type:
+            - 'null'
+            - string
+        txt_value:
+          type:
+            - 'null'
+            - string
+        http_url:
+          type:
+            - 'null'
+            - string
+        http_body:
+          type:
+            - 'null'
+            - string
+        emails:
+          type: array
+          items:
+            type: string
+      additionalProperties: false
+    WebstoreCustomDomainVerificationTypeDto:
+      enum:
+        - invalid
+        - http
+        - txt
+        - email
+        - cname
+      type: string
+    WebstoreDto:
+      required:
+        - custom_domain_verified
+        - id
+        - is_active
+        - slug
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        slug:
+          type: string
+        is_active:
+          type: boolean
+        custom_domain:
+          type:
+            - 'null'
+            - string
+        custom_domain_verified:
+          type: boolean
+        current_template_id:
+          $ref: '#/components/schemas/FlakeId'
+      additionalProperties: false
+    WebstoreModuleDto:
+      required:
+        - created_at
+        - enabled
+        - id
+        - sort_order
+        - type
+        - updated_at
+        - webstore_id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        webstore_id:
+          $ref: '#/components/schemas/FlakeId'
+        enabled:
+          type: boolean
+        type:
+          type: string
+        sort_order:
+          type: integer
+          format: int32
+        settings:
+          type: 'null'
+        starts_at:
+          type:
+            - 'null'
+            - string
+          format: date-time
+        ends_at:
+          type:
+            - 'null'
+            - string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      additionalProperties: false
+    WebstoreTemplateCompatibilityModeDto:
+      enum:
+        - invalid
+        - paynow
+        - tebex
+      type: string
+    WebstoreTemplateCompiledFileDto:
+      required:
+        - content_type
+        - file_name
+      type: object
+      properties:
+        file_name:
+          type: string
+        content_type:
+          type: string
+        compiled:
+          type:
+            - 'null'
+            - string
+        error:
+          type:
+            - 'null'
+            - string
+      additionalProperties: false
+    WebstoreTemplateDto:
+      required:
+        - compatibility_mode
+        - created_at
+        - id
+        - is_public
+        - name
+        - updated_at
+        - webstore_id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        webstore_id:
+          $ref: '#/components/schemas/FlakeId'
+        name:
+          type: string
+        is_public:
+          type: boolean
+        compatibility_mode:
+          $ref: '#/components/schemas/WebstoreTemplateCompatibilityModeDto'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        template_files:
+          type:
+            - 'null'
+            - array
+          items:
+            $ref: '#/components/schemas/WebstoreTemplateFileDto'
+      additionalProperties: false
+    WebstoreTemplateFileDto:
+      required:
+        - content_type
+        - created_at
+        - file_name
+        - id
+        - is_deletable
+        - is_public
+        - template_id
+        - updated_at
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        template_id:
+          $ref: '#/components/schemas/FlakeId'
+        file_name:
+          type: string
+        content_type:
+          type: string
+        is_public:
+          type: boolean
+        is_deletable:
+          type: boolean
+        content:
+          type:
+            - 'null'
+            - string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      additionalProperties: false
+    WebstoreTemplateLatestVersionDto:
+      type: object
+      properties:
+        version:
+          type:
+            - 'null'
+            - string
+      additionalProperties: false
+    WebstoreTemplatePreviewDto:
+      required:
+        - compatibilityMode
+        - compiled
+        - compiled_at
+      type: object
+      properties:
+        compiled:
+          type: array
+          items:
+            $ref: '#/components/schemas/WebstoreTemplateCompiledFileDto'
+        schema:
+          $ref: '#/components/schemas/WebstoreTemplateSchemaDto'
+        compatibilityMode:
+          $ref: '#/components/schemas/WebstoreTemplateCompatibilityModeDto'
+        compiled_at:
+          type: string
+          format: date-time
+      additionalProperties: false
+    WebstoreTemplatePreviewResponseDto:
+      required:
+        - template
+        - variables
+      type: object
+      properties:
+        template:
+          $ref: '#/components/schemas/WebstoreTemplatePreviewDto'
+        variables:
+          $ref: '#/components/schemas/WebstoreTemplatePreviewVariablesDto'
+      additionalProperties: false
+    WebstoreTemplatePreviewVariablesDto:
+      required:
+        - saved_at
+        - variables
+      type: object
+      properties:
+        variables:
+          type: array
+          items:
+            $ref: '#/components/schemas/WebstoreTemplateVariableDto'
+        saved_at:
+          type: string
+          format: date-time
+      additionalProperties: false
+    WebstoreTemplateSchemaDto:
+      required:
+        - author
+        - config
+      type: object
+      properties:
+        author:
+          type: string
+        support_email:
+          type:
+            - 'null'
+            - string
+        support_url:
+          type:
+            - 'null'
+            - string
+        updates:
+          $ref: '#/components/schemas/WebstoreTemplateSchemaUpdatesDto'
+        config:
+          type: array
+          items:
+            $ref: '#/components/schemas/WebstoreTemplateSchemaSectionDto'
+      additionalProperties: false
+    WebstoreTemplateSchemaOptionDto:
+      required:
+        - id
+        - name
+        - nested_options
+        - type
+        - values
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type:
+            - 'null'
+            - string
+        type:
+          type: string
+        default:
+          type: 'null'
+        values:
+          type: array
+          items:
+            type: string
+        numeric:
+          type:
+            - 'null'
+            - boolean
+        multiline:
+          type:
+            - 'null'
+            - boolean
+        min:
+          type:
+            - 'null'
+            - number
+          format: double
+        max:
+          type:
+            - 'null'
+            - number
+          format: double
+        nested_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/WebstoreTemplateSchemaOptionDto'
+      additionalProperties: false
+    WebstoreTemplateSchemaSectionDto:
+      required:
+        - header
+        - options
+      type: object
+      properties:
+        header:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/WebstoreTemplateSchemaOptionDto'
+      additionalProperties: false
+    WebstoreTemplateSchemaUpdatesDto:
+      required:
+        - github_branch
+        - supported
+        - version_check_supported
+      type: object
+      properties:
+        supported:
+          type: boolean
+        version_check_supported:
+          type: boolean
+        version:
+          type:
+            - 'null'
+            - string
+        github_url:
+          type:
+            - 'null'
+            - string
+        github_branch:
+          type: string
+        github_token:
+          type:
+            - 'null'
+            - string
+      additionalProperties: false
+    WebstoreTemplateVariableDto:
+      required:
+        - created_at
+        - id
+        - name
+        - template_id
+        - type
+        - updated_at
+        - value
+        - variable
+        - webstore_id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        template_id:
+          $ref: '#/components/schemas/FlakeId'
+        webstore_id:
+          $ref: '#/components/schemas/FlakeId'
+        name:
+          type: string
+        variable:
+          type: string
+        type:
+          $ref: '#/components/schemas/WebstoreTemplateVariableTypeDto'
+        value:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      additionalProperties: false
+    WebstoreTemplateVariableTypeDto:
+      enum:
+        - invalid
+        - string
+        - html
+        - number
+        - boolean
+        - json
+      type: string
   securitySchemes:
     APIKey:
       type: apiKey
@@ -21082,6 +23644,7 @@ components:
 tags:
   - name: affiliate-links
   - name: bans
+  - name: billing
   - name: checkout
   - name: checkout-style
   - name: coupons
@@ -21118,3 +23681,4 @@ tags:
   - name: trust
   - name: upsell-settings
   - name: webhooks
+  - name: webstore

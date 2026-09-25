@@ -10769,10 +10769,13 @@ paths:
     get:
       tags:
         - webstore
+      summary: Get webstore
+      description: "Retrieves the store's webstore, covering the slug it is served from, its custom domain\nstate and the template it currently renders."
       operationId: Webstores_GetWebstore
       parameters:
         - name: storeId
           in: path
+          description: The ID of the store to retrieve the webstore for.
           required: true
           schema:
             $ref: '#/components/schemas/FlakeId'
@@ -10795,14 +10798,18 @@ paths:
     post:
       tags:
         - webstore
+      summary: Set default template
+      description: Sets the template the webstore renders for customers.
       operationId: Webstores_SetWebstoreDefaultTemplate
       parameters:
         - name: storeId
           in: path
+          description: The ID of the store whose webstore is being changed.
           required: true
           schema:
             $ref: '#/components/schemas/FlakeId'
       requestBody:
+        description: The template to serve the webstore from.
         content:
           application/json:
             schema:
@@ -10828,14 +10835,18 @@ paths:
     post:
       tags:
         - webstore
+      summary: Set webstore slug
+      description: "Changes the slug the webstore is reachable at. Slugs are unique across all webstores, so a\nslug already taken by another store is rejected."
       operationId: Webstores_SetWebstoreSlug
       parameters:
         - name: storeId
           in: path
+          description: The ID of the store whose webstore is being changed.
           required: true
           schema:
             $ref: '#/components/schemas/FlakeId'
       requestBody:
+        description: The new slug to serve the webstore from.
         content:
           application/json:
             schema:
@@ -10861,10 +10872,13 @@ paths:
     get:
       tags:
         - webstore
+      summary: Get custom domain
+      description: "Retrieves the custom domain attached to the store's webstore, along with the records still\noutstanding for ownership and SSL verification."
       operationId: Webstores_GetWebstoreCustomDomain
       parameters:
         - name: storeId
           in: path
+          description: The ID of the store to retrieve the custom domain for.
           required: true
           schema:
             $ref: '#/components/schemas/FlakeId'
@@ -10886,14 +10900,18 @@ paths:
     post:
       tags:
         - webstore
+      summary: Set custom domain
+      description: Attaches a custom domain to the store's webstore and begins verification.
       operationId: Webstores_SetWebstoreCustomDomain
       parameters:
         - name: storeId
           in: path
+          description: The ID of the store whose webstore is being changed.
           required: true
           schema:
             $ref: '#/components/schemas/FlakeId'
       requestBody:
+        description: The domain to attach and how ownership of it should be proven.
         content:
           application/json:
             schema:
@@ -10922,10 +10940,13 @@ paths:
     delete:
       tags:
         - webstore
+      summary: Delete custom domain
+      description: "Detaches the custom domain from the store's webstore. The webstore stays reachable at its\nslug."
       operationId: Webstores_DeleteWebstoreCustomDomain
       parameters:
         - name: storeId
           in: path
+          description: The ID of the store to remove the custom domain from.
           required: true
           schema:
             $ref: '#/components/schemas/FlakeId'
@@ -10944,10 +10965,13 @@ paths:
     post:
       tags:
         - webstore
+      summary: Verify custom domain
+      description: "Re-checks the verification records for the webstore's custom domain. Call this once the\nrecords returned when the domain was set have been published."
       operationId: Webstores_VerifyWebstoreCustomDomain
       parameters:
         - name: storeId
           in: path
+          description: The ID of the store whose custom domain should be re-checked.
           required: true
           schema:
             $ref: '#/components/schemas/FlakeId'
@@ -19352,9 +19376,11 @@ components:
       properties:
         domain:
           type: string
+          description: 'The domain to serve the webstore from, without a scheme (e.g., store.example.com).'
         verification_type:
           $ref: '#/components/schemas/WebstoreCustomDomainVerificationTypeDto'
       additionalProperties: false
+      description: Represents a request to attach a custom domain to a webstore.
     SetWebstoreDefaultTemplateRequestDto:
       required:
         - template_id
@@ -19363,6 +19389,7 @@ components:
         template_id:
           $ref: '#/components/schemas/FlakeId'
       additionalProperties: false
+      description: Represents a request to set the template a webstore renders.
     SetWebstoreSlugRequestDto:
       required:
         - slug
@@ -19370,7 +19397,9 @@ components:
       properties:
         slug:
           type: string
+          description: The new slug to serve the webstore from. Slugs are unique across all webstores.
       additionalProperties: false
+      description: Represents a request to change the slug a webstore is served from.
     StartDataMigrationFromTebexRequestDto:
       required:
         - headless_token
@@ -23156,10 +23185,13 @@ components:
       properties:
         id:
           type: string
+          description: The identifier the domain was registered under with the hosting provider.
         hostname:
           type: string
+          description: 'The domain the webstore is served from, without a scheme (e.g., store.example.com).'
         status:
           type: string
+          description: "The verification state of the domain as reported by the hosting provider.\nThe domain only serves the webstore once it is active."
         ssl:
           $ref: '#/components/schemas/WebstoreCustomDomainSslDto'
         ownership_verification:
@@ -23170,12 +23202,15 @@ components:
           type: array
           items:
             type: string
+          description: "The errors raised by the last ownership verification attempt. Empty when the last attempt\nraised none."
         created_at:
           type:
             - 'null'
             - string
+          description: The date and time the domain was attached to the webstore.
           format: date-time
       additionalProperties: false
+      description: "Represents a custom domain attached to a webstore, together with the state of its ownership and\nSSL verification."
     WebstoreCustomDomainOwnershipVerificationDto:
       required:
         - name
@@ -23185,11 +23220,15 @@ components:
       properties:
         type:
           type: string
+          description: 'The kind of DNS record to publish (e.g., txt).'
         name:
           type: string
+          description: The name to publish the record under.
         value:
           type: string
+          description: The value the record has to hold.
       additionalProperties: false
+      description: Represents the DNS record that has to be published to prove ownership of a webstore's custom domain.
     WebstoreCustomDomainOwnershipVerificationHttpDto:
       required:
         - http_body
@@ -23198,9 +23237,12 @@ components:
       properties:
         http_url:
           type: string
+          description: The URL on the domain the token file has to be served from.
         http_body:
           type: string
+          description: The body that URL has to return.
       additionalProperties: false
+      description: "Represents the token file that has to be served over HTTP to prove ownership of a webstore's\ncustom domain."
     WebstoreCustomDomainSslDto:
       required:
         - id
@@ -23212,23 +23254,30 @@ components:
       properties:
         id:
           type: string
+          description: The identifier the certificate was issued under.
         method:
           type: string
+          description: 'How control of the domain is validated for the certificate (e.g., txt, http, email).'
         status:
           type: string
+          description: "The state of the certificate (e.g., pending_validation, active). The domain only serves\ntraffic over HTTPS once it is active."
         certificate_authority:
           type:
             - 'null'
             - string
+          description: 'The authority issuing the certificate, or null while one has not been chosen.'
         validation_records:
           type: array
           items:
             $ref: '#/components/schemas/WebstoreCustomDomainSslValidationRecordDto'
+          description: "The records that have to be published to validate the certificate. Empty once validation no\nlonger needs them."
         validation_errors:
           type: array
           items:
             type: string
+          description: "The errors raised by the last certificate validation attempt. Empty when the last attempt\nraised none."
       additionalProperties: false
+      description: Represents the SSL certificate issued for a webstore's custom domain.
     WebstoreCustomDomainSslValidationRecordDto:
       required:
         - emails
@@ -23238,23 +23287,29 @@ components:
           type:
             - 'null'
             - string
+          description: 'The name to publish the DNS TXT record under, or null when validation is not by TXT record.'
         txt_value:
           type:
             - 'null'
             - string
+          description: 'The value that TXT record has to hold, or null when validation is not by TXT record.'
         http_url:
           type:
             - 'null'
             - string
+          description: "The URL on the domain the token file has to be served from, or null when validation is not\nover HTTP."
         http_body:
           type:
             - 'null'
             - string
+          description: 'The body that URL has to return, or null when validation is not over HTTP.'
         emails:
           type: array
           items:
             type: string
+          description: The addresses a validation link can be sent to. Empty when validation is not by email.
       additionalProperties: false
+      description: "Represents one record that has to be published to validate a custom domain's SSL certificate.\nWhich fields are populated depends on the 'ssl' block's 'method'."
     WebstoreCustomDomainVerificationTypeDto:
       enum:
         - invalid
@@ -23263,6 +23318,13 @@ components:
         - email
         - cname
       type: string
+      description: "Specifies how ownership of a webstore's custom domain is proven.\nThe only officially supported method is the 'http' method."
+      x-enumDescriptions:
+        invalid: No verification type specified. This value is typically used as a default or uninitialized state.
+        http: "Ownership is proven by serving a token file over HTTP from the domain.\n            This is the RECOMMENDED way to prove ownership, and is used by the dashboard."
+        txt: Ownership is proven by publishing a DNS TXT record on the domain.
+        email: Ownership is proven by following a link sent to an administrative address on the domain.
+        cname: Ownership is proven by publishing a DNS CNAME record on the domain.
     WebstoreDto:
       required:
         - custom_domain_verified
@@ -23275,17 +23337,22 @@ components:
           $ref: '#/components/schemas/FlakeId'
         slug:
           type: string
+          description: 'The slug the webstore is served from, unique across all webstores.'
         is_active:
           type: boolean
+          description: Indicates whether the webstore is being served to customers.
         custom_domain:
           type:
             - 'null'
             - string
+          description: 'The custom domain the webstore is served from, or null when it is only reachable at its slug.'
         custom_domain_verified:
           type: boolean
+          description: "Indicates whether ownership of 'custom_domain' has been verified. Until it is, the webstore is\nonly served from its slug."
         current_template_id:
           $ref: '#/components/schemas/FlakeId'
       additionalProperties: false
+      description: 'Represents a store''s webstore, the hosted storefront customers browse and buy from.'
     WebstoreModuleDto:
       required:
         - created_at

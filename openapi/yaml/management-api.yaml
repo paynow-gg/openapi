@@ -507,9 +507,9 @@ paths:
     post:
       tags:
         - billing
-      summary: Change subscription payment method
-      description: Starts a session for the store owner to replace the card the subscription is billed to.
-      operationId: StoreBilling_ChangeSubscriptionPaymentMethod
+      summary: Create payment method update session
+      description: "Returns a customer portal session scoped to updating the payment method of the store's\nactive subscription. The store owner has to visit the returned 'session_url' to complete\nthe update."
+      operationId: StoreBilling_CreatePaymentMethodUpdateSession
       parameters:
         - name: storeId
           in: path
@@ -523,7 +523,63 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CheckoutSessionDto'
+                $ref: '#/components/schemas/PaymentMethodUpdateSessionDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/billing/orders':
+    get:
+      tags:
+        - billing
+      summary: Get billing orders
+      description: "Retrieves the orders placed for the store's own subscription. Only the store owner may\ncall this."
+      operationId: StoreBilling_GetStoreBillingOrders
+      parameters:
+        - name: storeId
+          in: path
+          description: The ID of the store to retrieve billing orders for.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: limit
+          in: query
+          description: The maximum number of items to return in a single request.
+          schema:
+            maximum: 100
+            minimum: 1
+            type: integer
+            format: int32
+        - name: after
+          in: query
+          description: "Returns items after the specified ID.\nUsed for forward pagination through results."
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+          example: 'null'
+        - name: before
+          in: query
+          description: "Returns items before the specified ID.\nUsed for backward pagination through results."
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+          example: 'null'
+        - name: asc
+          in: query
+          description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StorefrontOrderDto'
         default:
           description: Error response
           content:
@@ -589,97 +645,6 @@ paths:
       responses:
         '204':
           description: No Content
-        default:
-          description: Error response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PayNowError'
-      security:
-        - APIKey: [ ]
-  '/v1/stores/{storeId}/billing/invoices':
-    get:
-      tags:
-        - billing
-      summary: Get subscription invoices
-      description: Retrieves the invoices raised against the store's own subscription.
-      operationId: StoreBilling_GetStoreInvoices
-      parameters:
-        - name: storeId
-          in: path
-          description: The ID of the store to retrieve invoices for.
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-        - name: limit
-          in: query
-          description: The maximum number of items to return in a single request.
-          schema:
-            maximum: 100
-            minimum: 1
-            type: integer
-            format: int32
-        - name: after
-          in: query
-          description: "Returns items after the specified ID.\nUsed for forward pagination through results."
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-          example: 'null'
-        - name: before
-          in: query
-          description: "Returns items before the specified ID.\nUsed for backward pagination through results."
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-          example: 'null'
-        - name: asc
-          in: query
-          description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
-          schema:
-            type: boolean
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/StoreInvoiceDto'
-        default:
-          description: Error response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PayNowError'
-      security:
-        - APIKey: [ ]
-  '/v1/stores/{storeId}/billing/invoices/{invoiceId}/url':
-    get:
-      tags:
-        - billing
-      summary: Get invoice URL
-      description: "Issues a fresh link to the hosted invoice. Prefer this over the 'invoice_url' carried by\nthe invoice list, which is recorded once and may have expired."
-      operationId: StoreBilling_GetStoreInvoiceUrl
-      parameters:
-        - name: storeId
-          in: path
-          description: The ID of the store the invoice belongs to.
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-        - name: invoiceId
-          in: path
-          description: The ID of the invoice to link to.
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InvoiceUrlDto'
         default:
           description: Error response
           content:
@@ -15752,16 +15717,6 @@ components:
         - invoice
         - credit_note
       type: string
-    InvoiceUrlDto:
-      required:
-        - url
-      type: object
-      properties:
-        url:
-          type: string
-          description: The hosted invoice URL.
-      additionalProperties: false
-      description: Represents a freshly issued link to a hosted invoice.
     KlarnaDetailsDto:
       type: object
       properties:
@@ -17310,6 +17265,16 @@ components:
             - string
           format: date-time
       additionalProperties: false
+    PaymentMethodUpdateSessionDto:
+      required:
+        - session_url
+      type: object
+      properties:
+        session_url:
+          type: string
+          description: The URL the store owner has to visit to update the subscription's payment method.
+      additionalProperties: false
+      description: "A customer portal session scoped to updating the payment method of the store's\nactive subscription."
     PaymentPayoutSplitResultDto:
       required:
         - connected_platform_fee_amount
@@ -17514,6 +17479,10 @@ components:
             - string
         is_custom:
           type: boolean
+        inherits_from_plan_id:
+          type:
+            - 'null'
+            - string
       additionalProperties: false
     PlanPreviewDto:
       required:
@@ -17591,6 +17560,10 @@ components:
             - 'null'
             - string
           format: date-time
+        revenue_limit_exceeded:
+          type:
+            - 'null'
+            - boolean
       additionalProperties: false
     PlatformCapability:
       enum:
@@ -19655,18 +19628,18 @@ components:
           type: array
           items:
             type: string
+        alerts:
+          type: array
+          items:
+            $ref: '#/components/schemas/StoreAlertDto'
         plan:
           $ref: '#/components/schemas/PlanDto'
         plan_pricing:
           $ref: '#/components/schemas/PlanPricingDto'
         subscription:
           $ref: '#/components/schemas/StoreSubscriptionDto'
-        alerts:
-          type: array
-          items:
-            $ref: '#/components/schemas/StoreAlertDto'
         payment_method:
-          $ref: '#/components/schemas/SubscriptionPaymentMethodDto'
+          $ref: '#/components/schemas/PaymentMethodDto'
       additionalProperties: false
     StoreDto:
       required:
@@ -19769,61 +19742,6 @@ components:
           $ref: '#/components/schemas/PlatformStoreTypeAssociationDetailsDto'
       additionalProperties: false
       description: Represents a PayNow store and its associated configuration.
-    StoreInvoiceDto:
-      required:
-        - created_at
-        - currency
-        - description
-        - gateway
-        - gateway_invoice_id
-        - id
-        - invoice_url
-        - is_paid
-        - plan_pricing_id
-        - subscription_id
-        - total
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/FlakeId'
-        subscription_id:
-          $ref: '#/components/schemas/FlakeId'
-        plan_pricing_id:
-          $ref: '#/components/schemas/FlakeId'
-        gateway:
-          type: string
-          description: The payment gateway that issued the invoice.
-        gateway_invoice_id:
-          type: string
-          description: The identifier of the invoice within the payment gateway.
-        invoice_url:
-          type: string
-          description: "The hosted invoice URL recorded when the invoice was raised. May expire; request\n'invoices/{invoice_id}/url' for a freshly issued link."
-        description:
-          type: string
-          description: The description of what was billed.
-        currency:
-          type: string
-          description: The currency the invoice was issued in.
-        total:
-          type: integer
-          description: 'The invoiced total, in the smallest currency unit.'
-          format: int64
-        is_paid:
-          type: boolean
-          description: Whether the invoice has been paid.
-        created_at:
-          type: string
-          description: When the invoice was raised.
-          format: date-time
-        updated_at:
-          type:
-            - 'null'
-            - string
-          description: When the invoice was last updated.
-          format: date-time
-      additionalProperties: false
-      description: Represents an invoice raised against a store's own subscription.
     StoreMemberDto:
       required:
         - id
@@ -20045,21 +19963,23 @@ components:
         - cancel_at_period_end
         - created_at
         - currency
-        - current_period_end
-        - current_period_start
         - gateway
         - gateway_checkout_id
         - gateway_payment_method_id
         - gateway_subscription_id
         - id
         - plan_id
+        - renewal_period
         - status
         - store_id
+        - user_id
       type: object
       properties:
         id:
           $ref: '#/components/schemas/FlakeId'
         store_id:
+          $ref: '#/components/schemas/FlakeId'
+        user_id:
           $ref: '#/components/schemas/FlakeId'
         plan_id:
           type: string
@@ -20075,6 +19995,8 @@ components:
           type: string
         status:
           $ref: '#/components/schemas/StoreSubscriptionStatus'
+        renewal_period:
+          $ref: '#/components/schemas/StoreSubscriptionRenewalPeriod'
         downgrade_period_end_plan_id:
           type:
             - 'null'
@@ -20100,12 +20022,21 @@ components:
             - string
           format: date-time
         current_period_start:
-          type: string
+          type:
+            - 'null'
+            - string
           format: date-time
         current_period_end:
-          type: string
+          type:
+            - 'null'
+            - string
           format: date-time
       additionalProperties: false
+    StoreSubscriptionRenewalPeriod:
+      enum:
+        - monthly
+        - annually
+      type: string
     StoreSubscriptionStatus:
       enum:
         - incomplete
@@ -20316,6 +20247,474 @@ components:
         updated_by:
           $ref: '#/components/schemas/ActorDto'
       additionalProperties: false
+    StorefrontCustomerDto:
+      required:
+        - id
+        - store_id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        profile:
+          $ref: '#/components/schemas/CustomerGenericProfileDto'
+        steam_id:
+          $ref: '#/components/schemas/SteamId'
+        steam:
+          $ref: '#/components/schemas/StorefrontCustomerSteamProfileDto'
+        minecraft_uuid:
+          type:
+            - 'null'
+            - string
+          description: "The customer's Minecraft UUID, if they have linked their Minecraft account.\nNot set for offline Minecraft stores. If the platform type is Minecraft - Geyser,\nand the profile is a bedrock account, this will be a UUID generated from the Xbox XUID."
+          example: f84c6a79-0a4e-45e0-879b-cd49ebd4c4e2
+        minecraft:
+          $ref: '#/components/schemas/StorefrontCustomerMinecraftProfileDto'
+        minecraft_platform:
+          $ref: '#/components/schemas/CustomerMinecraftPlatform'
+        xbox_xuid:
+          type:
+            - 'null'
+            - string
+          description: 'The customer''s Xbox XUID, if available.'
+        name:
+          type:
+            - 'null'
+            - string
+          description: The display name for the customer.
+          example: m0uka
+      additionalProperties: false
+      description: A storefront representation of a customer in the PayNow system with their associated profiles and metadata.
+    StorefrontCustomerMinecraftProfileDto:
+      required:
+        - avatar_url
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          type: string
+          description: "The UUID of the Minecraft player.\nIf the platform is Minecraft Offline, this will be the name itself.\nIf the platform is Minecraft Geyser, and this is a Bedrock account, this ID will be an Xbox XUID."
+          example: f84c6a79-0a4e-45e0-879b-cd49ebd4c4e2
+        name:
+          type: string
+          description: The username of the Minecraft player.
+          example: notch
+        avatar_url:
+          type: string
+          description: The URL to the player's Minecraft skin rendered as an avatar.
+      additionalProperties: false
+      description: A storefront representation of a customers Minecraft profile.
+    StorefrontCustomerSteamProfileDto:
+      required:
+        - avatar_url
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/SteamId'
+        name:
+          type: string
+          description: The display name of the user on Steam.
+        avatar_url:
+          type: string
+          description: The URL to the user's Steam avatar image.
+      additionalProperties: false
+      description: A storefront representation of a customers Steam profile.
+    StorefrontOrderDto:
+      required:
+        - currency
+        - customer
+        - customer_id
+        - discount_amount
+        - discount_amount_str
+        - giftcard_usage_amount
+        - giftcard_usage_amount_str
+        - id
+        - is_subscription
+        - lines
+        - presentment_currency
+        - presentment_discount_amount
+        - presentment_discount_amount_str
+        - presentment_giftcard_usage_amount
+        - presentment_giftcard_usage_amount_str
+        - presentment_subtotal_amount
+        - presentment_subtotal_amount_str
+        - presentment_tax_amount
+        - presentment_tax_amount_str
+        - presentment_total_amount
+        - presentment_total_amount_str
+        - pretty_id
+        - status
+        - store_id
+        - subtotal_amount
+        - subtotal_amount_str
+        - tax_amount
+        - tax_amount_str
+        - total_amount
+        - total_amount_str
+        - type
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        pretty_id:
+          type: string
+          description: Human-readable identifier for the order.
+          readOnly: true
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        customer_id:
+          $ref: '#/components/schemas/FlakeId'
+        customer:
+          $ref: '#/components/schemas/StorefrontCustomerDto'
+        status:
+          $ref: '#/components/schemas/OrderStatus'
+        type:
+          $ref: '#/components/schemas/OrderType'
+        checkout_id:
+          $ref: '#/components/schemas/FlakeId'
+        subscription_id:
+          $ref: '#/components/schemas/FlakeId'
+        is_subscription:
+          type: boolean
+          description: Indicates whether this order is a subscription order.
+        currency:
+          type: string
+          description: Currency code used for this order.
+        discount_amount:
+          type: integer
+          description: The total discount amount applied to this order in smallest currency unit
+          format: int32
+          example: 500
+        discount_amount_str:
+          type: string
+          description: The discount amount formatted as a string
+          example: $5.00
+        subtotal_amount:
+          type: integer
+          description: The subtotal amount for this order in smallest currency unit
+          format: int32
+          example: 9995
+        subtotal_amount_str:
+          type: string
+          description: The subtotal amount formatted as a string
+          example: $99.95
+        tax_amount:
+          type: integer
+          description: The tax amount for this order in smallest currency unit
+          format: int32
+          example: 999
+        tax_amount_str:
+          type: string
+          description: The tax amount formatted as a string
+          example: $9.99
+        total_amount:
+          type: integer
+          description: The total amount for this order in smallest currency unit
+          format: int32
+          example: 10494
+        total_amount_str:
+          type: string
+          description: The total amount formatted as a string
+          example: $104.94
+        giftcard_usage_amount:
+          type: integer
+          description: The amount of gift card value used for this order in smallest currency unit
+          format: int32
+          example: 0
+        giftcard_usage_amount_str:
+          type: string
+          description: The gift card usage amount formatted as a string
+          example: $0.00
+        presentment_currency:
+          type: string
+          description: The presentment currency code used for this order (currency shown to customer)
+          example: eur
+        presentment_subtotal_amount:
+          type: integer
+          description: The presentment subtotal amount in smallest currency unit
+          format: int32
+          example: 9995
+        presentment_subtotal_amount_str:
+          type: string
+          description: The presentment subtotal amount formatted as a string
+          readOnly: true
+          example: €99.95
+        presentment_discount_amount:
+          type: integer
+          description: The presentment discount amount in smallest currency unit
+          format: int32
+          example: 500
+        presentment_discount_amount_str:
+          type: string
+          description: The presentment discount amount formatted as a string
+          readOnly: true
+          example: €5.00
+        presentment_giftcard_usage_amount:
+          type: integer
+          description: The presentment gift card usage amount in the smallest currency unit
+          format: int32
+          example: 0
+        presentment_giftcard_usage_amount_str:
+          type: string
+          description: The presentment gift card usage amount formatted as a string
+          readOnly: true
+          example: €0.00
+        presentment_tax_amount:
+          type: integer
+          description: The presentment tax amount in smallest currency unit
+          format: int32
+          example: 999
+        presentment_tax_amount_str:
+          type: string
+          description: The presentment tax amount formatted as a string
+          readOnly: true
+          example: €9.99
+        presentment_total_amount:
+          type: integer
+          description: The presentment total amount in the smallest currency unit
+          format: int32
+          example: 10494
+        presentment_total_amount_str:
+          type: string
+          description: The presentment total amount formatted as a string
+          readOnly: true
+          example: €104.94
+        billing_cycle_sequence:
+          type:
+            - 'null'
+            - integer
+          description: 'Sequence number of the billing cycle, if this order is associated with a subscription.'
+          format: int32
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/StorefrontOrderLineDto'
+          description: Line items associated with this order.
+        created_at:
+          type:
+            - 'null'
+            - string
+          description: Date and time when the order was created.
+          format: date-time
+        completed_at:
+          type:
+            - 'null'
+            - string
+          description: Date and time when the order was completed.
+          format: date-time
+        canceled_at:
+          type:
+            - 'null'
+            - string
+          description: Date and time when the order was canceled.
+          format: date-time
+      additionalProperties: false
+      description: Data transfer object representing a store order.
+    StorefrontOrderLineDto:
+      required:
+        - checkout_line_id
+        - discount_amount
+        - discount_amount_str
+        - gift
+        - giftcard_usage_amount
+        - giftcard_usage_amount_str
+        - id
+        - presentment_discount_amount
+        - presentment_discount_amount_str
+        - presentment_giftcard_usage_amount
+        - presentment_giftcard_usage_amount_str
+        - presentment_subtotal_amount
+        - presentment_subtotal_amount_str
+        - presentment_tax_amount
+        - presentment_tax_amount_str
+        - presentment_total_amount
+        - presentment_total_amount_str
+        - price
+        - price_str
+        - product_id
+        - product_image_url
+        - product_name
+        - product_version_id
+        - quantity
+        - subtotal_amount
+        - subtotal_amount_str
+        - tax_amount
+        - tax_amount_str
+        - tax_inclusive
+        - total_amount
+        - total_amount_str
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        checkout_line_id:
+          $ref: '#/components/schemas/FlakeId'
+        subscription_line_id:
+          $ref: '#/components/schemas/FlakeId'
+        trial_id:
+          $ref: '#/components/schemas/FlakeId'
+        product_id:
+          $ref: '#/components/schemas/FlakeId'
+        product_version_id:
+          $ref: '#/components/schemas/FlakeId'
+        product_name:
+          type: string
+          description: Name of the product associated with this order line.
+        product_image_url:
+          type: string
+          description: URL for the product image.
+        subscription_interval_value:
+          type:
+            - 'null'
+            - integer
+          description: 'Numeric value of the subscription billing interval, if this line is a subscription.'
+          format: int32
+        subscription_interval_scale:
+          type:
+            - 'null'
+            - string
+          description: 'Scale of the subscription billing interval (e.g., "day", "month", "year"), if applicable.'
+        gift:
+          type: boolean
+          description: Indicates whether this order line is a gift to another customer.
+        gift_to_customer_id:
+          $ref: '#/components/schemas/FlakeId'
+        gift_to_customer:
+          $ref: '#/components/schemas/StorefrontCustomerDto'
+        price:
+          type: integer
+          description: 'The unit price of the product in the smallest currency unit (e.g., cents)'
+          format: int32
+          example: 1999
+        price_str:
+          type: string
+          description: The unit price of the product formatted as a string
+          example: $19.99
+        quantity:
+          type: integer
+          description: The quantity of the product in this order line
+          format: int32
+          example: 1
+        discount_amount:
+          type: integer
+          description: 'The discount amount (from sales, coupons, and affiliate links) applied to this order line'
+          format: int32
+          example: 0
+        discount_amount_str:
+          type: string
+          description: The discount amount formatted as a string
+          example: $0.00
+        giftcard_usage_amount:
+          type: integer
+          description: The amount of gift card used for this order line
+          format: int32
+          example: 0
+        giftcard_usage_amount_str:
+          type: string
+          description: The gift card usage amount formatted as a string
+          example: $0.00
+        subtotal_amount:
+          type: integer
+          description: The subtotal amount for this order line
+          format: int32
+          example: 1999
+        subtotal_amount_str:
+          type: string
+          description: The subtotal amount formatted as a string
+          example: $19.99
+        tax_amount:
+          type: integer
+          description: The tax amount for this order line
+          format: int32
+          example: 200
+        tax_amount_str:
+          type: string
+          description: The tax amount formatted as a string
+          example: $2.00
+        total_amount:
+          type: integer
+          description: The total amount for this order line
+          format: int32
+          example: 2199
+        total_amount_str:
+          type: string
+          description: The total amount formatted as a string
+          example: $21.99
+        presentment_subtotal_amount:
+          type: integer
+          description: The presentment subtotal amount for this order line
+          format: int32
+          example: 1999
+        presentment_subtotal_amount_str:
+          type: string
+          description: The presentment subtotal amount formatted as a string
+          readOnly: true
+          example: €19.99
+        presentment_discount_amount:
+          type: integer
+          description: The presentment discount amount for this order line
+          format: int32
+          example: 0
+        presentment_discount_amount_str:
+          type: string
+          description: The presentment discount amount formatted as a string
+          readOnly: true
+          example: €0.00
+        presentment_tax_amount:
+          type: integer
+          description: The presentment tax amount for this order line
+          format: int32
+          example: 200
+        presentment_tax_amount_str:
+          type: string
+          description: The presentment tax amount formatted as a string
+          readOnly: true
+          example: €2.00
+        presentment_giftcard_usage_amount:
+          type: integer
+          description: The presentment gift card usage amount for this order line
+          format: int32
+          example: 0
+        presentment_giftcard_usage_amount_str:
+          type: string
+          description: The presentment gift card usage amount formatted as a string
+          readOnly: true
+          example: €0.00
+        presentment_total_amount:
+          type: integer
+          description: The presentment total amount for this order line
+          format: int32
+          example: 2199
+        presentment_total_amount_str:
+          type: string
+          description: The presentment total amount formatted as a string
+          readOnly: true
+          example: €21.99
+        selected_gameserver_id:
+          $ref: '#/components/schemas/FlakeId'
+        tax_inclusive:
+          type: boolean
+          description: 'Indicates whether tax is included in the base price, or added on top'
+          example: false
+        pricing_region_id:
+          type:
+            - 'null'
+            - string
+          description: 'The regional pricing region ID for this order line, null if no regional pricing set'
+          example: eu
+        custom_variables:
+          type:
+            - 'null'
+            - object
+          additionalProperties:
+            $ref: '#/components/schemas/CustomVariableLineItemDto'
+          description: Key-value pair of selected custom variables for this order.
+      additionalProperties: false
+      description: Represents a line item within an order.
     StorefrontStoreDto:
       required:
         - creator_currency
@@ -21385,42 +21784,6 @@ components:
           readOnly: true
       additionalProperties: false
       description: Represents a line item within a subscription.
-    SubscriptionPaymentMethodDto:
-      required:
-        - id
-        - type
-      type: object
-      properties:
-        id:
-          type: string
-          description: The identifier of the payment method within the payment gateway.
-        type:
-          type: string
-          description: 'The kind of payment method, such as a card.'
-        card_brand:
-          type:
-            - 'null'
-            - string
-          description: 'The card network, when the payment method is a card.'
-        card_exp_month:
-          type:
-            - 'null'
-            - integer
-          description: 'The month the card expires, when the payment method is a card.'
-          format: int64
-        card_exp_year:
-          type:
-            - 'null'
-            - integer
-          description: 'The year the card expires, when the payment method is a card.'
-          format: int64
-        card_last4:
-          type:
-            - 'null'
-            - string
-          description: 'The last four digits of the card, when the payment method is a card.'
-      additionalProperties: false
-      description: Represents the payment method a store's subscription is billed to.
     SubscriptionPaymentMethodUpdateFlowDto:
       required:
         - subscription_id

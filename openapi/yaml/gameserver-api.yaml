@@ -9,36 +9,6 @@ info:
     email: support@paynow.gg
   version: v1
 paths:
-  /v1/delivery/gameserver/link:
-    post:
-      tags:
-        - delivery
-      summary: Update the link information for a Gameserver
-      operationId: DeliveryGameServer_LinkGameServer
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LinkGameServerRequestDto'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/LinkGameServerRequestDto'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/LinkGameServerRequestDto'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LinkGameServerResponseDto'
-        default:
-          description: Error response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PayNowError'
   /v1/delivery/command-queue:
     get:
       tags:
@@ -207,6 +177,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PayNowError'
+  /v1/delivery/gameserver/link:
+    post:
+      tags:
+        - delivery
+      summary: Update the link information for a Gameserver
+      operationId: DeliveryGameServer_LinkGameServer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LinkGameServerRequestDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/LinkGameServerRequestDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/LinkGameServerRequestDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinkGameServerResponseDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
 components:
   schemas:
     AddressFamily:
@@ -257,6 +257,9 @@ components:
       x-enumDescriptions:
         invalid: Invalid or unspecified event type. Used as the default value.
         player_join: Indicates a player has joined the game server.
+      x-paynow-docs-enum-descriptions:
+        invalid: Invalid or unspecified event type. Used as the default value.
+        player_join: Indicates a player has joined the game server.
     GetQueuedCommandsWithOnlinePlayersRequestDto:
       type: object
       properties:
@@ -304,6 +307,8 @@ components:
     LinkGameServerResponseDto:
       required:
         - gameserver
+        - store_id
+        - store_platform
         - update_available
       type: object
       properties:
@@ -317,6 +322,10 @@ components:
           $ref: '#/components/schemas/PreviousGameServerLinkDto'
         gameserver:
           $ref: '#/components/schemas/StorefrontGameServerDto'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        store_platform:
+          type: string
       additionalProperties: false
     MarkQueuedCommandAsExecutedDto:
       required:

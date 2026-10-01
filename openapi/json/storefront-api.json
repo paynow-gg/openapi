@@ -737,6 +737,7 @@
             "Customer": [ ]
           }
         ],
+        "x-paynow-docs-ignore": true,
         "x-gitbook-ignore": true
       }
     },
@@ -1684,7 +1685,8 @@
             "$ref": "#/components/schemas/FlakeId"
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "description": "Represents the actor that performed an action, such as the user, API key or game server that\ncreated or changed a record."
       },
       "AuthenticateStorefrontCustomerRequestDto": {
         "required": [
@@ -2145,6 +2147,11 @@
           "dropdown": "Dropdown selection with predefined options.\n            Customers choose from a list of available options.\n            Allows for additional pricing based on the selected entry.",
           "text": "Free-form text input.\n            Customers can enter any text value (subject to validation).",
           "number": "Numeric input.\n            Customers can enter numeric values (subject to validation)."
+        },
+        "x-paynow-docs-enum-descriptions": {
+          "dropdown": "Dropdown selection with predefined options.\n            Customers choose from a list of available options.\n            Allows for additional pricing based on the selected entry.",
+          "text": "Free-form text input.\n            Customers can enter any text value (subject to validation).",
+          "number": "Numeric input.\n            Customers can enter numeric values (subject to validation)."
         }
       },
       "CustomerDto": {
@@ -2331,6 +2338,16 @@
           "minecraft_bedrock_name": "Minecraft Bedrock Profile Platform - the ID param must be a Bedrock minecraft nick.",
           "xbox_xuid": "Minecraft Xbox XUID Profile Platform - the ID param must be an xbox xuid",
           "minecraft_uuid": "Minecraft profile platform - the ID param must be a Minecraft UUID."
+        },
+        "x-paynow-docs-enum-descriptions": {
+          "steam": "Steam profile platform - the ID param must be a Steam ID 64.",
+          "minecraft": "Minecraft profile platform - the ID param must be a Minecraft nick.\n            If your store platform is Geyser, this automatically sets the Minecraft platform based on the prefix configured in store settings.",
+          "paynow_name": "PayNow name profile platform - the ID param must be a PayNow username.",
+          "paynow": "PayNow name profile platform - the ID param must be a PayNow username.",
+          "minecraft_java_name": "Minecraft Java Profile Platform - the ID param must be a Java minecraft nick.",
+          "minecraft_bedrock_name": "Minecraft Bedrock Profile Platform - the ID param must be a Bedrock minecraft nick.",
+          "xbox_xuid": "Minecraft Xbox XUID Profile Platform - the ID param must be an xbox xuid",
+          "minecraft_uuid": "Minecraft profile platform - the ID param must be a Minecraft UUID."
         }
       },
       "CustomerSteamProfileDto": {
@@ -2471,6 +2488,13 @@
         "type": "string",
         "description": "Defines the type of items contained in an order",
         "x-enumDescriptions": {
+          "one_time": "Order contains only one-time purchase items",
+          "subscription_initial": "Order is the initial charge for a subscription",
+          "subscription_renewal": "Order is a recurring renewal charge for a subscription",
+          "subscription_proration": "Order is a proration charge for a subscription",
+          "mixed": "Order contains both one-time purchase and subscription items"
+        },
+        "x-paynow-docs-enum-descriptions": {
           "one_time": "Order contains only one-time purchase items",
           "subscription_initial": "Order is the initial charge for a subscription",
           "subscription_renewal": "Order is a recurring renewal charge for a subscription",
@@ -2674,6 +2698,11 @@
         "type": "string",
         "description": "Describes how proration is handled when a subscription change is applied.",
         "x-enumDescriptions": {
+          "immediate": "Subscription will be updated instantly, and a proration charge will be applied.",
+          "next_billing_period": "Subscription will be updated at the end of the billing period, no proration will be applied.",
+          "none": "No proration is applied, subscription is updated instantly."
+        },
+        "x-paynow-docs-enum-descriptions": {
           "immediate": "Subscription will be updated instantly, and a proration charge will be applied.",
           "next_billing_period": "Subscription will be updated at the end of the billing period, no proration will be applied.",
           "none": "No proration is applied, subscription is updated instantly."
@@ -3137,6 +3166,14 @@
           "payout_provider": "Payout provider, e.g. Trolley, PayPal",
           "kyc_provider": "KYC provider, e.g. Stripe, Onefootprint",
           "external": "External party, not fitting in any other category, e.g. government, regulators"
+        },
+        "x-paynow-docs-enum-descriptions": {
+          "store": "The associated store",
+          "paynow": "We as a platform, RequestedByDetail is the admin actor ID in that case (or null if internal)",
+          "payment_processor": "Payment processor, e.g. Stripe",
+          "payout_provider": "Payout provider, e.g. Trolley, PayPal",
+          "kyc_provider": "KYC provider, e.g. Stripe, Onefootprint",
+          "external": "External party, not fitting in any other category, e.g. government, regulators"
         }
       },
       "StoreRequirementCategory": {
@@ -3163,6 +3200,17 @@
           "financial": "Financial setup and verification requirements.\n            Includes payment processing configuration, banking information, Tipalti/Trolley payout setup,\n            tax documentation (W-9, W-8, etc.), and payment method verification.",
           "legal": "Legal agreement and policy acceptance requirements.\n            Covers acceptance of User Agreement, Terms of Service, Privacy Policy,\n            and any other legal documents required by PayNow for store operation.",
           "other": "Other miscellaneous requirements that don't fit into the above categories.\n            Used for special cases or additional requirements specific to certain store types\n            or jurisdictions."
+        },
+        "x-paynow-docs-enum-descriptions": {
+          "invalid": "Invalid or unspecified category. Default value that should not be used in production.",
+          "business": "Business information and operational requirements.\n            Includes company details, business model, store policies, refund procedures,\n            and operational guidelines for running a store on PayNow.",
+          "kyc": "Know Your Customer (KYC) identity verification requirements.\n            Includes government-issued ID verification, proof of address, and identity confirmation\n            as per PayNow's KYC Policy and conducted via any third party KYC partners",
+          "compliance": "Regulatory compliance requirements including AML checks and content policies.\n            Covers sanctions screening, FATF checks, prohibited customer/product screening,\n            and content compliance as defined in PayNow's policies.",
+          "risk": "Risk management and fraud prevention requirements.\n            Includes transaction monitoring, unusual activity detection, and ongoing\n            risk assessment procedures to protect against fraudulent activities.",
+          "technical": "Technical integration and setup requirements.\n            Covers API configuration, webhook setup, platform integration, and any technical\n            prerequisites for store operation.",
+          "financial": "Financial setup and verification requirements.\n            Includes payment processing configuration, banking information, Tipalti/Trolley payout setup,\n            tax documentation (W-9, W-8, etc.), and payment method verification.",
+          "legal": "Legal agreement and policy acceptance requirements.\n            Covers acceptance of User Agreement, Terms of Service, Privacy Policy,\n            and any other legal documents required by PayNow for store operation.",
+          "other": "Other miscellaneous requirements that don't fit into the above categories.\n            Used for special cases or additional requirements specific to certain store types\n            or jurisdictions."
         }
       },
       "StoreRequirementStatus": {
@@ -3178,6 +3226,15 @@
         ],
         "type": "string",
         "x-enumDescriptions": {
+          "pending": "Requirement created, awaiting action",
+          "under_review": "Submitted, under review, or awaiting external verification",
+          "requires_revision": "Rejected, needs store to resubmit with corrections",
+          "approved": "Requirement successfully fulfilled",
+          "expired": "Requirement expired and needs renewal",
+          "waived": "Requirement waived by PayNow (manual override)",
+          "rejected_final": "Requirement fully rejected - usually terminal state for the entire store"
+        },
+        "x-paynow-docs-enum-descriptions": {
           "pending": "Requirement created, awaiting action",
           "under_review": "Submitted, under review, or awaiting external verification",
           "requires_revision": "Rejected, needs store to resubmit with corrections",
@@ -5979,6 +6036,13 @@
           "applied": "The change has been applied to the subscription.",
           "canceled": "The change was canceled and will not be applied.",
           "pending_verification": "The change requires a verification code sent to the customer's e-mail."
+        },
+        "x-paynow-docs-enum-descriptions": {
+          "pending_payment": "The change is pending payment before it can be applied.",
+          "pending_renewal": "The change will be applied at the next renewal.",
+          "applied": "The change has been applied to the subscription.",
+          "canceled": "The change was canceled and will not be applied.",
+          "pending_verification": "The change requires a verification code sent to the customer's e-mail."
         }
       },
       "SubscriptionStatusDto": {
@@ -5991,6 +6055,11 @@
         "type": "string",
         "description": "Represents the current state of a subscription.",
         "x-enumDescriptions": {
+          "created": "The subscription has been created but is not yet active.",
+          "active": "The subscription is currently active and will renew.",
+          "canceled": "The subscription has been canceled and will no longer renew."
+        },
+        "x-paynow-docs-enum-descriptions": {
           "created": "The subscription has been created but is not yet active.",
           "active": "The subscription is currently active and will renew.",
           "canceled": "The subscription has been canceled and will no longer renew."

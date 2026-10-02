@@ -1092,6 +1092,193 @@
         "x-gitbook-ignore": true
       }
     },
+    "/v1/stores/{storeId}/billing/orders/{orderId}/invoice": {
+      "get": {
+        "tags": [
+          "billing"
+        ],
+        "summary": "Get billing order invoice",
+        "description": "Generates the invoice for one of the store's billing orders, if it does not exist yet, and returns a\ntemporary URL to download it. Only the store owner may call this.",
+        "operationId": "StoreBilling_GetStoreBillingOrderInvoice",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "description": "The ID of the store the billing order belongs to.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "The ID of the billing order to retrieve the invoice for.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvoiceDownloadUrlResponseDto"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-paynow-docs-ignore": true,
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v1/stores/{storeId}/billing/invoices/stripe": {
+      "get": {
+        "tags": [
+          "billing"
+        ],
+        "summary": "Get Stripe invoices",
+        "description": "Retrieves the invoices Stripe Billing raised for the store's subscription before the store moved to\nPayNow, newest first. Only the store owner may call this.",
+        "operationId": "StoreBilling_GetStripeStoreInvoices",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "description": "The ID of the store to retrieve Stripe invoices for.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "The maximum number of invoices to return, between 1 and 100. Defaults to 25.",
+            "schema": {
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "starting_after",
+            "in": "query",
+            "description": "The 'id' of the last invoice of the previous page.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StripeStoreInvoicesDto"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-paynow-docs-ignore": true,
+        "x-gitbook-ignore": true
+      }
+    },
+    "/v1/stores/{storeId}/billing/invoices/stripe/{invoiceId}": {
+      "get": {
+        "tags": [
+          "billing"
+        ],
+        "summary": "Get Stripe invoice",
+        "description": "Returns a URL to download one of the store's Stripe Billing invoices. Only the store owner may\ncall this.",
+        "operationId": "StoreBilling_GetStripeStoreInvoice",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "description": "The ID of the store the invoice belongs to.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "invoiceId",
+            "in": "path",
+            "description": "The Stripe identifier of the invoice, starting with 'in_'.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvoiceDownloadUrlResponseDto"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-paynow-docs-ignore": true,
+        "x-gitbook-ignore": true
+      }
+    },
     "/v1/stores/{storeId}/billing/details": {
       "get": {
         "tags": [
@@ -7603,7 +7790,12 @@
           {
             "APIKey": [ ]
           }
-        ]
+        ],
+        "x-paynow-mcp": {
+          "name": "paynow_list_email_templates",
+          "description": "Lists the store's custom email templates with cursor paging. Any type without an active custom template sends PayNow's default, which paynow_list_email_template_definitions returns.",
+          "readOnly": true
+        }
       },
       "post": {
         "tags": [
@@ -7669,7 +7861,12 @@
           {
             "APIKey": [ ]
           }
-        ]
+        ],
+        "x-paynow-mcp": {
+          "name": "paynow_create_email_template",
+          "description": "Creates a custom email template for one 'email_template_type'. Start 'content' from that type's 'default_content' in paynow_list_email_template_definitions, which also lists the components and variables it can use. Make it the one customers receive with paynow_activate_email_template.",
+          "readOnly": false
+        }
       }
     },
     "/v1/stores/{storeId}/marketing/email/templates/{templateId}": {
@@ -7726,7 +7923,12 @@
           {
             "APIKey": [ ]
           }
-        ]
+        ],
+        "x-paynow-mcp": {
+          "name": "paynow_get_email_template",
+          "description": "Returns one custom email template by ID, content included. Read it before updating.",
+          "readOnly": true
+        }
       },
       "patch": {
         "tags": [
@@ -7801,7 +8003,12 @@
           {
             "APIKey": [ ]
           }
-        ]
+        ],
+        "x-paynow-mcp": {
+          "name": "paynow_update_email_template",
+          "description": "Partial update of a template's 'name' or 'content'. Send only the fields to change. 'email_template_type' cannot be changed after creation.",
+          "readOnly": false
+        }
       },
       "delete": {
         "tags": [
@@ -7849,7 +8056,12 @@
           {
             "APIKey": [ ]
           }
-        ]
+        ],
+        "x-paynow-mcp": {
+          "name": "paynow_delete_email_template",
+          "description": "Permanently deletes a custom email template. Cannot be undone. To revert to PayNow's default but keep the template, use paynow_deactivate_email_template instead.",
+          "readOnly": false
+        }
       }
     },
     "/v1/stores/{storeId}/marketing/email/templates/{templateId}/activate": {
@@ -7899,7 +8111,12 @@
           {
             "APIKey": [ ]
           }
-        ]
+        ],
+        "x-paynow-mcp": {
+          "name": "paynow_activate_email_template",
+          "description": "Makes the template the one customers receive for its type, in place of PayNow's default. This changes real customer emails, so confirm with the user first. Returns nothing.",
+          "readOnly": false
+        }
       }
     },
     "/v1/stores/{storeId}/marketing/email/templates/{templateId}/deactivate": {
@@ -7949,7 +8166,12 @@
           {
             "APIKey": [ ]
           }
-        ]
+        ],
+        "x-paynow-mcp": {
+          "name": "paynow_deactivate_email_template",
+          "description": "Deactivates a template so PayNow's default for its type is sent instead. The template is kept. Returns nothing.",
+          "readOnly": false
+        }
       }
     },
     "/v1/stores/{storeId}/marketing/email/templates/deactivate": {
@@ -8010,7 +8232,12 @@
           {
             "APIKey": [ ]
           }
-        ]
+        ],
+        "x-paynow-mcp": {
+          "name": "paynow_deactivate_email_template_by_type",
+          "description": "Deactivates whichever template is active for an 'email_template_type', so PayNow's default is sent instead. Use it when you know the type but not the template ID. Returns nothing.",
+          "readOnly": false
+        }
       }
     },
     "/v1/stores/{storeId}/marketing/email/template-definitions": {
@@ -8033,8 +8260,8 @@
           }
         ],
         "responses": {
-          "204": {
-            "description": "No Content",
+          "200": {
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -8061,7 +8288,12 @@
           {
             "APIKey": [ ]
           }
-        ]
+        ],
+        "x-paynow-mcp": {
+          "name": "paynow_list_email_template_definitions",
+          "description": "Lists every email type the store can customise, with its display name, the components and example variables its content can use, and PayNow's 'default_content'. Read it before creating or editing a template.",
+          "readOnly": true
+        }
       }
     },
     "/v1/stores/{storeId}/marketing/email/branding": {
@@ -8109,7 +8341,12 @@
           {
             "APIKey": [ ]
           }
-        ]
+        ],
+        "x-paynow-mcp": {
+          "name": "paynow_get_email_branding",
+          "description": "Returns the email branding: the accent 'color' and the light and dark header image URLs used across the store's emails.",
+          "readOnly": true
+        }
       },
       "patch": {
         "tags": [
@@ -8175,7 +8412,12 @@
           {
             "APIKey": [ ]
           }
-        ]
+        ],
+        "x-paynow-mcp": {
+          "name": "paynow_update_email_branding",
+          "description": "Partial update of the email branding. Send only the fields to change. Applies to every email the store sends.",
+          "readOnly": false
+        }
       }
     },
     "/v1/stores/{storeId}/marketing/email/branding/image-upload-url": {
@@ -8424,7 +8666,12 @@
           {
             "APIKey": [ ]
           }
-        ]
+        ],
+        "x-paynow-mcp": {
+          "name": "paynow_list_email_deliveries",
+          "description": "Lists emails the store has sent, with cursor paging. Filter by 'receiver_email', 'email_template_type' or 'status' to check whether a customer received an email.",
+          "readOnly": true
+        }
       }
     },
     "/v1/stores/{storeId}/marketing/email/deliveries/{emailDeliveryId}": {
@@ -8481,7 +8728,12 @@
           {
             "APIKey": [ ]
           }
-        ]
+        ],
+        "x-paynow-mcp": {
+          "name": "paynow_get_email_delivery",
+          "description": "Returns one email delivery by ID. Find IDs with paynow_list_email_deliveries.",
+          "readOnly": true
+        }
       }
     },
     "/v1/stores/{storeId}/marketing/abandoned-checkouts/configuration": {
@@ -33806,6 +34058,78 @@
         },
         "additionalProperties": false,
         "description": "Represents a store entity within the storefront system."
+      },
+      "StripeStoreInvoiceDto": {
+        "required": [
+          "created_at",
+          "currency",
+          "id",
+          "is_paid",
+          "total"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The Stripe identifier of the invoice, starting with 'in_'."
+          },
+          "number": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The invoice number printed on the document."
+          },
+          "description": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "What the invoice was raised for."
+          },
+          "currency": {
+            "type": "string",
+            "description": "The lowercase ISO 4217 currency the invoice was raised in."
+          },
+          "total": {
+            "type": "integer",
+            "description": "The invoice total in the smallest currency unit.",
+            "format": "int64"
+          },
+          "is_paid": {
+            "type": "boolean",
+            "description": "Whether the invoice has been paid."
+          },
+          "created_at": {
+            "type": "string",
+            "description": "When the invoice was created.",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents an invoice Stripe Billing raised for the store's subscription before the store moved to PayNow."
+      },
+      "StripeStoreInvoicesDto": {
+        "required": [
+          "has_more",
+          "invoices"
+        ],
+        "type": "object",
+        "properties": {
+          "invoices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StripeStoreInvoiceDto"
+            },
+            "description": "The invoices on this page."
+          },
+          "has_more": {
+            "type": "boolean",
+            "description": "Whether more invoices follow. Pass the last invoice's 'id' as 'starting_after' to fetch them."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents a page of the store's Stripe Billing invoices, newest first."
       },
       "SubscriptionBillingAmountDto": {
         "required": [

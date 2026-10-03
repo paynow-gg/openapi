@@ -3511,10 +3511,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/DataMigrationTaskDto"
-                  }
+                  "$ref": "#/components/schemas/DataMigrationTaskDto"
                 }
               }
             }
@@ -4972,7 +4969,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DiscordActionDto"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DiscordActionDto"
+                  }
                 }
               }
             }
@@ -5293,8 +5293,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
+          "204": {
+            "description": "No Content"
           },
           "default": {
             "description": "Error response",
@@ -5346,8 +5346,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
+          "204": {
+            "description": "No Content"
           },
           "default": {
             "description": "Error response",
@@ -5769,7 +5769,14 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StartDownloadableFileUploadResponseDto"
+                }
+              }
+            }
           },
           "default": {
             "description": "Error response",
@@ -16322,8 +16329,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
+          "204": {
+            "description": "No Content"
           },
           "default": {
             "description": "Error response",
@@ -23915,7 +23922,7 @@
             "$ref": "#/components/schemas/WebhookEventType"
           },
           "type": {
-            "$ref": "#/components/schemas/WebhookType"
+            "$ref": "#/components/schemas/WebhookTypeDto"
           },
           "discord_description_template": {
             "type": [
@@ -31485,7 +31492,7 @@
             "format": "date-time"
           },
           "state": {
-            "$ref": "#/components/schemas/WebhookState"
+            "$ref": "#/components/schemas/WebhookStateDto"
           },
           "next_retry": {
             "type": [
@@ -32408,6 +32415,22 @@
               "null",
               "string"
             ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "StartDownloadableFileUploadResponseDto": {
+        "required": [
+          "downloadable_file_id",
+          "upload_signed_url"
+        ],
+        "type": "object",
+        "properties": {
+          "downloadable_file_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "upload_signed_url": {
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -38149,7 +38172,7 @@
         },
         "additionalProperties": false
       },
-      "WebhookState": {
+      "WebhookStateDto": {
         "enum": [
           "success",
           "pending",
@@ -38173,7 +38196,7 @@
           },
           "url": {
             "type": "string",
-            "description": "The URL each event is delivered to. For the 'discord_v1' type this is the Discord webhook URL."
+            "description": "The URL each event is delivered to. For the 'DiscordV1' type this is the Discord webhook URL."
           },
           "secret": {
             "type": "string",
@@ -38183,28 +38206,28 @@
             "$ref": "#/components/schemas/WebhookEventType"
           },
           "type": {
-            "$ref": "#/components/schemas/WebhookType"
+            "$ref": "#/components/schemas/WebhookTypeDto"
           },
           "discord_description_template": {
             "type": [
               "null",
               "string"
             ],
-            "description": "The template rendered into the body of the Discord message, with webhook variables substituted.\nOnly used by the 'discord_v1' type."
+            "description": "The template rendered into the body of the Discord message, with webhook variables substituted.\nOnly used by the 'DiscordV1' type."
           },
           "discord_title": {
             "type": [
               "null",
               "string"
             ],
-            "description": "The title of the Discord embed. Only used by the 'discord_v1' type with the 'embed' format."
+            "description": "The title of the Discord embed. Only used by the 'DiscordV1' type with the 'Embed' format."
           },
           "discord_color": {
             "type": [
               "null",
               "string"
             ],
-            "description": "The accent colour of the Discord embed, as a hex colour. Only used by the 'discord_v1' type\nwith the 'embed' format."
+            "description": "The accent colour of the Discord embed, as a hex colour. Only used by the 'DiscordV1' type\nwith the 'Embed' format."
           },
           "discord_format": {
             "$ref": "#/components/schemas/WebhookDiscordFormatDto"
@@ -38213,12 +38236,21 @@
         "additionalProperties": false,
         "description": "Represents a webhook subscription: an endpoint that receives a request whenever one of the\nsubscribed events happens in the store."
       },
-      "WebhookType": {
+      "WebhookTypeDto": {
         "enum": [
-          "json_v1",
-          "discord_v1"
+          "JsonV1",
+          "DiscordV1"
         ],
-        "type": "string"
+        "type": "string",
+        "description": "Specifies the payload format a webhook delivers.",
+        "x-enumDescriptions": {
+          "JsonV1": "The event is posted as JSON. This is the default.",
+          "DiscordV1": "The event is posted as a Discord message."
+        },
+        "x-paynow-docs-enum-descriptions": {
+          "JsonV1": "The event is posted as JSON. This is the default.",
+          "DiscordV1": "The event is posted as a Discord message."
+        }
       },
       "WebhookVariablesDto": {
         "required": [

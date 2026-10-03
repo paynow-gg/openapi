@@ -3314,7 +3314,7 @@
         "x-gitbook-ignore": true,
         "x-paynow-mcp": {
           "name": "paynow_search_dashboard",
-          "description": "Searches the whole store at once (customers, orders, products, coupons, sales, gift cards, tags, affiliate links, trials, subscriptions, bans, game servers). Prefer this for finding an ID by name, email, code or identity. Use paynow_list_dashboard_search_hints for the supported qualifiers.",
+          "description": "Searches the whole store at once (customers, orders, products, coupons, sales, gift cards, tags, affiliate links, trials, subscriptions, bans, game servers, API keys, tier groups, custom variables, global commands, webhooks, email templates, email deliveries). Prefer this for finding an ID by name, email, code or identity. Use paynow_list_dashboard_search_hints for the supported qualifiers.",
           "readOnly": true,
           "standalone": true
         }
@@ -21936,6 +21936,85 @@
         "additionalProperties": false,
         "description": "Alipay payment method details"
       },
+      "ApiKeyDto": {
+        "required": [
+          "created_at",
+          "created_by",
+          "id",
+          "name",
+          "role_id",
+          "store_id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "store_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "role_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the API key."
+          },
+          "token": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The secret token used to authenticate as this API key. Only returned when the\nkey is created and when its token is reset."
+          },
+          "token_reset_at": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "When the API key's token was last reset.",
+            "format": "date-time"
+          },
+          "created_by": {
+            "$ref": "#/components/schemas/ActorDto"
+          },
+          "created_at": {
+            "type": "string",
+            "description": "When the API key was created.",
+            "format": "date-time"
+          },
+          "updated_by": {
+            "$ref": "#/components/schemas/ActorDto"
+          },
+          "updated_at": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "When the API key was last updated.",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ApiKeyResult": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "store_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "api_key": {
+            "$ref": "#/components/schemas/ApiKeyDto"
+          }
+        },
+        "additionalProperties": false
+      },
       "AvailablePermissionDto": {
         "required": [
           "description",
@@ -24210,6 +24289,24 @@
         "additionalProperties": false,
         "description": "Request model for defining custom variable options.\nUsed within UpsertCustomVariableRequestDto for dropdown-type variables."
       },
+      "CustomVariableResult": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "store_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "custom_variable": {
+            "$ref": "#/components/schemas/CustomVariableDto"
+          }
+        },
+        "additionalProperties": false
+      },
       "CustomVariableType": {
         "enum": [
           "dropdown",
@@ -24792,7 +24889,13 @@
           "giftcards",
           "stores",
           "users",
-          "tickets"
+          "tickets",
+          "tier_groups",
+          "custom_variables",
+          "global_commands",
+          "webhooks",
+          "email_templates",
+          "email_deliveries"
         ],
         "type": "string"
       },
@@ -25627,6 +25730,24 @@
         },
         "additionalProperties": false
       },
+      "EmailDeliveryResult": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "store_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "email_delivery": {
+            "$ref": "#/components/schemas/EmailDeliveryDto"
+          }
+        },
+        "additionalProperties": false
+      },
       "EmailDeliveryStatusDto": {
         "enum": [
           "unspecified",
@@ -25738,6 +25859,24 @@
               "string"
             ],
             "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "EmailTemplateResult": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "store_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "email_template": {
+            "$ref": "#/components/schemas/EmailTemplateDto"
           }
         },
         "additionalProperties": false
@@ -26564,6 +26703,24 @@
         },
         "additionalProperties": false,
         "description": "Represents a global command in the system.\nGlobal commands are instructions that can be executed across a store's environment."
+      },
+      "GlobalCommandResult": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "store_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "global_command": {
+            "$ref": "#/components/schemas/GlobalCommandDto"
+          }
+        },
+        "additionalProperties": false
       },
       "IdealDetailsDto": {
         "required": [
@@ -31885,19 +32042,26 @@
       "SearchDashboardResponseDto": {
         "required": [
           "affiliate_links",
+          "api_keys",
           "bans",
           "coupons",
+          "custom_variables",
           "customers",
+          "email_deliveries",
+          "email_templates",
           "facets",
           "gameservers",
           "giftcards",
+          "global_commands",
           "orders",
           "products",
           "sales",
           "stores",
           "subscriptions",
           "tags",
-          "trials"
+          "tier_groups",
+          "trials",
+          "webhooks"
         ],
         "type": "object",
         "properties": {
@@ -31979,6 +32143,48 @@
               "$ref": "#/components/schemas/BanResult"
             }
           },
+          "api_keys": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiKeyResult"
+            }
+          },
+          "tier_groups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TierGroupResult"
+            }
+          },
+          "custom_variables": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomVariableResult"
+            }
+          },
+          "global_commands": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GlobalCommandResult"
+            }
+          },
+          "webhooks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WebhookResult"
+            }
+          },
+          "email_templates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EmailTemplateResult"
+            }
+          },
+          "email_deliveries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EmailDeliveryResult"
+            }
+          },
           "facets": {
             "type": "object",
             "properties": {
@@ -32047,6 +32253,30 @@
                 "format": "int64"
               },
               "tickets": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "tier_groups": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "custom_variables": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "global_commands": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "webhooks": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "email_templates": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "email_deliveries": {
                 "type": "integer",
                 "format": "int64"
               }
@@ -35653,6 +35883,24 @@
         },
         "additionalProperties": false
       },
+      "TierGroupResult": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "store_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "tier_group": {
+            "$ref": "#/components/schemas/TierGroupDto"
+          }
+        },
+        "additionalProperties": false
+      },
       "TimeSeriesChartDto": {
         "required": [
           "chart",
@@ -37879,6 +38127,24 @@
             "items": {
               "$ref": "#/components/schemas/QueuedWebhookDto"
             }
+          }
+        },
+        "additionalProperties": false
+      },
+      "WebhookResult": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "store_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "webhook": {
+            "$ref": "#/components/schemas/WebhookSubscriptionDto"
           }
         },
         "additionalProperties": false

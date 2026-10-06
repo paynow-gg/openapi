@@ -1017,69 +1017,6 @@ paths:
         name: paynow_update_checkout_style
         description: 'Partial update. Send only the fields to change. Colours are hex strings. The background image is uploaded through the dashboard, not set here.'
         readOnly: false
-  '/v1/stores/{storeId}/checkout-style/background-image/upload_url':
-    get:
-      tags:
-        - checkout-style
-      summary: Get upload URL for checkout background image
-      description: Gets a pre-signed upload URL for uploading the hosted checkout background image.
-      operationId: StoreCheckoutStyle_GetStoreCheckoutStyleBackgroundImageUploadUrl
-      parameters:
-        - name: storeId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetCheckoutStyleBackgroundImageUploadUrlResponseDto'
-        default:
-          description: Error response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PayNowError'
-      security:
-        - APIKey: [ ]
-  '/v1/stores/{storeId}/checkout-style/background-image/upload_finish':
-    post:
-      tags:
-        - checkout-style
-      summary: Finish checkout background image upload
-      description: Finishes an upload of the hosted checkout background image.
-      operationId: StoreCheckoutStyle_FinishStoreCheckoutStyleBackgroundImageUpload
-      parameters:
-        - name: storeId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FinishCheckoutStyleBackgroundImageUploadRequestDto'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/FinishCheckoutStyleBackgroundImageUploadRequestDto'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/FinishCheckoutStyleBackgroundImageUploadRequestDto'
-      responses:
-        '204':
-          description: No Content
-        default:
-          description: Error response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PayNowError'
-      security:
-        - APIKey: [ ]
   '/v1/stores/{storeId}/checkout-style/background-image':
     delete:
       tags:
@@ -5264,69 +5201,6 @@ paths:
         name: paynow_update_email_branding
         description: Partial update of the email branding. Send only the fields to change. Applies to every email the store sends.
         readOnly: false
-  '/v1/stores/{storeId}/marketing/email/branding/image-upload-url':
-    get:
-      tags:
-        - marketing
-      operationId: Email_GetEmailBrandingImageUploadUrl
-      parameters:
-        - name: storeId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-        - name: dark_mode
-          in: query
-          schema:
-            type: boolean
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetEmailBrandingImageUploadUrlResponseDto'
-        default:
-          description: Error response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PayNowError'
-      security:
-        - APIKey: [ ]
-  '/v1/stores/{storeId}/marketing/email/branding/image-upload-finish':
-    post:
-      tags:
-        - marketing
-      operationId: Email_FinishEmailBrandingImageUpload
-      parameters:
-        - name: storeId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FinishEmailBrandingImageUploadRequestDto'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/FinishEmailBrandingImageUploadRequestDto'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/FinishEmailBrandingImageUploadRequestDto'
-      responses:
-        '204':
-          description: No Content
-        default:
-          description: Error response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PayNowError'
-      security:
-        - APIKey: [ ]
   '/v1/stores/{storeId}/marketing/email/deliveries':
     get:
       tags:
@@ -5614,6 +5488,208 @@ paths:
         name: paynow_update_purchase_follow_up_settings
         description: 'Full replace, not a partial update. Omitted fields reset to defaults, so start from the current configuration. Reminder: durations are ISO 8601 (P3D) and coupon percentages are tenths of a percent. Enabling this emails customers after purchase and issues real discount coupons.'
         readOnly: false
+  '/v1/stores/{storeId}/media':
+    get:
+      tags:
+        - media
+      summary: List media
+      description: 'Lists the store''s uploaded images and videos, newest first.'
+      operationId: Media_ListMediaAssets
+      parameters:
+        - name: storeId
+          in: path
+          description: The ID of the store to list media for.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: type
+          in: query
+          description: Only return media of this type.
+          schema:
+            $ref: '#/components/schemas/MediaAssetTypeDto'
+        - name: limit
+          in: query
+          description: The maximum number of items to return in a single request.
+          schema:
+            maximum: 100
+            minimum: 1
+            type: integer
+            format: int32
+        - name: after
+          in: query
+          description: "Returns items after the specified ID.\nUsed for forward pagination through results."
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+          example: 'null'
+        - name: before
+          in: query
+          description: "Returns items before the specified ID.\nUsed for backward pagination through results."
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+          example: 'null'
+        - name: asc
+          in: query
+          description: "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order."
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MediaAssetDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/media/{mediaAssetId}':
+    get:
+      tags:
+        - media
+      summary: Get media asset
+      description: Retrieves a single uploaded image or video.
+      operationId: Media_GetMediaAsset
+      parameters:
+        - name: storeId
+          in: path
+          description: The ID of the store the media asset belongs to.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: mediaAssetId
+          in: path
+          description: The ID of the media asset.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediaAssetDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+    delete:
+      tags:
+        - media
+      summary: Delete media asset
+      description: "Removes the media asset from the store's media so it can no longer be attached. Products, tags and logos\nalready using it keep showing it."
+      operationId: Media_DeleteMediaAsset
+      parameters:
+        - name: storeId
+          in: path
+          description: The ID of the store the media asset belongs to.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: mediaAssetId
+          in: path
+          description: The ID of the media asset.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '204':
+          description: No Content
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/media/uploads':
+    post:
+      tags:
+        - media
+      summary: Start media upload
+      description: "Starts uploading an image or video of at most 20 MB. Upload the file to the returned 'upload_url' with a PUT\nrequest whose Content-Type and Content-Length headers match the request, then call the finish route."
+      operationId: Media_CreateMediaUpload
+      parameters:
+        - name: storeId
+          in: path
+          description: The ID of the store to upload media to.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      requestBody:
+        description: The type and size of the file to upload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMediaUploadRequestDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CreateMediaUploadRequestDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/CreateMediaUploadRequestDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateMediaUploadResponseDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+  '/v1/stores/{storeId}/media/{mediaAssetId}/finish':
+    post:
+      tags:
+        - media
+      summary: Finish media upload
+      description: 'Checks the uploaded file and makes the media asset ready to be used on products, tags and store logos.'
+      operationId: Media_FinishMediaUpload
+      parameters:
+        - name: storeId
+          in: path
+          description: The ID of the store the media asset belongs to.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: mediaAssetId
+          in: path
+          description: The ID of the media asset returned when the upload was started.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediaAssetDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
   '/v1/stores/{storeId}/navlinks':
     get:
       tags:
@@ -6776,79 +6852,6 @@ paths:
         name: paynow_update_product_sort_order
         description: Sets the storefront order of products. Send the complete ordered list of product IDs. Returns nothing.
         readOnly: false
-  '/v1/stores/{storeId}/products/{productId}/image-upload-url':
-    get:
-      tags:
-        - products
-      summary: Get upload URL for product image
-      description: Gets a pre-signed upload URL for uploading an image to a product.
-      operationId: Products_GetProductImageUploadUrl
-      parameters:
-        - name: storeId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-        - name: productId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetProductImageUploadUrlResponseDto'
-        default:
-          description: Error response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PayNowError'
-      security:
-        - APIKey: [ ]
-  '/v1/stores/{storeId}/products/{productId}/image-upload-finish':
-    post:
-      tags:
-        - products
-      summary: Finish product image upload
-      description: 'Finishes an image upload for a product, attaching the uploaded image to the product.'
-      operationId: Products_FinishProductImageUpload
-      parameters:
-        - name: storeId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-        - name: productId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FinishProductImageUploadRequestDto'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/FinishProductImageUploadRequestDto'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/FinishProductImageUploadRequestDto'
-      responses:
-        '204':
-          description: No Content
-        default:
-          description: Error response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PayNowError'
-      security:
-        - APIKey: [ ]
   '/v1/stores/{storeId}/products/{productId}/image':
     delete:
       tags:
@@ -10331,69 +10334,6 @@ paths:
                 $ref: '#/components/schemas/PayNowError'
       security:
         - APIKey: [ ]
-  '/v1/stores/{storeId}/logo-upload-url':
-    get:
-      tags:
-        - store
-      summary: Get upload URL for store logo
-      description: Gets a pre-signed upload URL for uploading a logo to a store.
-      operationId: Store_GetStoreLogoUploadUrl
-      parameters:
-        - name: storeId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetStoreLogoUploadUrlResponseDto'
-        default:
-          description: Error response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PayNowError'
-      security:
-        - APIKey: [ ]
-  '/v1/stores/{storeId}/logo-upload-finish':
-    post:
-      tags:
-        - store
-      summary: Finish store logo upload
-      description: 'Finishes a logo upload for a store, attaching the uploaded image to the store.'
-      operationId: Store_FinishStoreLogoUpload
-      parameters:
-        - name: storeId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FinishStoreLogoUploadRequestDto'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/FinishStoreLogoUploadRequestDto'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/FinishStoreLogoUploadRequestDto'
-      responses:
-        '204':
-          description: No Content
-        default:
-          description: Error response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PayNowError'
-      security:
-        - APIKey: [ ]
   '/v1/stores/{storeId}/logo':
     delete:
       tags:
@@ -10916,79 +10856,6 @@ paths:
         name: paynow_delete_tag
         description: 'Permanently deletes a tag. To hide it instead, set ''enabled'' to false.'
         readOnly: false
-  '/v1/stores/{storeId}/tags/{tagId}/image-upload-url':
-    get:
-      tags:
-        - tags
-      summary: Get upload URL for tag image
-      description: Gets a pre-signed upload URL for uploading an image to a tag
-      operationId: Tags_GetTagImageUploadUrl
-      parameters:
-        - name: storeId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-        - name: tagId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetTagImageUploadUrlResponseDto'
-        default:
-          description: Error response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PayNowError'
-      security:
-        - APIKey: [ ]
-  '/v1/stores/{storeId}/tags/{tagId}/image-upload-finish':
-    post:
-      tags:
-        - tags
-      summary: Finish tag image upload
-      description: Finishes an image upload for a tag
-      operationId: Tags_FinishTagImageUpload
-      parameters:
-        - name: storeId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-        - name: tagId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlakeId'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FinishTagImageUploadUrlRequestDto'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/FinishTagImageUploadUrlRequestDto'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/FinishTagImageUploadUrlRequestDto'
-      responses:
-        '204':
-          description: No Content
-        default:
-          description: Error response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PayNowError'
-      security:
-        - APIKey: [ ]
   '/v1/stores/{storeId}/tags/{tagId}/image':
     delete:
       tags:
@@ -14207,7 +14074,9 @@ components:
           type:
             - 'null'
             - string
-          description: "The URL of the image shown behind the checkout, or null when none has been uploaded. It cannot\nbe set directly; upload an image through the background image endpoints instead."
+          description: "The URL of the image shown behind the checkout, or null when there is none. It cannot be set\ndirectly; set 'background_media_asset_id' instead."
+        background_media_asset_id:
+          $ref: '#/components/schemas/FlakeId'
       additionalProperties: false
       description: Represents the styling applied to the store's hosted checkout.
     CommandAttemptDto:
@@ -14739,6 +14608,8 @@ components:
         color_outline:
           type: string
           description: "The colour of borders and outlines on the checkout, as a CSS colour value, or null to use the\ndefault."
+        background_media_asset_id:
+          $ref: '#/components/schemas/FlakeId'
     CreateCouponDto:
       required:
         - enabled
@@ -14864,10 +14735,10 @@ components:
       properties:
         color:
           type: string
-        header_image_light_url:
-          type: string
-        header_image_dark_url:
-          type: string
+        header_image_light_media_asset_id:
+          $ref: '#/components/schemas/FlakeId'
+        header_image_dark_media_asset_id:
+          $ref: '#/components/schemas/FlakeId'
     CreateEmailTemplateDto:
       required:
         - email_template_type
@@ -14962,6 +14833,42 @@ components:
         user_email:
           type: string
           description: The email address the invite was sent to.
+    CreateMediaUploadRequestDto:
+      required:
+        - content_type
+        - size_bytes
+      type: object
+      properties:
+        content_type:
+          minLength: 1
+          type: string
+          description: 'The MIME type of the file. One of ''image/png'', ''image/jpeg'', ''image/webp'', ''image/gif'' or ''video/mp4''.'
+          example: image/png
+        size_bytes:
+          type: integer
+          description: 'The size of the file in bytes, at most 20 MB (20971520 bytes).'
+          format: int64
+          example: 524288
+      additionalProperties: false
+      description: Represents a request to start uploading a media file.
+    CreateMediaUploadResponseDto:
+      required:
+        - expires_at
+        - media_asset_id
+        - upload_url
+      type: object
+      properties:
+        media_asset_id:
+          $ref: '#/components/schemas/FlakeId'
+        upload_url:
+          type: string
+          description: 'The URL to upload the file to with a PUT request, sending the file as the raw request body.'
+        expires_at:
+          type: string
+          description: The date and time after which 'upload_url' stops accepting the upload.
+          format: date-time
+      additionalProperties: false
+      description: Represents a started media upload.
     CreateNavLinkDto:
       required:
         - tag_id
@@ -15114,6 +15021,10 @@ components:
         integration_type:
           type: string
           description: The integration type used by the store.
+        logo_media_asset_id:
+          $ref: '#/components/schemas/FlakeId'
+        logo_square_media_asset_id:
+          $ref: '#/components/schemas/FlakeId'
         minecraft_bedrock_username_prefix:
           type: string
           description: Username prefix used to identify Minecraft Bedrock players (e.g. ".").
@@ -16507,6 +16418,10 @@ components:
           type:
             - 'null'
             - string
+        header_image_light_media_asset_id:
+          $ref: '#/components/schemas/FlakeId'
+        header_image_dark_media_asset_id:
+          $ref: '#/components/schemas/FlakeId'
       additionalProperties: false
     EmailDeliveryDto:
       required:
@@ -16726,57 +16641,6 @@ components:
           type:
             - 'null'
             - string
-      additionalProperties: false
-    FinishCheckoutStyleBackgroundImageUploadRequestDto:
-      required:
-        - image_id
-      type: object
-      properties:
-        image_id:
-          type: string
-      additionalProperties: false
-    FinishEmailBrandingImageUploadRequestDto:
-      required:
-        - dark_mode
-        - image_id
-      type: object
-      properties:
-        image_id:
-          type: string
-        dark_mode:
-          type: boolean
-      additionalProperties: false
-    FinishProductImageUploadRequestDto:
-      required:
-        - image_id
-      type: object
-      properties:
-        image_id:
-          type: string
-          description: The ID of the uploaded image returned by the server.
-      additionalProperties: false
-    FinishStoreLogoUploadRequestDto:
-      required:
-        - image_id
-        - logo_type
-      type: object
-      properties:
-        image_id:
-          type: string
-          description: The ID of the uploaded image returned by the server.
-        logo_type:
-          type: integer
-          description: 'Which logo the upload replaces. 1 is the default logo, 2 the square logo.'
-          format: int32
-      additionalProperties: false
-    FinishTagImageUploadUrlRequestDto:
-      required:
-        - image_id
-      type: object
-      properties:
-        image_id:
-          type: string
-          description: The ID of the uploaded image returned by the server.
       additionalProperties: false
     FinishWebstoreTemplateUploadResponseDto:
       required:
@@ -17010,17 +16874,6 @@ components:
         gameserver:
           $ref: '#/components/schemas/GameServerDto'
       additionalProperties: false
-    GetCheckoutStyleBackgroundImageUploadUrlResponseDto:
-      required:
-        - id
-        - upload_url
-      type: object
-      properties:
-        id:
-          type: string
-        upload_url:
-          type: string
-      additionalProperties: false
     GetDimensionStatsResponseDto_V2:
       required:
         - dimension_type
@@ -17049,56 +16902,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DistributionEntryDto_V2'
-      additionalProperties: false
-    GetEmailBrandingImageUploadUrlResponseDto:
-      required:
-        - image_id
-        - upload_url
-      type: object
-      properties:
-        upload_url:
-          type: string
-        image_id:
-          type: string
-      additionalProperties: false
-    GetProductImageUploadUrlResponseDto:
-      required:
-        - id
-        - upload_url
-      type: object
-      properties:
-        id:
-          type: string
-          description: The ID of the direct image upload URL.
-        upload_url:
-          type: string
-          description: The URL to upload the image to.
-      additionalProperties: false
-    GetStoreLogoUploadUrlResponseDto:
-      required:
-        - id
-        - upload_url
-      type: object
-      properties:
-        id:
-          type: string
-          description: The ID of the direct image upload URL.
-        upload_url:
-          type: string
-          description: The URL to upload the logo to.
-      additionalProperties: false
-    GetTagImageUploadUrlResponseDto:
-      required:
-        - id
-        - upload_url
-      type: object
-      properties:
-        id:
-          type: string
-          description: The ID of the direct image upload URL.
-        upload_url:
-          type: string
-          description: The URL to upload the image to.
       additionalProperties: false
     GetWebstoreTemplateArchiveResponseDto:
       required:
@@ -17475,6 +17278,13 @@ components:
           items:
             $ref: '#/components/schemas/FlakeId'
           description: The IDs of associated custom variables.
+        media_asset_ids:
+          type:
+            - 'null'
+            - array
+          items:
+            $ref: '#/components/schemas/FlakeId'
+          description: 'The IDs of the media assets to show as the product''s images, in display order.'
         is_gift_cards_disabled:
           type:
             - 'null'
@@ -17834,6 +17644,54 @@ components:
           $ref: '#/components/schemas/Period'
       additionalProperties: false
       description: Represents the configuration settings for a coupon applied to marketing features.
+    MediaAssetDto:
+      required:
+        - content_type
+        - created_at
+        - id
+        - size_bytes
+        - store_id
+        - type
+        - url
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        url:
+          type: string
+          description: The public URL the media is served from.
+        type:
+          $ref: '#/components/schemas/MediaAssetTypeDto'
+        content_type:
+          type: string
+          description: 'The MIME type of the media, for example ''image/png''.'
+        size_bytes:
+          type: integer
+          description: The size of the media in bytes.
+          format: int64
+        created_at:
+          type: string
+          description: The date and time the media asset was created.
+          format: date-time
+      additionalProperties: false
+      description: Represents an image or video uploaded to a store's media.
+    MediaAssetTypeDto:
+      enum:
+        - unknown
+        - image
+        - video
+      type: string
+      description: Specifies the kind of media an asset holds.
+      x-enumDescriptions:
+        unknown: The type is unknown.
+        image: 'An image (PNG, JPEG, WEBP or GIF).'
+        video: A video (MP4).
+      x-paynow-docs-enum-descriptions:
+        unknown: The type is unknown.
+        image: 'An image (PNG, JPEG, WEBP or GIF).'
+        video: A video (MP4).
     MoneyDto_V2:
       required:
         - amount_minor_units
@@ -19978,6 +19836,7 @@ components:
         - description
         - gameservers
         - id
+        - images
         - name
         - payout_splits
         - price
@@ -20010,6 +19869,11 @@ components:
             - 'null'
             - string
           description: The URL to the product image.
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductImageDto'
+          description: The product's images in display order. The first image is the primary image.
         slug:
           type: string
           description: The unique slug for the product.
@@ -20195,6 +20059,22 @@ components:
           type: boolean
           description: Indicates whether this game server is enabled.
       additionalProperties: false
+    ProductImageDto:
+      required:
+        - media_asset_id
+        - type
+        - url
+      type: object
+      properties:
+        media_asset_id:
+          $ref: '#/components/schemas/FlakeId'
+        url:
+          type: string
+          description: The public URL the image is served from.
+        type:
+          $ref: '#/components/schemas/MediaAssetTypeDto'
+      additionalProperties: false
+      description: Represents one of a product's images.
     ProductPayoutSplitDto:
       required:
         - platform_fee
@@ -21893,6 +21773,10 @@ components:
             - 'null'
             - string
           description: URL of the store's square/icon logo image.
+        logo_media_asset_id:
+          $ref: '#/components/schemas/FlakeId'
+        logo_square_media_asset_id:
+          $ref: '#/components/schemas/FlakeId'
         minecraft_bedrock_username_prefix:
           type:
             - 'null'
@@ -24172,6 +24056,8 @@ components:
             - 'null'
             - string
           description: The Image URL associated with the tag.
+        media_asset_id:
+          $ref: '#/components/schemas/FlakeId'
         enabled:
           type: boolean
           description: Indicates whether this tag is enabled.
@@ -24856,6 +24742,8 @@ components:
         color_outline:
           type: string
           description: "The colour of borders and outlines on the checkout, as a CSS colour value, or null to use the\ndefault."
+        background_media_asset_id:
+          $ref: '#/components/schemas/FlakeId'
     UpdateCouponDto:
       type: object
       properties:
@@ -24940,10 +24828,10 @@ components:
       properties:
         color:
           type: string
-        header_image_light_url:
-          type: string
-        header_image_dark_url:
-          type: string
+        header_image_light_media_asset_id:
+          $ref: '#/components/schemas/FlakeId'
+        header_image_dark_media_asset_id:
+          $ref: '#/components/schemas/FlakeId'
     UpdateEmailTemplateDto:
       type: object
       properties:
@@ -25138,6 +25026,10 @@ components:
         live_mode:
           type: boolean
           description: 'When set to true, the store is processing real transactions in live mode.'
+        logo_media_asset_id:
+          $ref: '#/components/schemas/FlakeId'
+        logo_square_media_asset_id:
+          $ref: '#/components/schemas/FlakeId'
         minecraft_bedrock_username_prefix:
           type: string
           description: Username prefix used to identify Minecraft Bedrock players (e.g. ".").
@@ -25638,6 +25530,13 @@ components:
           items:
             $ref: '#/components/schemas/FlakeId'
           description: The IDs of associated custom variables.
+        media_asset_ids:
+          type:
+            - 'null'
+            - array
+          items:
+            $ref: '#/components/schemas/FlakeId'
+          description: 'The IDs of the media assets to show as the product''s images, in display order.'
         is_gift_cards_disabled:
           type:
             - 'null'
@@ -25774,6 +25673,8 @@ components:
           type:
             - 'null'
             - boolean
+        media_asset_id:
+          $ref: '#/components/schemas/FlakeId'
       additionalProperties: false
     ValidationError:
       required:
@@ -26598,6 +26499,7 @@ tags:
   - name: invites
   - name: invoices
   - name: marketing
+  - name: media
   - name: navlinks
   - name: orders
   - name: payment-method-types

@@ -1630,6 +1630,21 @@ components:
       additionalProperties: false
       format: flake-id
       example: '411486491630370816'
+    MediaAssetTypeDto:
+      enum:
+        - unknown
+        - image
+        - video
+      type: string
+      description: Specifies the kind of media an asset holds.
+      x-enumDescriptions:
+        unknown: The type is unknown.
+        image: 'An image (PNG, JPEG, WEBP or GIF).'
+        video: A video (MP4).
+      x-paynow-docs-enum-descriptions:
+        unknown: The type is unknown.
+        image: 'An image (PNG, JPEG, WEBP or GIF).'
+        video: A video (MP4).
     OrderStatus:
       enum:
         - created
@@ -1767,6 +1782,22 @@ components:
           type: boolean
           description: Value indicating whether to grant a giftcard with the product with the subtotal amount.
       additionalProperties: false
+    ProductImageDto:
+      required:
+        - media_asset_id
+        - type
+        - url
+      type: object
+      properties:
+        media_asset_id:
+          $ref: '#/components/schemas/FlakeId'
+        url:
+          type: string
+          description: The public URL the image is served from.
+        type:
+          $ref: '#/components/schemas/MediaAssetTypeDto'
+      additionalProperties: false
+      description: Represents one of a product's images.
     ProductRemoveAfterIntervalScale:
       enum:
         - invalid
@@ -2060,6 +2091,10 @@ components:
             - 'null'
             - string
           description: URL of the store's square/icon logo image.
+        logo_media_asset_id:
+          $ref: '#/components/schemas/FlakeId'
+        logo_square_media_asset_id:
+          $ref: '#/components/schemas/FlakeId'
         minecraft_bedrock_username_prefix:
           type:
             - 'null'
@@ -3068,6 +3103,7 @@ components:
         - gameservers
         - hidden
         - id
+        - images
         - is_affiliate_links_disabled
         - is_coupons_disabled
         - is_gift_cards_disabled
@@ -3100,6 +3136,11 @@ components:
             - string
           description: The URL to the product image.
           example: https://cdn.paynow.gg/logo/full/logotype-color.svg
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductImageDto'
+          description: The product's images in display order. The first image is the primary image.
         slug:
           type: string
           description: The unique slug for the product.

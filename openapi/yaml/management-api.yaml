@@ -11794,7 +11794,46 @@ paths:
         - APIKey: [ ]
       x-paynow-mcp:
         name: paynow_list_webhook_history
-        description: 'Lists a webhook subscription''s delivery history with payloads and attempts. ''page'' starts at 0; ''state'' is Success, Pending, Failed or All.'
+        description: 'Lists a webhook subscription''s delivery history with payloads and attempts. ''page'' starts at 1; ''state'' is Success, Pending, Failed or All.'
+        readOnly: true
+  '/v1/stores/{storeId}/webhooks/deliveries/{deliveryId}':
+    get:
+      tags:
+        - webhooks
+      summary: Get webhook delivery by ID
+      description: 'Retrieves a single webhook delivery, including its payload and attempts, by the ID for the specified store.'
+      operationId: Webhooks_GetDelivery
+      parameters:
+        - name: storeId
+          in: path
+          description: The ID of the store to retrieve the webhook delivery for.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: deliveryId
+          in: path
+          description: The ID of the webhook delivery.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueuedWebhookDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+      x-paynow-mcp:
+        name: paynow_get_webhook_delivery
+        description: 'Gets one webhook delivery with its payload and attempts. Takes the ''id'' of an entry from paynow_list_webhook_history, not the subscription ID.'
         readOnly: true
   '/v1/stores/{storeId}/webstore/marketplace/templates/{marketplaceTemplateId}/install':
     post:
@@ -15857,6 +15896,7 @@ components:
         - webhooks
         - email_templates
         - email_deliveries
+        - webhook_deliveries
       type: string
     DashboardStatsDto:
       required:
@@ -21203,6 +21243,7 @@ components:
         - tags
         - tier_groups
         - trials
+        - webhook_deliveries
         - webhooks
       type: object
       properties:
@@ -21286,6 +21327,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EmailDeliveryResult'
+        webhook_deliveries:
+          type: array
+          items:
+            $ref: '#/components/schemas/WebhookDeliveryResult'
         facets:
           type: object
           properties:
@@ -21356,6 +21401,9 @@ components:
               type: integer
               format: int64
             email_deliveries:
+              type: integer
+              format: int64
+            webhook_deliveries:
               type: integer
               format: int64
           additionalProperties: false
@@ -25698,6 +25746,18 @@ components:
           description: Type of the validation that failed.
       additionalProperties: false
       description: A validation error.
+    WebhookDeliveryResult:
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FlakeId'
+        store_id:
+          $ref: '#/components/schemas/FlakeId'
+        webhook_delivery:
+          $ref: '#/components/schemas/QueuedWebhookDto'
+      additionalProperties: false
     WebhookDiscordFormatDto:
       enum:
         - Invalid

@@ -25806,6 +25806,7 @@ components:
         - OnConnectedUserTrustStatusChanged
         - OnPaymentCompleted
         - OnPaymentFailed
+        - OnChargebackLifecycle
       type: string
     WebhookHistoryDto:
       required:

@@ -1001,6 +1001,7 @@ components:
         - ON_REFUND
         - ON_CHARGEBACK
         - ON_CHARGEBACK_CLOSED
+        - ON_CHARGEBACK_LIFECYCLE
         - ON_DELIVERY_ITEM_ADDED
         - ON_DELIVERY_ITEM_ACTIVATED
         - ON_DELIVERY_ITEM_USED
@@ -1280,6 +1281,164 @@ webhooks:
                       format: date-time
                       example: '2024-01-25T14:45:00Z'
                       x-discordVariable: chargeback_at
+        required: true
+      responses:
+        '200':
+          description: Webhook processed successfully
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+  ON_CHARGEBACK_LIFECYCLE:
+    post:
+      tags:
+        - Webhooks
+      summary: 'Triggered when a chargeback moves through its lifecycle: opened, escalated, needs a response, under review, won, lost, closed or prevented'
+      description: Webhook for ON_CHARGEBACK_LIFECYCLE
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - event_type
+                - event_id
+                - body
+              type: object
+              properties:
+                event_type:
+                  allOf:
+                    - $ref: '#/components/schemas/WebhookEventType'
+                  description: The type of webhook event
+                  example: ON_CHARGEBACK_LIFECYCLE
+                event_id:
+                  type: string
+                  description: The ID of the Webhook Event
+                  format: flake-id
+                  example: '411486491630370816'
+                body:
+                  required:
+                    - id
+                    - store_id
+                    - order_id
+                    - payment_id
+                    - customer_id
+                    - transition
+                    - sequence
+                    - status
+                    - stage
+                    - reason
+                    - currency
+                    - disputed_amount
+                    - created_at
+                    - occurred_at
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The Flake ID of the Chargeback
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: id
+                    store_id:
+                      type: string
+                      description: The Flake ID of the Store associated with the Chargeback
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: store_id
+                    order_id:
+                      type: string
+                      description: The Flake ID of the Order associated with the Chargeback
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: order_id
+                    payment_id:
+                      type: string
+                      description: The Flake ID of the disputed Payment
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: payment_id
+                    customer_id:
+                      type: string
+                      description: The Flake ID of the Customer associated with the Chargeback
+                      format: flake-id
+                      example: '411486491630370816'
+                      x-discordVariable: customer_id
+                    transition:
+                      type: string
+                      description: 'The lifecycle step that triggered this event: opened, escalated, needs_response, under_review, won, lost, closed or prevented'
+                      example: won
+                      x-discordVariable: transition
+                    sequence:
+                      type: integer
+                      description: Increases by one with every lifecycle event of this Chargeback. Ignore an event whose sequence is not higher than the last one you processed
+                      example: 3
+                    status:
+                      type: string
+                      description: 'The status of the Chargeback after this event: needs_response, under_review, won, lost, closed or prevented'
+                      example: won
+                      x-discordVariable: status
+                    previous_status:
+                      type:
+                        - 'null'
+                        - string
+                      description: The status of the Chargeback before this event. Null when the Chargeback was opened
+                      example: under_review
+                      x-discordVariable: previous_status
+                    stage:
+                      type: string
+                      description: 'The stage of the Chargeback after this event: inquiry or claim'
+                      example: claim
+                      x-discordVariable: stage
+                    previous_stage:
+                      type:
+                        - 'null'
+                        - string
+                      description: The stage of the Chargeback before this event. Null when the Chargeback was opened
+                      example: claim
+                      x-discordVariable: previous_stage
+                    reason:
+                      type: string
+                      description: The reason given for the Chargeback
+                      example: product_not_received
+                      x-discordVariable: reason
+                    currency:
+                      type: string
+                      description: The ISO-4217 Currency Code of the disputed amount
+                      example: USD
+                      x-discordVariable: currency
+                    disputed_amount:
+                      type: integer
+                      description: 'The disputed amount, represented in cents'
+                      example: 7500
+                      x-discordVariable: disputed_amount
+                    response_deadline_at:
+                      type:
+                        - 'null'
+                        - string
+                      description: 'Indicates when a response to the Chargeback is due, if one is required'
+                      format: date-time
+                      example: '2024-02-05T23:59:59Z'
+                      x-discordVariable: response_deadline_at
+                    created_at:
+                      type: string
+                      description: Indicates when the Chargeback was opened
+                      format: date-time
+                      example: '2024-01-25T14:45:00Z'
+                      x-discordVariable: created_at
+                    closed_at:
+                      type:
+                        - 'null'
+                        - string
+                      description: 'Indicates when the Chargeback was closed, if it is closed'
+                      format: date-time
+                      example: '2024-03-01T09:12:00Z'
+                      x-discordVariable: closed_at
+                    occurred_at:
+                      type: string
+                      description: Indicates when this lifecycle step was recorded
+                      format: date-time
+                      example: '2024-03-01T09:12:00Z'
+                      x-discordVariable: occurred_at
         required: true
       responses:
         '200':

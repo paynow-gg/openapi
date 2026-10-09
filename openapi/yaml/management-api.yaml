@@ -15897,6 +15897,7 @@ components:
         - email_templates
         - email_deliveries
         - webhook_deliveries
+        - payouts
       type: string
     DashboardStatsDto:
       required:
@@ -21404,6 +21405,9 @@ components:
               type: integer
               format: int64
             webhook_deliveries:
+              type: integer
+              format: int64
+            payouts:
               type: integer
               format: int64
           additionalProperties: false

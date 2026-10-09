@@ -24785,7 +24785,8 @@
           "webhooks",
           "email_templates",
           "email_deliveries",
-          "webhook_deliveries"
+          "webhook_deliveries",
+          "payouts"
         ],
         "type": "string"
       },
@@ -32127,6 +32128,10 @@
                 "format": "int64"
               },
               "webhook_deliveries": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "payouts": {
                 "type": "integer",
                 "format": "int64"
               }

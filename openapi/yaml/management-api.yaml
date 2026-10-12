@@ -6105,6 +6105,43 @@ paths:
         name: paynow_get_order
         description: Returns one order by ID with its lines and amounts. Orders are read-only through MCP; refunds cannot be issued here.
         readOnly: true
+  '/v1/stores/{storeId}/orders/{orderId}/refunds':
+    get:
+      tags:
+        - orders
+      summary: Get refunds for order
+      description: Retrieves all refunds issued for an order by the ID for the specified store.
+      operationId: Orders_GetOrderRefunds
+      parameters:
+        - name: storeId
+          in: path
+          description: The ID of the store the order belongs to.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: orderId
+          in: path
+          description: The ID of the order.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RefundDto'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
   '/v1/stores/{storeId}/orders/{orderId}/refund':
     post:
       tags:
@@ -14948,6 +14985,12 @@ components:
             - 'null'
             - boolean
           description: "Determines if the refund should be taken from the connected user's balance.\nOnly relevant for connected platforms."
+        note:
+          maxLength: 500
+          type:
+            - 'null'
+            - string
+          description: 'A note explaining why the refund was issued, at most 500 characters.'
       additionalProperties: false
     CreateRoleDto:
       required:
@@ -20927,6 +20970,13 @@ components:
         refund_from_connected_user_balance:
           type: boolean
           description: "Indicates whether the refund should be taken from the connected user's balance.\nOnly relevant for platforms."
+        note:
+          type:
+            - 'null'
+            - string
+          description: Optional note explaining why the refund was issued
+        created_by:
+          $ref: '#/components/schemas/ActorDto'
         created_at:
           type: string
           description: Date and time when the refund was created

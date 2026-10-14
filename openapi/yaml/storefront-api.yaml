@@ -2358,6 +2358,8 @@ components:
         - restriction_lifted
         - review_scheduled
         - review_completed
+        - risk_tier_changed
+        - decision_parameters_changed
       type: string
     StoreTrustOnboardingStepsDto:
       required:

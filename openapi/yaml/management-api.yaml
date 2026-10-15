@@ -14890,6 +14890,8 @@ components:
           description: The current balance remaining on the gift card in cents.
           format: int64
           example: 2500
+        usable_by_customer_id:
+          $ref: '#/components/schemas/FlakeId'
         usable_at:
           type: string
           description: The date and time when the gift card becomes usable.
@@ -17063,6 +17065,8 @@ components:
           description: The original balance when the gift card was first created in cents.
           format: int64
           example: 5000
+        usable_by_customer_id:
+          $ref: '#/components/schemas/FlakeId'
         usable_at:
           type: string
           description: The date and time when the gift card becomes usable.
@@ -24989,6 +24993,8 @@ components:
           description: The current balance remaining on the gift card in cents.
           format: int64
           example: 2500
+        usable_by_customer_id:
+          $ref: '#/components/schemas/FlakeId'
         usable_at:
           type: string
           description: The date and time when the gift card becomes usable.

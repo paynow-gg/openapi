@@ -712,7 +712,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InvoiceDownloadUrlResponseDto'
+                $ref: '#/components/schemas/DownloadUrlResponseDto'
         default:
           description: Error response
           content:
@@ -793,7 +793,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InvoiceDownloadUrlResponseDto'
+                $ref: '#/components/schemas/DownloadUrlResponseDto'
         default:
           description: Error response
           content:
@@ -4742,7 +4742,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InvoiceDownloadUrlResponseDto'
+                $ref: '#/components/schemas/DownloadUrlResponseDto'
         default:
           description: Error response
           content:
@@ -16486,6 +16486,15 @@ components:
           description: A short excerpt of the section text around the matching terms.
       additionalProperties: false
       description: Represents one matching section of a documentation page.
+    DownloadUrlResponseDto:
+      required:
+        - download_url
+      type: object
+      properties:
+        download_url:
+          type: string
+          description: Temporary URL the file can be downloaded from
+      additionalProperties: false
     EmailBrandingDto:
       required:
         - color
@@ -17515,15 +17524,6 @@ components:
           format: date-time
         accepted_by_user:
           $ref: '#/components/schemas/ActorDto'
-      additionalProperties: false
-    InvoiceDownloadUrlResponseDto:
-      required:
-        - download_url
-      type: object
-      properties:
-        download_url:
-          type: string
-          description: Temporary URL the invoice document can be downloaded from
       additionalProperties: false
     InvoiceDto:
       required:

@@ -13954,6 +13954,12 @@ components:
             - string
           description: "The card product code.\nOnly available internally."
           example: F
+        payment_account_reference:
+          type:
+            - 'null'
+            - string
+          description: "The card network's Payment Account Reference, identifying the underlying card across merchants.\nOnly available internally."
+          example: V0010013019326121174033855440
         wallet:
           $ref: '#/components/schemas/CardWalletDto'
       additionalProperties: false

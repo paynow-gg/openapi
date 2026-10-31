@@ -21821,11 +21821,15 @@ components:
         - name
         - owner_id
         - platform
+        - short_id
         - slug
       type: object
       properties:
         id:
           $ref: '#/components/schemas/FlakeId'
+        short_id:
+          type: string
+          description: The short identifier of the store.
         owner_id:
           $ref: '#/components/schemas/FlakeId'
         slug:

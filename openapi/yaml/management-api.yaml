@@ -9373,7 +9373,7 @@ paths:
       x-gitbook-ignore: true
       x-paynow-mcp:
         name: paynow_get_stats_time_series
-        description: 'Returns one metric over a date range as a chart series. Use ''dimension_type'' to split into one series per product, tag, coupon and so on, and the comparison range for a previous period. Money values are in the smallest unit of the returned ''currency''.'
+        description: 'Returns one metric over a date range as a chart series. Use ''dimension_type'' to split into one series per product, tag, coupon, sale and so on, and the comparison range for a previous period. ''customer_lifecycle_volume'' splits order volume into new, returning and renewal series. Money values are in the smallest unit of the returned ''currency''.'
         readOnly: true
   '/v2/stores/{storeId}/stats/distribution':
     get:
@@ -9421,6 +9421,10 @@ paths:
           required: true
           schema:
             type: string
+        - name: revenue_basis
+          in: query
+          schema:
+            $ref: '#/components/schemas/RevenueBasisDto_V2'
       responses:
         '200':
           description: OK
@@ -9440,7 +9444,7 @@ paths:
       x-gitbook-ignore: true
       x-paynow-mcp:
         name: paynow_get_stats_distribution
-        description: 'Breaks the orders in a date range down by country, payment method or payment acceptance.'
+        description: 'Breaks the orders in a date range down by country, payment method, payment acceptance or customer lifecycle (new, returning and renewal). Customer lifecycle also accepts ''revenue_basis''. Each entry has a ''key'', a ''count'' of orders (always 0 for payment method) and ''earnings'' in the smallest currency unit.'
         readOnly: true
   '/v2/stores/{storeId}/stats/dimension':
     get:
@@ -9508,7 +9512,7 @@ paths:
       x-gitbook-ignore: true
       x-paynow-mcp:
         name: paynow_get_stats_dimension
-        description: 'Ranks the top products, game servers, tags, affiliate links, coupons, gift cards or payouts by earnings over a date range. Entries carry only IDs. Resolve names with the matching list tool.'
+        description: 'Ranks the top products, game servers, tags, affiliate links, coupons, gift cards, payouts, sales or billing emails by earnings over a date range. ''count'' is units sold for products, game servers, tags and sales, and orders for the rest. Entries carry only IDs in ''dimension_id'': a numeric ID for most dimensions and the email address for billing emails. Resolve names with the matching list tool.'
         readOnly: true
   '/v2/stores/{storeId}/stats/orders/summary':
     get:
@@ -9791,6 +9795,58 @@ paths:
       x-paynow-mcp:
         name: paynow_get_trials_summary_for_range
         description: 'Returns trials started, canceled and converted within a date range.'
+        readOnly: true
+  '/v2/stores/{storeId}/stats/customers/summary/range':
+    get:
+      tags:
+        - stats
+      summary: Get customers summary for range
+      description: Retrieves new and returning customer counts over a date range for the specified store.
+      operationId: StatsControllerV_GetCustomersSummaryForRange
+      parameters:
+        - name: storeId
+          in: path
+          description: The ID of the store to retrieve the summary for.
+          required: true
+          schema:
+            $ref: '#/components/schemas/FlakeId'
+        - name: start
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: end
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: tz
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomersSummaryForRangeDto_V2'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayNowError'
+      security:
+        - APIKey: [ ]
+      x-paynow-docs-ignore: true
+      x-gitbook-ignore: true
+      x-paynow-mcp:
+        name: paynow_get_customers_summary_for_range
+        description: 'Returns new customers, returning customers and returning customers excluding subscription renewals within a date range.'
         readOnly: true
   '/v2/stores/{storeId}/stats/popular-times-of-day':
     get:
@@ -15908,6 +15964,23 @@ components:
           type: string
           description: The generated Customer token.
       additionalProperties: false
+    CustomersSummaryForRangeDto_V2:
+      required:
+        - new_customer_count
+        - returning_customer_count
+        - returning_customer_count_excluding_renewals
+      type: object
+      properties:
+        new_customer_count:
+          type: integer
+          format: int64
+        returning_customer_count:
+          type: integer
+          format: int64
+        returning_customer_count_excluding_renewals:
+          type: integer
+          format: int64
+      additionalProperties: false
     DashboardSearchHintDto:
       required:
         - description
@@ -16301,17 +16374,13 @@ components:
       type: string
     DimensionStatsEntryDto_V2:
       required:
+        - count
         - dimension_id
-        - line_count
-        - quantity
       type: object
       properties:
         dimension_id:
-          $ref: '#/components/schemas/FlakeId'
-        line_count:
-          type: integer
-          format: int64
-        quantity:
+          type: string
+        count:
           type: integer
           format: int64
         earnings:
@@ -16461,13 +16530,13 @@ components:
       additionalProperties: false
     DistributionTotalsDto_V2:
       required:
-        - order_count
+        - count
       type: object
       properties:
-        order_count:
+        count:
           type: integer
           format: int64
-        gross_volume:
+        earnings:
           $ref: '#/components/schemas/MoneyDto_V2'
       additionalProperties: false
     DocsSearchHitDto:
@@ -16995,10 +17064,13 @@ components:
       required:
         - distribution_type
         - entries
+        - revenue_basis
       type: object
       properties:
         distribution_type:
           $ref: '#/components/schemas/StatsDistributionTypeDto_V2'
+        revenue_basis:
+          $ref: '#/components/schemas/RevenueBasisDto_V2'
         entries:
           type: array
           items:
@@ -21581,6 +21653,8 @@ components:
         - coupon
         - giftcard
         - payout_id
+        - billing_email
+        - sale
       type: string
     StatsDistributionTypeDto_V2:
       enum:
@@ -21588,6 +21662,7 @@ components:
         - order_country
         - payment_method
         - payment_acceptance
+        - customer_lifecycle
       type: string
     SteamId:
       type: string
@@ -24285,7 +24360,9 @@ components:
         dimension_type:
           $ref: '#/components/schemas/StatsDimensionTypeDto_V2'
         dimension_id:
-          $ref: '#/components/schemas/FlakeId'
+          type:
+            - 'null'
+            - string
         revenue_basis:
           $ref: '#/components/schemas/RevenueBasisDto_V2'
         currency:
@@ -24324,6 +24401,7 @@ components:
         - gateway_fee_volume
         - platform_fee_volume
         - refund_volume
+        - customer_lifecycle_volume
       type: string
     TimeSeriesChartSeriesDto:
       required:

@@ -15001,6 +15001,13 @@
             }
           },
           {
+            "name": "dimension_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "unit",
             "in": "query",
             "schema": {
@@ -15039,7 +15046,7 @@
         "x-gitbook-ignore": true,
         "x-paynow-mcp": {
           "name": "paynow_get_stats_time_series",
-          "description": "Returns one metric over a date range as a chart series. Use 'dimension_type' to split into one series per product, tag, coupon, sale and so on, and the comparison range for a previous period. 'customer_lifecycle_volume' splits order volume into new, returning and renewal series. Money values are in the smallest unit of the returned 'currency'.",
+          "description": "Returns one metric over a date range as a chart series. Use 'dimension_type' to split into one series per product, tag, coupon, sale and so on, add 'dimension_id' to chart only one of them, and use the comparison range for a previous period. 'customer_lifecycle_volume' splits order volume into new, returning and renewal series. Money values are in the smallest unit of the returned 'currency'.",
           "readOnly": true
         }
       }

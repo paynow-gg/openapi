@@ -1151,41 +1151,22 @@
         "x-gitbook-ignore": true
       }
     },
-    "/v1/stores/{storeId}/billing/invoices/stripe": {
+    "/v1/stores/{storeId}/billing/invoices/legacy": {
       "get": {
         "tags": [
           "billing"
         ],
-        "summary": "Get Stripe invoices",
+        "summary": "Get legacy invoices",
         "description": "Retrieves the invoices Stripe Billing raised for the store's subscription before the store moved to\nPayNow, newest first. Only the store owner may call this.",
-        "operationId": "StoreBilling_GetStripeStoreInvoices",
+        "operationId": "StoreBilling_GetLegacyStoreInvoices",
         "parameters": [
           {
             "name": "storeId",
             "in": "path",
-            "description": "The ID of the store to retrieve Stripe invoices for.",
+            "description": "The ID of the store to retrieve legacy invoices for.",
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/FlakeId"
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of invoices to return, between 1 and 100. Defaults to 25.",
-            "schema": {
-              "maximum": 100,
-              "minimum": 1,
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "starting_after",
-            "in": "query",
-            "description": "The 'id' of the last invoice of the previous page.",
-            "schema": {
-              "type": "string"
             }
           }
         ],
@@ -1195,7 +1176,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/StripeStoreInvoicesDto"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LegacyStoreInvoiceDto"
+                  }
                 }
               }
             }
@@ -1220,14 +1204,14 @@
         "x-gitbook-ignore": true
       }
     },
-    "/v1/stores/{storeId}/billing/invoices/stripe/{invoiceId}": {
+    "/v1/stores/{storeId}/billing/invoices/legacy/{invoiceId}": {
       "get": {
         "tags": [
           "billing"
         ],
-        "summary": "Get Stripe invoice",
+        "summary": "Get legacy invoice",
         "description": "Returns a URL to download one of the store's Stripe Billing invoices. Only the store owner may\ncall this.",
-        "operationId": "StoreBilling_GetStripeStoreInvoice",
+        "operationId": "StoreBilling_GetLegacyStoreInvoice",
         "parameters": [
           {
             "name": "storeId",
@@ -27312,6 +27296,56 @@
         "additionalProperties": false,
         "description": "The last payment decline object."
       },
+      "LegacyStoreInvoiceDto": {
+        "required": [
+          "created_at",
+          "currency",
+          "id",
+          "is_paid",
+          "total"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The Stripe identifier of the invoice, starting with 'in_'."
+          },
+          "number": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The invoice number printed on the document."
+          },
+          "description": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "What the invoice was raised for."
+          },
+          "currency": {
+            "type": "string",
+            "description": "The lowercase ISO 4217 currency the invoice was raised in."
+          },
+          "total": {
+            "type": "integer",
+            "description": "The invoice total in the smallest currency unit.",
+            "format": "int64"
+          },
+          "is_paid": {
+            "type": "boolean",
+            "description": "Whether the invoice has been paid."
+          },
+          "created_at": {
+            "type": "string",
+            "description": "When the invoice was created.",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents an invoice Stripe Billing raised for the store's subscription before the store moved to PayNow."
+      },
       "LinkDetailsDto": {
         "required": [
           "email"
@@ -34384,78 +34418,6 @@
         },
         "additionalProperties": false,
         "description": "Represents a store entity within the storefront system."
-      },
-      "StripeStoreInvoiceDto": {
-        "required": [
-          "created_at",
-          "currency",
-          "id",
-          "is_paid",
-          "total"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "The Stripe identifier of the invoice, starting with 'in_'."
-          },
-          "number": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The invoice number printed on the document."
-          },
-          "description": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "What the invoice was raised for."
-          },
-          "currency": {
-            "type": "string",
-            "description": "The lowercase ISO 4217 currency the invoice was raised in."
-          },
-          "total": {
-            "type": "integer",
-            "description": "The invoice total in the smallest currency unit.",
-            "format": "int64"
-          },
-          "is_paid": {
-            "type": "boolean",
-            "description": "Whether the invoice has been paid."
-          },
-          "created_at": {
-            "type": "string",
-            "description": "When the invoice was created.",
-            "format": "date-time"
-          }
-        },
-        "additionalProperties": false,
-        "description": "Represents an invoice Stripe Billing raised for the store's subscription before the store moved to PayNow."
-      },
-      "StripeStoreInvoicesDto": {
-        "required": [
-          "has_more",
-          "invoices"
-        ],
-        "type": "object",
-        "properties": {
-          "invoices": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/StripeStoreInvoiceDto"
-            },
-            "description": "The invoices on this page."
-          },
-          "has_more": {
-            "type": "boolean",
-            "description": "Whether more invoices follow. Pass the last invoice's 'id' as 'starting_after' to fetch them."
-          }
-        },
-        "additionalProperties": false,
-        "description": "Represents a page of the store's Stripe Billing invoices, newest first."
       },
       "SubscriptionBillingAmountDto": {
         "required": [

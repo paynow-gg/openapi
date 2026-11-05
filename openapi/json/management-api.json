@@ -1424,6 +1424,186 @@
         "x-gitbook-ignore": true
       }
     },
+    "/v1/stores/{storeId}/chargebacks": {
+      "get": {
+        "tags": [
+          "chargebacks"
+        ],
+        "summary": "Get chargebacks",
+        "description": "Retrieves all chargebacks and pre-chargeback inquiries for the specified store using the filter specified.",
+        "operationId": "StoreChargebacks_GetChargebacks",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "description": "The ID of the store to retrieve chargebacks for.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "The maximum number of items to return in a single request.",
+            "schema": {
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "description": "Returns items after the specified ID.\nUsed for forward pagination through results.",
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            },
+            "example": "null"
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "description": "Returns items before the specified ID.\nUsed for backward pagination through results.",
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            },
+            "example": "null"
+          },
+          {
+            "name": "asc",
+            "in": "query",
+            "description": "Determines the sort order of returned items.\nWhen true, items are returned in ascending order.\nWhen false, items are returned in descending order.",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "order_id",
+            "in": "query",
+            "description": "Filter by order ID.",
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "customer_id",
+            "in": "query",
+            "description": "Filter by customer ID.",
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Filter by chargeback statuses.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/TrustChargebackStatus"
+              }
+            }
+          },
+          {
+            "name": "stage",
+            "in": "query",
+            "description": "Filter by chargeback stage.",
+            "schema": {
+              "$ref": "#/components/schemas/TrustChargebackStage"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StoreChargebackDto"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ]
+      }
+    },
+    "/v1/stores/{storeId}/chargebacks/{chargebackId}": {
+      "get": {
+        "tags": [
+          "chargebacks"
+        ],
+        "summary": "Get chargeback by ID",
+        "description": "Retrieves a chargeback or pre-chargeback inquiry by an ID.",
+        "operationId": "StoreChargebacks_GetChargebackById",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "description": "The ID of the store to retrieve the chargeback for.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "chargebackId",
+            "in": "path",
+            "description": "The ID of the chargeback.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreChargebackDto"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ]
+      }
+    },
     "/v1/stores/{storeId}/checkouts": {
       "post": {
         "tags": [
@@ -15030,7 +15210,7 @@
         "x-gitbook-ignore": true,
         "x-paynow-mcp": {
           "name": "paynow_get_stats_time_series",
-          "description": "Returns one metric over a date range as a chart series. Use 'dimension_type' to split into one series per product, tag, coupon, sale and so on, add 'dimension_id' to chart only one of them, and use the comparison range for a previous period. 'customer_lifecycle_volume' splits order volume into new, returning and renewal series. Money values are in the smallest unit of the returned 'currency'.",
+          "description": "Returns one metric over a date range as a chart series. Use 'dimension_type' to split into one series per product, tag, coupon, sale, country and so on, add 'dimension_id' to chart only one of them, and use the comparison range for a previous period. 'customer_lifecycle_volume' splits order volume into new, returning and renewal series. Money values are in the smallest unit of the returned 'currency'.",
           "readOnly": true
         }
       }
@@ -15147,6 +15327,109 @@
         }
       }
     },
+    "/v2/stores/{storeId}/stats/matrix": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "summary": "Get matrix",
+        "description": "Retrieves a grid of stats for the specified store, with rows and columns decided by the matrix type.",
+        "operationId": "StatsControllerV_GetMatrix",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "description": "The ID of the store to retrieve the matrix for.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          },
+          {
+            "name": "matrix_type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/MatrixTypeDto_V2"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "unit",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/TimeSeriesUnitDto_V2"
+            }
+          },
+          {
+            "name": "revenue_basis",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/RevenueBasisDto_V2"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMatrixResponseDto_V2"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-paynow-docs-ignore": true,
+        "x-gitbook-ignore": true,
+        "x-paynow-mcp": {
+          "name": "paynow_get_stats_matrix",
+          "description": "Returns a grid of stats over a date range for a 'matrix_type'. Each row has a 'header', a 'total' and 'cells' aligned with 'columns'. Every value has a 'count' and 'earnings' in the smallest currency unit.",
+          "readOnly": true
+        }
+      }
+    },
     "/v2/stores/{storeId}/stats/dimension": {
       "get": {
         "tags": [
@@ -15248,7 +15531,7 @@
         "x-gitbook-ignore": true,
         "x-paynow-mcp": {
           "name": "paynow_get_stats_dimension",
-          "description": "Ranks the top products, game servers, tags, affiliate links, coupons, gift cards, payouts, sales or billing emails by earnings over a date range. 'count' is units sold for products, game servers, tags and sales, and orders for the rest. Entries carry only IDs in 'dimension_id': a numeric ID for most dimensions and the email address for billing emails. Resolve names with the matching list tool.",
+          "description": "Ranks the top products, game servers, tags, affiliate links, coupons, gift cards, payouts, sales, billing emails or countries by earnings over a date range. 'count' is units sold for products, game servers, tags and sales, and orders for the rest. Entries carry only IDs in 'dimension_id': a numeric ID for most dimensions, the email address for billing emails and the ISO 3166-1 alpha-2 code for countries, with ZZ for no country. Resolve names with the matching list tool.",
           "readOnly": true
         }
       }
@@ -15435,6 +15718,20 @@
             "schema": {
               "$ref": "#/components/schemas/RevenueBasisDto_V2"
             }
+          },
+          {
+            "name": "dimension_type",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/StatsDimensionTypeDto_V2"
+            }
+          },
+          {
+            "name": "dimension_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -15468,7 +15765,7 @@
         "x-gitbook-ignore": true,
         "x-paynow-mcp": {
           "name": "paynow_get_subscriptions_summary",
-          "description": "Returns the current subscription position: MRR, average subscription value and active count. Takes no dates. For new and churned subscriptions over a period use paynow_get_subscriptions_summary_for_range.",
+          "description": "Returns the current subscription position: MRR, average subscription value and active count. Takes no dates. 'dimension_type' country with a 'dimension_id' country code narrows it to one country. For new and churned subscriptions over a period use paynow_get_subscriptions_summary_for_range.",
           "readOnly": true
         }
       }
@@ -15523,6 +15820,20 @@
             "schema": {
               "$ref": "#/components/schemas/RevenueBasisDto_V2"
             }
+          },
+          {
+            "name": "dimension_type",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/StatsDimensionTypeDto_V2"
+            }
+          },
+          {
+            "name": "dimension_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -15556,7 +15867,7 @@
         "x-gitbook-ignore": true,
         "x-paynow-mcp": {
           "name": "paynow_get_subscriptions_summary_for_range",
-          "description": "Returns new and churned subscriptions and churned revenue for one date range. For the current active count and MRR use paynow_get_subscriptions_summary.",
+          "description": "Returns new and churned subscriptions, churned revenue, and renewals due and paid for one date range. 'dimension_type' country with a 'dimension_id' country code narrows it to one country. For the current active count and MRR use paynow_get_subscriptions_summary.",
           "readOnly": true
         }
       }
@@ -26404,6 +26715,39 @@
         },
         "additionalProperties": false
       },
+      "GetMatrixResponseDto_V2": {
+        "required": [
+          "columns",
+          "matrix_type",
+          "revenue_basis",
+          "rows"
+        ],
+        "type": "object",
+        "properties": {
+          "matrix_type": {
+            "$ref": "#/components/schemas/MatrixTypeDto_V2"
+          },
+          "revenue_basis": {
+            "$ref": "#/components/schemas/RevenueBasisDto_V2"
+          },
+          "unit": {
+            "$ref": "#/components/schemas/TimeSeriesUnitDto_V2"
+          },
+          "columns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MatrixHeaderDto_V2"
+            }
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MatrixRowDto_V2"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
       "GetWebstoreTemplateArchiveResponseDto": {
         "required": [
           "download_url"
@@ -27447,6 +27791,78 @@
         },
         "additionalProperties": false,
         "description": "Represents the configuration settings for a coupon applied to marketing features."
+      },
+      "MatrixHeaderDto_V2": {
+        "required": [
+          "key"
+        ],
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "interval_start": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "interval_end": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "MatrixRowDto_V2": {
+        "required": [
+          "cells",
+          "header",
+          "total"
+        ],
+        "type": "object",
+        "properties": {
+          "header": {
+            "$ref": "#/components/schemas/MatrixHeaderDto_V2"
+          },
+          "total": {
+            "$ref": "#/components/schemas/MatrixValueDto_V2"
+          },
+          "cells": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MatrixValueDto_V2"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "MatrixTypeDto_V2": {
+        "enum": [
+          "unspecified",
+          "customer_purchase_retention"
+        ],
+        "type": "string"
+      },
+      "MatrixValueDto_V2": {
+        "required": [
+          "count"
+        ],
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "earnings": {
+            "$ref": "#/components/schemas/MoneyDto_V2"
+          }
+        },
+        "additionalProperties": false
       },
       "MediaAssetDto": {
         "required": [
@@ -32537,7 +32953,8 @@
           "giftcard",
           "payout_id",
           "billing_email",
-          "sale"
+          "sale",
+          "country"
         ],
         "type": "string"
       },
@@ -32852,6 +33269,104 @@
           }
         },
         "additionalProperties": false
+      },
+      "StoreChargebackDto": {
+        "required": [
+          "created_at",
+          "currency",
+          "customer_id",
+          "disputed_amount",
+          "id",
+          "is_refundable",
+          "network_case_type",
+          "order_id",
+          "payment_id",
+          "reason",
+          "stage",
+          "status",
+          "store_id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "store_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "order_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "payment_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "customer_id": {
+            "$ref": "#/components/schemas/FlakeId"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TrustChargebackStatus"
+          },
+          "reason": {
+            "$ref": "#/components/schemas/TrustChargebackReason"
+          },
+          "stage": {
+            "$ref": "#/components/schemas/TrustChargebackStage"
+          },
+          "network_case_type": {
+            "$ref": "#/components/schemas/TrustChargebackNetworkCaseType"
+          },
+          "network_reason_code": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The card network's reason code for the chargeback, if available."
+          },
+          "disputed_amount": {
+            "type": "integer",
+            "description": "The disputed amount, in the smallest currency unit.",
+            "format": "int64"
+          },
+          "currency": {
+            "type": "string",
+            "description": "The three-letter ISO currency code of 'disputed_amount', in lowercase."
+          },
+          "is_refundable": {
+            "type": "boolean",
+            "description": "Whether the payment can still be refunded."
+          },
+          "created_at": {
+            "type": "string",
+            "description": "The date and time the chargeback was opened.",
+            "format": "date-time"
+          },
+          "escalated_at": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The date and time the inquiry escalated to a claim, if it did.",
+            "format": "date-time"
+          },
+          "response_deadline_at": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The date and time by which a response must be submitted, if one is required.",
+            "format": "date-time"
+          },
+          "closed_at": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The date and time the chargeback was closed, if it is closed.",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents a chargeback or pre-chargeback inquiry raised against a payment."
       },
       "StoreDto": {
         "required": [
@@ -35794,6 +36309,8 @@
         "required": [
           "churned_subscription_count",
           "new_subscription_count",
+          "renewal_due_count",
+          "renewal_paid_count",
           "revenue_basis"
         ],
         "type": "object",
@@ -35809,6 +36326,14 @@
             "$ref": "#/components/schemas/MoneyDto_V2"
           },
           "churned_subscription_count": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "renewal_due_count": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "renewal_paid_count": {
             "type": "integer",
             "format": "int64"
           }
@@ -36458,6 +36983,121 @@
           }
         },
         "additionalProperties": false
+      },
+      "TrustChargebackNetworkCaseType": {
+        "enum": [
+          "unspecified",
+          "chargeback",
+          "inquiry",
+          "compliance",
+          "block",
+          "resolution"
+        ],
+        "type": "string",
+        "description": "Specifies the type of case the card network opened for the chargeback.",
+        "x-enumDescriptions": {
+          "unspecified": "No card network case type is available, for example for PayPal disputes.",
+          "chargeback": "A formal chargeback where the disputed funds are withdrawn.",
+          "inquiry": "A pre-chargeback inquiry from the issuer.",
+          "compliance": "A network compliance case filed outside the regular dispute process.",
+          "block": "The network blocked the dispute before it became a chargeback. No funds move.",
+          "resolution": "The dispute was resolved by automatically refunding the customer."
+        },
+        "x-paynow-docs-enum-descriptions": {
+          "unspecified": "No card network case type is available, for example for PayPal disputes.",
+          "chargeback": "A formal chargeback where the disputed funds are withdrawn.",
+          "inquiry": "A pre-chargeback inquiry from the issuer.",
+          "compliance": "A network compliance case filed outside the regular dispute process.",
+          "block": "The network blocked the dispute before it became a chargeback. No funds move.",
+          "resolution": "The dispute was resolved by automatically refunding the customer."
+        }
+      },
+      "TrustChargebackReason": {
+        "enum": [
+          "invalid",
+          "product_not_received",
+          "product_not_as_described",
+          "unauthorized",
+          "credit_not_processed",
+          "duplicate_charge",
+          "incorrect_amount",
+          "subscription_canceled",
+          "general"
+        ],
+        "type": "string",
+        "description": "Specifies the reason the customer gave for the chargeback.",
+        "x-enumDescriptions": {
+          "invalid": "The reason is unknown.",
+          "product_not_received": "The customer says the product or service was not received.",
+          "product_not_as_described": "The customer says the product or service was not as described.",
+          "unauthorized": "The customer says they did not authorize the payment.",
+          "credit_not_processed": "The customer says a promised refund or credit was not processed.",
+          "duplicate_charge": "The customer says they were charged more than once.",
+          "incorrect_amount": "The customer says they were charged the wrong amount.",
+          "subscription_canceled": "The customer says they were charged after canceling a subscription.",
+          "general": "Any other reason."
+        },
+        "x-paynow-docs-enum-descriptions": {
+          "invalid": "The reason is unknown.",
+          "product_not_received": "The customer says the product or service was not received.",
+          "product_not_as_described": "The customer says the product or service was not as described.",
+          "unauthorized": "The customer says they did not authorize the payment.",
+          "credit_not_processed": "The customer says a promised refund or credit was not processed.",
+          "duplicate_charge": "The customer says they were charged more than once.",
+          "incorrect_amount": "The customer says they were charged the wrong amount.",
+          "subscription_canceled": "The customer says they were charged after canceling a subscription.",
+          "general": "Any other reason."
+        }
+      },
+      "TrustChargebackStage": {
+        "enum": [
+          "invalid",
+          "inquiry",
+          "claim"
+        ],
+        "type": "string",
+        "description": "Specifies the stage of a chargeback.",
+        "x-enumDescriptions": {
+          "invalid": "The stage is unknown.",
+          "inquiry": "A pre-chargeback inquiry. No funds are withdrawn yet, and a refund may resolve it.",
+          "claim": "A formal claim where the disputed funds are at stake."
+        },
+        "x-paynow-docs-enum-descriptions": {
+          "invalid": "The stage is unknown.",
+          "inquiry": "A pre-chargeback inquiry. No funds are withdrawn yet, and a refund may resolve it.",
+          "claim": "A formal claim where the disputed funds are at stake."
+        }
+      },
+      "TrustChargebackStatus": {
+        "enum": [
+          "invalid",
+          "needs_response",
+          "under_review",
+          "won",
+          "lost",
+          "closed",
+          "prevented"
+        ],
+        "type": "string",
+        "description": "Specifies the status of a chargeback.",
+        "x-enumDescriptions": {
+          "invalid": "The status is unknown.",
+          "needs_response": "The chargeback is open and awaiting a response.",
+          "under_review": "A response was submitted and the chargeback is being reviewed.",
+          "won": "The chargeback was resolved in the store's favor.",
+          "lost": "The chargeback was resolved in the customer's favor.",
+          "closed": "The inquiry was closed without escalating to a chargeback.",
+          "prevented": "The chargeback was prevented before it was filed, see 'network_case_type' for how."
+        },
+        "x-paynow-docs-enum-descriptions": {
+          "invalid": "The status is unknown.",
+          "needs_response": "The chargeback is open and awaiting a response.",
+          "under_review": "A response was submitted and the chargeback is being reviewed.",
+          "won": "The chargeback was resolved in the store's favor.",
+          "lost": "The chargeback was resolved in the customer's favor.",
+          "closed": "The inquiry was closed without escalating to a chargeback.",
+          "prevented": "The chargeback was prevented before it was filed, see 'network_case_type' for how."
+        }
       },
       "TrustStoreRequirementDto": {
         "required": [
@@ -39210,6 +39850,9 @@
     },
     {
       "name": "billing"
+    },
+    {
+      "name": "chargebacks"
     },
     {
       "name": "checkout"

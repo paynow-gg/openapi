@@ -18096,6 +18096,7 @@ components:
       enum:
         - unspecified
         - customer_purchase_retention
+        - subscription_mrr_changes
       type: string
     MatrixValueDto_V2:
       required:

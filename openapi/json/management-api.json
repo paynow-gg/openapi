@@ -16051,6 +16051,20 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "dimension_type",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/StatsDimensionTypeDto_V2"
+            }
+          },
+          {
+            "name": "dimension_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {

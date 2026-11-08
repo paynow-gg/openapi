@@ -9550,7 +9550,7 @@ paths:
       x-gitbook-ignore: true
       x-paynow-mcp:
         name: paynow_get_stats_distribution
-        description: 'Breaks the orders in a date range down by country, payment method, payment acceptance or customer lifecycle (new, returning and renewal). Customer lifecycle also accepts ''revenue_basis''. Each entry has a ''key'', a ''count'' of orders (always 0 for payment method) and ''earnings'' in the smallest currency unit.'
+        description: 'Breaks the orders in a date range down by country, payment method, payment acceptance, customer lifecycle (new, returning and renewal) or customer platform (Minecraft java, bedrock and unknown). Customer lifecycle and customer platform also accept ''revenue_basis''. Each entry has a ''key'', a ''count'' (completed payments for payment method, orders for the rest) and ''earnings'' in the smallest currency unit.'
         readOnly: true
   '/v2/stores/{storeId}/stats/matrix':
     get:
@@ -21971,6 +21971,7 @@ components:
         - payment_method
         - payment_acceptance
         - customer_lifecycle
+        - customer_platform
       type: string
     SteamId:
       type: string

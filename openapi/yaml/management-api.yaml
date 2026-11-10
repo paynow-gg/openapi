@@ -27006,6 +27006,11 @@ components:
         header:
           type: string
           description: The heading shown above the section.
+        description:
+          type:
+            - 'null'
+            - string
+          description: 'The explanation shown under the section''s heading, or null when the template gives none.'
         options:
           type: array
           items:

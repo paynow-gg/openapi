@@ -19927,6 +19927,72 @@
         }
       }
     },
+    "/v1/stores/{storeId}/webstore/set-active": {
+      "post": {
+        "tags": [
+          "webstore"
+        ],
+        "summary": "Set webstore active",
+        "description": "Enables or disables the store's hosted webstore. While disabled, customers visiting the\nwebstore's slug or custom domain see a not-active page. Template previews keep working.",
+        "operationId": "WebstoreSettings_SetWebstoreActive",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "description": "The ID of the store whose webstore is being changed.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FlakeId"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Whether the webstore should be served to customers.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetWebstoreActiveRequestDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetWebstoreActiveRequestDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetWebstoreActiveRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayNowError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKey": [ ]
+          }
+        ],
+        "x-paynow-mcp": {
+          "name": "paynow_set_webstore_active",
+          "description": "Enables or disables the hosted webstore. Disabling takes the live webstore offline for customers immediately, so confirm with the user first.",
+          "readOnly": false
+        }
+      }
+    },
     "/v1/stores/{storeId}/webstore/custom-domain": {
       "get": {
         "tags": [
@@ -22487,6 +22553,36 @@
         "additionalProperties": false,
         "description": "Bancontact payment method details"
       },
+      "BizumDetailsDto": {
+        "type": "object",
+        "properties": {
+          "buyer_id": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The buyer identifier assigned by the local payment processor",
+            "example": "buyer_abc123"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Bizum payment method details"
+      },
+      "BlikDetailsDto": {
+        "type": "object",
+        "properties": {
+          "buyer_id": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The buyer identifier assigned by BLIK",
+            "example": "buyer_abc123"
+          }
+        },
+        "additionalProperties": false,
+        "description": "BLIK payment method details"
+      },
       "CancelSubscriptionRequestDto": {
         "type": "object",
         "properties": {
@@ -22591,10 +22687,46 @@
           },
           "wallet": {
             "$ref": "#/components/schemas/CardWalletDto"
+          },
+          "display_brand": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The brand to display for the card, which differs from 'brand' for co-branded cards",
+            "example": "cartes_bancaires"
+          },
+          "networks": {
+            "$ref": "#/components/schemas/CardNetworksDto"
           }
         },
         "additionalProperties": false,
         "description": "Card payment method details"
+      },
+      "CardNetworksDto": {
+        "required": [
+          "available"
+        ],
+        "type": "object",
+        "properties": {
+          "available": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The networks the card can be processed on"
+          },
+          "preferred": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The network the customer chose to process the card on",
+            "example": "cartes_bancaires"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Card networks the card can be processed on"
       },
       "CardWalletDto": {
         "required": [
@@ -22606,6 +22738,14 @@
             "type": "string",
             "description": "The type of digital wallet",
             "example": "apple_pay"
+          },
+          "dynamic_last4": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The last 4 digits of the device account number, for tokenized cards",
+            "example": 9876
           }
         },
         "additionalProperties": false,
@@ -26334,9 +26474,35 @@
           "invoice_generated",
           "payment_method_type_approval",
           "store_trust_event",
-          "data_subject_request_export_completed"
+          "data_subject_request_export_completed",
+          "fast_checkout_deletion",
+          "fast_checkout_payment_method_created",
+          "fast_checkout_owner_device_verified"
         ],
         "type": "string"
+      },
+      "EpsDetailsDto": {
+        "type": "object",
+        "properties": {
+          "bank": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The bank of the customer",
+            "example": "erste_bank_und_sparkassen"
+          },
+          "payer_name": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The verified name of the account owner",
+            "example": "John Doe"
+          }
+        },
+        "additionalProperties": false,
+        "description": "EPS payment method details"
       },
       "ExecutedWebhookDto": {
         "required": [
@@ -27613,6 +27779,21 @@
         ],
         "type": "string"
       },
+      "KakaoPayDetailsDto": {
+        "type": "object",
+        "properties": {
+          "buyer_id": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The buyer identifier assigned by the local payment processor",
+            "example": "buyer_abc123"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Kakao Pay payment method details"
+      },
       "KlarnaDetailsDto": {
         "type": "object",
         "properties": {
@@ -27635,6 +27816,37 @@
         },
         "additionalProperties": false,
         "description": "Klarna payment method details"
+      },
+      "KrCardDetailsDto": {
+        "type": "object",
+        "properties": {
+          "brand": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The local card brand",
+            "example": "shinhan"
+          },
+          "last4": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The last 4 digits of the card number",
+            "example": 4242
+          },
+          "buyer_id": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The buyer identifier assigned by the local payment processor",
+            "example": "buyer_abc123"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Korean card payment method details"
       },
       "LastPaymentErrorDto": {
         "required": [
@@ -27714,6 +27926,14 @@
             "type": "string",
             "description": "The email associated with the Link account",
             "example": "john.doe@example.com"
+          },
+          "country": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The country code of the funding source behind the Link payment",
+            "example": "US"
           }
         },
         "additionalProperties": false,
@@ -28002,6 +28222,21 @@
         },
         "additionalProperties": false,
         "description": "Represents a link in the storefront's navigation. Each link points at a tag, and links nest under\none another through 'parent_node_id' to form the navigation tree."
+      },
+      "NaverPayDetailsDto": {
+        "type": "object",
+        "properties": {
+          "buyer_id": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The buyer identifier assigned by the local payment processor",
+            "example": "buyer_abc123"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Naver Pay payment method details"
       },
       "OrderCountryDistributionDataDto": {
         "required": [
@@ -29004,6 +29239,21 @@
         "additionalProperties": false,
         "description": "PayPal payment method details"
       },
+      "PaycoDetailsDto": {
+        "type": "object",
+        "properties": {
+          "buyer_id": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The buyer identifier assigned by the local payment processor",
+            "example": "buyer_abc123"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Payco payment method details"
+      },
       "PaymentAcceptanceDistributionDataDto": {
         "required": [
           "gross_volume",
@@ -29485,6 +29735,36 @@
           },
           "paysafecard": {
             "$ref": "#/components/schemas/PaysafeCardDetailsDto"
+          },
+          "kr_card": {
+            "$ref": "#/components/schemas/KrCardDetailsDto"
+          },
+          "kakao_pay": {
+            "$ref": "#/components/schemas/KakaoPayDetailsDto"
+          },
+          "naver_pay": {
+            "$ref": "#/components/schemas/NaverPayDetailsDto"
+          },
+          "samsung_pay": {
+            "$ref": "#/components/schemas/SamsungPayDetailsDto"
+          },
+          "payco": {
+            "$ref": "#/components/schemas/PaycoDetailsDto"
+          },
+          "bizum": {
+            "$ref": "#/components/schemas/BizumDetailsDto"
+          },
+          "blik": {
+            "$ref": "#/components/schemas/BlikDetailsDto"
+          },
+          "swish": {
+            "$ref": "#/components/schemas/SwishDetailsDto"
+          },
+          "upi": {
+            "$ref": "#/components/schemas/UpiDetailsDto"
+          },
+          "eps": {
+            "$ref": "#/components/schemas/EpsDetailsDto"
           }
         },
         "additionalProperties": false,
@@ -29525,7 +29805,6 @@
       "PaymentMethodDto": {
         "required": [
           "created_at",
-          "customer_id",
           "gateway",
           "gateway_customer_id",
           "gateway_entity_identifier",
@@ -29538,9 +29817,6 @@
         "type": "object",
         "properties": {
           "id": {
-            "$ref": "#/components/schemas/FlakeId"
-          },
-          "customer_id": {
             "$ref": "#/components/schemas/FlakeId"
           },
           "gateway": {
@@ -32553,6 +32829,21 @@
         "additionalProperties": false,
         "description": "Object representing a specific tax within a sales tax jurisdiction."
       },
+      "SamsungPayDetailsDto": {
+        "type": "object",
+        "properties": {
+          "buyer_id": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The buyer identifier assigned by the local payment processor",
+            "example": "buyer_abc123"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Samsung Pay payment method details"
+      },
       "SearchDashboardResponseDto": {
         "required": [
           "affiliate_links",
@@ -32855,6 +33146,20 @@
           }
         },
         "additionalProperties": false
+      },
+      "SetWebstoreActiveRequestDto": {
+        "required": [
+          "is_active"
+        ],
+        "type": "object",
+        "properties": {
+          "is_active": {
+            "type": "boolean",
+            "description": "Whether the hosted webstore is served to customers. A disabled webstore shows a not-active page."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents a request to enable or disable a store's hosted webstore."
       },
       "SetWebstoreCustomDomainRequestDto": {
         "required": [
@@ -36356,6 +36661,29 @@
         },
         "additionalProperties": false
       },
+      "SwishDetailsDto": {
+        "type": "object",
+        "properties": {
+          "fingerprint": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "A unique fingerprint for this Swish account",
+            "example": "fingerprint_xyz789"
+          },
+          "verified_phone_last4": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The last 4 digits of the phone number of the Swish account",
+            "example": 6789
+          }
+        },
+        "additionalProperties": false,
+        "description": "Swish payment method details"
+      },
       "TagDto": {
         "required": [
           "created_at",
@@ -38152,6 +38480,21 @@
             "description": "The value of the variable, always stored as a string and parsed according to 'type' when the\ntemplate renders."
           }
         }
+      },
+      "UpiDetailsDto": {
+        "type": "object",
+        "properties": {
+          "vpa": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The Virtual Payment Address of the customer",
+            "example": "johndoe@upi"
+          }
+        },
+        "additionalProperties": false,
+        "description": "UPI payment method details"
       },
       "UpsellDiscountTypeDto": {
         "enum": [

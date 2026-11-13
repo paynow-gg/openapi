@@ -24449,6 +24449,12 @@
           },
           "discord_format": {
             "$ref": "#/components/schemas/WebhookDiscordFormatDto"
+          },
+          "discord_skip_zero_total_orders": {
+            "type": [
+              "null",
+              "boolean"
+            ]
           }
         },
         "additionalProperties": false
@@ -38388,6 +38394,12 @@
           },
           "discord_format": {
             "$ref": "#/components/schemas/WebhookDiscordFormatDto"
+          },
+          "discord_skip_zero_total_orders": {
+            "type": [
+              "null",
+              "boolean"
+            ]
           }
         },
         "additionalProperties": false
@@ -39268,6 +39280,7 @@
       },
       "WebhookSubscriptionDto": {
         "required": [
+          "discord_skip_zero_total_orders",
           "id",
           "secret",
           "subscribed_to",
@@ -39316,6 +39329,10 @@
           },
           "discord_format": {
             "$ref": "#/components/schemas/WebhookDiscordFormatDto"
+          },
+          "discord_skip_zero_total_orders": {
+            "type": "boolean",
+            "description": "Whether orders with a total of zero are left out of the 'OnOrderCompleted' deliveries. Only used\nby the 'DiscordV1' type."
           }
         },
         "additionalProperties": false,

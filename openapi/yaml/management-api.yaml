@@ -15569,6 +15569,10 @@ components:
             - string
         discord_format:
           $ref: '#/components/schemas/WebhookDiscordFormatDto'
+        discord_skip_zero_total_orders:
+          type:
+            - 'null'
+            - boolean
       additionalProperties: false
     CreateWebstoreModuleDto:
       required:
@@ -26036,6 +26040,10 @@ components:
             - string
         discord_format:
           $ref: '#/components/schemas/WebhookDiscordFormatDto'
+        discord_skip_zero_total_orders:
+          type:
+            - 'null'
+            - boolean
       additionalProperties: false
     UpdateWebstoreModuleDto:
       type: object
@@ -26672,6 +26680,7 @@ components:
       type: string
     WebhookSubscriptionDto:
       required:
+        - discord_skip_zero_total_orders
         - id
         - secret
         - subscribed_to
@@ -26708,6 +26717,9 @@ components:
           description: "The accent colour of the Discord embed, as a hex colour. Only used by the 'DiscordV1' type\nwith the 'Embed' format."
         discord_format:
           $ref: '#/components/schemas/WebhookDiscordFormatDto'
+        discord_skip_zero_total_orders:
+          type: boolean
+          description: "Whether orders with a total of zero are left out of the 'OnOrderCompleted' deliveries. Only used\nby the 'DiscordV1' type."
       additionalProperties: false
       description: "Represents a webhook subscription: an endpoint that receives a request whenever one of the\nsubscribed events happens in the store."
     WebhookTypeDto:

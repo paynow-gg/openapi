@@ -29676,7 +29676,7 @@
           "pagseguro",
           "tazapay",
           "paysafe",
-          "checkoutcom"
+          "payssion"
         ],
         "type": "string"
       },

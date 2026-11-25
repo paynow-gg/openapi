@@ -19516,7 +19516,7 @@ components:
         - pagseguro
         - tazapay
         - paysafe
-        - checkoutcom
+        - payssion
       type: string
     PaymentMethodChargebackRateDto_V2:
       required:
